@@ -1,13 +1,8 @@
 {
     "name": "seline/b1sistema-pdocrud",
     "type": "project",
-    "autoload": {
-        "psr-4": {
-            "B1sistemaPdocrud\\": "src/"
-        },
-        "classmap": [
-            "vendor/pdocrud/pdocrud.php"
-        ]
+    "require": {
+        "vlucas/phpdotenv": "^5.4"
     },
     "authors": [
         {
@@ -15,8 +10,10 @@
             "email": "gabriel@biblio1.com.br"
         }
     ],
-    "require": {
-        "vlucas/phpdotenv": "^5.4"
+    "autoload": {
+        "psr-4": {
+            "B1system\\Route\\": "route/"
+        }
     },
     "scripts": {
         "post-root-package-install": [
