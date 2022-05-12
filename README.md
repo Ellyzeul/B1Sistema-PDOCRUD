@@ -16,7 +16,7 @@ Ao ter uma distribuição em mãos
 
 ![Pasta com a distribuição](.github/images/procrud_zipped_folder.png)
 
-Mova a pasta ```script``` para dentro da pasta ```vendor``` do projeto
+Mova a pasta ```script``` para dentro da pasta ```vendor``` do projeto. Além disso renomeie a pasta ```script``` para ```pdocrud```
 
 ## Configuração do PDOCRUD
 
