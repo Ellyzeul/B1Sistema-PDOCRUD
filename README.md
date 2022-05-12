@@ -14,7 +14,7 @@ Acesse esse link com login realizado no GitHub em uma conta com acesso ao reposi
 
 Ao ter uma distribuição em mãos
 
-![Pasta com a distribuição]("https://raw.githubusercontent.com/B1Seline/B1Sistema-PDOCRUD/main/.github/images/procrud_zipped_folder.png?token=GHSAT0AAAAAABTC4RQ3PKMYRRZUI65SNEXCYT5EXBA")
+![Pasta com a distribuição](.github/images/procrud_zipped_folder.png)
 
 Mova a pasta ```script``` para dentro da pasta ```vendor``` do projeto
 
@@ -22,6 +22,6 @@ Mova a pasta ```script``` para dentro da pasta ```vendor``` do projeto
 
 No arquivo ```vendor/pdocrud/config/config.php``` colocar o seguinte código
 
-![Trecho de código de configuração]("https://raw.githubusercontent.com/B1Seline/B1Sistema-PDOCRUD/main/.github/images/pdocrud_config.png?token=GHSAT0AAAAAABTC4RQ3J5LKW5JNTPFXZCXCYT5H6KQ")
+![Trecho de código de configuração](.github/images/pdocrud_config.png)
 
 Lembrando que a maior parte desse código já vem por padrão no arquivo, então em vez de apenas replicar, adapte o código já existente.
