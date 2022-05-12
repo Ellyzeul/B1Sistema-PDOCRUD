@@ -18,6 +18,5 @@ foreach(explode("&", $requestURI[1]) as $param) {
     $pair = explode("=", $param, 2);
     $query_params = array_merge($query_params, [$pair[0] => $pair[1]]);
 }
-var_dump($query_params);
 
 Router::redirect($uri, $query_params);
