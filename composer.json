@@ -1,0 +1,26 @@
+{
+    "name": "seline/b1sistema-pdocrud",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "B1sistemaPdocrud\\": "src/"
+        },
+        "classmap": [
+            "vendor/pdocrud/pdocrud.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "B1GabrielAugusto",
+            "email": "gabriel@biblio1.com.br"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.4"
+    },
+    "scripts": {
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ]
+    }
+}
