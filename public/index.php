@@ -1,9 +1,8 @@
 <?php
 $sep = DIRECTORY_SEPARATOR;
 require_once ".." . $sep . "vendor" . $sep . "autoload.php";
-require_once ".." . $sep . "vendor" . $sep . "pdocrud" . $sep . "pdocrud.php";
 
-use \B1system\Route\Router;
+use B1system\Route\Router;
 
 
 $dotenv = Dotenv\Dotenv::createImmutable("..");
@@ -20,5 +19,6 @@ if(isset($requestURI[1])) {
         $query_params = array_merge($query_params, [$pair[0] => $pair[1] ?? null]);
     }
 }
+var_dump(new PDOCrud());
 
-Router::redirect($uri, $query_params);
+Router::redirect($endpoint, $query_params);

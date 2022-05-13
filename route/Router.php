@@ -1,15 +1,14 @@
-<?php
+<?php namespace B1system\Route;
 
 class Router
 {
-    public static function redirect(string $uri, array $request)
+    public static function redirect(string $endpoint, array $request)
     {
-        $uriParts = explode('/', $uri);
-        $model = $uriParts[1];
-        $operation = $uriParts[2];
+        $uriParts = explode('/', $endpoint);
+        $page = $uriParts[1];
 
-        if(!method_exists(__CLASS__, $model)) return;
+        if(!method_exists(__CLASS__, $page)) return;
 
-        call_user_func(__CLASS__ . "::" . $model, $operation, $request);
+        call_user_func(__CLASS__ . "::" . $page, $request);
     }
 }
