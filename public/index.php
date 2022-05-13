@@ -1,14 +1,15 @@
 <?php
-$sep = DIRECTORY_SEPARATOR;
-require_once ".." . $sep . "vendor" . $sep . "autoload.php";
+require_once ".." . DIRECTORY_SEPARATOR . "vendor" . DIRECTORY_SEPARATOR . "autoload.php";
 
 use B1system\Route\Router;
 use B1system\Dependency\LoadDependency;
+use B1system\Config\Constants;
 
 
 $dotenv = Dotenv\Dotenv::createImmutable("..");
 $dotenv->load();
 LoadDependency::loadPDOCrud();
+Constants::load();
 
 $requestURI = explode("?", $_SERVER["REQUEST_URI"]);
 
@@ -22,4 +23,6 @@ if(isset($requestURI[1])) {
     }
 }
 
-echo Router::redirect($endpoint, $query_params);
+$response = Router::redirect($endpoint, $query_params);
+
+echo $response;

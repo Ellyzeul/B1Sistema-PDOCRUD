@@ -12,10 +12,12 @@
     ],
     "autoload": {
         "psr-4": {
+            "B1system\\Model\\": "src/model/",
             "B1system\\Controller\\": "src/controller/",
             "B1system\\View\\": "src/view/",
             "B1system\\Route\\": "route/",
-            "B1system\\Dependency\\": "dependency/"
+            "B1system\\Dependency\\": "dependency/",
+            "B1system\\Config\\": "config/"
         }
     },
     "scripts": {
