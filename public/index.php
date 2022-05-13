@@ -3,10 +3,12 @@ $sep = DIRECTORY_SEPARATOR;
 require_once ".." . $sep . "vendor" . $sep . "autoload.php";
 
 use B1system\Route\Router;
+use B1system\Dependency\LoadDependency;
 
 
 $dotenv = Dotenv\Dotenv::createImmutable("..");
 $dotenv->load();
+LoadDependency::loadPDOCrud();
 
 $requestURI = explode("?", $_SERVER["REQUEST_URI"]);
 
@@ -19,6 +21,5 @@ if(isset($requestURI[1])) {
         $query_params = array_merge($query_params, [$pair[0] => $pair[1] ?? null]);
     }
 }
-var_dump(new PDOCrud());
 
-Router::redirect($endpoint, $query_params);
+echo Router::redirect($endpoint, $query_params);
