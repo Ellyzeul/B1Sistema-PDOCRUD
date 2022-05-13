@@ -5,7 +5,7 @@ use B1System\Dependency\LoadDependency;
 
 class OrderView
 {
-    public static function render(PDOCrud $crud)
+    public static function render(\PDOCrud $crud)
     {
         return $crud->render();
     }

@@ -6,7 +6,7 @@ use B1system\View\OrderView;
 class OrderController
 {
     public static function render() {
-        $crud = new PDOCrud();
+        $crud = new \PDOCrud();
 
         $response = OrderView::render($crud);
 
