@@ -65,7 +65,7 @@ $config["viewbtn"] = true;
 //show delete button (true = show)
 $config["delbtn"] = true;
 //show inline edit button (false = hide)
-$config["inlineEditbtn"] = false;
+$config["inlineEditbtn"] = true;
 //show clone row (copy row) button (false = hide)
 $config["clonebtn"] = false;
 //show action buttons (true = show)
@@ -131,7 +131,7 @@ $config["resetForm"] = false;
 //whether to allow data view on click of table row  - added in v 3.6
 $config["quickView"] = false;
 //whether to enable the table cell edit  - added in v 3.7
-$config["tableCellEdit"] = false;
+$config["tableCellEdit"] = true;
 //whether to include template css file or not (useful if you have already added css file for bootstrap)  - added in v 3.7
 $config["includeTemplateCSS"] = true;
 //whether to include template js file or not (useful if you have already added js file for bootstrap)  - added in v 3.7
