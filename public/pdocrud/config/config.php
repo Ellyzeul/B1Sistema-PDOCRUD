@@ -41,7 +41,7 @@ $config["characterset"] = "utf8";
 $config["salt"] = "@3dsfsdf**9934324";
 /************************crud table settings ************************/
 //records to be shown per page
-$config["recordsPerPage"] = 10;
+$config["recordsPerPage"] = 200;
 //adjacents links
 $config["adjacents"] = 1;
 //show pagination links (true = show)
@@ -77,21 +77,21 @@ $config["exportOption"] = true;
 //show print button (true = show)
 $config["printBtn"] = true;
 //show print button (true = show)
-$config["csvBtn"] = true;
+$config["csvBtn"] = false;
 //show print button (true = show)
 $config["excelBtn"] = true;
 //show print button (true = show)
-$config["pdfBtn"] = true;
+$config["pdfBtn"] = false;
 //show multi select checkbox column (true = show)
 $config["checkboxCol"] = true;
 //show number column (true = show)
-$config["numberCol"] = true;
+$config["numberCol"] = false;
 //show footer row (true = show)
 $config["headerRow"] = true;
 //show footer row (true = show)
-$config["footerRow"] = true;
+$config["footerRow"] = false;
 //show filters (false = hide)
-$config["filter"] = false;
+$config["filter"] = true;
 //For dropdown, whether to show "Select" as an option or not
 $config["selectOption"] = true;
 //whether to show "print" button or not in view page
@@ -111,7 +111,7 @@ $config["backButton"] = true;
 //whether to show "save and close" button or not, in forms
 $config["saveCloseButton"] = false;
 //Position of the action buttons
-$config["actionBtnPosition"] = "right";
+$config["actionBtnPosition"] = "left";
 //whether to show view form data in tabs or not - added in v 2.6
 $config["viewFormTabs"] = false; 
 //whether to reset search if search text box is empty - added in v 2.6
@@ -142,20 +142,20 @@ $config["template"] = "bootstrap";
 //set skin css to be used (skin css are placed in the script/skin folder)
 $config["skin"] = "default";
 //default language
-$config["lang"] = "en";
+$config["lang"] = "pt-br";
 /******************************** upload/download folder path ***********************************/
 //Upload folder
 $config["uploadFolder"] = PDOCrudABSPATH . "uploads/";
 //Upload folder URL
-$config["uploadURL"] = $config["script_url"] . "script/uploads/";
+$config["uploadURL"] = $config["script_url"] . "uploads/";
 //download folder
 $config["downloadFolder"] = PDOCrudABSPATH . "downloads/";
 //Download folder URL
-$config["downloadURL"] = $config["script_url"] . "script/downloads/";
+$config["downloadURL"] = $config["script_url"] . "downloads/";
 
 /******************************** js config related settings ***********************************/
 //date format
-$config["dateformat"] = "yy-mm-dd";
+$config["dateformat"] = "dd/mm/yy";
 //time format
 $config["timeformat"] = "HH:mm:ss";
 //change month option in datepicker
@@ -192,7 +192,7 @@ $config["recaptchaurl"] = "https://www.google.com/recaptcha/api.js";
 //load plugins initially (list of plugins available)
 $config["loadJsPlugins"] = array("chosen");
 //display errors directly
-$config["displayErrors"] = true;
+$config["displayErrors"] = $_SERVER["SERVER_NAME"] == "localhost";
 //By default, whether make form fields required or not
 $config["required"] = true;
 //whether to trim the value before database insert/update or not
