@@ -1,14 +1,13 @@
 <?php
 require_once ".." . DIRECTORY_SEPARATOR . "vendor" . DIRECTORY_SEPARATOR . "autoload.php";
+require_once "pdocrud" . DIRECTORY_SEPARATOR . "pdocrud.php";
 
 use B1system\Route\Router;
-use B1system\Dependency\LoadDependency;
 use B1system\Config\Constants;
 
 
 $dotenv = Dotenv\Dotenv::createImmutable("..");
 $dotenv->load();
-LoadDependency::loadPDOCrud();
 Constants::load();
 
 $requestURI = explode("?", $_SERVER["REQUEST_URI"]);
