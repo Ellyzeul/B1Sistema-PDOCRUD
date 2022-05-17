@@ -10,8 +10,8 @@ class OrderController
     public static function render() {
         $crud = new PDOCrud();
 
-        $response = Order::read($crud);
-        $response = OrderView::render($response);
+        $processed = Order::read($crud);
+        $response = OrderView::render($processed);
 
         return $response;
     }

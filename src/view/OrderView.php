@@ -5,7 +5,7 @@ use \PDOCrud;
 
 class OrderView
 {
-    public static function render($response)
+    public static function render(PDOCrud $response)
     {
         $template = file_get_contents(TEMPLATE_DIR . "orders.html");
         $content = $response->render();
