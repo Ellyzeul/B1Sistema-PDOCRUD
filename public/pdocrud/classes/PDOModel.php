@@ -486,7 +486,6 @@ Class PDOModel {
      * return   array                                   returns array as result of query.
      */
     public function select($dbTableName) {
-
         try {
             $this->sql = $this->getSelectQuery($dbTableName);
             $stmt = $this->dbObj->prepare($this->sql);
@@ -928,8 +927,10 @@ Class PDOModel {
     }
 
     private function getSelectQuery($dbTableName) {
-        if (is_array($this->columns) && count($this->columns) > 0)
-            $cols = implode(",", array_values($this->parseColumns($this->columns)));
+        if (is_array($this->columns) && count($this->columns) > 0) {
+            // $this->columns[0] == "" ? array_shift($this->columns) : null;
+            $cols = implode(",", array_values($this->parseColumns($this->columns)));    
+        }
         else {
             $cols = "$dbTableName.* ";
             if (isset($this->joinTables)) {

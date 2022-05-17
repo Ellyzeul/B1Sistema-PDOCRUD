@@ -5334,6 +5334,22 @@ Class PDOCrud {
         if (is_array($data) && count($data)) {
             $field .= " value=\"$data[0]\" ";
         }
+
+        if(strpos($class, "input-bulk-crud-update") >= 0) {
+            $field .= " onkeydown=\"(event => {
+                const key = event.key
+                const element = event.target
+                if(key === 'Enter') {
+                    document.querySelector('.pdocrud-button-save').click()
+                    return
+                }
+                if(key === 'Escape') {
+                    element.blur()
+                    return
+                }
+            })(event)\"";
+        }
+
         $field .= " />";
         return $field;
     }
@@ -5421,6 +5437,20 @@ Class PDOCrud {
                     $multi = true;
                 }
             }
+        }
+        if(strpos($class, "input-bulk-crud-update") >= 0) {
+            $field .= " onkeydown=\"(event => {
+                const key = event.key
+                const element = event.target
+                if(key === 'Enter') {
+                    document.querySelector('.pdocrud-button-save').click()
+                    return
+                }
+                if(key === 'Escape') {
+                    element.blur()
+                    return
+                }
+            })(event)\"";
         }
         $field .= ">";
         if ($this->settings["selectOption"])
