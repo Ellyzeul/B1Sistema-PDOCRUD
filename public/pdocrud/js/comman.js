@@ -461,13 +461,19 @@ jQuery(document).ready(function () {
                     instance = jQuery(this).closest(".pdocrud-table-container").data("objkey");
                     data.exportType = jQuery(this).data("export-type");
                 }
+
+                const getValue = (val) => {
+                    const returnVal = val ? val.replace(new RegExp('^([0-9]{2})/([0-9]{2})/([0-9]{4})$'), '$3-$2-$1') : null
+                    console.log(returnVal)
+                    return returnVal
+                }
                 
                 if (data.action === "save_crud_table_data") {
                     instance = jQuery(this).closest(".pdocrud-table-container").data("objkey");
                     var updateData = [];
                     jQuery(".input-bulk-crud-update").each(function () {
                         var col = jQuery(this).data("col");
-                        var val = jQuery(this).val();
+                        var val = getValue(jQuery(this).val());
                         var id = jQuery(this).data("id");
                         updateData.push({col: col, id: id, val:val});
 

@@ -50,10 +50,9 @@ Class PDOCrudTableFormat extends PDOCrudHelper {
         $loop = 0;
         foreach ($colFormat as $col => $options) {
             foreach ($data as $rows) {
-                if (isset($rows[$col])) {
-                    $rows[$col] = preg_replace('/{val}/', $rows[$col], $options["field"]);
-                    $rows[$col] = preg_replace('/{pk-val}/', $rows[$pk], $rows[$col]);
-                }
+                if (!isset($rows[$col])) $rows[$col] = "";
+                $rows[$col] = preg_replace('/{val}/', $rows[$col], $options["field"]);
+                $rows[$col] = preg_replace('/{pk-val}/', $rows[$pk], $rows[$col]);
                 $data[$loop] = $rows;
                 $loop++;
             }
