@@ -5347,7 +5347,9 @@ Class PDOCrud {
                     element.blur()
                     return
                 }
-            })(event)\"";
+            })(event)\"
+            
+            style=\"width: auto;\"";
         }
 
         $field .= " />";
@@ -5450,7 +5452,9 @@ Class PDOCrud {
                     element.blur()
                     return
                 }
-            })(event)\"";
+            })(event)\"
+            
+            style=\"width: auto;\"";
         }
         $field .= ">";
         if ($this->settings["selectOption"])
