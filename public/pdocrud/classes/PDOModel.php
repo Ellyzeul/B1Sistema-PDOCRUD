@@ -928,7 +928,6 @@ Class PDOModel {
 
     private function getSelectQuery($dbTableName) {
         if (is_array($this->columns) && count($this->columns) > 0) {
-            // $this->columns[0] == "" ? array_shift($this->columns) : null;
             $cols = implode(",", array_values($this->parseColumns($this->columns)));    
         }
         else {
