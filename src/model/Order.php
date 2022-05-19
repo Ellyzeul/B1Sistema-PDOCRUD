@@ -34,7 +34,7 @@ class Order
             "supplier_purchase_number",
             "id_delivery_method",
             "tracking_code",
-            "collect_code",
+            "collection_code",
             "delivered_date",
             "ask_rating"
         ]);
@@ -53,7 +53,7 @@ class Order
         $crud->colRename("supplier_purchase_number", "Nº Compra fornecedor");
         $crud->colRename("id_delivery_method", "Forma de envio");
         $crud->colRename("tracking_code", "Código de rastreio");
-        $crud->colRename("collect_code", "Código de coleta");
+        $crud->colRename("collection_code", "Código de coleta");
         $crud->colRename("delivered_date", "Data de entrega");
         $crud->colRename("ask_rating", "Pedir avaliação");
         
@@ -70,7 +70,7 @@ class Order
         $crud->fieldNotMandatory("supplier_purchase_number");
         $crud->fieldNotMandatory("id_delivery_method");
         $crud->fieldNotMandatory("tracking_code");
-        $crud->fieldNotMandatory("collect_code");
+        $crud->fieldNotMandatory("collection_code");
         $crud->fieldNotMandatory("delivered_date");
         $crud->fieldNotMandatory("ask_rating");
 
@@ -105,12 +105,22 @@ class Order
             return $pair[$val];
         });
 
+        $deliveryMethods = Order::getBulkUpdateData($crud, 'delivery_methods', function($pair, $key, $val)
+        {
+            return $pair[$val];
+        });
+
         $crud->bulkCrudUpdate("id_phase", "select", ['phase_key' => 'phase_val'], $phases);
         $crud->bulkCrudUpdate("invoice_number", "text");
         $crud->bulkCrudUpdate("bling_number", "text");
         $crud->bulkCrudUpdate("supplier_name", "text");
         $crud->bulkCrudUpdate("purchase_date", "date");
         $crud->bulkCrudUpdate("id_delivery_address", "select", ['deliveryaddress_key' => 'deliveryaddress_val'], $deliveryAddresses);
+        $crud->bulkCrudUpdate("supplier_purchase_number", "text");
+        $crud->bulkCrudUpdate("id_delivery_method", "select", ['deliverymethod_key' => 'deliverymethod_val'], $deliveryMethods);
+        $crud->bulkCrudUpdate("tracking_code", "text");
+        $crud->bulkCrudUpdate("collection_code", "text");
+        $crud->bulkCrudUpdate("delivered_date", "date");
         $crud->bulkCrudUpdate("ask_rating", "select", ['askrating_key' => 'askrating_val'], [
             [1, "Sim"],
             [0, "Não"]
@@ -123,6 +133,7 @@ class Order
     {
         $db = $crud->getPDOModelObj();
         $sellercentrals = $db->select("sellercentrals");
+        $phases = $db->select('phases');
 
         foreach($sellercentrals as $sel) {
             $crud->tableColFormatting("id_sellercentral", "replace", [$sel["id"] => $sel["name"]]);
