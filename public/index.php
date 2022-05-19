@@ -13,15 +13,20 @@ Constants::load();
 $requestURI = explode("?", $_SERVER["REQUEST_URI"]);
 
 $endpoint = $requestURI[0];
-$query_params = [];
+$request = [];
 
 if(isset($requestURI[1])) {
     foreach(explode("&", $requestURI[1]) as $param) {
         $pair = explode("=", $param, 2);
-        $query_params = array_merge($query_params, [$pair[0] => $pair[1] ?? null]);
+        $request = array_merge($request, [$pair[0] => $pair[1] ?? null]);
     }
 }
 
-$response = Router::redirect($endpoint, $query_params);
+$request = array_merge(
+    ["GET" => $request], 
+    ["POST" => json_decode(file_get_contents('php://input'), true) ?? []]
+);
+
+$response = Router::redirect($endpoint, $request);
 
 echo $response;
