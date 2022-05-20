@@ -21,7 +21,7 @@
         }
     },
     "scripts": {
-        "post-root-package-install": [
+        "compile": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ]
     }
