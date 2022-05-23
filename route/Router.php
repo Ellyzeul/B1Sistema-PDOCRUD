@@ -10,7 +10,7 @@ class Router
     {
         if($endpoint == "/") {
             \header("Location: /orders");
-            return;
+            die();
         }
 
         $uriParts = explode('/', $endpoint);
