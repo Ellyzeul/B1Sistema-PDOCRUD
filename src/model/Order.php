@@ -13,6 +13,8 @@ class Order
         $crud = Order::fieldsFormatting($crud);
         $crud = Order::crudSettings($crud);
 
+        $crud->dbOrderBy("id desc");
+
         $response = $crud->dbTable("order_control");
 
         return $response;
