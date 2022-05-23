@@ -8,10 +8,7 @@ class Router
 {
     public static function redirect(string $endpoint, array $request)
     {
-        if($endpoint == "/") {
-            \header("Location: /orders");
-            die();
-        }
+        Router::handleDefaultRedirect($endpoint);
 
         $uriParts = explode('/', $endpoint);
         array_shift($uriParts);
@@ -20,6 +17,14 @@ class Router
         if(!method_exists(__CLASS__, $routeName)) return;
 
         return call_user_func(__CLASS__ . "::" . $routeName, $uriParts, $request);
+    }
+
+    private static function handleDefaultRedirect(string $endpoint)
+    {
+        if($endpoint == "/") {
+            \header("Location: /orders");
+            die();
+        }
     }
 
     private static function orders(array $uriParts, array $request)
