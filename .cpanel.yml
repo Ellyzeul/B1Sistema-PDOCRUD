@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/bibli231/b1sistema.biblio1.com.br
+    - composer init
