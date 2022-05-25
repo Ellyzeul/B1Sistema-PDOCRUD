@@ -2,4 +2,4 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/bibli231/b1sistema.biblio1.com.br
-    - /bin/cp -R images $DEPLOYPATH
+    - /bin/cp -r * $DEPLOYPATH
