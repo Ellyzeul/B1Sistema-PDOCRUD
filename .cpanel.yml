@@ -1,6 +1,6 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/bibli231/b1sistema.biblio1.com.br
+    - export DEPLOYPATH=/home/bibli231/sistema.biblio1.com.br
     - composer install
     - /bin/cp -r * $DEPLOYPATH
