@@ -2,4 +2,4 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/bibli231/sistema.biblio1.com.br
-    - /bin/cp -r * $DEPLOYPATH
+    - /bin/cp -R /home/bibli231/repositories/B1Sistema-PDOCRUD $DEPLOYPATH
