@@ -26,13 +26,13 @@ $config["script_url"] = "/pdocrud/";
 //Set the host name to connect for database
 $config["hostname"] =  $_ENV["DB_HOST"];
 //Set the database name
-$config["database"] = $_ENV["DB_NAME"];
+$config["database"] = $_ENV["DB_DATABASE"];
 //Set the username for database access
-$config["username"] = $_ENV["DB_USER"];
+$config["username"] = $_ENV["DB_USERNAME"];
 //Set the pwd for the database user
-$config["password"] = $_ENV["DB_PASS"];
+$config["password"] = $_ENV["DB_PASSWORD"];
 //Set the database type to be used. Available values are "mysql", "pgsql", "sqlite" and "sqlserver".
-$config["dbtype"] = $_ENV["DB_TYPE"];
+$config["dbtype"] = $_ENV["DB_CONNECTION"];
 //Please enter purchase code. Please check how to find purchase code details here https://help.market.envato.com/hc/en-us/articles/202822600-Where-Is-My-Purchase-Code-
 $config["purchase_code"] = $_ENV["PDO_CRUD_PURCHASE_CODE"];
 //Set the character set to be used
