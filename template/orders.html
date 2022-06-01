@@ -4,9 +4,61 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/orders.css">
+    <script src="https://kit.fontawesome.com/76e8507a5a.js" crossorigin="anonymous"></script>
     <title>B1Sistema</title>
 </head>
-<body>
+<body onkeydown="closeModals(event)">
     %_CONTENT_%
+    <div id="purchase_link_modal">
+        <form id="purchase_link_form" onsubmit="saveUrlModal(event)">
+            <div id="purchase_link_form_close">
+                <i class="fa-solid fa-xmark" onclick="urlModalClose()"></i>
+            </div>
+            <fieldset id="purchase_link_form_content">
+                <strong>Link para compra</strong>
+                <div id="purchase_link_form_id" style="visibility: hidden;"></div>
+                <div id="purchase_link_form_online_order_number">
+                    <strong>ORIGEM:</strong><span></span>
+                </div>
+                <div>
+                    <label for="supplier_url">URL</label>
+                    <input type="text" name="supplier_url" id="purchase_link_formsupplier_url">
+                </div>
+                <div id="purchase_link_form_submit"><button type="submit">Salvar</button></div>
+            </fieldset>
+        </form>
+    </div>
+    <script>
+        const urlModalClose = () => {
+            document.querySelector('#purchase_link_modal').style.visibility = 'hidden'
+            document.querySelector('#purchase_link_form_id').textContent = ''
+            document.querySelector('#purchase_link_form_online_order_number > span').textContent = ''
+            document.querySelector('#purchase_link_formsupplier_url').value = ''
+            document.body.style.overflowY = 'auto'
+        }
+        const closeModals = event => {
+            const key = event.key
+            
+            if(key === 'Escape') {
+                urlModalClose()
+            }
+        }
+        const saveUrlModal = event => {
+            event.preventDefault()
+            const idRaw = document.querySelector('#purchase_link_form_id').textContent
+            const id = idRaw.match(/[0-9]{1,}/)[0];
+            const supplierURL = document.querySelector('#purchase_link_formsupplier_url').value
+
+            fetch('/api/supplier_url/update', {
+                method: 'POST',
+                body: JSON.stringify({
+                    id: id,
+                    supplier_url: supplierURL
+                })
+            })
+            .then(() => urlModalClose())
+        }
+    </script>
 </body>
 </html>

@@ -23,6 +23,7 @@ class Order
     private static function setFields(PDOCrud $crud)
     {
         $crud->crudTableCol([
+            "id",
             "id_sellercentral",
             "id_phase",
             "invoice_number",
@@ -30,6 +31,8 @@ class Order
             "bling_number",
             "order_date",
             "expected_date",
+            "isbn",
+            "selling_price",
             "supplier_name",
             "purchase_date",
             "id_delivery_address",
@@ -41,6 +44,7 @@ class Order
             "ask_rating"
         ]);
 
+        $crud->colRename("id", "Nº");
         $crud->colRename("id_sellercentral", "Exportação");
         $crud->colRename("id_phase", "Fase do processo");
         $crud->colRename("invoice_number", "NF");
@@ -48,6 +52,7 @@ class Order
         $crud->colRename("bling_number", "Nº Bling");
         $crud->colRename("order_date", "Data do pedido");
         $crud->colRename("expected_date", "Data prevista");
+        $crud->colRename("isbn", "ISBN");
         $crud->colRename("selling_price", "Valor");
         $crud->colRename("supplier_name", "Fornecedor");
         $crud->colRename("purchase_date", "Data da compra");

@@ -1,6 +1,7 @@
 <?php namespace B1system\Route;
 
 use B1system\Controller\OrderController;
+use B1system\Controller\SupplierURLController;
 
 
 class APIRouter
@@ -19,6 +20,19 @@ class APIRouter
 				if($fileType == "xlsx") {
 					return OrderController::insertWithXLSX();
 				}
+			}
+		}
+		if($model == "supplier_url") {
+			if($operation == "read") {
+				return SupplierURLController::read(
+					intval($request['GET']['id'])
+				);
+			}
+			if($operation == "update") {
+				return SupplierURLController::update(
+					intval($request['POST']['id']),
+					$request['POST']['supplier_url']
+				);
 			}
 		}
 	}
