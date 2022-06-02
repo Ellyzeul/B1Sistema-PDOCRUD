@@ -95,27 +95,7 @@
                             </td>
                             <?php
                         } else {
-                            $onClickEvent = "((event) => {
-                                const td = event.target
-                                const row = td.parentElement.children
-                                const pos = Array.from(row).indexOf(td)
-                                
-                                if(pos === 8) {
-                                    document.querySelector('#purchase_link_modal').style.visibility = 'visible'
-                                    document.body.style.overflowY = 'hidden'
-                                    document.querySelector('#purchase_link_form_id').textContent = row[0].textContent
-                                    document.querySelector('#purchase_link_form_online_order_number > span').textContent =
-                                        row[4].textContent
-                                    const id = row[0].textContent.match(/[0-9]{1,}/)[0]
-                                    fetch(`/api/supplier_url/read?id=\${id}`, {method: 'GET'})
-                                        .then(response => response.json())
-                                        .then(response => {
-                                            console.log(response)
-                                            document.querySelector('#purchase_link_formsupplier_url').value = response.url
-                                        })
-                                    return
-                                }
-                            })(event)"
+                            $onClickEvent = "urlModalOpen(event)"
                             ?>    
                             <td class="pdocrud-row-cols" onclick="<?= $onClickEvent ?>">
                             <?php echo $row; ?>

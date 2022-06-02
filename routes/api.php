@@ -21,7 +21,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/supplier_url/read', function (Request $request) {
-    return SupplierURLController::read($request->input('id'));
+    return SupplierURLController::read(
+        intval($request->input('id'))
+    );
 });
 
 Route::post('/supplier_url/update', function (Request $request) {
