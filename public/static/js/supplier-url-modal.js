@@ -9,20 +9,16 @@ const urlModalOpen = (event) => {
     const row = td.parentElement.children
     const pos = Array.from(row).indexOf(td)
     
-    if(pos === 8) {
-        supplierURLModal.style.visibility = 'visible'
-        document.body.style.overflowY = 'hidden'
-        supplierURLModalId.textContent = row[0].textContent
-        supplierURLModalOnlineOrderNumber.textContent = row[4].textContent
-        const id = row[0].textContent.match(/[0-9]{1,}/)[0]
-        fetch(`/api/supplier_url/read?id=${id}`, {method: 'GET'})
-            .then(response => response.json())
-            .then(response => {
-                console.log(response)
-                supplierURLModalURLInput.value = response.url
-            })
-        return
-    }
+    if(pos !== 8) return
+
+    supplierURLModal.style.visibility = 'visible'
+    document.body.style.overflowY = 'hidden'
+    supplierURLModalId.textContent = row[0].textContent
+    supplierURLModalOnlineOrderNumber.textContent = row[4].textContent
+    const id = row[0].textContent.match(/[0-9]{1,}/)[0]
+    fetch(`/api/supplier_url/read?id=${id}`, {method: 'GET'})
+        .then(response => response.json())
+        .then(response => supplierURLModalURLInput.value = response.url)
 }
 const urlModalClose = () => {
     supplierURLModal.style.visibility = 'hidden'

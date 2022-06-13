@@ -19,5 +19,7 @@ use App\Http\Controllers\OrderController;
 Route::redirect('/', '/orders', 301);
 
 Route::get('/orders', function (Request $request) {
-    return OrderController::render();
+    return OrderController::render(
+        floatval($request->input('phase'))
+    );
 });

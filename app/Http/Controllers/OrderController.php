@@ -6,11 +6,14 @@ use \PDOCrud;
 
 class OrderController
 {
-    public static function render()
+    public static function render(float|null $phase)
     {
         $crud = new PDOCrud();
 
-        $processed = Order::read($crud);
+        $processed = Order::read(
+            $crud, 
+            $phase
+        );
         $response = view('orders', [
             'pdocrud' => $processed
         ]);

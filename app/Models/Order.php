@@ -5,12 +5,13 @@ use \PDOCrud;
 
 class Order
 {
-    public static function read(PDOCrud $crud)
+    public static function read(PDOCrud $crud, float|null $phase)
     {
         $crud = Order::setFields($crud);
         $crud = Order::fieldsNotMandatory($crud);
         $crud = Order::fieldBulkUpdate($crud);
         $crud = Order::fieldsFormatting($crud);
+        $crud = Order::fieldsFiltering($crud, $phase);
         $crud = Order::crudSettings($crud);
 
         $crud->dbOrderBy("id desc");
@@ -149,6 +150,14 @@ class Order
         $crud->tableColFormatting("expected_date", "date", ["format" => "d/m/Y"]);
         $crud->tableColFormatting("purchase_date", "date", ["format" => "d/m/Y"]);
         $crud->tableColFormatting("delivered_date", "date", ["format" => "d/m/Y"]);
+
+        return $crud;
+    }
+
+    private static function fieldsFiltering(PDOCrud $crud, float|null $phase)
+    {
+        var_dump($phase);
+        if(isset($phase)) $crud->where('id_phase', $phase);
 
         return $crud;
     }
