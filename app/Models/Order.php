@@ -5,7 +5,7 @@ use \PDOCrud;
 
 class Order
 {
-    public static function read(PDOCrud $crud, float|null $phase)
+    public static function read(PDOCrud $crud, string|null $phase)
     {
         $crud = Order::setFields($crud);
         $crud = Order::fieldsNotMandatory($crud);
@@ -154,9 +154,8 @@ class Order
         return $crud;
     }
 
-    private static function fieldsFiltering(PDOCrud $crud, float|null $phase)
+    private static function fieldsFiltering(PDOCrud $crud, string|null $phase)
     {
-        var_dump($phase);
         if(isset($phase)) $crud->where('id_phase', $phase);
 
         return $crud;

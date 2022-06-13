@@ -20,6 +20,6 @@ Route::redirect('/', '/orders', 301);
 
 Route::get('/orders', function (Request $request) {
     return OrderController::render(
-        floatval($request->input('phase'))
+        strval($request->input('phase'))
     );
 });

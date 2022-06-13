@@ -6,7 +6,7 @@ use \PDOCrud;
 
 class OrderController
 {
-    public static function render(float|null $phase)
+    public static function render(string|null $phase)
     {
         $crud = new PDOCrud();
 
