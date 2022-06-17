@@ -95,9 +95,8 @@
                             </td>
                             <?php
                         } else {
-                            $onClickEvent = "urlModalOpen(event)"
                             ?>    
-                            <td class="pdocrud-row-cols" onclick="<?= $onClickEvent ?>">
+                            <td class="pdocrud-row-cols">
                             <?php echo $row; ?>
                             </td>
                             <?php

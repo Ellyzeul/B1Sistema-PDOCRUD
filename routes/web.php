@@ -16,10 +16,8 @@ use App\Http\Controllers\OrderController;
 |
 */
 
-Route::redirect('/', '/orders', 301);
 
-Route::get('/orders', function (Request $request) {
-    return OrderController::render(
-        strval($request->input('phase'))
-    );
+Route::get('/orders', function () {
+    return view('pdocrud');
 });
+Route::view('/{path?}', 'app')->where('path', '.*');

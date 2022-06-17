@@ -3338,7 +3338,7 @@ Class PDOCrud {
             $this->bulkCrudUpdateCol = $this->handleCallback('before_bulk_update', $this->bulkCrudUpdateCol);
             foreach ($this->bulkCrudUpdateCol as $col => $param) {
                 $data = array();
-                $param["attr"] = array_merge($param["attr"], array("data-id" => "{pk-val}", "data-col" => $col, "data-orignal-val" => "{val}"));
+                $param["attr"] = array_merge($param["attr"], array("data-id" => "{pk-val}", "data-col" => $col, "data-original-val" => "{val}"));
                 $data[$col] = array("field" => $this->getHTMLElement($col . "[]", $param["fieldType"], $param["attr"],  array("{val}"),  $param["fieldData"], array("input-bulk-crud-update")));
                 $result = $this->pdoTableFormatObj->bulkUpdate($result, $data, $this->pk);
             }

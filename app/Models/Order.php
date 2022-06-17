@@ -105,7 +105,7 @@ class Order
     {
         $phases = Order::getBulkUpdateData($crud, 'phases', function($pair, $key, $val)
         {
-            return (fmod($pair[$key], 1) == 0 ? $pair[$key] . ".0" : $pair[$key]) . " - " . $pair[$val];
+            return $pair[$key] . " - " . $pair[$val];
         });
 
         $deliveryAddresses = Order::getBulkUpdateData($crud, 'delivery_addresses', function($pair, $key, $val)

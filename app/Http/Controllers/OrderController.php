@@ -6,7 +6,7 @@ use \PDOCrud;
 
 class OrderController
 {
-    public static function render(string|null $phase)
+    public static function read(string|null $phase)
     {
         $crud = new PDOCrud();
 
@@ -14,9 +14,9 @@ class OrderController
             $crud, 
             $phase
         );
-        $response = view('orders', [
-            'pdocrud' => $processed
-        ]);
+        $response = [
+            "html" => $processed
+        ];
 
         return $response;
     }
