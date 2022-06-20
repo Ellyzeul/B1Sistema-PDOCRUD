@@ -10,7 +10,7 @@ deployment:
     - /bin cp /home/bibli231/repositories/B1Sistema-PDOCRUD/public $DEPLOYPATH
     - /bin cp /home/bibli231/repositories/B1Sistema-PDOCRUD/resources/css $DEPLOYPATH
     - /bin cp /home/bibli231/repositories/B1Sistema-PDOCRUD/resources/js $DEPLOYPATH
-    - /bin cp /home/bibli231/repositories/B1Sistema-PDOCRUD/resources/view $DEPLOYPATH
+    - /bin cp /home/bibli231/repositories/B1Sistema-PDOCRUD/resources/views $DEPLOYPATH
     - /bin cp /home/bibli231/repositories/B1Sistema-PDOCRUD/routes $DEPLOYPATH
     - /bin cp /home/bibli231/repositories/B1Sistema-PDOCRUD/storage $DEPLOYPATH
     - /bin cp /home/bibli231/repositories/B1Sistema-PDOCRUD/tests $DEPLOYPATH
