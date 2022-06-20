@@ -2,4 +2,15 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/bibli231/sistema.biblio1.com.br
-    - /bin/cp -R /home/bibli231/repositories/B1Sistema-PDOCRUD $DEPLOYPATH
+    - /bin cp /home/bibli231/repositories/B1Sistema-PDOCRUD/app $DEPLOYPATH
+    - /bin cp /home/bibli231/repositories/B1Sistema-PDOCRUD/bootstrap $DEPLOYPATH
+    - /bin cp /home/bibli231/repositories/B1Sistema-PDOCRUD/config $DEPLOYPATH
+    - /bin cp /home/bibli231/repositories/B1Sistema-PDOCRUD/database $DEPLOYPATH
+    - /bin cp /home/bibli231/repositories/B1Sistema-PDOCRUD/lang $DEPLOYPATH
+    - /bin cp /home/bibli231/repositories/B1Sistema-PDOCRUD/public $DEPLOYPATH
+    - /bin cp /home/bibli231/repositories/B1Sistema-PDOCRUD/resources/css $DEPLOYPATH
+    - /bin cp /home/bibli231/repositories/B1Sistema-PDOCRUD/resources/js $DEPLOYPATH
+    - /bin cp /home/bibli231/repositories/B1Sistema-PDOCRUD/resources/view $DEPLOYPATH
+    - /bin cp /home/bibli231/repositories/B1Sistema-PDOCRUD/routes $DEPLOYPATH
+    - /bin cp /home/bibli231/repositories/B1Sistema-PDOCRUD/storage $DEPLOYPATH
+    - /bin cp /home/bibli231/repositories/B1Sistema-PDOCRUD/tests $DEPLOYPATH
