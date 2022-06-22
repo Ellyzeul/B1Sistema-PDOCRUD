@@ -1,9 +1,9 @@
 import { OptionProp } from "./types"
 
 export const Option = (props: OptionProp) => {
-    const { label, pathname } = props
+	const { label, pathname } = props
 
-    return (
-        <a href={pathname}>{label}</a>
-    )
+	return (
+			<a href={pathname}>{label}</a>
+	)
 }
