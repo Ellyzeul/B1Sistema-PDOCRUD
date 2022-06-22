@@ -1,72 +1,72 @@
 #purchase_link_modal {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0,0,0,0.75);
-    display: grid;
-    place-items: center;
-    visibility: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0,0,0,0.75);
+	display: grid;
+	place-items: center;
+	visibility: hidden;
 }
 #purchase_link_form {
-    width: 60%;
-    height: 60%;
-    background-color: white;
-    display: grid;
-    grid-template-rows: 10% 80% 10%;
-    grid-template-areas: 
-        'purchase_link_form_close'
-        'purchase_link_form_content'
-        '.';
-    border-radius: 10px;
+	width: 60%;
+	height: 60%;
+	background-color: white;
+	display: grid;
+	grid-template-rows: 10% 80% 10%;
+	grid-template-areas: 
+			'purchase_link_form_close'
+			'purchase_link_form_content'
+			'.';
+	border-radius: 10px;
 }
 #purchase_link_form_close{
-    grid-area: purchase_link_form_close;
-    display: flex;
-    flex-direction: row-reverse;
-    align-items: center;
+	grid-area: purchase_link_form_close;
+	display: flex;
+	flex-direction: row-reverse;
+	align-items: center;
 }
 #purchase_link_form_close > i {
-    margin-right: 20px;
-    padding: 5px 7px;
-    border-radius: 100%;
-    /* transition: 250ms; */
+	margin-right: 20px;
+	padding: 5px 7px;
+	border-radius: 100%;
+	/* transition: 250ms; */
 }
 #purchase_link_form_close > i:hover {
-    cursor: pointer;
-    background-color: black;
-    color: white;
-    transition: 250ms;
+	cursor: pointer;
+	background-color: black;
+	color: white;
+	transition: 250ms;
 }
 #purchase_link_form_content {
-    grid-area: purchase_link_form_content;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
+	grid-area: purchase_link_form_content;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-around;
 }
 #purchase_link_form_content > div {
-    display: flex;
-    width: 80%;
-    justify-content: space-between;
+	display: flex;
+	width: 80%;
+	justify-content: space-between;
 }
 #purchase_link_formsupplier_url {
-    width: 80%;
+	width: 80%;
 }
 #purchase_link_form_submit {
-    display: flex;
-    flex-direction: row-reverse;
+	display: flex;
+	flex-direction: row-reverse;
 }
 #purchase_link_form_submit > button {
-    border: none;
-    padding: 10px;
-    border-radius: 10px;
-    background-color: white;
-    font-weight: bold;
+	border: none;
+	padding: 10px;
+	border-radius: 10px;
+	background-color: white;
+	font-weight: bold;
 }
 #purchase_link_form_submit > button:hover {
-    background-color: green;
-    color: white;
-    transition: 250ms;
+	background-color: green;
+	color: white;
+	transition: 250ms;
 }

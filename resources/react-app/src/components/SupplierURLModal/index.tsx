@@ -7,19 +7,19 @@ export const SupplierURLModal = (props: SupplierURLModalProp) => {
 	const { refModal, refModalId, refURLInput, refOnlineOrderNumber } = props
 
 	const saveUrlModal: FormEventHandler = (event) => {
-    event.preventDefault()
+		event.preventDefault()
 		if((!refModalId.current) || (!refURLInput.current)) return
 		const modalId = refModalId.current as HTMLDivElement
 		const urlInput = refURLInput.current as HTMLInputElement
-    const idRaw = modalId.textContent as string
-    const id = (idRaw.match(/[0-9]{1,}/) as string[])[0]
-    const supplierURL = urlInput.value
+		const idRaw = modalId.textContent as string
+		const id = (idRaw.match(/[0-9]{1,}/) as string[])[0]
+		const supplierURL = urlInput.value
 
-    api.post('/api/supplier_url/update', {
-			id: id,
-			supplier_url: supplierURL
-		})
-    .then(() => urlModalClose())
+		api.post('/api/supplier_url/update', {
+				id: id,
+				supplier_url: supplierURL
+			})
+		.then(() => urlModalClose())
 	}
 
 	const urlModalClose = useCallback(() => {
