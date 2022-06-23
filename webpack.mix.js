@@ -11,23 +11,23 @@ const mix = require('laravel-mix');
  */
 
 mix.options({
-    postCss: [
-        require('autoprefixer'),
-    ],
+	postCss: [
+		require('autoprefixer'),
+	],
 });
 
 mix.setPublicPath('public');
 
 mix.webpackConfig({
-    resolve: {
-        extensions: ['.js', '.vue'],
-        alias: {
-            '@': __dirname + 'resources'
-        }
-    },
-    output: {
-        chunkFilename: 'js/chunks/[name].js',
-    },
+	resolve: {
+		extensions: ['.js', '.vue'],
+		alias: {
+			'@': __dirname + 'resources'
+		}
+	},
+	output: {
+		chunkFilename: 'js/chunks/[name].js',
+	},
 }).react();
 
 // used to run app using reactjs
