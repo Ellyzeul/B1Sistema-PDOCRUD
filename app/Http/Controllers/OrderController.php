@@ -3,8 +3,7 @@
 use App\Models\Order;
 use \PDOCrud;
 
-
-class OrderController
+class OrderController extends Controller
 {
     public static function read(string|null $phase)
     {
