@@ -1,44 +1,49 @@
-<?php
+<?php namespace App\Models;
 
-namespace App\Models;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-
-class User extends Authenticatable
+class User
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    public static function create(string $name, string $email, string $password, int $id_section) {
+        $inserted = DB::table('users')->insert([
+            'email' => $email,
+            'name' => $name,
+            'password' => Hash::make($password),
+            'token' => Str::random(60),
+            'id_section' => $id_section
+        ]);
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+        $response = $inserted
+            ? [[
+                "message" => "Usuário inserido com sucesso"
+            ], 201]
+            : [[
+                "message" => "Erro ao inserir o usuário"
+            ], 500];
+        
+        return $response;
+    }
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    public static function login(string $email, string $password) {
+        $user = DB::table('users')->where("email", $email)->get()->first();
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+        if($user == null) return [[
+            "message" => "E-mail não cadastrado no sistema"
+        ], 401];
+        if(!Hash::check($password, $user->password)) return [[
+            "message" => "Senha incorreta"
+        ], 401];
+
+        if(Hash::needsRehash($user->password)) DB::table('table')->update([
+            "password" => Hash::make($password)
+        ]);
+
+        return [[
+            "message" => "Login realizado",
+            "token" => $user->token,
+            "id_section" => $user->id_section
+        ], 200];
+    }
 }

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SupplierURLController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PhaseController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,4 +44,20 @@ Route::get('/orders/read', function (Request $request) {
 
 Route::get('/phases/read', function () {
     return PhaseController::read();
+});
+
+Route::post('/user/create', function (Request $request) {
+    return UserController::create(
+        $request->input('name'),
+        $request->input('email'),
+        $request->input('password'),
+        $request->input('id_section')
+    );
+});
+
+Route::post('/user/login', function (Request $request) {
+    return UserController::login(
+        $request->input('email'),
+        $request->input('password')
+    );
 });

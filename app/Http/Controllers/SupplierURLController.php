@@ -2,8 +2,7 @@
 
 use App\Models\SupplierURL;
 
-
-class SupplierURLController
+class SupplierURLController extends Controller
 {
     public static function read(string $id)
     {
