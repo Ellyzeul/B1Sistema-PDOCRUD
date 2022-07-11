@@ -67,4 +67,5 @@
 #submit_login:hover {
 	color: white;
 	background-color: rgb(5, 181, 5);
+	cursor: pointer;
 }
