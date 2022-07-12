@@ -1,5 +1,5 @@
 import { FormEventHandler, useRef, useState } from "react"
-import { toast } from "react-toastify"
+import { toast, ToastContainer } from "react-toastify"
 import api from "../../services/axios"
 import 'react-toastify/dist/ReactToastify.css'
 import "./style.css"
@@ -41,6 +41,7 @@ export const LoginForm = () => {
 				</div>
 				<button type="submit" id="submit_login">Enviar</button>
 			</div>
+      <ToastContainer />
 		</form>
 	)
 }
