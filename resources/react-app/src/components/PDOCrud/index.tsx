@@ -22,6 +22,7 @@ export const PDOCrud = (props: PDOCrudProp) => {
 		if(elem.children.length === 0) return
 		if(!document.querySelectorAll('.pdocrud-data-row')[0].children[1]) return
 
+		(document.querySelector(".panel-title") as HTMLHeadingElement).textContent = "Controle de fases"
 		setValuesOnSelects()
 		setCurrencySymbols()
 		setOpenModalEvent(refModal, refModalId, refOnlineOrderNumber, refURLInput)

@@ -2168,12 +2168,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/index.js");
-/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.mjs");
-/* harmony import */ var _App_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./App.css */ "./resources/react-app/src/App.css");
-/* harmony import */ var _pages_Login__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pages/Login */ "./resources/react-app/src/pages/Login/index.tsx");
-/* harmony import */ var _pages_Orders__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./pages/Orders */ "./resources/react-app/src/pages/Orders/index.tsx");
-
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/index.js");
+/* harmony import */ var _App_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./App.css */ "./resources/react-app/src/App.css");
+/* harmony import */ var _pages_Login__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./pages/Login */ "./resources/react-app/src/pages/Login/index.tsx");
+/* harmony import */ var _pages_Orders__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pages/Orders */ "./resources/react-app/src/pages/Orders/index.tsx");
 
 
 
@@ -2185,23 +2183,21 @@ function App() {
   var userData = userDataRaw ? JSON.parse(userDataRaw) : false;
   var isLogged = !!userData;
   console.log(isLogged);
-  return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-    children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_5__.Routes, {
-      children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_5__.Route, {
-        path: '/login',
-        element: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Login__WEBPACK_IMPORTED_MODULE_3__.Login, {})
-      }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_5__.Route, {
-        path: '/',
-        element: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_5__.Navigate, {
-          to: '/orders'
-        })
-      }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_5__.Route, {
-        path: '/orders',
-        element: isLogged ? (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Orders__WEBPACK_IMPORTED_MODULE_4__.OrdersPage, {}) : (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_5__.Navigate, {
-          to: '/login'
-        })
-      })]
-    }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_toastify__WEBPACK_IMPORTED_MODULE_1__.ToastContainer, {})]
+  return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Routes, {
+    children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Route, {
+      path: '/login',
+      element: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Login__WEBPACK_IMPORTED_MODULE_2__.Login, {})
+    }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Route, {
+      path: '/',
+      element: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Navigate, {
+        to: '/orders'
+      })
+    }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Route, {
+      path: '/orders',
+      element: isLogged ? (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Orders__WEBPACK_IMPORTED_MODULE_3__.OrdersPage, {}) : (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Navigate, {
+        to: '/login'
+      })
+    })]
   });
 }
 
@@ -2328,7 +2324,7 @@ var LoginForm = function LoginForm() {
       }, {
         children: "Enviar"
       }))]
-    }))]
+    })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_toastify__WEBPACK_IMPORTED_MODULE_2__.ToastContainer, {})]
   }));
 };
 
@@ -2644,6 +2640,7 @@ var PDOCrud = function PDOCrud(props) {
     var elem = elemRef.current;
     if (elem.children.length === 0) return;
     if (!document.querySelectorAll('.pdocrud-data-row')[0].children[1]) return;
+    document.querySelector(".panel-title").textContent = "Controle de fases";
     (0,_functions__WEBPACK_IMPORTED_MODULE_3__.setValuesOnSelects)();
     (0,_functions__WEBPACK_IMPORTED_MODULE_3__.setCurrencySymbols)();
     (0,_functions__WEBPACK_IMPORTED_MODULE_3__.setOpenModalEvent)(refModal, refModalId, refOnlineOrderNumber, refURLInput);
@@ -2887,10 +2884,11 @@ var OrdersPage = function OrdersPage() {
         }]
       }];
       phases.forEach(function (phase) {
-        var id = phase.id;
+        var id = phase.id,
+            name = phase.name;
         var label = id.split('.')[0];
         var option = {
-          label: id,
+          label: "".concat(id, " - ").concat(name),
           pathname: "/orders?phase=".concat(id)
         };
         items[label] ? items[label].push(option) : items[label] = [option];
@@ -3083,7 +3081,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".dropdown {\r\n\tposition: relative;\r\n\tdisplay: inline-block;\r\n\theight: 100%;\r\n}\r\n.dropbtn {\r\n\tbackground-color: rgba(0,0,0,0);\r\n\tcolor: white;\r\n\theight: 100%;\r\n\tpadding: 0 16px;\r\n\tfont-size: 16px;\r\n\tborder: none;\r\n}\r\n.dropdown-content {\r\n\tdisplay: none;\r\n\tposition: absolute;\r\n\tbackground-color: #fff;\r\n\tmin-width: 160px;\r\n\tbox-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);\r\n\tz-index: 1;\r\n}\r\n.dropdown-content a {\r\n\tcolor: #000;\r\n\tfont-size: larger;\r\n\tpadding: 12px 16px;\r\n\ttext-decoration: none;\r\n\tdisplay: block;\r\n}\r\n.dropdown-content a:hover {\r\n\tbackground-color: #000;\r\n\tcolor: #fff;\r\n}\r\n.dropdown:hover .dropdown-content {\r\n\tdisplay: block;\r\n}\r\n.dropdown:hover .dropbtn {\r\n\tbackground-color: #fff;\r\n\tcolor: #000;\r\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".dropdown {\r\n\tposition: relative;\r\n\tdisplay: inline-block;\r\n\theight: 100%;\r\n}\r\n.dropbtn {\r\n\tbackground-color: rgba(0,0,0,0);\r\n\tcolor: white;\r\n\theight: 100%;\r\n\tpadding: 0 16px;\r\n\tfont-size: 16px;\r\n\tborder: none;\r\n}\r\n.dropdown-content {\r\n\tdisplay: none;\r\n\tposition: absolute;\r\n\tbackground-color: #fff;\r\n\tmin-width: 380px;\r\n\tbox-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);\r\n\tz-index: 1;\r\n}\r\n.dropdown-content a {\r\n\tcolor: #000;\r\n\tfont-size: larger;\r\n\tpadding: 12px 16px;\r\n\ttext-decoration: none;\r\n\tdisplay: block;\r\n}\r\n.dropdown-content a:hover {\r\n\tbackground-color: #000;\r\n\tcolor: #fff;\r\n}\r\n.dropdown:hover .dropdown-content {\r\n\tdisplay: block;\r\n}\r\n.dropdown:hover .dropbtn {\r\n\tbackground-color: #fff;\r\n\tcolor: #000;\r\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

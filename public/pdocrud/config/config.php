@@ -57,7 +57,7 @@ $config["totalRecordsInfo"] = true;
 //show save button in crud table
 $config["savebtn"] = false;
 //show add button (true = show)
-$config["addbtn"] = true;
+$config["addbtn"] = false;
 //show edit button (true = show)
 $config["editbtn"] = true;
 //show view button (true = show)

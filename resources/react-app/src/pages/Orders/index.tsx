@@ -26,10 +26,10 @@ export const OrdersPage = () => {
 				}] as DropdownProp[]
 
 				phases.forEach(phase => {
-					const { id } = phase
+					const { id, name } = phase
 					const label = (id.split('.') as string[])[0]
 					const option = {
-						label: id,
+						label: `${id} - ${name}`,
 						pathname: `/orders?phase=${id}`
 					}
 
