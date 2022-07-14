@@ -2361,11 +2361,20 @@ var __assign = undefined && undefined.__assign || function () {
 
 var Option = function Option(props) {
   var label = props.label,
-      pathname = props.pathname;
-  return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("a", __assign({
+      pathname = props.pathname,
+      color = props.color;
+  var style = {
+    backgroundColor: color,
+    padding: "4px",
+    borderRadius: "10px",
+    border: "1px solid #DDD"
+  };
+  return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("a", __assign({
     href: pathname
   }, {
-    children: label
+    children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+      style: style
+    }), label]
   }));
 };
 
@@ -2421,7 +2430,8 @@ var Dropdown = function Dropdown(props) {
     options.forEach(function (option) {
       return toUpdate.push((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_Option__WEBPACK_IMPORTED_MODULE_3__.Option, {
         label: option.label,
-        pathname: option.pathname
+        pathname: option.pathname,
+        color: option.color
       }, i++));
     });
     setOptionsElem(toUpdate);
@@ -2885,11 +2895,13 @@ var OrdersPage = function OrdersPage() {
       }];
       phases.forEach(function (phase) {
         var id = phase.id,
-            name = phase.name;
+            name = phase.name,
+            color = phase.color;
         var label = id.split('.')[0];
         var option = {
           label: "".concat(id, " - ").concat(name),
-          pathname: "/orders?phase=".concat(id)
+          pathname: "/orders?phase=".concat(id),
+          color: "#".concat(color)
         };
         items[label] ? items[label].push(option) : items[label] = [option];
       });

@@ -11,7 +11,7 @@ export const Dropdown = (props: DropdownProp) => {
 		const toUpdate = [] as JSX.Element[]
 		let i = 0
 		options.forEach(option => toUpdate.push(
-			<Option label={option.label} pathname={option.pathname} key={i++} />
+			<Option label={option.label} pathname={option.pathname} color={option.color} key={i++} />
 		))
 		setOptionsElem(toUpdate)
 	}, [options])

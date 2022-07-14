@@ -1,4 +1,5 @@
 export interface Phase {
 	id: string,
-	name: string
+	name: string,
+	color?: string
 }
