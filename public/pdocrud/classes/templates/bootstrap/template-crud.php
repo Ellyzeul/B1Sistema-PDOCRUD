@@ -67,24 +67,6 @@
                     </div>     
                 </div>
             </div>       
-            <?php if(isset($extraData["dateRangeReport"])) { ?>
-            <div class="row" style="padding-bottom: 5px">
-                <?php foreach($extraData["dateRangeReport"] as $key => $dateRange ) {?>
-                        <div class="col-md-2 col-lg-2">
-                            <a title="<?php echo $dateRange["text"]; ?>" class="pdocrud-actions pdocrud-button btn btn-success pdocrud-date-range-report"
-                               href="javascript:;" data-action="date_range_report" data-action-id="<?php echo $key;?>" data-obj-key="<?php echo $objKey; ?>">
-                                <?php echo $dateRange["text"];?>
-                            </a>
-                        </div>
-                <?php 
-                }?>
-            </div>
-            <?php } ?>
-            <div class="row">
-                <div class="col-sm-12">
-                    <?php echo $data; ?>
-                </div>
-            </div>
             <div class="row pdocrud-options-files">
                 <div class="col-sm-6 col-md-6 col-xs-12">
                     <ul class="pdocrud-export-options">
@@ -121,7 +103,26 @@
                     </div>
                 </div>
                 <div style="clear:both"></div>
-            </div>  
+            </div>
+            <?php if(isset($extraData["dateRangeReport"])) { ?>
+            <div class="row" style="padding-bottom: 5px">
+                <?php foreach($extraData["dateRangeReport"] as $key => $dateRange ) {?>
+                        <div class="col-md-2 col-lg-2">
+                            <a title="<?php echo $dateRange["text"]; ?>" class="pdocrud-actions pdocrud-button btn btn-success pdocrud-date-range-report"
+                               href="javascript:;" data-action="date_range_report" data-action-id="<?php echo $key;?>" data-obj-key="<?php echo $objKey; ?>">
+                                <?php echo $dateRange["text"];?>
+                            </a>
+                        </div>
+                <?php 
+                }?>
+            </div>
+            <?php } ?>
+            <div class="row">
+                <div class="col-sm-12">
+                    <?php echo $data; ?>
+                </div>
+            </div>
+              
         </div><!-- /.box-body -->
     </div><!-- /.box -->
 <?php echo $modal; ?>  
