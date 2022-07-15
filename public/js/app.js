@@ -2182,7 +2182,6 @@ function App() {
   var userDataRaw = window.localStorage.getItem("userData");
   var userData = userDataRaw ? JSON.parse(userDataRaw) : false;
   var isLogged = !!userData;
-  console.log(isLogged);
   return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Routes, {
     children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Route, {
       path: '/login',
@@ -2342,6 +2341,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Option": () => (/* binding */ Option)
 /* harmony export */ });
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./style.css */ "./resources/react-app/src/components/Navbar/Dropdown/Option/style.css");
 var __assign = undefined && undefined.__assign || function () {
   __assign = Object.assign || function (t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -2359,20 +2359,20 @@ var __assign = undefined && undefined.__assign || function () {
 };
 
 
+
 var Option = function Option(props) {
   var label = props.label,
       pathname = props.pathname,
       color = props.color;
   var style = {
-    backgroundColor: color,
-    padding: "4px",
-    borderRadius: "10px",
-    border: "1px solid #DDD"
+    backgroundColor: color
   };
   return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("a", __assign({
+    className: "navbar-dropdown-option",
     href: pathname
   }, {
     children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+      className: "navbar-dropdown-option-colour-div",
       style: style
     }), label]
   }));
@@ -2516,10 +2516,10 @@ var Navbar = function Navbar(props) {
 
 /***/ }),
 
-/***/ "./resources/react-app/src/components/PDOCrud/functions.ts":
-/*!*****************************************************************!*\
-  !*** ./resources/react-app/src/components/PDOCrud/functions.ts ***!
-  \*****************************************************************/
+/***/ "./resources/react-app/src/components/PDOCrud/functions.tsx":
+/*!******************************************************************!*\
+  !*** ./resources/react-app/src/components/PDOCrud/functions.tsx ***!
+  \******************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -2527,9 +2527,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "setCurrencySymbols": () => (/* binding */ setCurrencySymbols),
 /* harmony export */   "setOpenModalEvent": () => (/* binding */ setOpenModalEvent),
+/* harmony export */   "setTopScrollBar": () => (/* binding */ setTopScrollBar),
 /* harmony export */   "setValuesOnSelects": () => (/* binding */ setValuesOnSelects)
 /* harmony export */ });
-/* harmony import */ var _services_axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../services/axios */ "./resources/react-app/src/services/axios.ts");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _services_axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services/axios */ "./resources/react-app/src/services/axios.ts");
+/* harmony import */ var _TopScrollBar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../TopScrollBar */ "./resources/react-app/src/components/TopScrollBar/index.tsx");
+/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
+
+
+
 
 var setValuesOnSelects = function setValuesOnSelects() {
   var selects = document.querySelectorAll('.pdocrud-row-cols > select');
@@ -2590,6 +2597,14 @@ var setOpenModalEvent = function setOpenModalEvent(refModal, refModalId, refOnli
     };
   });
 };
+var setTopScrollBar = function setTopScrollBar(panelBody) {
+  var toScroll = panelBody.children[2];
+  var scrollbarContainer = document.createElement("div");
+  scrollbarContainer.style.height = "20px";
+  panelBody.insertBefore(scrollbarContainer, toScroll);
+  var scrollbarRoot = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_3__.createRoot)(scrollbarContainer);
+  scrollbarRoot.render((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_TopScrollBar__WEBPACK_IMPORTED_MODULE_2__.TopScrollBar, {}));
+};
 
 var openModal = function openModal(modal, modalId, onlineOrderNumber, urlInput, rowId, rowOnlineOrderNumber) {
   modal.style.visibility = 'visible';
@@ -2597,7 +2612,7 @@ var openModal = function openModal(modal, modalId, onlineOrderNumber, urlInput, 
   modalId.textContent = rowId;
   onlineOrderNumber.textContent = rowOnlineOrderNumber;
   var id = rowId;
-  _services_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("/api/supplier_url/read?id=".concat(id)).then(function (response) {
+  _services_axios__WEBPACK_IMPORTED_MODULE_1__["default"].get("/api/supplier_url/read?id=".concat(id)).then(function (response) {
     return response.data;
   }).then(function (response) {
     return urlInput.value = response.url;
@@ -2621,7 +2636,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _services_axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../services/axios */ "./resources/react-app/src/services/axios.ts");
-/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./functions */ "./resources/react-app/src/components/PDOCrud/functions.ts");
+/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./functions */ "./resources/react-app/src/components/PDOCrud/functions.tsx");
 
 
 
@@ -2654,6 +2669,7 @@ var PDOCrud = function PDOCrud(props) {
     (0,_functions__WEBPACK_IMPORTED_MODULE_3__.setValuesOnSelects)();
     (0,_functions__WEBPACK_IMPORTED_MODULE_3__.setCurrencySymbols)();
     (0,_functions__WEBPACK_IMPORTED_MODULE_3__.setOpenModalEvent)(refModal, refModalId, refOnlineOrderNumber, refURLInput);
+    (0,_functions__WEBPACK_IMPORTED_MODULE_3__.setTopScrollBar)(document.querySelector(".panel-body"));
   }, [elemRef, rawHTML]);
   return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
     ref: elemRef,
@@ -2798,6 +2814,76 @@ var SupplierURLModal = function SupplierURLModal(props) {
         }))]
       }))]
     }))
+  }));
+};
+
+/***/ }),
+
+/***/ "./resources/react-app/src/components/TopScrollBar/index.tsx":
+/*!*******************************************************************!*\
+  !*** ./resources/react-app/src/components/TopScrollBar/index.tsx ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "TopScrollBar": () => (/* binding */ TopScrollBar)
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./style.css */ "./resources/react-app/src/components/TopScrollBar/style.css");
+var __assign = undefined && undefined.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+
+
+
+var TopScrollBar = function TopScrollBar() {
+  var scrollRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+  var scrollContentRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+  var table = document.querySelector(".table-responsive");
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+    if (!scrollContentRef.current) return;
+    var scrollContent = scrollContentRef.current;
+    var scrollWidth = table.scrollWidth;
+    scrollContent.style.width = "".concat(scrollWidth, "px");
+  }, [scrollContentRef]);
+
+  var onScroll = function onScroll(event) {
+    var scroll = event.target;
+    table.scrollLeft = scroll.scrollLeft;
+  };
+
+  table.addEventListener("scroll", function (event) {
+    if (!scrollRef.current) return;
+    var toScroll = event.target;
+    var scroll = scrollRef.current;
+    scroll.scrollLeft = toScroll.scrollLeft;
+  });
+  return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({
+    className: "top-scroll-bar",
+    ref: scrollRef,
+    onScroll: onScroll
+  }, {
+    children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+      className: "top-scroll-bar-content",
+      ref: scrollContentRef
+    })
   }));
 };
 
@@ -3076,6 +3162,30 @@ ___CSS_LOADER_EXPORT___.push([module.id, "#login_form {\r\n\tbackground-color: w
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/components/Navbar/Dropdown/Option/style.css":
+/*!***************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/components/Navbar/Dropdown/Option/style.css ***!
+  \***************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, ".navbar-dropdown-option {\r\n\tcolor: #000;\r\n\tfont-size: larger;\r\n\tpadding: 12px 16px;\r\n\ttext-decoration: none;\r\n\tdisplay: block;\r\n}\r\n.navbar-dropdown-option:hover {\r\n\tbackground-color: #000;\r\n\tcolor: #fff;\r\n}\r\n\r\n.navbar-dropdown-option-colour-div {\r\n  padding: 4px;\r\n  border-radius: 10px;\r\n  border: 1px solid #DDD;\r\n}\r\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/components/Navbar/Dropdown/style.css":
 /*!********************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/components/Navbar/Dropdown/style.css ***!
@@ -3093,7 +3203,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".dropdown {\r\n\tposition: relative;\r\n\tdisplay: inline-block;\r\n\theight: 100%;\r\n}\r\n.dropbtn {\r\n\tbackground-color: rgba(0,0,0,0);\r\n\tcolor: white;\r\n\theight: 100%;\r\n\tpadding: 0 16px;\r\n\tfont-size: 16px;\r\n\tborder: none;\r\n}\r\n.dropdown-content {\r\n\tdisplay: none;\r\n\tposition: absolute;\r\n\tbackground-color: #fff;\r\n\tmin-width: 380px;\r\n\tbox-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);\r\n\tz-index: 1;\r\n}\r\n.dropdown-content a {\r\n\tcolor: #000;\r\n\tfont-size: larger;\r\n\tpadding: 12px 16px;\r\n\ttext-decoration: none;\r\n\tdisplay: block;\r\n}\r\n.dropdown-content a:hover {\r\n\tbackground-color: #000;\r\n\tcolor: #fff;\r\n}\r\n.dropdown:hover .dropdown-content {\r\n\tdisplay: block;\r\n}\r\n.dropdown:hover .dropbtn {\r\n\tbackground-color: #fff;\r\n\tcolor: #000;\r\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".dropdown {\r\n\tposition: relative;\r\n\tdisplay: inline-block;\r\n\theight: 100%;\r\n}\r\n.dropbtn {\r\n\tbackground-color: rgba(0,0,0,0);\r\n\tcolor: white;\r\n\theight: 100%;\r\n\tpadding: 0 16px;\r\n\tfont-size: 16px;\r\n\tborder: none;\r\n}\r\n.dropdown-content {\r\n\tdisplay: none;\r\n\tposition: absolute;\r\n\tbackground-color: #fff;\r\n\tmin-width: 380px;\r\n\tbox-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);\r\n\tz-index: 100;\r\n}\r\n.dropdown:hover .dropdown-content {\r\n\tdisplay: block;\r\n}\r\n.dropdown:hover .dropbtn {\r\n\tbackground-color: #fff;\r\n\tcolor: #000;\r\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -3148,6 +3258,30 @@ ___CSS_LOADER_EXPORT___.push([module.id, "#purchase_link_modal {\r\n\tposition: 
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/components/TopScrollBar/style.css":
+/*!*****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/components/TopScrollBar/style.css ***!
+  \*****************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, ".top-scroll-bar {\r\n  overflow-x: scroll;\r\n  width: 100%;\r\n  height: 20px;\r\n}\r\n.top-scroll-bar-content {\r\n  height: 20px;\r\n}\r\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/index.css":
 /*!*****************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/index.css ***!
@@ -3165,7 +3299,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "body {\r\n  margin: 0;\r\n  padding: 0;\r\n  top: 0;\r\n  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',\r\n    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',\r\n    sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\n#root {\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\ncode {\r\n  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',\r\n    monospace;\r\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "body {\r\n  margin: 0;\r\n  padding: 0;\r\n  top: 0;\r\n  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',\r\n    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',\r\n    sans-serif;\r\n  overflow-x: hidden;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\n#root {\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\ncode {\r\n  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',\r\n    monospace;\r\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -40402,6 +40536,36 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 /***/ }),
 
+/***/ "./resources/react-app/src/components/Navbar/Dropdown/Option/style.css":
+/*!*****************************************************************************!*\
+  !*** ./resources/react-app/src/components/Navbar/Dropdown/Option/style.css ***!
+  \*****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_2_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!../../../../../../../node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./style.css */ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/components/Navbar/Dropdown/Option/style.css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_2_style_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_2_style_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
 /***/ "./resources/react-app/src/components/Navbar/Dropdown/style.css":
 /*!**********************************************************************!*\
   !*** ./resources/react-app/src/components/Navbar/Dropdown/style.css ***!
@@ -40476,6 +40640,36 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_2_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!../../../../../node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./style.css */ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/components/SupplierURLModal/style.css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_2_style_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_2_style_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
+/***/ "./resources/react-app/src/components/TopScrollBar/style.css":
+/*!*******************************************************************!*\
+  !*** ./resources/react-app/src/components/TopScrollBar/style.css ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_2_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!../../../../../node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./style.css */ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/components/TopScrollBar/style.css");
 
             
 

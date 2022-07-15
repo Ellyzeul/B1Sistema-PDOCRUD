@@ -1,15 +1,18 @@
 import { OptionProp } from "./types"
+import "./style.css"
 
 export const Option = (props: OptionProp) => {
 	const { label, pathname, color } = props
 	const style = {
-		backgroundColor: color,
-		padding: "4px",
-		borderRadius: "10px",
-		border: "1px solid #DDD"
+		backgroundColor: color
 	}
 
 	return (
-			<a href={pathname}><div style={style}></div>{label}</a>
+		<a
+			className={"navbar-dropdown-option"} 
+			href={pathname}>
+			<div className={"navbar-dropdown-option-colour-div"} style={style}></div>
+			{label}
+		</a>
 	)
 }

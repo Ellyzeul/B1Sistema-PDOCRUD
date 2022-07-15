@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import api from "../../services/axios"
-import { setOpenModalEvent, setCurrencySymbols, setValuesOnSelects } from "./functions"
+import { setOpenModalEvent, setCurrencySymbols, setValuesOnSelects, setTopScrollBar } from "./functions"
 import { PDOCrudProp } from "./types"
 
 export const PDOCrud = (props: PDOCrudProp) => {
@@ -26,6 +26,7 @@ export const PDOCrud = (props: PDOCrudProp) => {
 		setValuesOnSelects()
 		setCurrencySymbols()
 		setOpenModalEvent(refModal, refModalId, refOnlineOrderNumber, refURLInput)
+		setTopScrollBar(document.querySelector(".panel-body") as HTMLDivElement)
 	}, [elemRef, rawHTML])
 
 	return (

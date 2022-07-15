@@ -1,0 +1,17 @@
+.navbar-dropdown-option {
+	color: #000;
+	font-size: larger;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+}
+.navbar-dropdown-option:hover {
+	background-color: #000;
+	color: #fff;
+}
+
+.navbar-dropdown-option-colour-div {
+  padding: 4px;
+  border-radius: 10px;
+  border: 1px solid #DDD;
+}
