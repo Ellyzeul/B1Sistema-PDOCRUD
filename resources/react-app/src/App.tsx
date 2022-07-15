@@ -7,7 +7,6 @@ function App() {
   const userDataRaw = window.localStorage.getItem("userData")
   const userData = userDataRaw ? JSON.parse(userDataRaw) : false
   const isLogged = !!userData
-  console.log(isLogged)
 
   return (
     <Routes>

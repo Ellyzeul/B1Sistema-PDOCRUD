@@ -1,0 +1,8 @@
+.top-scroll-bar {
+  overflow-x: scroll;
+  width: 100%;
+  height: 20px;
+}
+.top-scroll-bar-content {
+  height: 20px;
+}

@@ -1,5 +1,7 @@
 import api from "../../services/axios"
 import { MutableRefObject } from "react";
+import { TopScrollBar } from "../TopScrollBar";
+import { createRoot } from "react-dom/client";
 
 export const setValuesOnSelects = () => {
 	const selects = document.querySelectorAll('.pdocrud-row-cols > select') as NodeListOf<HTMLSelectElement>
@@ -63,6 +65,16 @@ export const setOpenModalEvent = (
 			rowOnlineOrderNumber
 		)
 	})
+}
+
+export const setTopScrollBar = (panelBody: HTMLDivElement) => {
+	const toScroll = panelBody.children[2] as HTMLDivElement
+	const scrollbarContainer = document.createElement("div")
+
+	scrollbarContainer.style.height= "20px"
+	panelBody.insertBefore(scrollbarContainer, toScroll)
+	const scrollbarRoot = createRoot(scrollbarContainer)
+	scrollbarRoot.render(<TopScrollBar/>)
 }
 
 const openModal = (
