@@ -5,8 +5,9 @@ use \PDOCrud;
 
 class Order
 {
-    public static function read(PDOCrud $crud, string|null $phase)
+    public static function read(string|null $phase)
     {
+        $crud = new PDOCrud();
         $crud = Order::setFields($crud);
         $crud = Order::fieldsNotMandatory($crud);
         $crud = Order::fieldBulkUpdate($crud);
