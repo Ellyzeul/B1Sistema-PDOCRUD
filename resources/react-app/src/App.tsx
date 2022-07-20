@@ -2,6 +2,7 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
 import { Login } from './pages/Login';
 import { OrdersPage } from './pages/Orders';
+import { PhotosPage } from './pages/Photos';
 
 function App() {
   const userDataRaw = window.localStorage.getItem("userData")
@@ -13,6 +14,7 @@ function App() {
       <Route path='/login' element={<Login />} />
       <Route path='/' element={<Navigate to='/orders'/>} />
       <Route path='/orders' element={isLogged ? <OrdersPage/> : <Navigate to='/login'/>} />
+      <Route path='/photos' element={isLogged ? <PhotosPage/> : <Navigate to='/login'/>} />
     </Routes>
   );
 }

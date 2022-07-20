@@ -7,12 +7,7 @@ class OrderController extends Controller
 {
     public static function read(string|null $phase)
     {
-        $crud = new PDOCrud();
-
-        $processed = Order::read(
-            $crud, 
-            $phase
-        );
+        $processed = Order::read($phase);
         $response = [
             "html" => $processed
         ];
