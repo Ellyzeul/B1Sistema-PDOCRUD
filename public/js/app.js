@@ -2270,9 +2270,23 @@ var LoginForm = function LoginForm() {
       setPassVisible = _a[1];
 
   var formRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+  var root = document.querySelector("#root");
 
   var changePasswordVisibility = function changePasswordVisibility() {
     return setPassVisible(!passVisible);
+  };
+
+  var treatLogin = function treatLogin(message, userData) {
+    root.style.cursor = "context-menu";
+
+    if (!("name" in userData) || !("token" in userData) || !("id_section" in userData)) {
+      react_toastify__WEBPACK_IMPORTED_MODULE_2__.toast.error(message);
+      return;
+    }
+
+    react_toastify__WEBPACK_IMPORTED_MODULE_2__.toast.success(message);
+    window.localStorage.setItem("userData", JSON.stringify(userData));
+    window.location.pathname = '/orders';
   };
 
   var makeLogin = function makeLogin(event) {
@@ -2281,6 +2295,7 @@ var LoginForm = function LoginForm() {
     var form = formRef.current;
     var email = form[0].value;
     var password = form[1].value;
+    root.style.cursor = "wait";
     _services_axios__WEBPACK_IMPORTED_MODULE_3__["default"].post('/api/user/login', {
       email: email,
       password: password
@@ -2290,9 +2305,7 @@ var LoginForm = function LoginForm() {
       var message = response.message,
           userData = __rest(response, ["message"]);
 
-      react_toastify__WEBPACK_IMPORTED_MODULE_2__.toast.success(message);
-      window.localStorage.setItem("userData", JSON.stringify(userData));
-      window.location.pathname = '/orders';
+      treatLogin(message, userData);
     });
   };
 
@@ -3066,18 +3079,29 @@ var PhotosPage = function PhotosPage() {
   return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({
     className: "photos-form"
   }, {
-    children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("form", {
-      children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+    children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("form", {
+      children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
         children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", __assign({
-          htmlFor: "photo-input"
+          htmlFor: "photo-name"
+        }, {
+          children: "Nome da foto"
+        })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
+          type: "text",
+          name: "photo-name",
+          id: "photo-name"
+        })]
+      }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+        children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", __assign({
+          htmlFor: "photo-image"
         }, {
           children: "Foto a ser postada"
         })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
           type: "file",
-          name: "photo-input",
+          name: "photo-image",
+          id: "photo-image",
           accept: "image/jpeg, image/jpg, image/png"
         })]
-      })
+      })]
     })
   }));
 };
@@ -3131,7 +3155,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 
 var location = window.location;
-var baseURL = location.hostname === "localhost" ? "http://localhost:8000/" : "".concat(location.protocol, "//").concat(location.host, "/");
+var baseURL = location.hostname === "localhost" || location.hostname === "192.168.0.195" ? "http://localhost:8000/" : "".concat(location.protocol, "//").concat(location.host, "/");
 var api = axios__WEBPACK_IMPORTED_MODULE_0___default().create({
   baseURL: baseURL
 });
@@ -3412,7 +3436,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".photos-form {\r\n  width: 100%;\r\n  height: 100vh;\r\n  background-color: black;\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n}\r\n.photos-form > form {\r\n  width: 80%;\r\n  height: 60%;\r\n  background-color: white;\r\n  display: flex;\r\n  flex-direction: column;\r\n  justify-content: center;\r\n  align-items: center;\r\n  border-radius: 10px;\r\n}\r\n.photos-form > form > div {\r\n  display: flex;\r\n  flex-direction: column;\r\n  height: 30%;\r\n  align-items: center;\r\n  justify-content: space-between;\r\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".photos-form {\r\n  width: 100%;\r\n  height: 100vh;\r\n  background-color: black;\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n}\r\n.photos-form > form {\r\n  width: 80%;\r\n  height: 60%;\r\n  background-color: white;\r\n  display: flex;\r\n  flex-direction: column;\r\n  justify-content: space-around;\r\n  align-items: center;\r\n  border-radius: 10px;\r\n}\r\n.photos-form > form > div {\r\n  display: flex;\r\n  flex-direction: column;\r\n  height: 20%;\r\n  align-items: center;\r\n  justify-content: space-between;\r\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
