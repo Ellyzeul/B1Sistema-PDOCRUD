@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SupplierURLController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PhaseController;
+use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -59,5 +60,12 @@ Route::post('/user/login', function (Request $request) {
     return UserController::login(
         $request->input('email'),
         $request->input('password')
+    );
+});
+
+Route::post('/photo/create', function (Request $request) {
+    return PhotoController::create(
+        $request->input('photo_url'),
+        $request->input('photo_name')
     );
 });
