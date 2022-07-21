@@ -7,8 +7,21 @@ import "./style.css"
 export const LoginForm = () => {
 	const [passVisible, setPassVisible] = useState(false)
 	const formRef = useRef(null)
+	const root = document.querySelector("#root") as HTMLDivElement
 
 	const changePasswordVisibility = () => setPassVisible(!passVisible)
+
+	const treatLogin = (message: string, userData: Object) => {
+		root.style.cursor = "context-menu"
+		if(!("name" in userData) || !("token" in userData) || !("id_section" in userData)) {
+			toast.error(message)
+			return
+		}
+
+		toast.success(message)
+		window.localStorage.setItem("userData", JSON.stringify(userData))
+		window.location.pathname = '/orders'
+	}
 
 	const makeLogin: FormEventHandler = (event) => {
 		event.preventDefault()
@@ -17,6 +30,8 @@ export const LoginForm = () => {
 		const email = (form[0] as HTMLInputElement).value
 		const password = (form[1] as HTMLInputElement).value
 
+		root.style.cursor = "wait"
+
 		api.post('/api/user/login', {
 			email: email,
 			password: password
@@ -24,9 +39,7 @@ export const LoginForm = () => {
 		.then(response => response.data)
 		.then(response => {
 			const { message, ...userData } = response
-			toast.success(message)
-			window.localStorage.setItem("userData", JSON.stringify(userData))
-			window.location.pathname = '/orders'
+			treatLogin(message, userData)
 		})
 	}
 
