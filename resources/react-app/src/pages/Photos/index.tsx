@@ -5,10 +5,15 @@ export const PhotosPage = () => {
     <div className="photos-form">
       <form>
         <div>
-          <label htmlFor="photo-input">Foto a ser postada</label>
+          <label htmlFor="photo-name">Nome da foto</label>
+          <input type="text" name="photo-name" id="photo-name" />
+        </div>
+        <div>
+          <label htmlFor="photo-image">Foto a ser postada</label>
           <input 
             type="file" 
-            name="photo-input"
+            name="photo-image"
+            id="photo-image"
             accept="image/jpeg, image/jpg, image/png"
           />
         </div>
