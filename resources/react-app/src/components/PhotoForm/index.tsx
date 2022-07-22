@@ -1,6 +1,6 @@
 import { FormEventHandler } from "react"
 import { toast, ToastContainer } from "react-toastify"
-import api from "../../services/axios"
+import api, { postFile } from "../../services/axios"
 import "./style.css"
 
 export const PhotoForm = () => {
@@ -18,6 +18,7 @@ export const PhotoForm = () => {
   }
 
   const onSubmit: FormEventHandler = (event) => {
+    event.preventDefault()
     const form = event.target as HTMLFormElement
     const fileList = (form[1] as HTMLInputElement).files as FileList
 
@@ -28,18 +29,17 @@ export const PhotoForm = () => {
 
     const imageName = (form[0] as HTMLInputElement).value
     const imageFile = fileList[0]
+    const formData = new FormData()
 
-    const toUpload = renameImage(imageFile, imageName)
-    const photoURL = URL.createObjectURL(toUpload)
-    const photoName = toUpload.name
+    const photoFile = renameImage(imageFile, imageName)
+    const photoName = photoFile.name
+    formData.append("photo", photoFile, photoName)
 
-    api.post("/photo/create", {
-      photo_url: photoURL,
-      photo_name: photoName
-    })
-      .then(() => {
-        URL.revokeObjectURL(photoURL)
-        toast.success("Imagem salva!")
+    postFile("/api/photo/create", formData)
+      .then(response => response.data)
+      .then(response => {
+        const { message } = response
+        toast.success(message)
       })
   }
 

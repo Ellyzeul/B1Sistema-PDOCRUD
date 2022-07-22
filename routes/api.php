@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\SupplierURLController;
@@ -64,8 +65,13 @@ Route::post('/user/login', function (Request $request) {
 });
 
 Route::post('/photo/create', function (Request $request) {
+    Log::info("Rota - /api/photo/create");
+    $photo = $request->file("photo");
+    $photoName = $photo->getClientOriginalName();
+    Log::info("Imagem para salvar recebida");
+
     return PhotoController::create(
-        $request->input('photo_url'),
-        $request->input('photo_name')
+        $photo,
+        $photoName
     );
 });
