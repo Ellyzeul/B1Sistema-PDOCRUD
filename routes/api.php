@@ -1,11 +1,13 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\SupplierURLController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PhaseController;
+use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -59,5 +61,17 @@ Route::post('/user/login', function (Request $request) {
     return UserController::login(
         $request->input('email'),
         $request->input('password')
+    );
+});
+
+Route::post('/photo/create', function (Request $request) {
+    Log::info("Rota - /api/photo/create");
+    $photo = $request->file("photo");
+    $photoName = $photo->getClientOriginalName();
+    Log::info("Imagem para salvar recebida");
+
+    return PhotoController::create(
+        $photo,
+        $photoName
     );
 });
