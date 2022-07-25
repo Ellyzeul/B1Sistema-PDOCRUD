@@ -20,4 +20,5 @@ use App\Http\Controllers\OrderController;
 Route::get('/orders', function () {
     return view('pdocrud');
 });
+Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
 Route::view('/{path?}', 'app')->where('path', '.*');

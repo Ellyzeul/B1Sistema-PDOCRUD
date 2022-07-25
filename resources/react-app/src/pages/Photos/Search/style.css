@@ -1,0 +1,66 @@
+.photos-search-page {
+  height: 100vh;
+  width: 100%;
+  background-color: black;
+  display: grid;
+  grid-template-rows: 25% 70%;
+  grid-template-areas: 
+    'photos-search'
+    'photos-display';
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+}
+.photo-search {
+  margin-left: 50px;
+  margin-right: 20px;
+  width: 150px;
+  border-radius: 10px;
+  border: none;
+  padding: 6px;
+  outline: none;
+}
+.search-container > button {
+  border: none;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background-color: rgb(48, 48, 48);
+  color: white;
+}
+.search-container > button:hover {
+  cursor: pointer;
+  padding: 8px 12px;
+  background-color: white;
+  color: black;
+  transition: 125ms;
+}
+.bottom-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.bottom-container > p {
+  color: white;
+}
+.display-container {
+  width: 95%;
+  height: 90%;
+  background-color: white;
+  border-radius: 10px;
+  display: flex;
+  overflow-y: auto;
+}
+.image-display {
+  height: 250px;
+  margin: 10px 0 0 10px;
+  border-radius: 10px;
+  transition: 250ms;
+}
+.image-display:hover {
+  cursor: pointer;
+  height: 350px;
+  transition: 1000ms;
+}
