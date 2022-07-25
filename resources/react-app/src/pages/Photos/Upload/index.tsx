@@ -1,7 +1,7 @@
-import { PhotoForm } from "../../components/PhotoForm"
+import { PhotoForm } from "../../../components/PhotoForm"
 import "./style.css"
 
-export const PhotosPage = () => {
+export const PhotosUploadPage = () => {
   return (
     <div className="photos-upload-page">
       <PhotoForm />

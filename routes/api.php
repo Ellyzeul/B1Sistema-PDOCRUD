@@ -66,12 +66,21 @@ Route::post('/user/login', function (Request $request) {
 
 Route::post('/photo/create', function (Request $request) {
     Log::info("Rota - /api/photo/create");
-    $photo = $request->file("photo");
-    $photoName = $photo->getClientOriginalName();
+    $photoFile = $request->file("photo");
+    $photoName = $photoFile->getClientOriginalName();
     Log::info("Imagem para salvar recebida");
 
     return PhotoController::create(
-        $photo,
+        $photoFile,
         $photoName
+    );
+});
+
+Route::get('/photo/read', function (Request $request) {
+    Log::info("Rota - /api/photo/read");
+    $photoNamePattern = $request->input("name_pattern");
+
+    return PhotoController::read(
+        $photoNamePattern
     );
 });
