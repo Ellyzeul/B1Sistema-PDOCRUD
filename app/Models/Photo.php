@@ -17,10 +17,11 @@ class Photo extends Model
     {
         $sep = DIRECTORY_SEPARATOR;
         $this->savePath = $_SERVER['DOCUMENT_ROOT'] . $sep . "static" . $sep . "photos";
-        $this->readPath = (
-            $_SERVER['SERVER_NAME'] == "localhost" 
-            ? $_SERVER['SERVER_NAME'] . ":" . $_SERVER["SERVER_PORT"]
-            : $_SERVER['SERVER_NAME']
+        $this->readPath = 
+            (isset($_SERVER["HTTPS"]) ? "https" : "http") . "://" . (
+                $_SERVER['SERVER_NAME'] == "localhost" 
+                ? $_SERVER['SERVER_NAME'] . ":" . $_SERVER["SERVER_PORT"]
+                : $_SERVER['SERVER_NAME']
             ) . "/static/photos/";
     }
 
