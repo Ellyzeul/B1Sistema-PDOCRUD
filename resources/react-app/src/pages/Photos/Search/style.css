@@ -51,16 +51,5 @@
   background-color: white;
   border-radius: 10px;
   display: flex;
-  overflow-y: auto;
-}
-.image-display {
-  height: 250px;
-  margin: 10px 0 0 10px;
-  border-radius: 10px;
-  transition: 250ms;
-}
-.image-display:hover {
-  cursor: pointer;
-  height: 350px;
-  transition: 1000ms;
+  overflow: auto none;
 }
