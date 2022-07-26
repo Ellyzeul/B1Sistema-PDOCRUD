@@ -1,0 +1,13 @@
+.image-display {
+  height: 250px;
+  margin: 10px 0 0 10px;
+  border-radius: 10px;
+  transition: 250ms;
+  background-color: gray;
+  color: white;
+}
+.image-display:hover {
+  cursor: pointer;
+  height: 350px;
+  transition: 1000ms;
+}
