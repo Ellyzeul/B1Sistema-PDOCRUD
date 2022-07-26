@@ -2722,15 +2722,70 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 /* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./style.css */ "./resources/react-app/src/components/PhotoDisplay/style.css");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
+var __assign = undefined && undefined.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+
 
 
 var PhotoDisplay = function PhotoDisplay(props) {
   var url = props.url;
-  return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("img", {
+  var altText = "Imagem não pôde ser carregada. Clique com botão direito e 'Abrir imagem em nova aba' para ver";
+  var overlayRef = (0,react__WEBPACK_IMPORTED_MODULE_2__.useRef)(null);
+
+  var onMouseOver = function onMouseOver() {
+    if (!overlayRef.current) return;
+    var overlay = overlayRef.current;
+    overlay.style.visibility = "visible";
+  };
+
+  var onMouseLeave = function onMouseLeave() {
+    if (!overlayRef.current) return;
+    var overlay = overlayRef.current;
+    overlay.style.visibility = "hidden";
+  };
+
+  var onClick = function onClick() {
+    var rawFilename = url.match(/\/([A-Za-z0-9_-\s])*\.(jpg|png|jpeg)/)[0];
+    var filename = rawFilename.substring(1);
+    var a = document.createElement('a');
+    a.href = url;
+    a.target = "_blank";
+    a.download = filename;
+    a.click();
+  };
+
+  return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
     className: "image-display",
-    src: url,
-    alt: "Imagem n\xE3o p\xF4de ser carregada. Clique com bot\xE3o direito e 'Abrir imagem em nova aba' para ver"
-  });
+    onMouseOver: onMouseOver,
+    onMouseLeave: onMouseLeave
+  }, {
+    children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("img", {
+      src: url,
+      alt: altText
+    }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({
+      className: "image-overlay",
+      ref: overlayRef,
+      onClick: onClick
+    }, {
+      children: "Clique para baixar"
+    }))]
+  }));
 };
 
 /***/ }),
@@ -3274,7 +3329,9 @@ var PhotosSearchPage = function PhotosSearchPage() {
       }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({
         className: "display-container"
       }, {
-        children: photosElem
+        children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+          children: photosElem
+        })
       }))]
     }))]
   }));
@@ -3568,7 +3625,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".image-display {\r\n  height: 250px;\r\n  margin: 10px 0 0 10px;\r\n  border-radius: 10px;\r\n  transition: 250ms;\r\n  background-color: gray;\r\n  color: white;\r\n}\r\n.image-display:hover {\r\n  cursor: pointer;\r\n  height: 350px;\r\n  transition: 1000ms;\r\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".image-display {\r\n  height: 350px;\r\n  margin: 10px 0 0 10px;\r\n  border-radius: 10px;\r\n  transition: 250ms;\r\n  background-color: rgb(52, 52, 52);\r\n  color: white;\r\n  display: inline-block;\r\n  position: relative;\r\n}\r\n.image-display:hover {\r\n  cursor: pointer;\r\n}\r\n\r\n.image-display > img {\r\n  height: 100%;\r\n  border-radius: 10px;\r\n}\r\n\r\n.image-overlay {\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  justify-content: center;\r\n  position: absolute;\r\n  top: 0;\r\n  left: 0;\r\n  height: 100%;\r\n  width: 100%;\r\n  border-radius: 10px;\r\n  background-color: rgba(193, 193, 193, 0.75);\r\n  visibility: hidden;\r\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -3712,7 +3769,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".photos-search-page {\r\n  height: 100vh;\r\n  width: 100%;\r\n  background-color: black;\r\n  display: grid;\r\n  grid-template-rows: 25% 70%;\r\n  grid-template-areas: \r\n    'photos-search'\r\n    'photos-display';\r\n}\r\n\r\n.search-container {\r\n  display: flex;\r\n  align-items: center;\r\n}\r\n.photo-search {\r\n  margin-left: 50px;\r\n  margin-right: 20px;\r\n  width: 150px;\r\n  border-radius: 10px;\r\n  border: none;\r\n  padding: 6px;\r\n  outline: none;\r\n}\r\n.search-container > button {\r\n  border: none;\r\n  padding: 6px 10px;\r\n  border-radius: 10px;\r\n  background-color: rgb(48, 48, 48);\r\n  color: white;\r\n}\r\n.search-container > button:hover {\r\n  cursor: pointer;\r\n  padding: 8px 12px;\r\n  background-color: white;\r\n  color: black;\r\n  transition: 125ms;\r\n}\r\n.bottom-container {\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  justify-content: center;\r\n}\r\n.bottom-container > p {\r\n  color: white;\r\n}\r\n.display-container {\r\n  width: 95%;\r\n  height: 90%;\r\n  background-color: white;\r\n  border-radius: 10px;\r\n  display: flex;\r\n  overflow: auto none;\r\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".photos-search-page {\r\n  height: 100vh;\r\n  width: 100%;\r\n  background-color: black;\r\n  display: grid;\r\n  grid-template-rows: 25% 70%;\r\n  grid-template-areas: \r\n    'photos-search'\r\n    'photos-display';\r\n}\r\n\r\n.search-container {\r\n  display: flex;\r\n  align-items: center;\r\n}\r\n.photo-search {\r\n  margin-left: 50px;\r\n  margin-right: 20px;\r\n  width: 150px;\r\n  border-radius: 10px;\r\n  border: none;\r\n  padding: 6px;\r\n  outline: none;\r\n}\r\n.search-container > button {\r\n  border: none;\r\n  padding: 6px 10px;\r\n  border-radius: 10px;\r\n  background-color: rgb(48, 48, 48);\r\n  color: white;\r\n}\r\n.search-container > button:hover {\r\n  cursor: pointer;\r\n  padding: 8px 12px;\r\n  background-color: white;\r\n  color: black;\r\n  transition: 125ms;\r\n}\r\n.bottom-container {\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  justify-content: center;\r\n}\r\n.bottom-container > p {\r\n  color: white;\r\n}\r\n.display-container {\r\n  width: 95%;\r\n  height: 90%;\r\n  background-color: white;\r\n  border-radius: 10px;\r\n  display: flex;\r\n  overflow-x: auto;\r\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
