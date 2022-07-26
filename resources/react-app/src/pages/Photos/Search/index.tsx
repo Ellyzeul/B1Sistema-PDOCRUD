@@ -35,7 +35,9 @@ export const PhotosSearchPage = () => {
       <div className="bottom-container">
         <p>Fotos pesquisadas</p>
         <div className="display-container">
-          {photosElem}
+          <div>
+            {photosElem}
+          </div>
         </div>
       </div>
     </div>
