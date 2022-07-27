@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\SupplierURLController;
+use App\Http\Controllers\NavbarItemController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PhaseController;
 use App\Http\Controllers\PhotoController;
@@ -83,4 +84,11 @@ Route::get('/photo/read', function (Request $request) {
     return PhotoController::read(
         $photoNamePattern
     );
+});
+
+Route::get('/navbar-items/read', function (Request $request) {
+    Log::info("Rota - /api/navbar-items/read");
+    $email = $request->input("email");
+
+    return NavbarItemController::read($email);
 });

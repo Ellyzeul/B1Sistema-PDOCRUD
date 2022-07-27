@@ -42,6 +42,7 @@ class User
 
         return [[
             "message" => "Login realizado",
+            "email" => $email,
             "name" => $user->name,
             "token" => $user->token,
             "id_section" => $user->id_section

@@ -10,7 +10,8 @@ export const Option = (props: OptionProp) => {
 	return (
 		<a
 			className={"navbar-dropdown-option"} 
-			href={pathname}>
+			href={pathname}
+		>
 			<div className={"navbar-dropdown-option-colour-div"} style={style}></div>
 			{label}
 		</a>
