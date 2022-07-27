@@ -1,17 +1,21 @@
-import { FormEventHandler, useRef, useState } from "react"
+import { FormEventHandler, useContext, useRef, useState } from "react"
 import { toast, ToastContainer } from "react-toastify"
 import api from "../../services/axios"
 import 'react-toastify/dist/ReactToastify.css'
 import "./style.css"
+import { UserDataContext } from "../../contexts/UserData"
+import { UserData } from "./types"
 
 export const LoginForm = () => {
 	const [passVisible, setPassVisible] = useState(false)
+	const userDataContext = useContext(UserDataContext)
+	const setUserData = userDataContext[1] as (prevState: UserData) => void
 	const formRef = useRef(null)
 	const root = document.querySelector("#root") as HTMLDivElement
 
 	const changePasswordVisibility = () => setPassVisible(!passVisible)
 
-	const treatLogin = (message: string, userData: Object) => {
+	const treatLogin = (message: string, userData: UserData) => {
 		root.style.cursor = "context-menu"
 		if(!("name" in userData) || !("token" in userData) || !("id_section" in userData)) {
 			toast.error(message)
@@ -19,6 +23,7 @@ export const LoginForm = () => {
 		}
 
 		toast.success(message)
+		setUserData(userData)
 		window.localStorage.setItem("userData", JSON.stringify(userData))
 		window.location.pathname = '/orders'
 	}
