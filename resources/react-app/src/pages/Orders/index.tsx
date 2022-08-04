@@ -1,56 +1,58 @@
-import { useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
+import { UserData } from "../../components/LoginForm/types"
 import { Navbar } from "../../components/Navbar"
-import { OptionProp } from "../../components/Navbar/Dropdown/Option/types"
 import { DropdownProp } from "../../components/Navbar/Dropdown/types"
 import { PDOCrud } from "../../components/PDOCrud"
 import { SupplierURLModal } from "../../components/SupplierURLModal"
+import { NavbarContext } from "../../contexts/Navbar"
+import { UserDataContext } from "../../contexts/UserData"
 import api from "../../services/axios"
-import { Phase } from "./types"
+import { PhaseResponse } from "./types"
 
 export const OrdersPage = () => {
 	const refModal= useRef(null)
 	const refModalId = useRef(null)
 	const refOnlineOrderNumber = useRef(null)
 	const refURLInput = useRef(null)
-	const [navbarItems, setNavbarItems] = useState([] as DropdownProp[])
+	const navbarContext = useContext(NavbarContext)
+	const userDataContext = useContext(UserDataContext)
+	const navbarItems = navbarContext[0] as {[key: string]: DropdownProp[]}
+	const setNavbarItems = navbarContext[1] as (prevState: {[key: string]: DropdownProp[]}) => void
+	const userData = userDataContext[0] as UserData
+	const [phases, setPhases] = useState([] as DropdownProp[])
 
-	useEffect(() => {
-		api.get('/api/phases/read')
-			.then(response => response.data)
+	const fetchPhases = () => {
+		api.get(`/api/phases/read?email=${userData.email}`)
+			.then(response => response.data as PhaseResponse)
 			.then(response => {
-				const phases = response.phases as Phase[]
-				const items = {} as {[key: string]: OptionProp[]}
-				const toUpdate = [{
+				const { message, items } = response
+				const { inicio, ...phases } = items
+				const dropdowns = [] as DropdownProp[]
+
+				dropdowns.push({
 					label: "Início",
-					options: [{label: "Início", pathname: "/orders"}]
-				}] as DropdownProp[]
-
-				phases.forEach(phase => {
-					const { id, name, color } = phase
-					const label = (id.split('.') as string[])[0]
-					const option = {
-						label: `${id} - ${name}`,
-						pathname: `/orders?phase=${id}`,
-						color: `#${color}`
-					}
-
-					items[label] 
-					 	? items[label].push(option)
-						: items[label] = [option]
+					options: inicio
 				})
-
-				Object.keys(items).forEach(phaseId => toUpdate.push({
-					label: `Fase ${phaseId}`,
-					options: items[phaseId]
+				Object.keys(phases).forEach(phase => dropdowns.push({
+					label: phase,
+					options: items[phase]
 				}))
 
-				setNavbarItems(toUpdate)
+				setPhases(dropdowns)
+				navbarItems.phases = dropdowns
+				setNavbarItems(navbarItems)
 			})
-	}, [])
+	}
+
+	useEffect(() => {
+		if(!("phases" in navbarItems)) return fetchPhases()
+
+		setPhases(navbarItems.phases)
+	}, [navbarItems])
 
 	return (
 		<>
-			<Navbar items={navbarItems} />
+			<Navbar items={phases} />
 			<PDOCrud 
 				refModal={refModal} 
 				refModalId={refModalId} 

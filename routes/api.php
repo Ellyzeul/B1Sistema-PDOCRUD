@@ -45,8 +45,10 @@ Route::get('/orders/read', function (Request $request) {
     );
 });
 
-Route::get('/phases/read', function () {
-    return PhaseController::read();
+Route::get('/phases/read', function (Request $request) {
+    return PhaseController::read(
+        $request->input('email')
+    );
 });
 
 Route::post('/user/create', function (Request $request) {

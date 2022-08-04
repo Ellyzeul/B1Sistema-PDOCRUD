@@ -1,5 +1,6 @@
 export interface OptionProp {
-	pathname: string,
-	label: string,
+	id: string,
+	name: string,
+	url: string,
 	color?: string
 }
