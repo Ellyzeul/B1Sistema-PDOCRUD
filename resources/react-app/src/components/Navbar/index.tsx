@@ -19,8 +19,16 @@ export const Navbar = (props: NavbarProp) => {
 	}, [items])
 
 	return (
-		<nav className="nav_bar">
-			{dropdowns}
+		<nav className="nav-bar">
+			<div className="nav-bar-img">
+				<img src="/liv_seline_logo.png" alt="" />
+			</div>
+			<div className="nav-bar-dropdowns">
+				{dropdowns}
+			</div>
+			<div className="nav-bar-img nav-bar-img-right">
+				<img src="/b1_logo.png" alt="" />
+			</div>
 		</nav>
 	)
 }

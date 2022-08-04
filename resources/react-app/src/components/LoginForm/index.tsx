@@ -1,15 +1,19 @@
-import { FormEventHandler, useContext, useRef, useState } from "react"
+import { FormEventHandler, useContext, useEffect, useRef, useState } from "react"
 import { toast, ToastContainer } from "react-toastify"
 import api from "../../services/axios"
 import 'react-toastify/dist/ReactToastify.css'
 import "./style.css"
 import { UserDataContext } from "../../contexts/UserData"
 import { UserData } from "./types"
+import { NavbarContext } from "../../contexts/Navbar"
+import { DropdownProp } from "../Navbar/Dropdown/types"
 
 export const LoginForm = () => {
 	const [passVisible, setPassVisible] = useState(false)
 	const userDataContext = useContext(UserDataContext)
+	const navbarContext = useContext(NavbarContext)
 	const setUserData = userDataContext[1] as (prevState: UserData) => void
+	const setNavbarItems = navbarContext[1] as (prevState: {[key: string]: DropdownProp[]}) => void
 	const formRef = useRef(null)
 	const root = document.querySelector("#root") as HTMLDivElement
 
@@ -25,7 +29,7 @@ export const LoginForm = () => {
 		toast.success(message)
 		setUserData(userData)
 		window.localStorage.setItem("userData", JSON.stringify(userData))
-		window.location.pathname = '/orders'
+		window.location.pathname = '/'
 	}
 
 	const makeLogin: FormEventHandler = (event) => {
@@ -47,6 +51,10 @@ export const LoginForm = () => {
 			treatLogin(message, userData)
 		})
 	}
+
+	useEffect(() => {
+		setNavbarItems({})
+	}, [])
 
 	return (
 		<form id="login_form" ref={formRef} onSubmit={makeLogin}>
