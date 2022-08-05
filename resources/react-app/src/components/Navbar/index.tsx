@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { MouseEventHandler, useEffect, useRef, useState } from "react"
 import { Dropdown } from "./Dropdown"
 import "./style.css"
 import { NavbarProp } from "./types"
@@ -6,6 +6,25 @@ import { NavbarProp } from "./types"
 export const Navbar = (props: NavbarProp) => {
 	const { items } = props
 	const [dropdowns, setDropdowns] = useState([] as JSX.Element[])
+	const logoRef = useRef(null)
+
+	const onClickLogo: MouseEventHandler = () => {
+		window.location.pathname = "/"
+	}
+
+	const onMouseEnterLogo: MouseEventHandler = () => {
+		if(!logoRef.current) return
+		const logo = logoRef.current as HTMLImageElement
+
+		logo.style.filter = "invert(1)"
+	}
+
+	const onMouseLeaveLogo: MouseEventHandler = () => {
+		if(!logoRef.current) return
+		const logo = logoRef.current as HTMLImageElement
+
+		logo.style.filter = "invert(0)"
+	}
 
 	useEffect(() => {
 		const toUpdate = [] as JSX.Element[]
@@ -20,8 +39,13 @@ export const Navbar = (props: NavbarProp) => {
 
 	return (
 		<nav className="nav-bar">
-			<div className="nav-bar-img">
-				<img src="/liv_seline_logo.png" alt="" />
+			<div 
+				className={"nav-bar-img nav-bar-img-clickable"} 
+				onClick={onClickLogo}
+				onMouseEnter={onMouseEnterLogo}
+				onMouseLeave={onMouseLeaveLogo}
+			>
+				<img ref={logoRef} src="/liv_seline_logo.png" alt="" />
 			</div>
 			<div className="nav-bar-dropdowns">
 				{dropdowns}

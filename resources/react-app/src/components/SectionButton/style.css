@@ -1,0 +1,38 @@
+.section-button {
+  width: 90%;
+  height: 80px;
+  border-radius: 5px;
+  background-color: white;
+  display: grid;
+  grid-template-columns: 20% 60% 20%;
+  user-select: none;
+  border: 1px solid black;
+  margin-top: 20px;
+}
+
+.section-button:hover {
+  cursor: pointer;
+  background-color: rgb(0, 0, 0);
+  color: white;
+}
+
+.section-button > div {
+  display: grid;
+  place-items: center;
+}
+
+.section-button > div > img {
+  height: 70px;
+}
+
+.section-button > strong {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media only screen and (max-width: 600px) {
+  .section-button > div > img {
+    height: 50px;
+  }
+}
