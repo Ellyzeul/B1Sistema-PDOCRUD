@@ -13,6 +13,10 @@
 	align-items: center;
 	justify-content: center;
 }
+.nav-bar-img-clickable:hover {
+	cursor: pointer;
+	background-color: white;
+}
 .nav-bar-img > img {
 	height: 55px;
 }

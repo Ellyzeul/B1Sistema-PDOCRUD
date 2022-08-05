@@ -45,6 +45,7 @@ class User
             "email" => $email,
             "name" => $user->name,
             "token" => $user->token,
+            "ramal" => $user->ramal,
             "id_section" => $user->id_section
         ], 200];
     }
