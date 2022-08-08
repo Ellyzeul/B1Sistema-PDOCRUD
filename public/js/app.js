@@ -2229,6 +2229,17 @@ function App() {
     });
   };
 
+  var isUserDataValid = function isUserDataValid(userData) {
+    return ["email", "name", "token", "ramal", "id_section"].reduce(function (isValid, key) {
+      return !isValid ? "false" : key in userData ? "true" : "false";
+    }) === "true";
+  };
+
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+    if (userData === null || isUserDataValid(userData)) return;
+    window.localStorage.setItem("userData", "");
+    window.location.pathname = "/login";
+  }, [userData]);
   return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_contexts_UserData__WEBPACK_IMPORTED_MODULE_4__.UserDataContext.Provider, __assign({
     value: [userData, setUserData]
   }, {
@@ -2663,9 +2674,7 @@ var Navbar = function Navbar(props) {
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     var toUpdate = [];
     var i = 0;
-    console.log(items);
     items.forEach(function (item) {
-      console.log(item);
       return toUpdate.push((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__.Dropdown, {
         label: item.label,
         options: item.options
@@ -3628,7 +3637,6 @@ var OrdersPage = function OrdersPage() {
           phases = __rest(items, ["inicio"]);
 
       var dropdowns = [];
-      console.log(userData);
       dropdowns.push({
         label: "Geral",
         options: inicio
