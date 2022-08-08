@@ -16,7 +16,7 @@ class Phase
             $label = isset($urlParts[1]) ? "Fase ".explode(".", $urlParts[1])[0] : "inicio";
             if($label == "inicio") {
                 $items[$label] = [[
-                    "name" => "Geral",
+                    "name" => "Ir para a geral",
                     "url" => $item->url
                 ]];
                 continue;

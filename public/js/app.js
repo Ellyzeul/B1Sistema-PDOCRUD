@@ -2168,12 +2168,37 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/index.js");
-/* harmony import */ var _App_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./App.css */ "./resources/react-app/src/App.css");
-/* harmony import */ var _pages_Login__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./pages/Login */ "./resources/react-app/src/pages/Login/index.tsx");
-/* harmony import */ var _pages_Orders__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pages/Orders */ "./resources/react-app/src/pages/Orders/index.tsx");
-/* harmony import */ var _pages_Photos_Search__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./pages/Photos/Search */ "./resources/react-app/src/pages/Photos/Search/index.tsx");
-/* harmony import */ var _pages_Photos_Upload__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pages/Photos/Upload */ "./resources/react-app/src/pages/Photos/Upload/index.tsx");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/index.js");
+/* harmony import */ var _App_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./App.css */ "./resources/react-app/src/App.css");
+/* harmony import */ var _contexts_Navbar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./contexts/Navbar */ "./resources/react-app/src/contexts/Navbar.ts");
+/* harmony import */ var _contexts_UserData__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./contexts/UserData */ "./resources/react-app/src/contexts/UserData.ts");
+/* harmony import */ var _pages_Home__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pages/Home */ "./resources/react-app/src/pages/Home/index.tsx");
+/* harmony import */ var _pages_Login__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./pages/Login */ "./resources/react-app/src/pages/Login/index.tsx");
+/* harmony import */ var _pages_Orders__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./pages/Orders */ "./resources/react-app/src/pages/Orders/index.tsx");
+/* harmony import */ var _pages_Photos_Search__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./pages/Photos/Search */ "./resources/react-app/src/pages/Photos/Search/index.tsx");
+/* harmony import */ var _pages_Photos_Upload__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./pages/Photos/Upload */ "./resources/react-app/src/pages/Photos/Upload/index.tsx");
+var __assign = undefined && undefined.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+
+
+
+
 
 
 
@@ -2184,38 +2209,119 @@ __webpack_require__.r(__webpack_exports__);
 
 function App() {
   var userDataRaw = window.localStorage.getItem("userData");
-  var userData = userDataRaw ? JSON.parse(userDataRaw) : false;
-  var isLogged = !!userData;
+  var userDataParsed = userDataRaw ? JSON.parse(userDataRaw) : null;
+
+  var _a = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(userDataParsed),
+      userData = _a[0],
+      setUserData = _a[1];
+
+  var _b = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)({}),
+      navbarItems = _b[0],
+      setNavbarItems = _b[1];
+
+  var isLogged = function isLogged() {
+    return !!userData;
+  };
 
   var getElement = function getElement(element) {
-    return isLogged ? element : (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_6__.Navigate, {
+    return isLogged() ? element : (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Navigate, {
       to: '/login'
     });
   };
 
-  return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_6__.Routes, {
-    children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_6__.Route, {
-      path: '/login',
-      element: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Login__WEBPACK_IMPORTED_MODULE_2__.Login, {})
-    }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_6__.Route, {
-      path: '/',
-      element: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_6__.Navigate, {
-        to: '/orders'
+  return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_contexts_UserData__WEBPACK_IMPORTED_MODULE_4__.UserDataContext.Provider, __assign({
+    value: [userData, setUserData]
+  }, {
+    children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_contexts_Navbar__WEBPACK_IMPORTED_MODULE_3__.NavbarContext.Provider, __assign({
+      value: [navbarItems, setNavbarItems]
+    }, {
+      children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Routes, {
+        children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Route, {
+          path: '/login',
+          element: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Login__WEBPACK_IMPORTED_MODULE_6__.Login, {})
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Route, {
+          path: '/',
+          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Home__WEBPACK_IMPORTED_MODULE_5__.HomePage, {}))
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Route, {
+          path: '/pedidos',
+          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Orders__WEBPACK_IMPORTED_MODULE_7__.OrdersPage, {}))
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Route, {
+          path: '/fotos/enviar',
+          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Photos_Upload__WEBPACK_IMPORTED_MODULE_9__.PhotosUploadPage, {}))
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Route, {
+          path: '/fotos/pesquisa',
+          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Photos_Search__WEBPACK_IMPORTED_MODULE_8__.PhotosSearchPage, {}))
+        })]
       })
-    }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_6__.Route, {
-      path: '/orders',
-      element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Orders__WEBPACK_IMPORTED_MODULE_3__.OrdersPage, {}))
-    }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_6__.Route, {
-      path: '/photos/upload',
-      element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Photos_Upload__WEBPACK_IMPORTED_MODULE_5__.PhotosUploadPage, {}))
-    }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_6__.Route, {
-      path: '/photos/search',
-      element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Photos_Search__WEBPACK_IMPORTED_MODULE_4__.PhotosSearchPage, {}))
-    })]
-  });
+    }))
+  }));
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (App);
+
+/***/ }),
+
+/***/ "./resources/react-app/src/components/BookQuotesCard/index.tsx":
+/*!*********************************************************************!*\
+  !*** ./resources/react-app/src/components/BookQuotesCard/index.tsx ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "BookQuotesCard": () => (/* binding */ BookQuotesCard)
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./style.css */ "./resources/react-app/src/components/BookQuotesCard/style.css");
+var __assign = undefined && undefined.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+
+
+var BookQuotesCard = function BookQuotesCard(props) {
+  var userName = props.userName;
+  return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
+    className: "book-quote-card"
+  }, {
+    children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {}), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({
+      className: "book-quote-card-header"
+    }, {
+      children: "Inspire-se"
+    })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
+      className: "book-quote-body"
+    }, {
+      children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
+        className: "book-quote-greeting"
+      }, {
+        children: ["Ol\xE1 ", userName]
+      })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({
+        className: "book-quote-content"
+      }, {
+        children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+          children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("strong", {
+            children: "\"Daqui pra frente, s\xF3 pra tr\xE1s\""
+          }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("br", {}), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", {
+            children: "Prov\xE9rbio popular"
+          })]
+        })
+      }))]
+    }))]
+  }));
+};
 
 /***/ }),
 
@@ -2237,6 +2343,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../services/axios */ "./resources/react-app/src/services/axios.ts");
 /* harmony import */ var react_toastify_dist_ReactToastify_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-toastify/dist/ReactToastify.css */ "./node_modules/react-toastify/dist/ReactToastify.css");
 /* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./style.css */ "./resources/react-app/src/components/LoginForm/style.css");
+/* harmony import */ var _contexts_UserData__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../contexts/UserData */ "./resources/react-app/src/contexts/UserData.ts");
+/* harmony import */ var _contexts_Navbar__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../contexts/Navbar */ "./resources/react-app/src/contexts/Navbar.ts");
 var __assign = undefined && undefined.__assign || function () {
   __assign = Object.assign || function (t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -2272,11 +2380,17 @@ var __rest = undefined && undefined.__rest || function (s, e) {
 
 
 
+
+
 var LoginForm = function LoginForm() {
   var _a = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false),
       passVisible = _a[0],
       setPassVisible = _a[1];
 
+  var userDataContext = (0,react__WEBPACK_IMPORTED_MODULE_1__.useContext)(_contexts_UserData__WEBPACK_IMPORTED_MODULE_6__.UserDataContext);
+  var navbarContext = (0,react__WEBPACK_IMPORTED_MODULE_1__.useContext)(_contexts_Navbar__WEBPACK_IMPORTED_MODULE_7__.NavbarContext);
+  var setUserData = userDataContext[1];
+  var setNavbarItems = navbarContext[1];
   var formRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
   var root = document.querySelector("#root");
 
@@ -2293,8 +2407,9 @@ var LoginForm = function LoginForm() {
     }
 
     react_toastify__WEBPACK_IMPORTED_MODULE_2__.toast.success(message);
+    setUserData(userData);
     window.localStorage.setItem("userData", JSON.stringify(userData));
-    window.location.pathname = '/orders';
+    window.location.pathname = '/';
   };
 
   var makeLogin = function makeLogin(event) {
@@ -2317,6 +2432,9 @@ var LoginForm = function LoginForm() {
     });
   };
 
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+    setNavbarItems({});
+  }, []);
   return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("form", __assign({
     id: "login_form",
     ref: formRef,
@@ -2389,20 +2507,21 @@ var __assign = undefined && undefined.__assign || function () {
 
 
 var Option = function Option(props) {
-  var label = props.label,
-      pathname = props.pathname,
+  var id = props.id,
+      name = props.name,
+      url = props.url,
       color = props.color;
   var style = {
-    backgroundColor: color
+    backgroundColor: "#".concat(color)
   };
   return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("a", __assign({
     className: "navbar-dropdown-option",
-    href: pathname
+    href: url
   }, {
-    children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+    children: [color ? (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
       className: "navbar-dropdown-option-colour-div",
       style: style
-    }), label]
+    }) : null, name]
   }));
 };
 
@@ -2453,16 +2572,15 @@ var Dropdown = function Dropdown(props) {
       setOptionsElem = _a[1];
 
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
-    var toUpdate = [];
     var i = 0;
-    options.forEach(function (option) {
-      return toUpdate.push((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_Option__WEBPACK_IMPORTED_MODULE_3__.Option, {
-        label: option.label,
-        pathname: option.pathname,
+    setOptionsElem(options.map(function (option) {
+      return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_Option__WEBPACK_IMPORTED_MODULE_3__.Option, {
+        id: option.id,
+        name: option.name,
+        url: option.url,
         color: option.color
-      }, i++));
-    });
-    setOptionsElem(toUpdate);
+      }, i++);
+    }));
   }, [options]);
   return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
     className: "dropdown"
@@ -2524,10 +2642,30 @@ var Navbar = function Navbar(props) {
       dropdowns = _a[0],
       setDropdowns = _a[1];
 
+  var logoRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+
+  var onClickLogo = function onClickLogo() {
+    window.location.pathname = "/";
+  };
+
+  var onMouseEnterLogo = function onMouseEnterLogo() {
+    if (!logoRef.current) return;
+    var logo = logoRef.current;
+    logo.style.filter = "invert(1)";
+  };
+
+  var onMouseLeaveLogo = function onMouseLeaveLogo() {
+    if (!logoRef.current) return;
+    var logo = logoRef.current;
+    logo.style.filter = "invert(0)";
+  };
+
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     var toUpdate = [];
     var i = 0;
+    console.log(items);
     items.forEach(function (item) {
+      console.log(item);
       return toUpdate.push((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__.Dropdown, {
         label: item.label,
         options: item.options
@@ -2535,10 +2673,32 @@ var Navbar = function Navbar(props) {
     });
     setDropdowns(toUpdate);
   }, [items]);
-  return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("nav", __assign({
-    className: "nav_bar"
+  return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("nav", __assign({
+    className: "nav-bar"
   }, {
-    children: dropdowns
+    children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({
+      className: "nav-bar-img nav-bar-img-clickable",
+      onClick: onClickLogo,
+      onMouseEnter: onMouseEnterLogo,
+      onMouseLeave: onMouseLeaveLogo
+    }, {
+      children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("img", {
+        ref: logoRef,
+        src: "/liv_seline_logo.png",
+        alt: ""
+      })
+    })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({
+      className: "nav-bar-dropdowns"
+    }, {
+      children: dropdowns
+    })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({
+      className: "nav-bar-img nav-bar-img-right"
+    }, {
+      children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("img", {
+        src: "/b1_logo.png",
+        alt: ""
+      })
+    }))]
   }));
 };
 
@@ -2896,6 +3056,83 @@ var PhotoForm = function PhotoForm() {
 
 /***/ }),
 
+/***/ "./resources/react-app/src/components/SectionButton/index.tsx":
+/*!********************************************************************!*\
+  !*** ./resources/react-app/src/components/SectionButton/index.tsx ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "SectionButton": () => (/* binding */ SectionButton)
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./style.css */ "./resources/react-app/src/components/SectionButton/style.css");
+var __assign = undefined && undefined.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+
+
+
+var SectionButton = function SectionButton(props) {
+  var label = props.label,
+      icon = props.icon,
+      url = props.url;
+  var iconRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+
+  var onClick = function onClick() {
+    window.location.pathname = url;
+  };
+
+  var onMouseEnter = function onMouseEnter() {
+    if (!iconRef.current) return;
+    var img = iconRef.current;
+    img.style.filter = "invert(1)";
+  };
+
+  var onMouseLeave = function onMouseLeave() {
+    if (!iconRef.current) return;
+    var img = iconRef.current;
+    img.style.filter = "invert(0)";
+  };
+
+  return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
+    className: "section-button",
+    onClick: onClick,
+    onMouseEnter: onMouseEnter,
+    onMouseLeave: onMouseLeave
+  }, {
+    children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+      children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("img", {
+        ref: iconRef,
+        src: icon,
+        alt: "",
+        draggable: false
+      })
+    }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("strong", {
+      children: label
+    })]
+  }));
+};
+
+/***/ }),
+
 /***/ "./resources/react-app/src/components/SupplierURLModal/index.tsx":
 /*!***********************************************************************!*\
   !*** ./resources/react-app/src/components/SupplierURLModal/index.tsx ***!
@@ -3109,6 +3346,178 @@ var TopScrollBar = function TopScrollBar() {
 
 /***/ }),
 
+/***/ "./resources/react-app/src/components/UserInfoCard/index.tsx":
+/*!*******************************************************************!*\
+  !*** ./resources/react-app/src/components/UserInfoCard/index.tsx ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "UserInfoCard": () => (/* binding */ UserInfoCard)
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+var __assign = undefined && undefined.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+
+var UserInfoCard = function UserInfoCard(props) {
+  var userData = props.userData;
+  return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
+    className: "user-info-card"
+  }, {
+    children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("p", {
+      children: ["Nome: ", userData.name]
+    }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("hr", {}), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("p", {
+      children: ["E-mail: ", userData.email]
+    }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("hr", {}), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("p", {
+      children: ["Ramal: ", userData.ramal]
+    }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("hr", {})]
+  }));
+};
+
+/***/ }),
+
+/***/ "./resources/react-app/src/contexts/Navbar.ts":
+/*!****************************************************!*\
+  !*** ./resources/react-app/src/contexts/Navbar.ts ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "NavbarContext": () => (/* binding */ NavbarContext)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+var NavbarContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)([{}, function (prevState) {}]);
+
+/***/ }),
+
+/***/ "./resources/react-app/src/contexts/UserData.ts":
+/*!******************************************************!*\
+  !*** ./resources/react-app/src/contexts/UserData.ts ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "UserDataContext": () => (/* binding */ UserDataContext)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+var UserDataContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)([null, function (prevState) {}]);
+
+/***/ }),
+
+/***/ "./resources/react-app/src/pages/Home/index.tsx":
+/*!******************************************************!*\
+  !*** ./resources/react-app/src/pages/Home/index.tsx ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "HomePage": () => (/* binding */ HomePage)
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _components_BookQuotesCard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/BookQuotesCard */ "./resources/react-app/src/components/BookQuotesCard/index.tsx");
+/* harmony import */ var _components_Navbar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/Navbar */ "./resources/react-app/src/components/Navbar/index.tsx");
+/* harmony import */ var _components_SectionButton__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/SectionButton */ "./resources/react-app/src/components/SectionButton/index.tsx");
+/* harmony import */ var _components_UserInfoCard__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/UserInfoCard */ "./resources/react-app/src/components/UserInfoCard/index.tsx");
+/* harmony import */ var _contexts_UserData__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../contexts/UserData */ "./resources/react-app/src/contexts/UserData.ts");
+/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./style.css */ "./resources/react-app/src/pages/Home/style.css");
+var __assign = undefined && undefined.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+
+
+
+
+
+
+
+
+var HomePage = function HomePage() {
+  var userDataContext = (0,react__WEBPACK_IMPORTED_MODULE_1__.useContext)(_contexts_UserData__WEBPACK_IMPORTED_MODULE_6__.UserDataContext);
+  var userData = userDataContext[0];
+  return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
+    className: "home-page"
+  }, {
+    children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_Navbar__WEBPACK_IMPORTED_MODULE_3__.Navbar, {
+      items: []
+    }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
+      className: "home-page-content"
+    }, {
+      children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
+        className: "home-page-user-info"
+      }, {
+        children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+          children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_BookQuotesCard__WEBPACK_IMPORTED_MODULE_2__.BookQuotesCard, {
+            userName: userData.name
+          })
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+          children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_UserInfoCard__WEBPACK_IMPORTED_MODULE_5__.UserInfoCard, {
+            userData: userData
+          })
+        })]
+      })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
+        className: "home-page-sections"
+      }, {
+        children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_SectionButton__WEBPACK_IMPORTED_MODULE_4__.SectionButton, {
+          icon: "/icons/gestao.png",
+          label: "Controle de pedidos",
+          url: "/pedidos"
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_SectionButton__WEBPACK_IMPORTED_MODULE_4__.SectionButton, {
+          icon: "/icons/fotos.png",
+          label: "Fotos dos pedidos",
+          url: "/fotos/enviar"
+        })]
+      })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({
+        className: "home-page-notifications"
+      }, {
+        children: "Sample Text"
+      }))]
+    }))]
+  }));
+};
+
+/***/ }),
+
 /***/ "./resources/react-app/src/pages/Login/index.tsx":
 /*!*******************************************************!*\
   !*** ./resources/react-app/src/pages/Login/index.tsx ***!
@@ -3169,7 +3578,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Navbar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/Navbar */ "./resources/react-app/src/components/Navbar/index.tsx");
 /* harmony import */ var _components_PDOCrud__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/PDOCrud */ "./resources/react-app/src/components/PDOCrud/index.tsx");
 /* harmony import */ var _components_SupplierURLModal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/SupplierURLModal */ "./resources/react-app/src/components/SupplierURLModal/index.tsx");
-/* harmony import */ var _services_axios__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../services/axios */ "./resources/react-app/src/services/axios.ts");
+/* harmony import */ var _contexts_Navbar__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../contexts/Navbar */ "./resources/react-app/src/contexts/Navbar.ts");
+/* harmony import */ var _contexts_UserData__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../contexts/UserData */ "./resources/react-app/src/contexts/UserData.ts");
+/* harmony import */ var _services_axios__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../services/axios */ "./resources/react-app/src/services/axios.ts");
+var __rest = undefined && undefined.__rest || function (s, e) {
+  var t = {};
+
+  for (var p in s) {
+    if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+  }
+
+  if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+    if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i])) t[p[i]] = s[p[i]];
+  }
+  return t;
+};
+
+
+
 
 
 
@@ -3181,48 +3607,51 @@ var OrdersPage = function OrdersPage() {
   var refModalId = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
   var refOnlineOrderNumber = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
   var refURLInput = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+  var navbarContext = (0,react__WEBPACK_IMPORTED_MODULE_1__.useContext)(_contexts_Navbar__WEBPACK_IMPORTED_MODULE_5__.NavbarContext);
+  var userDataContext = (0,react__WEBPACK_IMPORTED_MODULE_1__.useContext)(_contexts_UserData__WEBPACK_IMPORTED_MODULE_6__.UserDataContext);
+  var navbarItems = navbarContext[0];
+  var setNavbarItems = navbarContext[1];
+  var userData = userDataContext[0];
 
   var _a = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
-      navbarItems = _a[0],
-      setNavbarItems = _a[1];
+      phases = _a[0],
+      setPhases = _a[1];
 
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
-    _services_axios__WEBPACK_IMPORTED_MODULE_5__["default"].get('/api/phases/read').then(function (response) {
+  var fetchPhases = function fetchPhases() {
+    _services_axios__WEBPACK_IMPORTED_MODULE_7__["default"].get("/api/phases/read?email=".concat(userData.email)).then(function (response) {
       return response.data;
     }).then(function (response) {
-      var phases = response.phases;
-      var items = {};
-      var toUpdate = [{
-        label: "Início",
-        options: [{
-          label: "Início",
-          pathname: "/orders"
-        }]
-      }];
-      phases.forEach(function (phase) {
-        var id = phase.id,
-            name = phase.name,
-            color = phase.color;
-        var label = id.split('.')[0];
-        var option = {
-          label: "".concat(id, " - ").concat(name),
-          pathname: "/orders?phase=".concat(id),
-          color: "#".concat(color)
-        };
-        items[label] ? items[label].push(option) : items[label] = [option];
+      var message = response.message,
+          items = response.items;
+
+      var inicio = items.inicio,
+          phases = __rest(items, ["inicio"]);
+
+      var dropdowns = [];
+      console.log(userData);
+      dropdowns.push({
+        label: "Geral",
+        options: inicio
       });
-      Object.keys(items).forEach(function (phaseId) {
-        return toUpdate.push({
-          label: "Fase ".concat(phaseId),
-          options: items[phaseId]
+      Object.keys(phases).forEach(function (phase) {
+        return dropdowns.push({
+          label: phase,
+          options: items[phase]
         });
       });
-      setNavbarItems(toUpdate);
+      setPhases(dropdowns);
+      navbarItems.phases = dropdowns;
+      setNavbarItems(navbarItems);
     });
-  }, []);
+  };
+
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+    if (!("phases" in navbarItems)) return fetchPhases();
+    setPhases(navbarItems.phases);
+  }, [navbarItems]);
   return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
     children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_Navbar__WEBPACK_IMPORTED_MODULE_2__.Navbar, {
-      items: navbarItems
+      items: phases
     }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_PDOCrud__WEBPACK_IMPORTED_MODULE_3__.PDOCrud, {
       refModal: refModal,
       refModalId: refModalId,
@@ -3512,6 +3941,30 @@ ___CSS_LOADER_EXPORT___.push([module.id, ".app {\r\n  width: 100%;\r\n  height: 
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/components/BookQuotesCard/style.css":
+/*!*******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/components/BookQuotesCard/style.css ***!
+  \*******************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, ".book-quote-card {\r\n  width: 90%;\r\n  height: 90%;\r\n  border-radius: 5px;\r\n  border: 1px solid black;\r\n  display: grid;\r\n  grid-template-rows: 2% 13% 85%;\r\n  background-color: white;\r\n}\r\n\r\n.book-quote-card-header {\r\n  background-color: black;\r\n  color: white;\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n}\r\n\r\n.book-quote-body {\r\n  display: grid;\r\n  grid-template-rows: 20% 80%;\r\n}\r\n\r\n.book-quote-greeting {\r\n  display: flex;\r\n  align-items: center;\r\n  padding-left: 5px;\r\n}\r\n.book-quote-content {\r\n  display: flex;\r\n  flex-direction: column;\r\n  place-items: center;\r\n  place-content: center;\r\n  padding: 0 20px;\r\n  font-family: Georgia, 'Times New Roman', Times, serif;\r\n}\r\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/components/LoginForm/style.css":
 /*!**************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/components/LoginForm/style.css ***!
@@ -3601,7 +4054,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".nav_bar {\r\n\theight: 60px;\r\n\tpadding: 0;\r\n\tmargin: 0;\r\n\tdisplay: flex;\r\n\tbackground-color: black;\r\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".nav-bar {\r\n\theight: 60px;\r\n\tpadding: 0;\r\n\tmargin: 0;\r\n\tdisplay: grid;\r\n\tgrid-template-columns: 70px auto 10%;\r\n\tbackground-color: black;\r\n}\r\n\r\n.nav-bar-img {\r\n\theight: 100%;\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\tjustify-content: center;\r\n}\r\n.nav-bar-img-clickable:hover {\r\n\tcursor: pointer;\r\n\tbackground-color: white;\r\n}\r\n.nav-bar-img > img {\r\n\theight: 55px;\r\n}\r\n\r\n@media only screen and (max-width: 1080px) {\r\n\t.nav-bar-img-right > img {\r\n\t\tdisplay: none;\r\n\t}\r\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -3650,6 +4103,30 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
 ___CSS_LOADER_EXPORT___.push([module.id, ".photos-form {\r\n  width: 80%;\r\n  height: 60%;\r\n  background-color: white;\r\n  display: flex;\r\n  flex-direction: column;\r\n  justify-content: space-around;\r\n  align-items: center;\r\n  border-radius: 10px;\r\n}\r\n.photos-form > div {\r\n  display: flex;\r\n  flex-direction: column;\r\n  height: 20%;\r\n  align-items: center;\r\n  justify-content: space-between;\r\n}\r\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/components/SectionButton/style.css":
+/*!******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/components/SectionButton/style.css ***!
+  \******************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, ".section-button {\r\n  width: 90%;\r\n  height: 80px;\r\n  border-radius: 5px;\r\n  background-color: white;\r\n  display: grid;\r\n  grid-template-columns: 20% 60% 20%;\r\n  -webkit-user-select: none;\r\n          user-select: none;\r\n  border: 1px solid black;\r\n  margin-top: 20px;\r\n}\r\n\r\n.section-button:hover {\r\n  cursor: pointer;\r\n  background-color: rgb(0, 0, 0);\r\n  color: white;\r\n}\r\n\r\n.section-button > div {\r\n  display: grid;\r\n  place-items: center;\r\n}\r\n\r\n.section-button > div > img {\r\n  height: 70px;\r\n}\r\n\r\n.section-button > strong {\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n}\r\n\r\n@media only screen and (max-width: 600px) {\r\n  .section-button > div > img {\r\n    height: 50px;\r\n  }\r\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -3722,6 +4199,30 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
 ___CSS_LOADER_EXPORT___.push([module.id, "body {\n  margin: 0;\n  padding: 0;\n  top: 0;\n  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',\n    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',\n    sans-serif;\n  overflow-x: hidden;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}\n\n#root {\n  width: 100%;\n  height: 100%;\n}\n\ncode {\n  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',\n    monospace;\n}\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/pages/Home/style.css":
+/*!****************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/pages/Home/style.css ***!
+  \****************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, ".home-page {\r\n  display: grid;\r\n  grid-template-rows: 60px calc(100vh - 60px);\r\n  background-color: #f2f4f5;\r\n}\r\n\r\n.home-page-content {\r\n  overflow: auto auto;\r\n  display: grid;\r\n  grid-template-columns: 25% 50% 25%;\r\n}\r\n\r\n.home-page-user-info {\r\n  display: grid;\r\n  grid-template-rows: 50% 50%;\r\n}\r\n.home-page-user-info > div {\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  justify-content: center;\r\n}\r\n\r\n.home-page-sections {\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  overflow-y: auto;\r\n}\r\n\r\n.home-page-notifications {\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  justify-content: center;\r\n}\r\n\r\n@media only screen and (max-width: 600px) {\r\n  .home-page-content {\r\n    overflow: auto auto;\r\n    display: grid;\r\n    grid-template-columns: 100%;\r\n  }\r\n  \r\n  .home-page-user-info {\r\n    display: none;\r\n  }\r\n  \r\n  .home-page-notifications {\r\n    display: none;\r\n  }\r\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -40976,6 +41477,36 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 /***/ }),
 
+/***/ "./resources/react-app/src/components/BookQuotesCard/style.css":
+/*!*********************************************************************!*\
+  !*** ./resources/react-app/src/components/BookQuotesCard/style.css ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_2_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!../../../../../node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./style.css */ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/components/BookQuotesCard/style.css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_2_style_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_2_style_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
 /***/ "./resources/react-app/src/components/LoginForm/style.css":
 /*!****************************************************************!*\
   !*** ./resources/react-app/src/components/LoginForm/style.css ***!
@@ -41156,6 +41687,36 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 /***/ }),
 
+/***/ "./resources/react-app/src/components/SectionButton/style.css":
+/*!********************************************************************!*\
+  !*** ./resources/react-app/src/components/SectionButton/style.css ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_2_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!../../../../../node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./style.css */ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/components/SectionButton/style.css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_2_style_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_2_style_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
 /***/ "./resources/react-app/src/components/SupplierURLModal/style.css":
 /*!***********************************************************************!*\
   !*** ./resources/react-app/src/components/SupplierURLModal/style.css ***!
@@ -41243,6 +41804,36 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_2_index_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
+/***/ "./resources/react-app/src/pages/Home/style.css":
+/*!******************************************************!*\
+  !*** ./resources/react-app/src/pages/Home/style.css ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_2_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!../../../../../node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./style.css */ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/pages/Home/style.css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_2_style_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_2_style_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
 
 /***/ }),
 

@@ -30,7 +30,7 @@ export const OrdersPage = () => {
 				const dropdowns = [] as DropdownProp[]
 
 				dropdowns.push({
-					label: "Início",
+					label: "Geral",
 					options: inicio
 				})
 				Object.keys(phases).forEach(phase => dropdowns.push({
