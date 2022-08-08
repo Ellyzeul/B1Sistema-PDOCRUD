@@ -1,0 +1,52 @@
+.home-page {
+  display: grid;
+  grid-template-rows: 60px calc(100vh - 60px);
+  background-color: #f2f4f5;
+}
+
+.home-page-content {
+  overflow: auto auto;
+  display: grid;
+  grid-template-columns: 25% 50% 25%;
+}
+
+.home-page-user-info {
+  display: grid;
+  grid-template-rows: 50% 50%;
+}
+.home-page-user-info > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-page-sections {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+}
+
+.home-page-notifications {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+@media only screen and (max-width: 600px) {
+  .home-page-content {
+    overflow: auto auto;
+    display: grid;
+    grid-template-columns: 100%;
+  }
+  
+  .home-page-user-info {
+    display: none;
+  }
+  
+  .home-page-notifications {
+    display: none;
+  }
+}

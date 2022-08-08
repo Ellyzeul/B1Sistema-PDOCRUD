@@ -5,9 +5,9 @@ use App\Models\Phase;
 
 class PhaseController extends Controller
 {
-    public static function read()
+    public static function read($email)
     {
-        $response = Phase::read();
+        $response = Phase::read($email);
 
         return $response;
     }
