@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
 import { UserData } from './components/LoginForm/types';
@@ -19,6 +19,17 @@ function App() {
 
   const isLogged = () => !!userData
   const getElement = (element: JSX.Element) => isLogged() ? element : <Navigate to='/login'/>
+  const isUserDataValid = (userData: any) => 
+    ["email", "name", "token", "ramal", "id_section"].reduce((isValid, key) => 
+      !isValid ? "false" : (key in userData ? "true" : "false")
+    ) === "true"
+
+  useEffect(() => {
+    if(userData === null || isUserDataValid(userData)) return
+
+    window.localStorage.setItem("userData", "")
+    window.location.pathname = "/login"
+  }, [userData])
 
   return (
     <UserDataContext.Provider value={[userData, setUserData]}>

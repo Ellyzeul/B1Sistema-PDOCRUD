@@ -1,4 +1,4 @@
-export type UserData = {
+export interface UserData {
   email: string,
   name: string,
   token: string,
