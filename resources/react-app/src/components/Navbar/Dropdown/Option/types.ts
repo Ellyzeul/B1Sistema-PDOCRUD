@@ -1,5 +1,5 @@
 export interface OptionProp {
-	id: string,
+	id?: string,
 	name: string,
 	url: string,
 	color?: string

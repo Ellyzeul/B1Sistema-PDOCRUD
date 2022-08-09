@@ -2,6 +2,11 @@
   width: 100%;
   height: 100vh;
   background-color: black;
+  display: grid;
+  grid-template-rows: 60px calc(100vh - 60px);
+}
+
+.photos-upload-content {
   display: flex;
   align-items: center;
   justify-content: center;
