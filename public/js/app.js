@@ -2260,7 +2260,7 @@ function App() {
           path: '/fotos/enviar',
           element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Photos_Upload__WEBPACK_IMPORTED_MODULE_9__.PhotosUploadPage, {}))
         }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Route, {
-          path: '/fotos/pesquisa',
+          path: '/fotos/pesquisar',
           element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Photos_Search__WEBPACK_IMPORTED_MODULE_8__.PhotosSearchPage, {}))
         })]
       })
@@ -2284,7 +2284,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "BookQuotesCard": () => (/* binding */ BookQuotesCard)
 /* harmony export */ });
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./style.css */ "./resources/react-app/src/components/BookQuotesCard/style.css");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _services_axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../services/axios */ "./resources/react-app/src/services/axios.ts");
+/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./style.css */ "./resources/react-app/src/components/BookQuotesCard/style.css");
 var __assign = undefined && undefined.__assign || function () {
   __assign = Object.assign || function (t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -2303,8 +2306,27 @@ var __assign = undefined && undefined.__assign || function () {
 
 
 
+
+
 var BookQuotesCard = function BookQuotesCard(props) {
   var userName = props.userName;
+
+  var _a = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)({}),
+      quoteInfo = _a[0],
+      setQuoteInfo = _a[1];
+
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+    _services_axios__WEBPACK_IMPORTED_MODULE_2__["default"].get('/api/quotes/read').then(function (response) {
+      return response.data;
+    }).then(function (response) {
+      var quote = response.quote,
+          author = response.author;
+      setQuoteInfo({
+        quote: quote,
+        author: author
+      });
+    });
+  }, []);
   return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
     className: "book-quote-card"
   }, {
@@ -2324,9 +2346,9 @@ var BookQuotesCard = function BookQuotesCard(props) {
       }, {
         children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
           children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("strong", {
-            children: "\"Daqui pra frente, s\xF3 pra tr\xE1s\""
+            children: quoteInfo.quote ? "\"".concat(quoteInfo.quote, "\"") : null
           }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("br", {}), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", {
-            children: "Prov\xE9rbio popular"
+            children: quoteInfo.author
           })]
         })
       }))]
@@ -3516,11 +3538,9 @@ var HomePage = function HomePage() {
           label: "Fotos dos pedidos",
           url: "/fotos/enviar"
         })]
-      })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({
+      })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
         className: "home-page-notifications"
-      }, {
-        children: "Sample Text"
-      }))]
+      })]
     }))]
   }));
 };
@@ -3691,9 +3711,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.mjs");
-/* harmony import */ var _components_PhotoDisplay__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../components/PhotoDisplay */ "./resources/react-app/src/components/PhotoDisplay/index.tsx");
-/* harmony import */ var _services_axios__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/axios */ "./resources/react-app/src/services/axios.ts");
-/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./style.css */ "./resources/react-app/src/pages/Photos/Search/style.css");
+/* harmony import */ var _components_Navbar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../components/Navbar */ "./resources/react-app/src/components/Navbar/index.tsx");
+/* harmony import */ var _components_PhotoDisplay__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../components/PhotoDisplay */ "./resources/react-app/src/components/PhotoDisplay/index.tsx");
+/* harmony import */ var _services_axios__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../services/axios */ "./resources/react-app/src/services/axios.ts");
+/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./style.css */ "./resources/react-app/src/pages/Photos/Search/style.css");
 var __assign = undefined && undefined.__assign || function () {
   __assign = Object.assign || function (t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -3709,6 +3730,7 @@ var __assign = undefined && undefined.__assign || function () {
 
   return __assign.apply(this, arguments);
 };
+
 
 
 
@@ -3728,7 +3750,7 @@ var PhotosSearchPage = function PhotosSearchPage() {
     var input = inputRef.current;
     var namePattern = input.value;
     if (namePattern === "") return;
-    _services_axios__WEBPACK_IMPORTED_MODULE_4__["default"].get("/api/photo/read?name_pattern=".concat(namePattern)).then(function (response) {
+    _services_axios__WEBPACK_IMPORTED_MODULE_5__["default"].get("/api/photo/read?name_pattern=".concat(namePattern)).then(function (response) {
       return response.data;
     }).then(function (response) {
       var message = response.message,
@@ -3736,7 +3758,7 @@ var PhotosSearchPage = function PhotosSearchPage() {
       react_toastify__WEBPACK_IMPORTED_MODULE_2__.toast.success(message);
       var i = 0;
       setPhotos(photos.map(function (url) {
-        return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_PhotoDisplay__WEBPACK_IMPORTED_MODULE_3__.PhotoDisplay, {
+        return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_PhotoDisplay__WEBPACK_IMPORTED_MODULE_4__.PhotoDisplay, {
           url: url
         }, i++);
       }));
@@ -3746,29 +3768,41 @@ var PhotosSearchPage = function PhotosSearchPage() {
   return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
     className: "photos-search-page"
   }, {
-    children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
-      className: "search-container"
+    children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_Navbar__WEBPACK_IMPORTED_MODULE_3__.Navbar, {
+      items: [{
+        label: "Fotos",
+        options: [{
+          name: "Enviar",
+          url: "/fotos/enviar"
+        }]
+      }]
+    }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
+      className: "photos-search-content"
     }, {
-      children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
-        ref: inputRef,
-        className: "photo-search",
-        type: "text"
-      }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({
-        onClick: searchPhotos
+      children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
+        className: "search-container"
       }, {
-        children: "Pesquisar"
-      })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_toastify__WEBPACK_IMPORTED_MODULE_2__.ToastContainer, {})]
-    })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
-      className: "bottom-container"
-    }, {
-      children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", {
-        children: "Fotos pesquisadas"
-      }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({
-        className: "display-container"
+        children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
+          ref: inputRef,
+          className: "photo-search",
+          type: "text"
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({
+          onClick: searchPhotos
+        }, {
+          children: "Pesquisar"
+        })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_toastify__WEBPACK_IMPORTED_MODULE_2__.ToastContainer, {})]
+      })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
+        className: "bottom-container"
       }, {
-        children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-          children: photosElem
-        })
+        children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", {
+          children: "Fotos pesquisadas"
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({
+          className: "display-container"
+        }, {
+          children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+            children: photosElem
+          })
+        }))]
       }))]
     }))]
   }));
@@ -3788,8 +3822,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "PhotosUploadPage": () => (/* binding */ PhotosUploadPage)
 /* harmony export */ });
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-/* harmony import */ var _components_PhotoForm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../components/PhotoForm */ "./resources/react-app/src/components/PhotoForm/index.tsx");
-/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./style.css */ "./resources/react-app/src/pages/Photos/Upload/style.css");
+/* harmony import */ var _components_Navbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../components/Navbar */ "./resources/react-app/src/components/Navbar/index.tsx");
+/* harmony import */ var _components_PhotoForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../components/PhotoForm */ "./resources/react-app/src/components/PhotoForm/index.tsx");
+/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./style.css */ "./resources/react-app/src/pages/Photos/Upload/style.css");
 var __assign = undefined && undefined.__assign || function () {
   __assign = Object.assign || function (t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -3809,11 +3844,24 @@ var __assign = undefined && undefined.__assign || function () {
 
 
 
+
 var PhotosUploadPage = function PhotosUploadPage() {
-  return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({
+  return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
     className: "photos-upload-page"
   }, {
-    children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_PhotoForm__WEBPACK_IMPORTED_MODULE_1__.PhotoForm, {})
+    children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_Navbar__WEBPACK_IMPORTED_MODULE_1__.Navbar, {
+      items: [{
+        label: "Fotos",
+        options: [{
+          name: "Pesquisar",
+          url: "/fotos/pesquisar"
+        }]
+      }]
+    }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({
+      className: "photos-upload-content"
+    }, {
+      children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_PhotoForm__WEBPACK_IMPORTED_MODULE_2__.PhotoForm, {})
+    }))]
   }));
 };
 
@@ -4278,7 +4326,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".photos-search-page {\r\n  height: 100vh;\r\n  width: 100%;\r\n  background-color: black;\r\n  display: grid;\r\n  grid-template-rows: 25% 70%;\r\n  grid-template-areas: \r\n    'photos-search'\r\n    'photos-display';\r\n}\r\n\r\n.search-container {\r\n  display: flex;\r\n  align-items: center;\r\n}\r\n.photo-search {\r\n  margin-left: 50px;\r\n  margin-right: 20px;\r\n  width: 150px;\r\n  border-radius: 10px;\r\n  border: none;\r\n  padding: 6px;\r\n  outline: none;\r\n}\r\n.search-container > button {\r\n  border: none;\r\n  padding: 6px 10px;\r\n  border-radius: 10px;\r\n  background-color: rgb(48, 48, 48);\r\n  color: white;\r\n}\r\n.search-container > button:hover {\r\n  cursor: pointer;\r\n  padding: 8px 12px;\r\n  background-color: white;\r\n  color: black;\r\n  transition: 125ms;\r\n}\r\n.bottom-container {\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  justify-content: center;\r\n}\r\n.bottom-container > p {\r\n  color: white;\r\n}\r\n.display-container {\r\n  width: 95%;\r\n  height: 90%;\r\n  background-color: white;\r\n  border-radius: 10px;\r\n  display: flex;\r\n  overflow-x: auto;\r\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".photos-search-page {\r\n  height: 100vh;\r\n  width: 100%;\r\n  background-color: black;\r\n  display: grid;\r\n  grid-template-rows: 60px calc(100vh - 60px);\r\n}\r\n\r\n.photos-search-content {\r\n  display: grid;\r\n  grid-template-rows: 25% 70%;\r\n  grid-template-areas: \r\n    'photos-search'\r\n    'photos-display';\r\n}\r\n\r\n.search-container {\r\n  display: flex;\r\n  align-items: center;\r\n}\r\n.photo-search {\r\n  margin-left: 50px;\r\n  margin-right: 20px;\r\n  width: 150px;\r\n  border-radius: 10px;\r\n  border: none;\r\n  padding: 6px;\r\n  outline: none;\r\n}\r\n.search-container > button {\r\n  border: none;\r\n  padding: 6px 10px;\r\n  border-radius: 10px;\r\n  background-color: rgb(48, 48, 48);\r\n  color: white;\r\n}\r\n.search-container > button:hover {\r\n  cursor: pointer;\r\n  padding: 8px 12px;\r\n  background-color: white;\r\n  color: black;\r\n  transition: 125ms;\r\n}\r\n.bottom-container {\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  justify-content: center;\r\n}\r\n.bottom-container > p {\r\n  color: white;\r\n}\r\n.display-container {\r\n  width: 95%;\r\n  height: 90%;\r\n  background-color: white;\r\n  border-radius: 10px;\r\n  display: flex;\r\n  overflow-x: auto;\r\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -4302,7 +4350,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".photos-upload-page {\r\n  width: 100%;\r\n  height: 100vh;\r\n  background-color: black;\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".photos-upload-page {\r\n  width: 100%;\r\n  height: 100vh;\r\n  background-color: black;\r\n  display: grid;\r\n  grid-template-rows: 60px calc(100vh - 60px);\r\n}\r\n\r\n.photos-upload-content {\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

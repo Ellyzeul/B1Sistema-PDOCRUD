@@ -1,10 +1,14 @@
+import { Navbar } from "../../../components/Navbar"
 import { PhotoForm } from "../../../components/PhotoForm"
 import "./style.css"
 
 export const PhotosUploadPage = () => {
   return (
     <div className="photos-upload-page">
-      <PhotoForm />
+      <Navbar items={[{label: "Fotos", options: [{name: "Pesquisar", url: "/fotos/pesquisar"}]}]} />
+      <div className="photos-upload-content">
+        <PhotoForm />
+      </div>
     </div>
   )
 }

@@ -9,6 +9,7 @@ use App\Http\Controllers\NavbarItemController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PhaseController;
 use App\Http\Controllers\PhotoController;
+use App\Http\Controllers\QuoteController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -93,4 +94,8 @@ Route::get('/navbar-items/read', function (Request $request) {
     $email = $request->input("email");
 
     return NavbarItemController::read($email);
+});
+
+Route::get('/quotes/read', function (Request $request) {
+    return QuoteController::read();
 });
