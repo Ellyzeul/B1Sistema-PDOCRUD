@@ -11,5 +11,10 @@ class Quote extends Model
 {
     use HasFactory;
 
+    public function read()
+    {
+        $result = DB::select("CALL select_random_quote()")[0];
 
+        return $result;
+    }
 }

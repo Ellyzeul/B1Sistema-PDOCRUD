@@ -28,7 +28,7 @@ export const HomePage = () => {
           <SectionButton icon={"/icons/fotos.png"} label={"Fotos dos pedidos"} url={"/fotos/enviar"} />
         </div>
         <div className={"home-page-notifications"}>
-          Sample Text
+          
         </div>
       </div>
     </div>

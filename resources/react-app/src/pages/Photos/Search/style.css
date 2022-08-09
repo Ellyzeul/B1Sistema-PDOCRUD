@@ -3,6 +3,11 @@
   width: 100%;
   background-color: black;
   display: grid;
+  grid-template-rows: 60px calc(100vh - 60px);
+}
+
+.photos-search-content {
+  display: grid;
   grid-template-rows: 25% 70%;
   grid-template-areas: 
     'photos-search'

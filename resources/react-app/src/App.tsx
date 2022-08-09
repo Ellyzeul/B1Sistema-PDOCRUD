@@ -39,7 +39,7 @@ function App() {
           <Route path='/' element={getElement(<HomePage/>)} />
           <Route path='/pedidos' element={getElement(<OrdersPage/>)} />
           <Route path='/fotos/enviar' element={getElement(<PhotosUploadPage/>)} />
-          <Route path='/fotos/pesquisa' element={getElement(<PhotosSearchPage/>)} />
+          <Route path='/fotos/pesquisar' element={getElement(<PhotosSearchPage/>)} />
         </Routes>
       </NavbarContext.Provider>
     </UserDataContext.Provider>

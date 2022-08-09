@@ -1,5 +1,6 @@
 import { MouseEventHandler, useRef, useState } from "react"
 import { toast, ToastContainer } from "react-toastify"
+import { Navbar } from "../../../components/Navbar"
 import { PhotoDisplay } from "../../../components/PhotoDisplay"
 import api from "../../../services/axios"
 import "./style.css"
@@ -27,16 +28,19 @@ export const PhotosSearchPage = () => {
 
   return (
     <div className="photos-search-page">
-      <div className="search-container">
-        <input ref={inputRef} className="photo-search" type="text" />
-        <button onClick={searchPhotos}>Pesquisar</button>
-        <ToastContainer />
-      </div>
-      <div className="bottom-container">
-        <p>Fotos pesquisadas</p>
-        <div className="display-container">
-          <div>
-            {photosElem}
+      <Navbar items={[{label: "Fotos", options: [{name:"Enviar", url: "/fotos/enviar"}]}]} />
+      <div className="photos-search-content">
+        <div className="search-container">
+          <input ref={inputRef} className="photo-search" type="text" />
+          <button onClick={searchPhotos}>Pesquisar</button>
+          <ToastContainer />
+        </div>
+        <div className="bottom-container">
+          <p>Fotos pesquisadas</p>
+          <div className="display-container">
+            <div>
+              {photosElem}
+            </div>
           </div>
         </div>
       </div>
