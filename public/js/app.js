@@ -2554,7 +2554,7 @@ var Option = function Option(props) {
     children: [color ? (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
       className: "navbar-dropdown-option-colour-div",
       style: style
-    }) : null, name]
+    }) : null, id ? "".concat(id, " - ") : null, name]
   }));
 };
 

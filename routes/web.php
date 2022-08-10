@@ -17,7 +17,7 @@ use App\Http\Controllers\OrderController;
 */
 
 
-Route::get('/orders', function () {
+Route::get('/pedidos', function () {
     return view('pdocrud');
 });
 Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
