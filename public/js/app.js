@@ -2744,6 +2744,8 @@ var Navbar = function Navbar(props) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "configureBulkInputs": () => (/* binding */ configureBulkInputs),
+/* harmony export */   "configureSearchInput": () => (/* binding */ configureSearchInput),
 /* harmony export */   "setCurrencySymbols": () => (/* binding */ setCurrencySymbols),
 /* harmony export */   "setOpenModalEvent": () => (/* binding */ setOpenModalEvent),
 /* harmony export */   "setTopScrollBar": () => (/* binding */ setTopScrollBar),
@@ -2824,6 +2826,34 @@ var setTopScrollBar = function setTopScrollBar(panelBody) {
   var scrollbarRoot = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_3__.createRoot)(scrollbarContainer);
   scrollbarRoot.render((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_TopScrollBar__WEBPACK_IMPORTED_MODULE_2__.TopScrollBar, {}));
 };
+var configureBulkInputs = function configureBulkInputs() {
+  var bulkInputs = document.querySelectorAll(".input-bulk-crud-update");
+
+  var onKeyDown = function onKeyDown(key) {
+    console.log(key);
+    if (key !== "Enter") return;
+    var anchor = document.querySelector(".pdocrud-button-save ");
+    anchor.click();
+  };
+
+  bulkInputs.forEach(function (input) {
+    input.onkeydown = function (event) {
+      return onKeyDown(event.key);
+    };
+
+    input.style.minWidth = "100px";
+  });
+};
+var configureSearchInput = function configureSearchInput() {
+  var input = document.querySelector(".pdocrud_search_input");
+  var anchor = document.querySelector("#pdocrud_search_btn");
+
+  input.onkeydown = function (event) {
+    var key = event.key;
+    if (key !== "Enter") return;
+    anchor.click();
+  };
+};
 
 var openModal = function openModal(modal, modalId, onlineOrderNumber, urlInput, rowId, rowOnlineOrderNumber) {
   modal.style.visibility = 'visible';
@@ -2889,6 +2919,8 @@ var PDOCrud = function PDOCrud(props) {
     (0,_functions__WEBPACK_IMPORTED_MODULE_3__.setCurrencySymbols)();
     (0,_functions__WEBPACK_IMPORTED_MODULE_3__.setOpenModalEvent)(refModal, refModalId, refOnlineOrderNumber, refURLInput);
     (0,_functions__WEBPACK_IMPORTED_MODULE_3__.setTopScrollBar)(document.querySelector(".panel-body"));
+    (0,_functions__WEBPACK_IMPORTED_MODULE_3__.configureBulkInputs)();
+    (0,_functions__WEBPACK_IMPORTED_MODULE_3__.configureSearchInput)();
   }, [elemRef, rawHTML]);
   return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
     ref: elemRef,

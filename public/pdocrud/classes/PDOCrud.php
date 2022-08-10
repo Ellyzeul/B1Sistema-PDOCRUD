@@ -5335,23 +5335,6 @@ Class PDOCrud {
             $field .= " value=\"$data[0]\" ";
         }
 
-        if(strpos($class, "input-bulk-crud-update") >= 0) {
-            $field .= " onkeydown=\"(event => {
-                const key = event.key
-                const element = event.target
-                if(key === 'Enter') {
-                    document.querySelector('.pdocrud-button-save').click()
-                    return
-                }
-                if(key === 'Escape') {
-                    element.blur()
-                    return
-                }
-            })(event)\"
-            
-            style=\"width: auto;\"";
-        }
-
         $field .= " />";
         return $field;
     }
@@ -5440,22 +5423,7 @@ Class PDOCrud {
                 }
             }
         }
-        if(strpos($class, "input-bulk-crud-update") >= 0) {
-            $field .= " onkeydown=\"(event => {
-                const key = event.key
-                const element = event.target
-                if(key === 'Enter') {
-                    document.querySelector('.pdocrud-button-save').click()
-                    return
-                }
-                if(key === 'Escape') {
-                    element.blur()
-                    return
-                }
-            })(event)\"
-            
-            style=\"width: auto;\"";
-        }
+
         $field .= ">";
         if ($this->settings["selectOption"])
             $field .= "<option value=''>" . $this->langData["select"] . "</option>";

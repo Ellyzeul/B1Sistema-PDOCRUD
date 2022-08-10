@@ -1,5 +1,5 @@
 import api from "../../services/axios"
-import { MutableRefObject } from "react";
+import { KeyboardEventHandler, MutableRefObject } from "react";
 import { TopScrollBar } from "../TopScrollBar";
 import { createRoot } from "react-dom/client";
 
@@ -75,6 +75,34 @@ export const setTopScrollBar = (panelBody: HTMLDivElement) => {
 	panelBody.insertBefore(scrollbarContainer, toScroll)
 	const scrollbarRoot = createRoot(scrollbarContainer)
 	scrollbarRoot.render(<TopScrollBar/>)
+}
+
+export const configureBulkInputs = () => {
+	const bulkInputs = document.querySelectorAll(".input-bulk-crud-update") as NodeListOf<HTMLInputElement>
+	const onKeyDown = (key: string) => {
+		console.log(key)
+		if(key !== "Enter") return
+
+		const anchor = document.querySelector(".pdocrud-button-save ") as HTMLAnchorElement
+		anchor.click()
+	}
+
+	bulkInputs.forEach(input => {
+		input.onkeydown = event => onKeyDown(event.key)
+		input.style.minWidth = "100px"
+	})
+}
+
+export const configureSearchInput = () => {
+	const input = document.querySelector(".pdocrud_search_input") as HTMLInputElement
+	const anchor = document.querySelector("#pdocrud_search_btn") as HTMLAnchorElement
+
+	input.onkeydown = event => {
+		const key = event.key
+		if(key !== "Enter") return
+
+		anchor.click()
+	}
 }
 
 const openModal = (
