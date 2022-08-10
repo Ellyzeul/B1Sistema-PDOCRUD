@@ -14,7 +14,7 @@ export const Option = (props: OptionProp) => {
 				? <div className={"navbar-dropdown-option-colour-div"} style={style}></div> 
 				: null
 			}
-			{name}
+			{id ? `${id} - ` : null}{name}
 		</a>
 	)
 }
