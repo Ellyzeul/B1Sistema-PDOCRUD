@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react"
 import api from "../../services/axios"
-import { setOpenModalEvent, setCurrencySymbols, setValuesOnSelects, setTopScrollBar, configureBulkInputs, configureSearchInput } from "./functions"
+import { configurePage } from "./functions"
 import { PDOCrudProp } from "./types"
 
 export const PDOCrud = (props: PDOCrudProp) => {
 	const { refModal, refModalId, refOnlineOrderNumber, refURLInput } = props
 	const [rawHTML, setRawHTML] = useState("")
+	const [pdocrud, setPDOCrud] = useState(null as HTMLDivElement|null)
 	const elemRef = useRef(null)
 
 	useEffect(() => {
@@ -17,19 +18,17 @@ export const PDOCrud = (props: PDOCrudProp) => {
 
 	useEffect(() => {
 		if(!elemRef.current) return
-		const elem = elemRef.current as HTMLDivElement
-
-		if(elem.children.length === 0) return
-		if(!document.querySelectorAll('.pdocrud-data-row')[0].children[1]) return
-
-		(document.querySelector(".panel-title") as HTMLHeadingElement).textContent = "Controle de fases"
-		setValuesOnSelects()
-		setCurrencySymbols()
-		setOpenModalEvent(refModal, refModalId, refOnlineOrderNumber, refURLInput)
-		setTopScrollBar(document.querySelector(".panel-body") as HTMLDivElement)
-		configureBulkInputs()
-		configureSearchInput()
-	}, [elemRef, rawHTML])
+		setPDOCrud(elemRef.current as HTMLDivElement)
+		if(!pdocrud) return
+		configurePage(
+			elemRef,
+			refModal,
+			refModalId,
+			refOnlineOrderNumber,
+			refURLInput
+		)
+		console.log(pdocrud)
+	}, [elemRef, pdocrud, rawHTML])
 
 	return (
 		<div 

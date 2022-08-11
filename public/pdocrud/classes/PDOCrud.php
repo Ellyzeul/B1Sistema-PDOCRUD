@@ -5335,8 +5335,29 @@ Class PDOCrud {
             $field .= " value=\"$data[0]\" ";
         }
 
+        if($id == "pdocrud_search_box") $field .= $this->getSearchEvent();
+        if(in_array("input-bulk-crud-update", $fieldClass)) $field .= $this->getSaveEvent();
+
         $field .= " />";
         return $field;
+    }
+
+    private function getSearchEvent() {
+        return " onkeydown=\"((event) => {
+            const key = event.key
+            if(key !== 'Enter') return
+
+            document.querySelector('#pdocrud_search_btn').click()
+        })(event)\"";
+    }
+
+    private function getSaveEvent() {
+        return " onkeydown=\"((event) => {
+            const key = event.key
+            if(key !== 'Enter') return
+
+            document.querySelector('.pdocrud-button-save').click()
+        })(event)\"";
     }
 
     public function getSubmitField($fieldName, $attr = array(), $data = array(), $fieldClass = array()) {
@@ -5423,6 +5444,8 @@ Class PDOCrud {
                 }
             }
         }
+
+        if(in_array("input-bulk-crud-update", $fieldClass)) $field .= $this->getSaveEvent();
 
         $field .= ">";
         if ($this->settings["selectOption"])

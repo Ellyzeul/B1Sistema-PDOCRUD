@@ -77,32 +77,24 @@ export const setTopScrollBar = (panelBody: HTMLDivElement) => {
 	scrollbarRoot.render(<TopScrollBar/>)
 }
 
-export const configureBulkInputs = () => {
-	const bulkInputs = document.querySelectorAll(".input-bulk-crud-update") as NodeListOf<HTMLInputElement>
-	const onKeyDown = (key: string) => {
-		console.log(key)
-		if(key !== "Enter") return
+export const configurePage = (
+	elemRef: React.MutableRefObject<null>, 
+	refModal: React.MutableRefObject<null>, 
+	refModalId: React.MutableRefObject<null>, 
+	refOnlineOrderNumber: React.MutableRefObject<null>, 
+	refURLInput: React.MutableRefObject<null>
+) => {
+	if(!elemRef.current) return
+	const elem = elemRef.current as HTMLDivElement
 
-		const anchor = document.querySelector(".pdocrud-button-save ") as HTMLAnchorElement
-		anchor.click()
-	}
+	if(elem.children.length === 0) return
+	if(!document.querySelectorAll('.pdocrud-data-row')[0].children[1]) return
 
-	bulkInputs.forEach(input => {
-		input.onkeydown = event => onKeyDown(event.key)
-		input.style.minWidth = "100px"
-	})
-}
-
-export const configureSearchInput = () => {
-	const input = document.querySelector(".pdocrud_search_input") as HTMLInputElement
-	const anchor = document.querySelector("#pdocrud_search_btn") as HTMLAnchorElement
-
-	input.onkeydown = event => {
-		const key = event.key
-		if(key !== "Enter") return
-
-		anchor.click()
-	}
+	(document.querySelector(".panel-title") as HTMLHeadingElement).textContent = "Controle de fases"
+	setValuesOnSelects()
+	setCurrencySymbols()
+	setOpenModalEvent(refModal, refModalId, refOnlineOrderNumber, refURLInput)
+	setTopScrollBar(document.querySelector(".panel-body") as HTMLDivElement)
 }
 
 const openModal = (
