@@ -99,7 +99,7 @@ const setOpenModalEvent = (
 	const modal = (refModal.current as HTMLDivElement)
 	const modalId = (refModalId.current as HTMLDivElement)
 	const onlineOrderNumber = (refOnlineOrderNumber.current as HTMLSpanElement)
-	const urlInput = (refURLInput.current as HTMLInputElement)
+	const urlInput = (refURLInput.current as HTMLTextAreaElement)
 	const rows = document.querySelectorAll('.pdocrud-data-row') as NodeListOf<HTMLTableRowElement>
 	
 	rows.forEach(row => {
@@ -134,7 +134,7 @@ const openModal = (
 	modal: HTMLDivElement, 
 	modalId: HTMLDivElement, 
 	onlineOrderNumber: HTMLSpanElement, 
-	urlInput: HTMLInputElement,
+	urlInput: HTMLTextAreaElement,
 	rowId: string,
 	rowOnlineOrderNumber: string
 ) => {
