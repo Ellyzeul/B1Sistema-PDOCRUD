@@ -27,7 +27,7 @@ export const SupplierURLModal = (props: SupplierURLModalProp) => {
 		const modal = (refModal.current as HTMLDivElement)
 		const modalId = (refModalId.current as HTMLDivElement)
 		const onlineOrderNumber = (refOnlineOrderNumber.current as HTMLSpanElement)
-		const urlInput = (refURLInput.current as HTMLInputElement)
+		const urlInput = (refURLInput.current as HTMLTextAreaElement)
 
 		modal.style.visibility = 'hidden'
 		modalId.textContent = ''
@@ -56,7 +56,7 @@ export const SupplierURLModal = (props: SupplierURLModalProp) => {
 					</div>
 					<div>
 						<label htmlFor="supplier_url">URL</label>
-						<input type="text" name="supplier_url" id="purchase_link_formsupplier_url" ref={refURLInput} />
+						<textarea name="supplier_url" id="purchase_link_formsupplier_url" ref={refURLInput} />
 					</div>
 					<div id="purchase_link_form_submit"><button type="submit">Salvar</button></div>
 				</fieldset>

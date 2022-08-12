@@ -5856,10 +5856,6 @@ Class PDOCrud {
                 array(
                     "100",
                     "100"
-                ),
-                array(
-                    "All",
-                    "All"
                 )
             );
         }
