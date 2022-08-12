@@ -2744,11 +2744,7 @@ var Navbar = function Navbar(props) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "configurePage": () => (/* binding */ configurePage),
-/* harmony export */   "setCurrencySymbols": () => (/* binding */ setCurrencySymbols),
-/* harmony export */   "setOpenModalEvent": () => (/* binding */ setOpenModalEvent),
-/* harmony export */   "setTopScrollBar": () => (/* binding */ setTopScrollBar),
-/* harmony export */   "setValuesOnSelects": () => (/* binding */ setValuesOnSelects)
+/* harmony export */   "configurePage": () => (/* binding */ configurePage)
 /* harmony export */ });
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 /* harmony import */ var _services_axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services/axios */ "./resources/react-app/src/services/axios.ts");
@@ -2757,6 +2753,39 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+var configurePage = function configurePage(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput) {
+  if (!elemRef.current) return;
+  var elem = elemRef.current;
+  if (elem.children.length === 0) return;
+  if (!document.querySelectorAll('.pdocrud-data-row')[0].children[1]) return;
+  document.querySelector(".panel-title").textContent = "Controle de fases";
+  setValuesOnSelects();
+  setCurrencySymbols();
+  setOpenModalEvent(refModal, refModalId, refOnlineOrderNumber, refURLInput);
+  setTopScrollBar(document.querySelector(".panel-body"));
+  setSearchWorkaround(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput);
+};
+
+var setSearchWorkaround = function setSearchWorkaround(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput) {
+  var searchBtn = document.querySelector("#pdocrud_search_btn");
+  var loadGif = document.querySelector("#pdocrud-ajax-loader");
+
+  var applyConfigsAfterTimeout = function applyConfigsAfterTimeout() {
+    return setTimeout(function () {
+      if (loadGif.style.display !== "none") {
+        applyConfigsAfterTimeout();
+        return;
+      }
+
+      configurePage(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput);
+    }, 1000);
+  };
+
+  searchBtn.onclick = function () {
+    return applyConfigsAfterTimeout();
+  };
+};
 
 var setValuesOnSelects = function setValuesOnSelects() {
   var selects = document.querySelectorAll('.pdocrud-row-cols > select');
@@ -2768,6 +2797,7 @@ var setValuesOnSelects = function setValuesOnSelects() {
     });
   });
 };
+
 var setCurrencySymbols = function setCurrencySymbols() {
   var rows = document.querySelectorAll('.pdocrud-data-row');
   var regex = [{
@@ -2798,6 +2828,7 @@ var setCurrencySymbols = function setCurrencySymbols() {
     currency.textContent = "".concat(getCurrency(country), " ").concat(currency.textContent);
   });
 };
+
 var setOpenModalEvent = function setOpenModalEvent(refModal, refModalId, refOnlineOrderNumber, refURLInput) {
   if (!refModal.current || !refModalId.current || !refOnlineOrderNumber.current || !refURLInput.current) return;
   var modal = refModal.current;
@@ -2817,6 +2848,7 @@ var setOpenModalEvent = function setOpenModalEvent(refModal, refModalId, refOnli
     };
   });
 };
+
 var setTopScrollBar = function setTopScrollBar(panelBody) {
   var toScroll = panelBody.children[2];
   var scrollbarContainer = document.createElement("div");
@@ -2824,17 +2856,6 @@ var setTopScrollBar = function setTopScrollBar(panelBody) {
   panelBody.insertBefore(scrollbarContainer, toScroll);
   var scrollbarRoot = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_3__.createRoot)(scrollbarContainer);
   scrollbarRoot.render((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_TopScrollBar__WEBPACK_IMPORTED_MODULE_2__.TopScrollBar, {}));
-};
-var configurePage = function configurePage(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput) {
-  if (!elemRef.current) return;
-  var elem = elemRef.current;
-  if (elem.children.length === 0) return;
-  if (!document.querySelectorAll('.pdocrud-data-row')[0].children[1]) return;
-  document.querySelector(".panel-title").textContent = "Controle de fases";
-  setValuesOnSelects();
-  setCurrencySymbols();
-  setOpenModalEvent(refModal, refModalId, refOnlineOrderNumber, refURLInput);
-  setTopScrollBar(document.querySelector(".panel-body"));
 };
 
 var openModal = function openModal(modal, modalId, onlineOrderNumber, urlInput, rowId, rowOnlineOrderNumber) {
@@ -2882,10 +2903,6 @@ var PDOCrud = function PDOCrud(props) {
       rawHTML = _a[0],
       setRawHTML = _a[1];
 
-  var _b = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null),
-      pdocrud = _b[0],
-      setPDOCrud = _b[1];
-
   var elemRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     var params = window.location.search;
@@ -2895,13 +2912,15 @@ var PDOCrud = function PDOCrud(props) {
       return setRawHTML(response.html);
     });
   }, [setRawHTML]);
+
+  var setConfigurations = function setConfigurations() {
+    return (0,_functions__WEBPACK_IMPORTED_MODULE_3__.configurePage)(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput);
+  };
+
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     if (!elemRef.current) return;
-    setPDOCrud(elemRef.current);
-    if (!pdocrud) return;
-    (0,_functions__WEBPACK_IMPORTED_MODULE_3__.configurePage)(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput);
-    console.log(pdocrud);
-  }, [elemRef, pdocrud, rawHTML]);
+    setConfigurations();
+  }, [elemRef, rawHTML]);
   return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
     ref: elemRef,
     dangerouslySetInnerHTML: {

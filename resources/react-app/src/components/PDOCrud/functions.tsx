@@ -1,9 +1,62 @@
 import api from "../../services/axios"
-import { KeyboardEventHandler, MutableRefObject } from "react";
+import { MutableRefObject } from "react";
 import { TopScrollBar } from "../TopScrollBar";
 import { createRoot } from "react-dom/client";
 
-export const setValuesOnSelects = () => {
+export const configurePage = (
+	elemRef: React.MutableRefObject<null>, 
+	refModal: React.MutableRefObject<null>, 
+	refModalId: React.MutableRefObject<null>, 
+	refOnlineOrderNumber: React.MutableRefObject<null>, 
+	refURLInput: React.MutableRefObject<null>
+) => {
+	if(!elemRef.current) return
+	const elem = elemRef.current as HTMLDivElement
+
+	if(elem.children.length === 0) return
+	if(!document.querySelectorAll('.pdocrud-data-row')[0].children[1]) return
+
+	(document.querySelector(".panel-title") as HTMLHeadingElement).textContent = "Controle de fases"
+	setValuesOnSelects()
+	setCurrencySymbols()
+	setOpenModalEvent(refModal, refModalId, refOnlineOrderNumber, refURLInput)
+	setTopScrollBar(document.querySelector(".panel-body") as HTMLDivElement)
+	setSearchWorkaround(
+		elemRef,
+		refModal,
+		refModalId,
+		refOnlineOrderNumber,
+		refURLInput
+	)
+}
+
+const setSearchWorkaround = (
+	elemRef: React.MutableRefObject<null>, 
+	refModal: React.MutableRefObject<null>, 
+	refModalId: React.MutableRefObject<null>, 
+	refOnlineOrderNumber: React.MutableRefObject<null>, 
+	refURLInput: React.MutableRefObject<null>
+) => {
+	const searchBtn = document.querySelector("#pdocrud_search_btn") as HTMLAnchorElement
+	const loadGif = document.querySelector("#pdocrud-ajax-loader") as HTMLDivElement
+	const applyConfigsAfterTimeout = () => setTimeout(() => {
+		if(loadGif.style.display !== "none") {
+			applyConfigsAfterTimeout()
+			return
+		}
+		configurePage(
+			elemRef,
+			refModal,
+			refModalId,
+			refOnlineOrderNumber,
+			refURLInput
+		)
+	}, 1000)
+
+	searchBtn.onclick = () => applyConfigsAfterTimeout()
+}
+
+const setValuesOnSelects = () => {
 	const selects = document.querySelectorAll('.pdocrud-row-cols > select') as NodeListOf<HTMLSelectElement>
 
 	selects.forEach(select => {
@@ -14,7 +67,7 @@ export const setValuesOnSelects = () => {
 	})
 }
 
-export const setCurrencySymbols = () => {
+const setCurrencySymbols = () => {
 	const rows = document.querySelectorAll('.pdocrud-data-row') as NodeListOf<HTMLTableCellElement>
 	const regex = [
 		{regex: /Brasil/, symbol: "R$"},
@@ -36,7 +89,7 @@ export const setCurrencySymbols = () => {
 	})
 }
 
-export const setOpenModalEvent = (
+const setOpenModalEvent = (
 	refModal: MutableRefObject<null>, 
 	refModalId: MutableRefObject<null>, 
 	refOnlineOrderNumber: MutableRefObject<null>, 
@@ -67,7 +120,7 @@ export const setOpenModalEvent = (
 	})
 }
 
-export const setTopScrollBar = (panelBody: HTMLDivElement) => {
+const setTopScrollBar = (panelBody: HTMLDivElement) => {
 	const toScroll = panelBody.children[2] as HTMLDivElement
 	const scrollbarContainer = document.createElement("div")
 
@@ -75,26 +128,6 @@ export const setTopScrollBar = (panelBody: HTMLDivElement) => {
 	panelBody.insertBefore(scrollbarContainer, toScroll)
 	const scrollbarRoot = createRoot(scrollbarContainer)
 	scrollbarRoot.render(<TopScrollBar/>)
-}
-
-export const configurePage = (
-	elemRef: React.MutableRefObject<null>, 
-	refModal: React.MutableRefObject<null>, 
-	refModalId: React.MutableRefObject<null>, 
-	refOnlineOrderNumber: React.MutableRefObject<null>, 
-	refURLInput: React.MutableRefObject<null>
-) => {
-	if(!elemRef.current) return
-	const elem = elemRef.current as HTMLDivElement
-
-	if(elem.children.length === 0) return
-	if(!document.querySelectorAll('.pdocrud-data-row')[0].children[1]) return
-
-	(document.querySelector(".panel-title") as HTMLHeadingElement).textContent = "Controle de fases"
-	setValuesOnSelects()
-	setCurrencySymbols()
-	setOpenModalEvent(refModal, refModalId, refOnlineOrderNumber, refURLInput)
-	setTopScrollBar(document.querySelector(".panel-body") as HTMLDivElement)
 }
 
 const openModal = (
