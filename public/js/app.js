@@ -2744,11 +2744,7 @@ var Navbar = function Navbar(props) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "configurePage": () => (/* binding */ configurePage),
-/* harmony export */   "setCurrencySymbols": () => (/* binding */ setCurrencySymbols),
-/* harmony export */   "setOpenModalEvent": () => (/* binding */ setOpenModalEvent),
-/* harmony export */   "setTopScrollBar": () => (/* binding */ setTopScrollBar),
-/* harmony export */   "setValuesOnSelects": () => (/* binding */ setValuesOnSelects)
+/* harmony export */   "configurePage": () => (/* binding */ configurePage)
 /* harmony export */ });
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 /* harmony import */ var _services_axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services/axios */ "./resources/react-app/src/services/axios.ts");
@@ -2757,6 +2753,52 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+var configurePage = function configurePage(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput) {
+  if (!elemRef.current) return;
+  var elem = elemRef.current;
+  if (elem.children.length === 0) return;
+  if (!document.querySelectorAll('.pdocrud-data-row')[0].children[1]) return;
+  document.querySelector(".panel-title").textContent = "Controle de fases";
+  setValuesOnSelects();
+  setCurrencySymbols();
+  setOpenModalEvent(refModal, refModalId, refOnlineOrderNumber, refURLInput);
+  setTopScrollBar(document.querySelector(".panel-body"));
+  setSearchWorkaround(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput);
+};
+
+var setSearchWorkaround = function setSearchWorkaround(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput) {
+  var searchBtn = document.querySelector("#pdocrud_search_btn");
+  var loadGif = document.querySelector("#pdocrud-ajax-loader");
+  var pagesItems = document.querySelectorAll(".page-item > a");
+  var totalPerPage = document.querySelectorAll('#pdocrud_records_per_page > option');
+
+  var applyConfigsAfterTimeout = function applyConfigsAfterTimeout() {
+    return setTimeout(function () {
+      if (loadGif.style.display !== "none") {
+        applyConfigsAfterTimeout();
+        return;
+      }
+
+      configurePage(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput);
+    }, 1000);
+  };
+
+  searchBtn.onclick = function () {
+    return applyConfigsAfterTimeout();
+  };
+
+  pagesItems.forEach(function (anchor) {
+    return anchor.onclick = function () {
+      return applyConfigsAfterTimeout();
+    };
+  });
+  totalPerPage.forEach(function (option) {
+    return option.onclick = function () {
+      return applyConfigsAfterTimeout();
+    };
+  });
+};
 
 var setValuesOnSelects = function setValuesOnSelects() {
   var selects = document.querySelectorAll('.pdocrud-row-cols > select');
@@ -2768,8 +2810,17 @@ var setValuesOnSelects = function setValuesOnSelects() {
     });
   });
 };
+
 var setCurrencySymbols = function setCurrencySymbols() {
   var rows = document.querySelectorAll('.pdocrud-data-row');
+  var headers = Array.from(document.querySelectorAll(".pdocrud-header-row > th"));
+  var valueIdx = headers.findIndex(function (header) {
+    return header.outerText === "Valor";
+  });
+  var sellercentralIdx = headers.findIndex(function (header) {
+    return header.outerText === "Exportação";
+  });
+  if (valueIdx === -1 || sellercentralIdx === -1) return;
   var regex = [{
     regex: /Brasil/,
     symbol: "R$"
@@ -2793,12 +2844,21 @@ var setCurrencySymbols = function setCurrencySymbols() {
   };
 
   rows.forEach(function (row) {
-    var country = row.children[1].textContent;
-    var currency = row.children[9];
+    var country = row.children[sellercentralIdx].textContent;
+    var currency = row.children[valueIdx];
     currency.textContent = "".concat(getCurrency(country), " ").concat(currency.textContent);
   });
 };
+
 var setOpenModalEvent = function setOpenModalEvent(refModal, refModalId, refOnlineOrderNumber, refURLInput) {
+  var headers = Array.from(document.querySelectorAll(".pdocrud-header-row > th"));
+  var isbnIdx = headers.findIndex(function (header) {
+    return header.outerText === "ISBN";
+  });
+  var onlineNumberIdx = headers.findIndex(function (header) {
+    return header.outerText === "ORIGEM";
+  });
+  if (isbnIdx === -1 || onlineNumberIdx === -1) return;
   if (!refModal.current || !refModalId.current || !refOnlineOrderNumber.current || !refURLInput.current) return;
   var modal = refModal.current;
   var modalId = refModalId.current;
@@ -2807,9 +2867,9 @@ var setOpenModalEvent = function setOpenModalEvent(refModal, refModalId, refOnli
   var rows = document.querySelectorAll('.pdocrud-data-row');
   rows.forEach(function (row) {
     var rowData = Array.from(row.children);
-    var isbnCell = rowData[8];
+    var isbnCell = rowData[isbnIdx];
     var rowId = rowData[0].textContent.match(/[0-9]{1,}/)[0];
-    var rowOnlineOrderNumber = rowData[4].textContent;
+    var rowOnlineOrderNumber = rowData[onlineNumberIdx].textContent;
     isbnCell.style.cursor = 'pointer';
 
     isbnCell.onclick = function () {
@@ -2817,6 +2877,7 @@ var setOpenModalEvent = function setOpenModalEvent(refModal, refModalId, refOnli
     };
   });
 };
+
 var setTopScrollBar = function setTopScrollBar(panelBody) {
   var toScroll = panelBody.children[2];
   var scrollbarContainer = document.createElement("div");
@@ -2824,17 +2885,6 @@ var setTopScrollBar = function setTopScrollBar(panelBody) {
   panelBody.insertBefore(scrollbarContainer, toScroll);
   var scrollbarRoot = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_3__.createRoot)(scrollbarContainer);
   scrollbarRoot.render((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_TopScrollBar__WEBPACK_IMPORTED_MODULE_2__.TopScrollBar, {}));
-};
-var configurePage = function configurePage(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput) {
-  if (!elemRef.current) return;
-  var elem = elemRef.current;
-  if (elem.children.length === 0) return;
-  if (!document.querySelectorAll('.pdocrud-data-row')[0].children[1]) return;
-  document.querySelector(".panel-title").textContent = "Controle de fases";
-  setValuesOnSelects();
-  setCurrencySymbols();
-  setOpenModalEvent(refModal, refModalId, refOnlineOrderNumber, refURLInput);
-  setTopScrollBar(document.querySelector(".panel-body"));
 };
 
 var openModal = function openModal(modal, modalId, onlineOrderNumber, urlInput, rowId, rowOnlineOrderNumber) {
@@ -2868,6 +2918,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _services_axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../services/axios */ "./resources/react-app/src/services/axios.ts");
 /* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./functions */ "./resources/react-app/src/components/PDOCrud/functions.tsx");
+/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./style.css */ "./resources/react-app/src/components/PDOCrud/style.css");
+
 
 
 
@@ -2882,10 +2934,6 @@ var PDOCrud = function PDOCrud(props) {
       rawHTML = _a[0],
       setRawHTML = _a[1];
 
-  var _b = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null),
-      pdocrud = _b[0],
-      setPDOCrud = _b[1];
-
   var elemRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     var params = window.location.search;
@@ -2895,13 +2943,15 @@ var PDOCrud = function PDOCrud(props) {
       return setRawHTML(response.html);
     });
   }, [setRawHTML]);
+
+  var setConfigurations = function setConfigurations() {
+    return (0,_functions__WEBPACK_IMPORTED_MODULE_3__.configurePage)(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput);
+  };
+
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     if (!elemRef.current) return;
-    setPDOCrud(elemRef.current);
-    if (!pdocrud) return;
-    (0,_functions__WEBPACK_IMPORTED_MODULE_3__.configurePage)(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput);
-    console.log(pdocrud);
-  }, [elemRef, pdocrud, rawHTML]);
+    setConfigurations();
+  }, [elemRef, rawHTML]);
   return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
     ref: elemRef,
     dangerouslySetInnerHTML: {
@@ -3292,8 +3342,7 @@ var SupplierURLModal = function SupplierURLModal(props) {
             htmlFor: "supplier_url"
           }, {
             children: "URL"
-          })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
-            type: "text",
+          })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("textarea", {
             name: "supplier_url",
             id: "purchase_link_formsupplier_url",
             ref: refURLInput
@@ -4129,6 +4178,30 @@ ___CSS_LOADER_EXPORT___.push([module.id, ".nav-bar {\r\n\theight: 60px;\r\n\tpad
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/components/PDOCrud/style.css":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/components/PDOCrud/style.css ***!
+  \************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, ".input-bulk-crud-update {\r\n  width: min-content !important;\r\n  max-width: 100px;\r\n}\r\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/components/PhotoDisplay/style.css":
 /*!*****************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/components/PhotoDisplay/style.css ***!
@@ -4218,7 +4291,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "#purchase_link_modal {\r\n\tposition: absolute;\r\n\ttop: 0;\r\n\tleft: 0;\r\n\twidth: 100vw;\r\n\theight: 100vh;\r\n\tbackground-color: rgba(0,0,0,0.75);\r\n\tdisplay: grid;\r\n\tplace-items: center;\r\n\tvisibility: hidden;\r\n}\r\n#purchase_link_form {\r\n\twidth: 60%;\r\n\theight: 60%;\r\n\tbackground-color: white;\r\n\tdisplay: grid;\r\n\tgrid-template-rows: 10% 80% 10%;\r\n\tgrid-template-areas: \r\n\t\t\t'purchase_link_form_close'\r\n\t\t\t'purchase_link_form_content'\r\n\t\t\t'.';\r\n\tborder-radius: 10px;\r\n}\r\n#purchase_link_form_close{\r\n\tgrid-area: purchase_link_form_close;\r\n\tdisplay: flex;\r\n\tflex-direction: row-reverse;\r\n\talign-items: center;\r\n}\r\n#purchase_link_form_close > i {\r\n\tmargin-right: 20px;\r\n\tpadding: 5px 7px;\r\n\tborder-radius: 100%;\r\n\t/* transition: 250ms; */\r\n}\r\n#purchase_link_form_close > i:hover {\r\n\tcursor: pointer;\r\n\tbackground-color: black;\r\n\tcolor: white;\r\n\ttransition: 250ms;\r\n}\r\n#purchase_link_form_content {\r\n\tgrid-area: purchase_link_form_content;\r\n\tdisplay: flex;\r\n\tflex-direction: column;\r\n\talign-items: center;\r\n\tjustify-content: space-around;\r\n}\r\n#purchase_link_form_content > div {\r\n\tdisplay: flex;\r\n\twidth: 80%;\r\n\tjustify-content: space-between;\r\n}\r\n#purchase_link_formsupplier_url {\r\n\twidth: 80%;\r\n}\r\n#purchase_link_form_submit {\r\n\tdisplay: flex;\r\n\tflex-direction: row-reverse;\r\n}\r\n#purchase_link_form_submit > button {\r\n\tborder: none;\r\n\tpadding: 10px;\r\n\tborder-radius: 10px;\r\n\tbackground-color: white;\r\n\tfont-weight: bold;\r\n}\r\n#purchase_link_form_submit > button:hover {\r\n\tbackground-color: green;\r\n\tcolor: white;\r\n\ttransition: 250ms;\r\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "#purchase_link_modal {\r\n\tposition: fixed;\r\n\ttop: 0;\r\n\tleft: 0;\r\n\twidth: 100vw;\r\n\theight: 100vh;\r\n\tbackground-color: rgba(0,0,0,0.75);\r\n\tdisplay: grid;\r\n\tplace-items: center;\r\n\tvisibility: hidden;\r\n\tz-index: 500;\r\n}\r\n#purchase_link_form {\r\n\twidth: 60%;\r\n\theight: 60%;\r\n\tbackground-color: white;\r\n\tdisplay: grid;\r\n\tgrid-template-rows: 10% 80% 10%;\r\n\tgrid-template-areas: \r\n\t\t\t'purchase_link_form_close'\r\n\t\t\t'purchase_link_form_content'\r\n\t\t\t'.';\r\n\tborder-radius: 10px;\r\n}\r\n#purchase_link_form_close{\r\n\tgrid-area: purchase_link_form_close;\r\n\tdisplay: flex;\r\n\tflex-direction: row-reverse;\r\n\talign-items: center;\r\n}\r\n#purchase_link_form_close > i {\r\n\tmargin-right: 20px;\r\n\tpadding: 5px 7px;\r\n\tborder-radius: 100%;\r\n}\r\n#purchase_link_form_close > i:hover {\r\n\tcursor: pointer;\r\n\tbackground-color: black;\r\n\tcolor: white;\r\n\ttransition: 250ms;\r\n}\r\n#purchase_link_form_content {\r\n\tgrid-area: purchase_link_form_content;\r\n\tdisplay: flex;\r\n\tflex-direction: column;\r\n\talign-items: center;\r\n\tjustify-content: space-around;\r\n}\r\n#purchase_link_form_content > div {\r\n\tdisplay: flex;\r\n\twidth: 80%;\r\n\tjustify-content: space-between;\r\n}\r\n#purchase_link_formsupplier_url {\r\n\twidth: 80%;\r\n}\r\n#purchase_link_form_submit {\r\n\tdisplay: flex;\r\n\tflex-direction: row-reverse;\r\n}\r\n#purchase_link_form_submit > button {\r\n\tborder: none;\r\n\tpadding: 10px;\r\n\tborder-radius: 10px;\r\n\tbackground-color: white;\r\n\tfont-weight: bold;\r\n}\r\n#purchase_link_form_submit > button:hover {\r\n\tbackground-color: green;\r\n\tcolor: white;\r\n\ttransition: 250ms;\r\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -41679,6 +41752,36 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_2_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!../../../../../node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./style.css */ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/components/Navbar/style.css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_2_style_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_2_style_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
+/***/ "./resources/react-app/src/components/PDOCrud/style.css":
+/*!**************************************************************!*\
+  !*** ./resources/react-app/src/components/PDOCrud/style.css ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_2_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!../../../../../node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./style.css */ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/components/PDOCrud/style.css");
 
             
 

@@ -1,5 +1,5 @@
 #purchase_link_modal {
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100vw;
@@ -8,6 +8,7 @@
 	display: grid;
 	place-items: center;
 	visibility: hidden;
+	z-index: 500;
 }
 #purchase_link_form {
 	width: 60%;
@@ -31,7 +32,6 @@
 	margin-right: 20px;
 	padding: 5px 7px;
 	border-radius: 100%;
-	/* transition: 250ms; */
 }
 #purchase_link_form_close > i:hover {
 	cursor: pointer;
