@@ -2770,6 +2770,8 @@ var configurePage = function configurePage(elemRef, refModal, refModalId, refOnl
 var setSearchWorkaround = function setSearchWorkaround(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput) {
   var searchBtn = document.querySelector("#pdocrud_search_btn");
   var loadGif = document.querySelector("#pdocrud-ajax-loader");
+  var pagesItems = document.querySelectorAll(".page-item > a");
+  var totalPerPage = document.querySelectorAll('#pdocrud_records_per_page > option');
 
   var applyConfigsAfterTimeout = function applyConfigsAfterTimeout() {
     return setTimeout(function () {
@@ -2785,6 +2787,17 @@ var setSearchWorkaround = function setSearchWorkaround(elemRef, refModal, refMod
   searchBtn.onclick = function () {
     return applyConfigsAfterTimeout();
   };
+
+  pagesItems.forEach(function (anchor) {
+    return anchor.onclick = function () {
+      return applyConfigsAfterTimeout();
+    };
+  });
+  totalPerPage.forEach(function (option) {
+    return option.onclick = function () {
+      return applyConfigsAfterTimeout();
+    };
+  });
 };
 
 var setValuesOnSelects = function setValuesOnSelects() {
@@ -2800,6 +2813,14 @@ var setValuesOnSelects = function setValuesOnSelects() {
 
 var setCurrencySymbols = function setCurrencySymbols() {
   var rows = document.querySelectorAll('.pdocrud-data-row');
+  var headers = Array.from(document.querySelectorAll(".pdocrud-header-row > th"));
+  var valueIdx = headers.findIndex(function (header) {
+    return header.outerText === "Valor";
+  });
+  var sellercentralIdx = headers.findIndex(function (header) {
+    return header.outerText === "Exportação";
+  });
+  if (valueIdx === -1 || sellercentralIdx === -1) return;
   var regex = [{
     regex: /Brasil/,
     symbol: "R$"
@@ -2823,13 +2844,21 @@ var setCurrencySymbols = function setCurrencySymbols() {
   };
 
   rows.forEach(function (row) {
-    var country = row.children[1].textContent;
-    var currency = row.children[9];
+    var country = row.children[sellercentralIdx].textContent;
+    var currency = row.children[valueIdx];
     currency.textContent = "".concat(getCurrency(country), " ").concat(currency.textContent);
   });
 };
 
 var setOpenModalEvent = function setOpenModalEvent(refModal, refModalId, refOnlineOrderNumber, refURLInput) {
+  var headers = Array.from(document.querySelectorAll(".pdocrud-header-row > th"));
+  var isbnIdx = headers.findIndex(function (header) {
+    return header.outerText === "ISBN";
+  });
+  var onlineNumberIdx = headers.findIndex(function (header) {
+    return header.outerText === "ORIGEM";
+  });
+  if (isbnIdx === -1 || onlineNumberIdx === -1) return;
   if (!refModal.current || !refModalId.current || !refOnlineOrderNumber.current || !refURLInput.current) return;
   var modal = refModal.current;
   var modalId = refModalId.current;
@@ -2838,9 +2867,9 @@ var setOpenModalEvent = function setOpenModalEvent(refModal, refModalId, refOnli
   var rows = document.querySelectorAll('.pdocrud-data-row');
   rows.forEach(function (row) {
     var rowData = Array.from(row.children);
-    var isbnCell = rowData[8];
+    var isbnCell = rowData[isbnIdx];
     var rowId = rowData[0].textContent.match(/[0-9]{1,}/)[0];
-    var rowOnlineOrderNumber = rowData[4].textContent;
+    var rowOnlineOrderNumber = rowData[onlineNumberIdx].textContent;
     isbnCell.style.cursor = 'pointer';
 
     isbnCell.onclick = function () {

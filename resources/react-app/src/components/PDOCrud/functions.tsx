@@ -39,6 +39,8 @@ const setSearchWorkaround = (
 ) => {
 	const searchBtn = document.querySelector("#pdocrud_search_btn") as HTMLAnchorElement
 	const loadGif = document.querySelector("#pdocrud-ajax-loader") as HTMLDivElement
+	const pagesItems = document.querySelectorAll(".page-item > a") as NodeListOf<HTMLAnchorElement>
+	const totalPerPage = document.querySelectorAll('#pdocrud_records_per_page > option') as NodeListOf<HTMLOptionElement>
 	const applyConfigsAfterTimeout = () => setTimeout(() => {
 		if(loadGif.style.display !== "none") {
 			applyConfigsAfterTimeout()
@@ -54,6 +56,8 @@ const setSearchWorkaround = (
 	}, 1000)
 
 	searchBtn.onclick = () => applyConfigsAfterTimeout()
+	pagesItems.forEach(anchor => anchor.onclick = () => applyConfigsAfterTimeout())
+	totalPerPage.forEach(option => option.onclick = () => applyConfigsAfterTimeout())
 }
 
 const setValuesOnSelects = () => {
@@ -69,6 +73,13 @@ const setValuesOnSelects = () => {
 
 const setCurrencySymbols = () => {
 	const rows = document.querySelectorAll('.pdocrud-data-row') as NodeListOf<HTMLTableCellElement>
+	const headers = Array.from(
+		document.querySelectorAll(".pdocrud-header-row > th") as NodeListOf<HTMLTableCellElement>
+	)
+	const valueIdx = headers.findIndex(header => header.outerText === "Valor")
+	const sellercentralIdx = headers.findIndex(header => header.outerText === "Exportação")
+
+	if(valueIdx === -1 || sellercentralIdx === -1) return
 	const regex = [
 		{regex: /Brasil/, symbol: "R$"},
 		{regex: /Canadá/, symbol: "CA$"},
@@ -82,8 +93,8 @@ const setCurrencySymbols = () => {
 	}
 
 	rows.forEach(row => {
-		const country = row.children[1].textContent as string
-		const currency = row.children[9]
+		const country = row.children[sellercentralIdx].textContent as string
+		const currency = row.children[valueIdx]
 
 		currency.textContent = `${getCurrency(country)} ${currency.textContent}`
 	})
@@ -95,18 +106,24 @@ const setOpenModalEvent = (
 	refOnlineOrderNumber: MutableRefObject<null>, 
 	refURLInput: MutableRefObject<null>
 ) => {
+	const headers = Array.from(
+		document.querySelectorAll(".pdocrud-header-row > th") as NodeListOf<HTMLTableCellElement>
+	)
+	const isbnIdx = headers.findIndex(header => header.outerText === "ISBN")
+	const onlineNumberIdx = headers.findIndex(header => header.outerText === "ORIGEM")
+	if(isbnIdx === -1 || onlineNumberIdx === -1) return
 	if((!refModal.current) || (!refModalId.current) || (!refOnlineOrderNumber.current) || (!refURLInput.current)) return
 	const modal = (refModal.current as HTMLDivElement)
 	const modalId = (refModalId.current as HTMLDivElement)
 	const onlineOrderNumber = (refOnlineOrderNumber.current as HTMLSpanElement)
 	const urlInput = (refURLInput.current as HTMLTextAreaElement)
 	const rows = document.querySelectorAll('.pdocrud-data-row') as NodeListOf<HTMLTableRowElement>
-	
+
 	rows.forEach(row => {
 		const rowData = Array.from(row.children) as HTMLTableCellElement[]
-		const isbnCell = rowData[8]
+		const isbnCell = rowData[isbnIdx]
 		const rowId = ((rowData[0].textContent as string).match(/[0-9]{1,}/) as string[])[0]
-		const rowOnlineOrderNumber = rowData[4].textContent as string
+		const rowOnlineOrderNumber = rowData[onlineNumberIdx].textContent as string
 
 		isbnCell.style.cursor = 'pointer'
 		isbnCell.onclick = () => openModal(
