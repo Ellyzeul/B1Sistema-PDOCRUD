@@ -331,7 +331,7 @@ if (XRegExp) {
         return regex.exec(this); // Run the altered `exec`
     };
 
-    // Adds support for `${n}` tokens for named and numbered backreferences in replacement text,
+    // Adds support for `$[n]` tokens for named and numbered backreferences in replacement text,
     // and provides named backreferences to replacement functions as `arguments[0].name`. Also
     // fixes cross-browser differences in replacement text syntax when performing a replacement
     // using a nonregex search value, and the value of replacement regexes' `lastIndex` property
@@ -405,12 +405,12 @@ if (XRegExp) {
                         }
                     // Named backreference or delimited numbered backreference
                     } else {
-                        // What does "${n}" mean?
+                        // What does "$[n]" mean?
                         // - Backreference to numbered capture n. Two differences from "$n":
                         //   - n can be more than two digits
                         //   - Backreference 0 is allowed, and is the entire match
                         // - Backreference to named capture n, if it exists and is not a number overridden by numbered capture
-                        // - Otherwise, it's the string "${n}"
+                        // - Otherwise, it's the string "$[n]"
                         var n = +$2; // Type conversion; drop leading zeros
                         if (n <= args.length - 3)
                             return args[n];
