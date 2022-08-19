@@ -1,4 +1,4 @@
-import { FormEventHandler } from "react"
+import { ChangeEventHandler, FormEventHandler } from "react"
 import { toast, ToastContainer } from "react-toastify"
 import api, { postFile } from "../../services/axios"
 import "./style.css"
@@ -43,6 +43,15 @@ export const PhotoForm = () => {
       })
   }
 
+  const onChange: ChangeEventHandler = (event) => {
+    const input = event.target as HTMLInputElement
+    const value = input.value
+
+    if(value.length !== 44) return
+
+    input.value = `${Number(value.substring(25, 34))}`
+  }
+
   return (
     <>
       <form 
@@ -51,7 +60,7 @@ export const PhotoForm = () => {
       >
         <div>
           <label htmlFor="photo-name">Nome da foto</label>
-          <input type="text" name="photo-name" id="photo-name" />
+          <input type="text" name="photo-name" id="photo-name" onChange={onChange} />
         </div>
         <div>
           <label htmlFor="photo-image">Foto a ser postada</label>

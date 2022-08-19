@@ -1,4 +1,4 @@
-import { MouseEventHandler, useRef, useState } from "react"
+import { ChangeEventHandler, MouseEventHandler, useRef, useState } from "react"
 import { toast, ToastContainer } from "react-toastify"
 import { Navbar } from "../../../components/Navbar"
 import { PhotoDisplay } from "../../../components/PhotoDisplay"
@@ -26,12 +26,21 @@ export const PhotosSearchPage = () => {
       })
   }
 
+  const onChange: ChangeEventHandler = (event) => {
+    const input = event.target as HTMLInputElement
+    const value = input.value
+
+    if(value.length !== 44) return
+
+    input.value = `${Number(value.substring(25, 34))}`
+  }
+
   return (
     <div className="photos-search-page">
       <Navbar items={[{label: "Fotos", options: [{name:"Enviar", url: "/fotos/enviar"}]}]} />
       <div className="photos-search-content">
         <div className="search-container">
-          <input ref={inputRef} className="photo-search" type="text" />
+          <input ref={inputRef} className="photo-search" type="text" onChange={onChange} />
           <button onClick={searchPhotos}>Pesquisar</button>
           <ToastContainer />
         </div>

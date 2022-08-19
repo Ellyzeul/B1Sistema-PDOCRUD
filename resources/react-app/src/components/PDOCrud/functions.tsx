@@ -2,41 +2,37 @@ import api from "../../services/axios"
 import { MutableRefObject } from "react";
 import { TopScrollBar } from "../TopScrollBar";
 import { createRoot } from "react-dom/client";
+import { intervalToDuration } from "date-fns";
 
-export const configurePage = (
-	elemRef: React.MutableRefObject<null>, 
-	refModal: React.MutableRefObject<null>, 
-	refModalId: React.MutableRefObject<null>, 
-	refOnlineOrderNumber: React.MutableRefObject<null>, 
-	refURLInput: React.MutableRefObject<null>
-) => {
+export const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObject<null>, refModalId: MutableRefObject<null>, refOnlineOrderNumber: MutableRefObject<null>, refURLInput: MutableRefObject<null>) => {
 	if(!elemRef.current) return
 	const elem = elemRef.current as HTMLDivElement
 
 	if(elem.children.length === 0) return
 	if(!document.querySelectorAll('.pdocrud-data-row')[0].children[1]) return
 
-	(document.querySelector(".panel-title") as HTMLHeadingElement).textContent = "Controle de fases"
+	const phase = Number(window.location.search.split(/=/)[1]) || 0
+	console.log(phase)
+
+	const h1 = document.querySelector(".panel-title") as HTMLHeadingElement
+	h1.textContent = "Controle de fases"
 	setValuesOnSelects()
 	setCurrencySymbols()
 	setOpenModalEvent(refModal, refModalId, refOnlineOrderNumber, refURLInput)
 	setTopScrollBar(document.querySelector(".panel-body") as HTMLDivElement)
-	setSearchWorkaround(
-		elemRef,
-		refModal,
-		refModalId,
-		refOnlineOrderNumber,
-		refURLInput
-	)
+	setSearchWorkaround(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput)
+	if(phase < 7) setDeadlineColumn()
+	if(phase === 2.1) setURLColumn()
 }
 
-const setSearchWorkaround = (
-	elemRef: React.MutableRefObject<null>, 
-	refModal: React.MutableRefObject<null>, 
-	refModalId: React.MutableRefObject<null>, 
-	refOnlineOrderNumber: React.MutableRefObject<null>, 
-	refURLInput: React.MutableRefObject<null>
-) => {
+const getColumnFieldIndex: {(fieldName: string): number, headers?: HTMLTableCellElement[]} = (fieldName: string) => {
+	if(!getColumnFieldIndex.headers) getColumnFieldIndex.headers = Array.from(
+		document.querySelectorAll(".pdocrud-header-row > th") as NodeListOf<HTMLTableCellElement>
+	)
+	return getColumnFieldIndex.headers.findIndex(header => header.outerText === fieldName)
+}
+
+const setSearchWorkaround = (elemRef: MutableRefObject<null>, refModal: MutableRefObject<null>, refModalId: MutableRefObject<null>, refOnlineOrderNumber: MutableRefObject<null>, refURLInput: MutableRefObject<null>) => {
 	const searchBtn = document.querySelector("#pdocrud_search_btn") as HTMLAnchorElement
 	const loadGif = document.querySelector("#pdocrud-ajax-loader") as HTMLDivElement
 	const pagesItems = document.querySelectorAll(".page-item > a") as NodeListOf<HTMLAnchorElement>
@@ -46,13 +42,7 @@ const setSearchWorkaround = (
 			applyConfigsAfterTimeout()
 			return
 		}
-		configurePage(
-			elemRef,
-			refModal,
-			refModalId,
-			refOnlineOrderNumber,
-			refURLInput
-		)
+		configurePage(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput)
 	}, 1000)
 
 	searchBtn.onclick = () => applyConfigsAfterTimeout()
@@ -73,11 +63,8 @@ const setValuesOnSelects = () => {
 
 const setCurrencySymbols = () => {
 	const rows = document.querySelectorAll('.pdocrud-data-row') as NodeListOf<HTMLTableCellElement>
-	const headers = Array.from(
-		document.querySelectorAll(".pdocrud-header-row > th") as NodeListOf<HTMLTableCellElement>
-	)
-	const valueIdx = headers.findIndex(header => header.outerText === "Valor")
-	const sellercentralIdx = headers.findIndex(header => header.outerText === "Exportação")
+	const valueIdx = getColumnFieldIndex("Valor")
+	const sellercentralIdx = getColumnFieldIndex("Exportação")
 
 	if(valueIdx === -1 || sellercentralIdx === -1) return
 	const regex = [
@@ -100,17 +87,9 @@ const setCurrencySymbols = () => {
 	})
 }
 
-const setOpenModalEvent = (
-	refModal: MutableRefObject<null>, 
-	refModalId: MutableRefObject<null>, 
-	refOnlineOrderNumber: MutableRefObject<null>, 
-	refURLInput: MutableRefObject<null>
-) => {
-	const headers = Array.from(
-		document.querySelectorAll(".pdocrud-header-row > th") as NodeListOf<HTMLTableCellElement>
-	)
-	const isbnIdx = headers.findIndex(header => header.outerText === "ISBN")
-	const onlineNumberIdx = headers.findIndex(header => header.outerText === "ORIGEM")
+const setOpenModalEvent = (refModal: MutableRefObject<null>, refModalId: MutableRefObject<null>, refOnlineOrderNumber: MutableRefObject<null>, refURLInput: MutableRefObject<null>) => {
+	const isbnIdx = getColumnFieldIndex("ISBN")
+	const onlineNumberIdx = getColumnFieldIndex("ORIGEM")
 	if(isbnIdx === -1 || onlineNumberIdx === -1) return
 	if((!refModal.current) || (!refModalId.current) || (!refOnlineOrderNumber.current) || (!refURLInput.current)) return
 	const modal = (refModal.current as HTMLDivElement)
@@ -126,14 +105,7 @@ const setOpenModalEvent = (
 		const rowOnlineOrderNumber = rowData[onlineNumberIdx].textContent as string
 
 		isbnCell.style.cursor = 'pointer'
-		isbnCell.onclick = () => openModal(
-			modal, 
-			modalId, 
-			onlineOrderNumber, 
-			urlInput, 
-			rowId, 
-			rowOnlineOrderNumber
-		)
+		isbnCell.onclick = () => openModal(modal, modalId, onlineOrderNumber, urlInput, rowId, rowOnlineOrderNumber)
 	})
 }
 
@@ -163,4 +135,80 @@ const openModal = (
 	api.get(`/api/supplier_url/read?id=${id}`)
 		.then(response => response.data)
 		.then(response => urlInput.value = response.url)
+}
+
+type SetNewColumnPrototype = {
+	(fieldname: string, generateData: (row: HTMLTableRowElement) => string): void,
+	columns: {
+		[key: string]: string[]
+	}
+}
+const setNewColumn: SetNewColumnPrototype = (fieldname: string, generateData: (row: HTMLTableRowElement) => string) => {
+	const headers = document.querySelector(".pdocrud-header-row") as HTMLTableRowElement
+	const rows = (document.querySelector(".pdocrud-table > tbody") as HTMLTableSectionElement).children
+	const newHeader = document.createElement('th')
+	const getValue = fieldname in setNewColumn.columns 
+		? (i: number) => setNewColumn.columns[fieldname][i]
+		: (i: number) => {
+			if(!setNewColumn.columns[fieldname]) setNewColumn.columns[fieldname] = []
+			setNewColumn.columns[fieldname][i] = generateData(rows[i] as HTMLTableRowElement)
+			return setNewColumn.columns[fieldname][i]
+		}
+
+	newHeader.innerText = fieldname
+	headers.appendChild(newHeader)
+
+	for(let i = 1; i < rows.length; i++) {
+		const newCell = document.createElement('td')
+		newCell.className = "pdocrud-row-cols"
+		rows[i].appendChild(newCell)
+		newCell.innerText = getValue(i)
+	}
+}
+setNewColumn.columns = {}
+
+const setDeadlineColumn = () => {
+	const generateData = (row: HTMLTableRowElement) => {
+		const expectedDateIdx = getColumnFieldIndex("Data prevista")
+		if(expectedDateIdx === -1) return ""
+		const date = (row.children[expectedDateIdx] as HTMLTableCellElement)
+			.outerText.split('/')
+			.map(part => Number(part))
+		const start = new Date()
+		const end = new Date(date[2], date[1]-1, date[0])
+
+		if(end < start) return "Prazo vencido"
+		if(end === start) return "O prazo é hoje"
+
+		const interval = intervalToDuration({
+			start: start,
+			end: end
+		})
+		return `${interval.days} dias restantes`
+	}
+	setNewColumn("Dias para entrega", generateData)
+}
+
+const setURLColumn = () => {
+	const headers = document.querySelector(".pdocrud-header-row") as HTMLTableRowElement
+	const rows = (document.querySelector(".pdocrud-table > tbody") as HTMLTableSectionElement).children
+	const colIdx = headers.children.length
+	const totalRows = rows.length
+	const newHeader = document.createElement('th')
+
+	newHeader.innerText = "Comentários"
+	headers.appendChild(newHeader)
+	
+	for(let i = 1; i < totalRows; i++) {
+		const newCell = document.createElement('td')
+		const rowId = (rows[i].children[0] as HTMLTableCellElement).outerText.trim()
+		rows[i].appendChild(newCell)
+		newCell.className = "pdocrud-row"
+		api.get(`/api/supplier_url/read?id=${rowId}`)
+			.then(response => response.data)
+			.then(response => {
+				const { url } = response
+				newCell.innerText = url
+			})
+	}
 }

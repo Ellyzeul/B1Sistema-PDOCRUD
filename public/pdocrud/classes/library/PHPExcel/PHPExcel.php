@@ -523,7 +523,8 @@ class PHPExcel
                 $this->activeSheetIndex = 0;
             }
             $this->workSheetCollection[] = $pSheet;
-        } else {
+        } 
+        else {
             // Insert the sheet at the requested index
             array_splice(
                 $this->workSheetCollection,
