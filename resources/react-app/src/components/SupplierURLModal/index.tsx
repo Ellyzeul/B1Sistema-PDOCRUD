@@ -13,7 +13,7 @@ export const SupplierURLModal = (props: SupplierURLModalProp) => {
 		const urlInput = refURLInput.current as HTMLInputElement
 		const idRaw = modalId.textContent as string
 		const id = (idRaw.match(/[0-9]{1,}/) as string[])[0]
-		const supplierURL = urlInput.value
+		const supplierURL = urlInput.value as string
 
 		api.post('/api/supplier_url/update', {
 				id: id,

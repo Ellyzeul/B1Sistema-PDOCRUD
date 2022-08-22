@@ -36,7 +36,7 @@ Route::get('/supplier_url/read', function (Request $request) {
 Route::post('/supplier_url/update', function (Request $request) {
     return SupplierURLController::update(
         intval($request->input('id')),
-        $request->input('supplier_url')
+        $request->input('supplier_url') ?? ""
     );
 });
 
@@ -87,6 +87,12 @@ Route::get('/photo/read', function (Request $request) {
     return PhotoController::read(
         $photoNamePattern
     );
+});
+
+Route::get('/photo/read-all', function () {
+    Log::info("Rota - /api/photo/read-all");
+
+    return;
 });
 
 Route::get('/navbar-items/read', function (Request $request) {
