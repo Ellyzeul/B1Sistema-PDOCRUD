@@ -12,6 +12,7 @@ class Photo extends Model
     use HasFactory;
 
     private string $savePath;
+    private string $readPath;
 
     public function __construct()
     {
@@ -71,5 +72,13 @@ class Photo extends Model
         }
 
         return $response;
+    }
+
+    public function readAll(array $photoNumbers) {
+        $results = DB::select(
+            "SELECT SUBSTRING(name FROM 1 FOR POSITION('.' IN name) - 1) AS name 
+             FROM photos 
+             GROUP BY name"
+        );
     }
 }

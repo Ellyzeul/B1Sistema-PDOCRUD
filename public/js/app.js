@@ -2762,7 +2762,6 @@ var configurePage = function configurePage(elemRef, refModal, refModalId, refOnl
   if (elem.children.length === 0) return;
   if (!document.querySelectorAll('.pdocrud-data-row')[0].children[1]) return;
   var phase = Number(window.location.search.split(/=/)[1]) || 0;
-  console.log(phase);
   var h1 = document.querySelector(".panel-title");
   h1.textContent = "Controle de fases";
   setValuesOnSelects();
