@@ -12,7 +12,6 @@ export const configurePage = (elemRef: MutableRefObject<null>, refModal: Mutable
 	if(!document.querySelectorAll('.pdocrud-data-row')[0].children[1]) return
 
 	const phase = Number(window.location.search.split(/=/)[1]) || 0
-	console.log(phase)
 
 	const h1 = document.querySelector(".panel-title") as HTMLHeadingElement
 	h1.textContent = "Controle de fases"
