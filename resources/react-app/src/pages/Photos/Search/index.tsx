@@ -1,4 +1,4 @@
-import { ChangeEventHandler, MouseEventHandler, useRef, useState } from "react"
+import { ChangeEventHandler, MouseEventHandler, useEffect, useRef, useState } from "react"
 import { toast, ToastContainer } from "react-toastify"
 import { Navbar } from "../../../components/Navbar"
 import { PhotoDisplay } from "../../../components/PhotoDisplay"
@@ -8,7 +8,20 @@ import { PhotosSearchResponse } from "./types"
 
 export const PhotosSearchPage = () => {
   const inputRef = useRef(null)
+  const buttonRef = useRef(null)
   const [photosElem, setPhotos] = useState([] as JSX.Element[])
+
+  useEffect(() => {
+    if(!inputRef.current || !buttonRef.current) return
+    const getParams = new URLSearchParams(window.location.search)
+    const photoNumber = getParams.get("photo_number")
+    if(!photoNumber) return
+    const input = inputRef.current as HTMLInputElement
+    const button = buttonRef.current as HTMLButtonElement
+
+    input.value = photoNumber
+    button.click()
+  }, [inputRef, buttonRef])
 
   const searchPhotos: MouseEventHandler = event => {
     if(!inputRef.current) return
@@ -41,7 +54,7 @@ export const PhotosSearchPage = () => {
       <div className="photos-search-content">
         <div className="search-container">
           <input ref={inputRef} className="photo-search" type="text" onChange={onChange} />
-          <button onClick={searchPhotos}>Pesquisar</button>
+          <button ref={buttonRef} onClick={searchPhotos}>Pesquisar</button>
           <ToastContainer />
         </div>
         <div className="bottom-container">
