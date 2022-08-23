@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import api from "../../services/axios"
-import { configurePage } from "./functions"
+import configurePage from "./functions/configurePage"
 import { PDOCrudProp } from "./types"
 import "./style.css"
 
