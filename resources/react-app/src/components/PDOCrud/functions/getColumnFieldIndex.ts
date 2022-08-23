@@ -2,7 +2,7 @@ const getColumnFieldIndex: {(fieldName: string): number, headers?: HTMLTableCell
 	if(!getColumnFieldIndex.headers) getColumnFieldIndex.headers = Array.from(
 		document.querySelectorAll(".pdocrud-header-row > th") as NodeListOf<HTMLTableCellElement>
 	)
-	return getColumnFieldIndex.headers.findIndex(header => header.outerText === fieldName)
+	return getColumnFieldIndex.headers.findIndex(header => header.outerText.trim() === fieldName)
 }
 
 export default getColumnFieldIndex

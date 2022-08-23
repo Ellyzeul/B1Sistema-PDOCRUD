@@ -20,7 +20,7 @@ class Photo extends Model
         $this->savePath = $_SERVER['DOCUMENT_ROOT'] . $sep . "static" . $sep . "photos";
         $this->readPath = 
             (isset($_SERVER["HTTPS"]) ? "https" : "http") . "://" . (
-                $_SERVER['SERVER_NAME'] == "localhost" 
+                $_SERVER['SERVER_NAME'] == "localhost" || $_SERVER['SERVER_NAME'] == "127.0.0.1"
                 ? $_SERVER['SERVER_NAME'] . ":" . $_SERVER["SERVER_PORT"]
                 : $_SERVER['SERVER_NAME']
             ) . "/static/photos/";
@@ -74,11 +74,18 @@ class Photo extends Model
         return $response;
     }
 
-    public function readAll(array $photoNumbers) {
+    public function verifyFromList(string $numberList) {
         $results = DB::select(
-            "SELECT SUBSTRING(name FROM 1 FOR POSITION('.' IN name) - 1) AS name 
-             FROM photos 
-             GROUP BY name"
+            "CALL select_photos_from_list(?)",
+            [$numberList]
         );
+        if(isset($results[0]->critical_warning)) return ["message" => $results[0]->critical_warning];
+
+        $photoNumbers = explode(",", $numberList);
+        $response = [];
+        foreach($photoNumbers as $number) $response[$number] = false;
+        foreach($results as $result) $response[$result->name] = true;
+
+        return $response;
     }
 }

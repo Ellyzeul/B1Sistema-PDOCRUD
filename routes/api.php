@@ -68,32 +68,14 @@ Route::post('/user/login', function (Request $request) {
     );
 });
 
-Route::post('/photo/create', function (Request $request) {
-    Log::info("Rota - /api/photo/create");
-    $photoFile = $request->file("photo");
-    $photoName = $photoFile->getClientOriginalName();
-    Log::info("Imagem para salvar recebida");
-
-    return PhotoController::create(
-        $photoFile,
-        $photoName
-    );
-});
-
-Route::get('/photo/read', function (Request $request) {
-    Log::info("Rota - /api/photo/read");
-    $photoNamePattern = $request->input("name_pattern");
-
-    return PhotoController::read(
-        $photoNamePattern
-    );
-});
-
-Route::get('/photo/read-all', function () {
-    Log::info("Rota - /api/photo/read-all");
-
-    return;
-});
+Route::controller(PhotoController::class)
+    ->prefix('photo')
+    ->group(function() {
+        Route::post('/create', 'create');
+        Route::get('/read', 'read');
+        Route::get('/verify-list', 'verifyFromList');
+    }
+);
 
 Route::get('/navbar-items/read', function (Request $request) {
     Log::info("Rota - /api/navbar-items/read");
