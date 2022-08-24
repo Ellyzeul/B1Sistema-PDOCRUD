@@ -31,3 +31,51 @@
   background-color: rgba(193, 193, 193, 0.75);
   visibility: hidden;
 }
+.image-overlay-delete {
+  position: absolute;
+  height: 10%;
+  width: 13%;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: red;
+  border-radius: 10px 0;
+}
+
+.image-overlay-delete-confirm {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-overlay-delete-button, .image-overlay-cancel-button {
+  padding: 5px 0;
+  width: 40%;
+  margin-top: 10px;
+  border: none;
+  color: white;
+  font-size:medium;
+  border-radius: 5px;
+}
+
+.image-overlay-delete-button {
+  background-color: red;
+}
+.image-overlay-delete-button:hover {
+  background-color: white;
+  color: red;
+}
+
+.image-overlay-cancel-button {
+  background-color: gray;
+}

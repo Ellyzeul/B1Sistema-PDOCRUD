@@ -49,6 +49,14 @@ export const PhotoDisplay = (props: PhotoDisplayProp) => {
       >
         Clique para baixar
       </div>
+      {/* <div className="image-overlay-delete">
+        <i className="fa-solid fa-trash"></i>
+      </div> */}
+      {/* <div className="image-overlay-delete-confirm">
+        <p>Deseja mesmo deletar essa foto?</p>
+        <button className="image-overlay-delete-button">Deletar</button>
+        <button className="image-overlay-cancel-button">Cancelar</button>
+      </div> */}
     </div>
   )
 }
