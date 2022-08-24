@@ -3000,6 +3000,7 @@ var setPhotoLink = function setPhotoLink() {
   var _a;
 
   var invoiceIdx = (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_1__["default"])("NF");
+  if (invoiceIdx === -1) return;
   var rows = (_a = document.querySelector(".pdocrud-table > tbody")) === null || _a === void 0 ? void 0 : _a.children;
   var cells = {};
   var numbersList = "";
@@ -4541,7 +4542,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".image-display {\r\n  height: 350px;\r\n  margin: 10px 0 0 10px;\r\n  border-radius: 10px;\r\n  transition: 250ms;\r\n  background-color: rgb(52, 52, 52);\r\n  color: white;\r\n  display: inline-block;\r\n  position: relative;\r\n}\r\n.image-display:hover {\r\n  cursor: pointer;\r\n}\r\n\r\n.image-display > img {\r\n  height: 100%;\r\n  border-radius: 10px;\r\n}\r\n\r\n.image-overlay {\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  justify-content: center;\r\n  position: absolute;\r\n  top: 0;\r\n  left: 0;\r\n  height: 100%;\r\n  width: 100%;\r\n  border-radius: 10px;\r\n  background-color: rgba(193, 193, 193, 0.75);\r\n  visibility: hidden;\r\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".image-display {\r\n  height: 350px;\r\n  margin: 10px 0 0 10px;\r\n  border-radius: 10px;\r\n  transition: 250ms;\r\n  background-color: rgb(52, 52, 52);\r\n  color: white;\r\n  display: inline-block;\r\n  position: relative;\r\n}\r\n.image-display:hover {\r\n  cursor: pointer;\r\n}\r\n\r\n.image-display > img {\r\n  height: 100%;\r\n  border-radius: 10px;\r\n}\r\n\r\n.image-overlay {\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  justify-content: center;\r\n  position: absolute;\r\n  top: 0;\r\n  left: 0;\r\n  height: 100%;\r\n  width: 100%;\r\n  border-radius: 10px;\r\n  background-color: rgba(193, 193, 193, 0.75);\r\n  visibility: hidden;\r\n}\r\n.image-overlay-delete {\r\n  position: absolute;\r\n  height: 10%;\r\n  width: 13%;\r\n  top: 0;\r\n  left: 0;\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  background-color: red;\r\n  border-radius: 10px 0;\r\n}\r\n\r\n.image-overlay-delete-confirm {\r\n  position: absolute;\r\n  top: 0;\r\n  left: 0;\r\n  height: 100%;\r\n  width: 100%;\r\n  background-color: rgba(0, 0, 0, 0.75);\r\n  border-radius: 10px;\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  justify-content: center;\r\n}\r\n\r\n.image-overlay-delete-button, .image-overlay-cancel-button {\r\n  padding: 5px 0;\r\n  width: 40%;\r\n  margin-top: 10px;\r\n  border: none;\r\n  color: white;\r\n  font-size:medium;\r\n  border-radius: 5px;\r\n}\r\n\r\n.image-overlay-delete-button {\r\n  background-color: red;\r\n}\r\n.image-overlay-delete-button:hover {\r\n  background-color: white;\r\n  color: red;\r\n}\r\n\r\n.image-overlay-cancel-button {\r\n  background-color: gray;\r\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
