@@ -7,6 +7,7 @@ import setTopScrollBar from "./setTopScrollBar";
 import setDeadlineColumn from "./setDeadlineColumn";
 import setURLColumn from "./setURLColumn";
 import setPhotoLink from "./setPhotoLink";
+import setSearchTrim from "./setSearchTrim";
 
 const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObject<null>, refModalId: MutableRefObject<null>, refOnlineOrderNumber: MutableRefObject<null>, refURLInput: MutableRefObject<null>) => {
 	if(!elemRef.current) return
@@ -25,6 +26,7 @@ const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObje
 	setTopScrollBar(document.querySelector(".panel-body") as HTMLDivElement)
 	setSearchWorkaround(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput)
 	setPhotoLink()
+	setSearchTrim()
 	if(phase < 7) setDeadlineColumn()
 	if(phase === 2.1) setURLColumn()
 }

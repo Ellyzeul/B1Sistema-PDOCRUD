@@ -2754,6 +2754,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _setDeadlineColumn__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./setDeadlineColumn */ "./resources/react-app/src/components/PDOCrud/functions/setDeadlineColumn.ts");
 /* harmony import */ var _setURLColumn__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./setURLColumn */ "./resources/react-app/src/components/PDOCrud/functions/setURLColumn.ts");
 /* harmony import */ var _setPhotoLink__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./setPhotoLink */ "./resources/react-app/src/components/PDOCrud/functions/setPhotoLink.tsx");
+/* harmony import */ var _setSearchTrim__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./setSearchTrim */ "./resources/react-app/src/components/PDOCrud/functions/setSearchTrim.ts");
+
 
 
 
@@ -2777,6 +2779,7 @@ var configurePage = function configurePage(elemRef, refModal, refModalId, refOnl
   (0,_setTopScrollBar__WEBPACK_IMPORTED_MODULE_4__["default"])(document.querySelector(".panel-body"));
   (0,_setSearchWorkaround__WEBPACK_IMPORTED_MODULE_2__["default"])(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput);
   (0,_setPhotoLink__WEBPACK_IMPORTED_MODULE_7__["default"])();
+  (0,_setSearchTrim__WEBPACK_IMPORTED_MODULE_8__["default"])();
   if (phase < 7) (0,_setDeadlineColumn__WEBPACK_IMPORTED_MODULE_5__["default"])();
   if (phase === 2.1) (0,_setURLColumn__WEBPACK_IMPORTED_MODULE_6__["default"])();
 };
@@ -3042,6 +3045,36 @@ var setPhotoLink = function setPhotoLink() {
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (setPhotoLink);
+
+/***/ }),
+
+/***/ "./resources/react-app/src/components/PDOCrud/functions/setSearchTrim.ts":
+/*!*******************************************************************************!*\
+  !*** ./resources/react-app/src/components/PDOCrud/functions/setSearchTrim.ts ***!
+  \*******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var setSearchTrim = function setSearchTrim() {
+  var searchInput = document.querySelector("#pdocrud_search_box");
+  var trim = false;
+
+  searchInput.onpaste = function () {
+    trim = true;
+  };
+
+  searchInput.oninput = function () {
+    if (!trim) return;
+    searchInput.value = searchInput.value.trim();
+    trim = false;
+  };
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (setSearchTrim);
 
 /***/ }),
 
