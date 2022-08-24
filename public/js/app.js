@@ -2735,22 +2735,29 @@ var Navbar = function Navbar(props) {
 
 /***/ }),
 
-/***/ "./resources/react-app/src/components/PDOCrud/functions.tsx":
-/*!******************************************************************!*\
-  !*** ./resources/react-app/src/components/PDOCrud/functions.tsx ***!
-  \******************************************************************/
+/***/ "./resources/react-app/src/components/PDOCrud/functions/configurePage.ts":
+/*!*******************************************************************************!*\
+  !*** ./resources/react-app/src/components/PDOCrud/functions/configurePage.ts ***!
+  \*******************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "configurePage": () => (/* binding */ configurePage)
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-/* harmony import */ var _services_axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services/axios */ "./resources/react-app/src/services/axios.ts");
-/* harmony import */ var _TopScrollBar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../TopScrollBar */ "./resources/react-app/src/components/TopScrollBar/index.tsx");
-/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
-/* harmony import */ var date_fns__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! date-fns */ "./node_modules/date-fns/esm/intervalToDuration/index.js");
+/* harmony import */ var _setValuesOnSelects__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./setValuesOnSelects */ "./resources/react-app/src/components/PDOCrud/functions/setValuesOnSelects.ts");
+/* harmony import */ var _setCurrencySymblos__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./setCurrencySymblos */ "./resources/react-app/src/components/PDOCrud/functions/setCurrencySymblos.ts");
+/* harmony import */ var _setSearchWorkaround__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./setSearchWorkaround */ "./resources/react-app/src/components/PDOCrud/functions/setSearchWorkaround.ts");
+/* harmony import */ var _setOpenModalEvent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./setOpenModalEvent */ "./resources/react-app/src/components/PDOCrud/functions/setOpenModalEvent.ts");
+/* harmony import */ var _setTopScrollBar__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./setTopScrollBar */ "./resources/react-app/src/components/PDOCrud/functions/setTopScrollBar.tsx");
+/* harmony import */ var _setDeadlineColumn__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./setDeadlineColumn */ "./resources/react-app/src/components/PDOCrud/functions/setDeadlineColumn.ts");
+/* harmony import */ var _setURLColumn__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./setURLColumn */ "./resources/react-app/src/components/PDOCrud/functions/setURLColumn.ts");
+/* harmony import */ var _setPhotoLink__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./setPhotoLink */ "./resources/react-app/src/components/PDOCrud/functions/setPhotoLink.tsx");
+
+
+
+
 
 
 
@@ -2764,70 +2771,60 @@ var configurePage = function configurePage(elemRef, refModal, refModalId, refOnl
   var phase = Number(window.location.search.split(/=/)[1]) || 0;
   var h1 = document.querySelector(".panel-title");
   h1.textContent = "Controle de fases";
-  setValuesOnSelects();
-  setCurrencySymbols();
-  setOpenModalEvent(refModal, refModalId, refOnlineOrderNumber, refURLInput);
-  setTopScrollBar(document.querySelector(".panel-body"));
-  setSearchWorkaround(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput);
-  if (phase < 7) setDeadlineColumn();
-  if (phase === 2.1) setURLColumn();
+  (0,_setValuesOnSelects__WEBPACK_IMPORTED_MODULE_0__["default"])();
+  (0,_setCurrencySymblos__WEBPACK_IMPORTED_MODULE_1__["default"])();
+  (0,_setOpenModalEvent__WEBPACK_IMPORTED_MODULE_3__["default"])(refModal, refModalId, refOnlineOrderNumber, refURLInput);
+  (0,_setTopScrollBar__WEBPACK_IMPORTED_MODULE_4__["default"])(document.querySelector(".panel-body"));
+  (0,_setSearchWorkaround__WEBPACK_IMPORTED_MODULE_2__["default"])(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput);
+  (0,_setPhotoLink__WEBPACK_IMPORTED_MODULE_7__["default"])();
+  if (phase < 7) (0,_setDeadlineColumn__WEBPACK_IMPORTED_MODULE_5__["default"])();
+  if (phase === 2.1) (0,_setURLColumn__WEBPACK_IMPORTED_MODULE_6__["default"])();
 };
 
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (configurePage);
+
+/***/ }),
+
+/***/ "./resources/react-app/src/components/PDOCrud/functions/getColumnFieldIndex.ts":
+/*!*************************************************************************************!*\
+  !*** ./resources/react-app/src/components/PDOCrud/functions/getColumnFieldIndex.ts ***!
+  \*************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 var getColumnFieldIndex = function getColumnFieldIndex(fieldName) {
   if (!getColumnFieldIndex.headers) getColumnFieldIndex.headers = Array.from(document.querySelectorAll(".pdocrud-header-row > th"));
   return getColumnFieldIndex.headers.findIndex(function (header) {
-    return header.outerText === fieldName;
+    return header.outerText.trim() === fieldName;
   });
 };
 
-var setSearchWorkaround = function setSearchWorkaround(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput) {
-  var searchBtn = document.querySelector("#pdocrud_search_btn");
-  var loadGif = document.querySelector("#pdocrud-ajax-loader");
-  var pagesItems = document.querySelectorAll(".page-item > a");
-  var totalPerPage = document.querySelectorAll('#pdocrud_records_per_page > option');
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (getColumnFieldIndex);
 
-  var applyConfigsAfterTimeout = function applyConfigsAfterTimeout() {
-    return setTimeout(function () {
-      if (loadGif.style.display !== "none") {
-        applyConfigsAfterTimeout();
-        return;
-      }
+/***/ }),
 
-      configurePage(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput);
-    }, 1000);
-  };
+/***/ "./resources/react-app/src/components/PDOCrud/functions/setCurrencySymblos.ts":
+/*!************************************************************************************!*\
+  !*** ./resources/react-app/src/components/PDOCrud/functions/setCurrencySymblos.ts ***!
+  \************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-  searchBtn.onclick = function () {
-    return applyConfigsAfterTimeout();
-  };
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./getColumnFieldIndex */ "./resources/react-app/src/components/PDOCrud/functions/getColumnFieldIndex.ts");
 
-  pagesItems.forEach(function (anchor) {
-    return anchor.onclick = function () {
-      return applyConfigsAfterTimeout();
-    };
-  });
-  totalPerPage.forEach(function (option) {
-    return option.onclick = function () {
-      return applyConfigsAfterTimeout();
-    };
-  });
-};
-
-var setValuesOnSelects = function setValuesOnSelects() {
-  var selects = document.querySelectorAll('.pdocrud-row-cols > select');
-  selects.forEach(function (select) {
-    var val = select.dataset.originalVal;
-    var options = Array.from(select.options);
-    options.forEach(function (option) {
-      return option.value === val ? option.selected = true : null;
-    });
-  });
-};
 
 var setCurrencySymbols = function setCurrencySymbols() {
   var rows = document.querySelectorAll('.pdocrud-data-row');
-  var valueIdx = getColumnFieldIndex("Valor");
-  var sellercentralIdx = getColumnFieldIndex("Exportação");
+  var valueIdx = (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_0__["default"])("Valor");
+  var sellercentralIdx = (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_0__["default"])("Exportação");
   if (valueIdx === -1 || sellercentralIdx === -1) return;
   var regex = [{
     regex: /Brasil/,
@@ -2858,50 +2855,25 @@ var setCurrencySymbols = function setCurrencySymbols() {
   });
 };
 
-var setOpenModalEvent = function setOpenModalEvent(refModal, refModalId, refOnlineOrderNumber, refURLInput) {
-  var isbnIdx = getColumnFieldIndex("ISBN");
-  var onlineNumberIdx = getColumnFieldIndex("ORIGEM");
-  if (isbnIdx === -1 || onlineNumberIdx === -1) return;
-  if (!refModal.current || !refModalId.current || !refOnlineOrderNumber.current || !refURLInput.current) return;
-  var modal = refModal.current;
-  var modalId = refModalId.current;
-  var onlineOrderNumber = refOnlineOrderNumber.current;
-  var urlInput = refURLInput.current;
-  var rows = document.querySelectorAll('.pdocrud-data-row');
-  rows.forEach(function (row) {
-    var rowData = Array.from(row.children);
-    var isbnCell = rowData[isbnIdx];
-    var rowId = rowData[0].textContent.match(/[0-9]{1,}/)[0];
-    var rowOnlineOrderNumber = rowData[onlineNumberIdx].textContent;
-    isbnCell.style.cursor = 'pointer';
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (setCurrencySymbols);
 
-    isbnCell.onclick = function () {
-      return openModal(modal, modalId, onlineOrderNumber, urlInput, rowId, rowOnlineOrderNumber);
-    };
-  });
-};
+/***/ }),
 
-var setTopScrollBar = function setTopScrollBar(panelBody) {
-  var toScroll = panelBody.children[2];
-  var scrollbarContainer = document.createElement("div");
-  scrollbarContainer.style.height = "20px";
-  panelBody.insertBefore(scrollbarContainer, toScroll);
-  var scrollbarRoot = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_3__.createRoot)(scrollbarContainer);
-  scrollbarRoot.render((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_TopScrollBar__WEBPACK_IMPORTED_MODULE_2__.TopScrollBar, {}));
-};
+/***/ "./resources/react-app/src/components/PDOCrud/functions/setDeadlineColumn.ts":
+/*!***********************************************************************************!*\
+  !*** ./resources/react-app/src/components/PDOCrud/functions/setDeadlineColumn.ts ***!
+  \***********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-var openModal = function openModal(modal, modalId, onlineOrderNumber, urlInput, rowId, rowOnlineOrderNumber) {
-  modal.style.visibility = 'visible';
-  document.body.style.overflowY = 'hidden';
-  modalId.textContent = rowId;
-  onlineOrderNumber.textContent = rowOnlineOrderNumber;
-  var id = rowId;
-  _services_axios__WEBPACK_IMPORTED_MODULE_1__["default"].get("/api/supplier_url/read?id=".concat(id)).then(function (response) {
-    return response.data;
-  }).then(function (response) {
-    return urlInput.value = response.url;
-  });
-};
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var date_fns__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! date-fns */ "./node_modules/date-fns/esm/intervalToDuration/index.js");
+/* harmony import */ var _getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./getColumnFieldIndex */ "./resources/react-app/src/components/PDOCrud/functions/getColumnFieldIndex.ts");
+
+
 
 var setNewColumn = function setNewColumn(fieldname, generateData) {
   var headers = document.querySelector(".pdocrud-header-row");
@@ -2929,7 +2901,7 @@ setNewColumn.columns = {};
 
 var setDeadlineColumn = function setDeadlineColumn() {
   var generateData = function generateData(row) {
-    var expectedDateIdx = getColumnFieldIndex("Data prevista");
+    var expectedDateIdx = (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_0__["default"])("Data prevista");
     if (expectedDateIdx === -1) return "";
     var date = row.children[expectedDateIdx].outerText.split('/').map(function (part) {
       return Number(part);
@@ -2938,7 +2910,7 @@ var setDeadlineColumn = function setDeadlineColumn() {
     var end = new Date(date[2], date[1] - 1, date[0]);
     if (end < start) return "Prazo vencido";
     if (end === start) return "O prazo é hoje";
-    var interval = (0,date_fns__WEBPACK_IMPORTED_MODULE_4__["default"])({
+    var interval = (0,date_fns__WEBPACK_IMPORTED_MODULE_1__["default"])({
       start: start,
       end: end
     });
@@ -2947,6 +2919,224 @@ var setDeadlineColumn = function setDeadlineColumn() {
 
   setNewColumn("Dias para entrega", generateData);
 };
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (setDeadlineColumn);
+
+/***/ }),
+
+/***/ "./resources/react-app/src/components/PDOCrud/functions/setOpenModalEvent.ts":
+/*!***********************************************************************************!*\
+  !*** ./resources/react-app/src/components/PDOCrud/functions/setOpenModalEvent.ts ***!
+  \***********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _services_axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../services/axios */ "./resources/react-app/src/services/axios.ts");
+/* harmony import */ var _getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getColumnFieldIndex */ "./resources/react-app/src/components/PDOCrud/functions/getColumnFieldIndex.ts");
+
+
+
+var setOpenModalEvent = function setOpenModalEvent(refModal, refModalId, refOnlineOrderNumber, refURLInput) {
+  var isbnIdx = (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_1__["default"])("ISBN");
+  var onlineNumberIdx = (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_1__["default"])("ORIGEM");
+  if (isbnIdx === -1 || onlineNumberIdx === -1) return;
+  if (!refModal.current || !refModalId.current || !refOnlineOrderNumber.current || !refURLInput.current) return;
+  var modal = refModal.current;
+  var modalId = refModalId.current;
+  var onlineOrderNumber = refOnlineOrderNumber.current;
+  var urlInput = refURLInput.current;
+  var rows = document.querySelectorAll('.pdocrud-data-row');
+  rows.forEach(function (row) {
+    var rowData = Array.from(row.children);
+    var isbnCell = rowData[isbnIdx];
+    var rowId = rowData[0].textContent.match(/[0-9]{1,}/)[0];
+    var rowOnlineOrderNumber = rowData[onlineNumberIdx].textContent;
+    isbnCell.style.cursor = 'pointer';
+
+    isbnCell.onclick = function () {
+      return openModal(modal, modalId, onlineOrderNumber, urlInput, rowId, rowOnlineOrderNumber);
+    };
+  });
+};
+
+var openModal = function openModal(modal, modalId, onlineOrderNumber, urlInput, rowId, rowOnlineOrderNumber) {
+  modal.style.visibility = 'visible';
+  document.body.style.overflowY = 'hidden';
+  modalId.textContent = rowId;
+  onlineOrderNumber.textContent = rowOnlineOrderNumber;
+  var id = rowId;
+  _services_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("/api/supplier_url/read?id=".concat(id)).then(function (response) {
+    return response.data;
+  }).then(function (response) {
+    return urlInput.value = response.url;
+  });
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (setOpenModalEvent);
+
+/***/ }),
+
+/***/ "./resources/react-app/src/components/PDOCrud/functions/setPhotoLink.tsx":
+/*!*******************************************************************************!*\
+  !*** ./resources/react-app/src/components/PDOCrud/functions/setPhotoLink.tsx ***!
+  \*******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _services_axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../services/axios */ "./resources/react-app/src/services/axios.ts");
+/* harmony import */ var _getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getColumnFieldIndex */ "./resources/react-app/src/components/PDOCrud/functions/getColumnFieldIndex.ts");
+
+
+
+var setPhotoLink = function setPhotoLink() {
+  var _a;
+
+  var invoiceIdx = (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_1__["default"])("NF");
+  var rows = (_a = document.querySelector(".pdocrud-table > tbody")) === null || _a === void 0 ? void 0 : _a.children;
+  var cells = {};
+  var numbersList = "";
+
+  for (var i = 1; i < rows.length; i++) {
+    var cell = rows[i].children[invoiceIdx];
+    var input = cell.children[0];
+    var invoiceNumber = input.value;
+    numbersList += numbersList === "" ? invoiceNumber : ",".concat(invoiceNumber);
+    cells[invoiceNumber] = cells[invoiceNumber] ? cells[invoiceNumber] : [];
+    cells[invoiceNumber].push(cell);
+  }
+
+  _services_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("/api/photo/verify-list?numbers_list=".concat(numbersList)).then(function (response) {
+    return response.data;
+  }).then(function (response) {
+    return Object.keys(response).forEach(function (number) {
+      if (!response[number]) return;
+      cells[number].forEach(function (cell) {
+        var div = document.createElement('div');
+        var i = document.createElement('i');
+        i.className = "fa-solid fa-image";
+        div.appendChild(i);
+        div.className = "photo-icon";
+
+        div.onclick = function () {
+          var anchor = document.createElement('a');
+          anchor.href = "/fotos/pesquisar?photo_number=".concat(number);
+          anchor.click();
+        };
+
+        cell.appendChild(div);
+        cell.className = cell.className + " photo-link";
+      });
+    });
+  });
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (setPhotoLink);
+
+/***/ }),
+
+/***/ "./resources/react-app/src/components/PDOCrud/functions/setSearchWorkaround.ts":
+/*!*************************************************************************************!*\
+  !*** ./resources/react-app/src/components/PDOCrud/functions/setSearchWorkaround.ts ***!
+  \*************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _configurePage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./configurePage */ "./resources/react-app/src/components/PDOCrud/functions/configurePage.ts");
+
+
+var setSearchWorkaround = function setSearchWorkaround(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput) {
+  var searchBtn = document.querySelector("#pdocrud_search_btn");
+  var loadGif = document.querySelector("#pdocrud-ajax-loader");
+  var pagesItems = document.querySelectorAll(".page-item > a");
+  var totalPerPage = document.querySelectorAll('#pdocrud_records_per_page > option');
+
+  var applyConfigsAfterTimeout = function applyConfigsAfterTimeout() {
+    return setTimeout(function () {
+      if (loadGif.style.display !== "none") {
+        applyConfigsAfterTimeout();
+        return;
+      }
+
+      (0,_configurePage__WEBPACK_IMPORTED_MODULE_0__["default"])(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput);
+    }, 1000);
+  };
+
+  searchBtn.onclick = function () {
+    return applyConfigsAfterTimeout();
+  };
+
+  pagesItems.forEach(function (anchor) {
+    return anchor.onclick = function () {
+      return applyConfigsAfterTimeout();
+    };
+  });
+  totalPerPage.forEach(function (option) {
+    return option.onclick = function () {
+      return applyConfigsAfterTimeout();
+    };
+  });
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (setSearchWorkaround);
+
+/***/ }),
+
+/***/ "./resources/react-app/src/components/PDOCrud/functions/setTopScrollBar.tsx":
+/*!**********************************************************************************!*\
+  !*** ./resources/react-app/src/components/PDOCrud/functions/setTopScrollBar.tsx ***!
+  \**********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _TopScrollBar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../TopScrollBar */ "./resources/react-app/src/components/TopScrollBar/index.tsx");
+/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
+
+
+
+
+var setTopScrollBar = function setTopScrollBar(panelBody) {
+  var toScroll = panelBody.children[2];
+  var scrollbarContainer = document.createElement("div");
+  scrollbarContainer.style.height = "20px";
+  panelBody.insertBefore(scrollbarContainer, toScroll);
+  var scrollbarRoot = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_2__.createRoot)(scrollbarContainer);
+  scrollbarRoot.render((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_TopScrollBar__WEBPACK_IMPORTED_MODULE_1__.TopScrollBar, {}));
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (setTopScrollBar);
+
+/***/ }),
+
+/***/ "./resources/react-app/src/components/PDOCrud/functions/setURLColumn.ts":
+/*!******************************************************************************!*\
+  !*** ./resources/react-app/src/components/PDOCrud/functions/setURLColumn.ts ***!
+  \******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _services_axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../services/axios */ "./resources/react-app/src/services/axios.ts");
+
 
 var setURLColumn = function setURLColumn() {
   var headers = document.querySelector(".pdocrud-header-row");
@@ -2962,7 +3152,7 @@ var setURLColumn = function setURLColumn() {
     var rowId = rows[i].children[0].outerText.trim();
     rows[i].appendChild(newCell);
     newCell.className = "pdocrud-row";
-    _services_axios__WEBPACK_IMPORTED_MODULE_1__["default"].get("/api/supplier_url/read?id=".concat(rowId)).then(function (response) {
+    _services_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("/api/supplier_url/read?id=".concat(rowId)).then(function (response) {
       return response.data;
     }).then(function (response) {
       var url = response.url;
@@ -2974,6 +3164,34 @@ var setURLColumn = function setURLColumn() {
     _loop_1(i);
   }
 };
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (setURLColumn);
+
+/***/ }),
+
+/***/ "./resources/react-app/src/components/PDOCrud/functions/setValuesOnSelects.ts":
+/*!************************************************************************************!*\
+  !*** ./resources/react-app/src/components/PDOCrud/functions/setValuesOnSelects.ts ***!
+  \************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var setValuesOnSelects = function setValuesOnSelects() {
+  var selects = document.querySelectorAll('.pdocrud-row-cols > select');
+  selects.forEach(function (select) {
+    var val = select.dataset.originalVal;
+    var options = Array.from(select.options);
+    options.forEach(function (option) {
+      return option.value === val ? option.selected = true : null;
+    });
+  });
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (setValuesOnSelects);
 
 /***/ }),
 
@@ -2992,7 +3210,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _services_axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../services/axios */ "./resources/react-app/src/services/axios.ts");
-/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./functions */ "./resources/react-app/src/components/PDOCrud/functions.tsx");
+/* harmony import */ var _functions_configurePage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./functions/configurePage */ "./resources/react-app/src/components/PDOCrud/functions/configurePage.ts");
 /* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./style.css */ "./resources/react-app/src/components/PDOCrud/style.css");
 
 
@@ -3020,7 +3238,7 @@ var PDOCrud = function PDOCrud(props) {
   }, [setRawHTML]);
 
   var setConfigurations = function setConfigurations() {
-    return (0,_functions__WEBPACK_IMPORTED_MODULE_3__.configurePage)(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput);
+    return (0,_functions_configurePage__WEBPACK_IMPORTED_MODULE_3__["default"])(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput);
   };
 
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
@@ -3884,10 +4102,22 @@ var __assign = undefined && undefined.__assign || function () {
 
 var PhotosSearchPage = function PhotosSearchPage() {
   var inputRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+  var buttonRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
 
   var _a = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
       photosElem = _a[0],
       setPhotos = _a[1];
+
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+    if (!inputRef.current || !buttonRef.current) return;
+    var getParams = new URLSearchParams(window.location.search);
+    var photoNumber = getParams.get("photo_number");
+    if (!photoNumber) return;
+    var input = inputRef.current;
+    var button = buttonRef.current;
+    input.value = photoNumber;
+    button.click();
+  }, [inputRef, buttonRef]);
 
   var searchPhotos = function searchPhotos(event) {
     if (!inputRef.current) return;
@@ -3939,6 +4169,7 @@ var PhotosSearchPage = function PhotosSearchPage() {
           type: "text",
           onChange: onChange
         }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({
+          ref: buttonRef,
           onClick: searchPhotos
         }, {
           children: "Pesquisar"
@@ -4286,7 +4517,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".input-bulk-crud-update {\r\n  width: min-content !important;\r\n  max-width: 100px;\r\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".input-bulk-crud-update {\r\n  width: min-content !important;\r\n  max-width: 100px;\r\n}\r\n\r\n.photo-link {\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: space-between;\r\n}\r\n\r\n.photo-icon {\r\n  height: 80%;\r\n  padding: 5px 7px;\r\n  border-radius: 10px;\r\n}\r\n.photo-icon:hover {\r\n  background-color: black;\r\n  color: white;\r\n  cursor: pointer;\r\n  transition: 125ms;\r\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
