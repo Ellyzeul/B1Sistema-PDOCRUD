@@ -3,6 +3,7 @@ import getColumnFieldIndex from "./getColumnFieldIndex"
 
 const setPhotoLink = () => {
   const invoiceIdx = getColumnFieldIndex("NF")
+  if(invoiceIdx === -1) return
   const rows = document.querySelector(".pdocrud-table > tbody")?.children as HTMLCollectionOf<HTMLTableRowElement>
   const cells = {} as {[key: string]: HTMLTableCellElement[]}
   let numbersList = ""
