@@ -32,6 +32,7 @@ const setNewColumn: SetNewColumnPrototype = (fieldname: string, generateData: (r
 setNewColumn.columns = {}
 
 const setDeadlineColumn = () => {
+	setNewColumn.columns = {}
 	const generateData = (row: HTMLTableRowElement) => {
 		const expectedDateIdx = getColumnFieldIndex("Data prevista")
 		if(expectedDateIdx === -1) return ""
@@ -48,7 +49,8 @@ const setDeadlineColumn = () => {
 			start: start,
 			end: end
 		})
-		return `${interval.days} dias restantes`
+
+		return `${(interval.days || 0) + 1} dias restantes`
 	}
 	setNewColumn("Dias para entrega", generateData)
 }

@@ -2900,6 +2900,9 @@ var setNewColumn = function setNewColumn(fieldname, generateData) {
 setNewColumn.columns = {};
 
 var setDeadlineColumn = function setDeadlineColumn() {
+  setNewColumn.columns = {};
+  console.log("aaa");
+
   var generateData = function generateData(row) {
     var expectedDateIdx = (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_0__["default"])("Data prevista");
     if (expectedDateIdx === -1) return "";
@@ -2914,6 +2917,7 @@ var setDeadlineColumn = function setDeadlineColumn() {
       start: start,
       end: end
     });
+    console.log([interval.days, end, row]);
     return "".concat(interval.days, " dias restantes");
   };
 
