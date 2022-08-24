@@ -35,7 +35,7 @@ class Order
         $crud = Order::fieldBulkUpdate($crud, $columns);
         $crud = Order::fieldsFormatting($crud, $columns);
         $crud = Order::fieldsFiltering($crud, $phase);
-        $crud = Order::crudSettings($crud);
+        $crud = Order::crudSettings($crud, $phase);
 
         $crud->dbOrderBy("id desc");
 
@@ -170,10 +170,11 @@ class Order
         return $crud;
     }
 
-    private static function crudSettings(PDOCrud $crud)
+    private static function crudSettings(PDOCrud $crud, string|null $phase)
     {
         $crud->setSettings("actionbtn", false);
         $crud->setSettings("checkboxCol", false);
+        if(!isset($phase)) $crud->setSettings("excelBtn", false);
 
         return $crud;
     }
