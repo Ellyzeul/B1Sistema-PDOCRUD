@@ -3158,6 +3158,7 @@ var setPhotoLink = function setPhotoLink() {
         div.onclick = function () {
           var anchor = document.createElement('a');
           anchor.href = "/fotos/pesquisar?photo_number=".concat(number);
+          anchor.target = "blank";
           anchor.click();
         };
 
