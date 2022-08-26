@@ -1,7 +1,8 @@
 import { MutableRefObject } from "react"
 import configurePage from "./configurePage"
 
-const setSearchWorkaround = (elemRef: MutableRefObject<null>, refModal: MutableRefObject<null>, refModalId: MutableRefObject<null>, refOnlineOrderNumber: MutableRefObject<null>, refURLInput: MutableRefObject<null>) => {
+const setConfigurationReapply = (elemRef: MutableRefObject<null>, refModal: MutableRefObject<null>, refModalId: MutableRefObject<null>, refOnlineOrderNumber: MutableRefObject<null>, refURLInput: MutableRefObject<null>) => {
+	const saveBtn = document.querySelector(".pdocrud-button-save") as HTMLAnchorElement
 	const searchBtn = document.querySelector("#pdocrud_search_btn") as HTMLAnchorElement
 	const loadGif = document.querySelector("#pdocrud-ajax-loader") as HTMLDivElement
 	const pagesItems = document.querySelectorAll(".page-item > a") as NodeListOf<HTMLAnchorElement>
@@ -14,9 +15,10 @@ const setSearchWorkaround = (elemRef: MutableRefObject<null>, refModal: MutableR
 		configurePage(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput)
 	}, 1000)
 
+	saveBtn.onclick = () => applyConfigsAfterTimeout()
 	searchBtn.onclick = () => applyConfigsAfterTimeout()
 	pagesItems.forEach(anchor => anchor.onclick = () => applyConfigsAfterTimeout())
 	totalPerPage.forEach(option => option.onclick = () => applyConfigsAfterTimeout())
 }
 
-export default setSearchWorkaround
+export default setConfigurationReapply
