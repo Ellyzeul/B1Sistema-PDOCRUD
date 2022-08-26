@@ -119,12 +119,12 @@ class Order
 
         if(\in_array('id_delivery_address', $columns)) $deliveryAddresses = Order::getBulkUpdateData($crud, 'delivery_addresses', function($pair, $key, $val)
         {
-            return $pair[$val];
+            return "$pair[$key] - $pair[$val]";
         });
 
         if(\in_array('id_delivery_method', $columns)) $deliveryMethods = Order::getBulkUpdateData($crud, 'delivery_methods', function($pair, $key, $val)
         {
-            return $pair[$val];
+            return "$pair[$key] - $pair[$val]";
         });
 
         $crud->bulkCrudUpdate("id_phase", "select", ['phase_key' => 'phase_val'], $phases);

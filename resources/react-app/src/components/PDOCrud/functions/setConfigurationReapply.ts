@@ -13,7 +13,7 @@ const setConfigurationReapply = (elemRef: MutableRefObject<null>, refModal: Muta
 			return
 		}
 		configurePage(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput)
-	}, 1000)
+	}, 100)
 
 	saveBtn.onclick = () => applyConfigsAfterTimeout()
 	searchBtn.onclick = () => applyConfigsAfterTimeout()
