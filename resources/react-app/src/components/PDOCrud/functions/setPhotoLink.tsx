@@ -31,6 +31,7 @@ const setPhotoLink = () => {
         div.onclick = () => {
           const anchor = document.createElement('a')
           anchor.href = `/fotos/pesquisar?photo_number=${number}`
+          anchor.target = "blank"
           anchor.click()
         }
 
