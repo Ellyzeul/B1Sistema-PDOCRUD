@@ -3,7 +3,6 @@ import api from "../../../services/axios"
 const setURLColumn = () => {
 	const headers = document.querySelector(".pdocrud-header-row") as HTMLTableRowElement
 	const rows = (document.querySelector(".pdocrud-table > tbody") as HTMLTableSectionElement).children
-	const colIdx = headers.children.length
 	const totalRows = rows.length
 	const newHeader = document.createElement('th')
 

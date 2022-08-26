@@ -2735,6 +2735,71 @@ var Navbar = function Navbar(props) {
 
 /***/ }),
 
+/***/ "./resources/react-app/src/components/PDOCrud/functions/configureDatepickers.ts":
+/*!**************************************************************************************!*\
+  !*** ./resources/react-app/src/components/PDOCrud/functions/configureDatepickers.ts ***!
+  \**************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./getColumnFieldIndex */ "./resources/react-app/src/components/PDOCrud/functions/getColumnFieldIndex.ts");
+
+var COLUMNS_TO_CHECK = ["Data da compra", "Data de entrega"];
+var DATE_CELL_ATTR = {
+  month: "data-month",
+  year: "data-year"
+};
+
+var configureDatepickers = function configureDatepickers() {
+  var indexes = COLUMNS_TO_CHECK.filter(function (column) {
+    return (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_0__["default"])(column) !== -1;
+  }).map(function (column) {
+    return (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_0__["default"])(column);
+  });
+  var rows = Array.from(document.querySelectorAll(".pdocrud-table > tbody > tr"));
+  var datepickers = [];
+  rows.forEach(function (row) {
+    datepickers.push.apply(datepickers, indexes.map(function (index) {
+      return row.cells[index].children[0];
+    }));
+  });
+  datepickers.forEach(function (datepicker) {
+    datepicker.onclick = function () {
+      var rows = document.querySelectorAll(".ui-datepicker-calendar > tbody > tr");
+      rows.forEach(function (row) {
+        var cells = row.cells;
+
+        var _loop_1 = function _loop_1(i) {
+          if (cells[i].children.length == 0) return "continue";
+          cells[i].replaceWith(cells[i].cloneNode(true));
+
+          cells[i].onclick = function () {
+            var attr = cells[i].attributes;
+            var day = Number(cells[i].children[0].innerText);
+            var month = Number(attr.getNamedItem(DATE_CELL_ATTR.month).value) + 1;
+            var year = attr.getNamedItem(DATE_CELL_ATTR.year).value;
+            var date = "".concat(day < 10 ? "0".concat(day) : day, "/").concat(month < 10 ? "0".concat(month) : month, "/").concat(year);
+            datepicker.value = date;
+            datepicker.focus();
+          };
+        };
+
+        for (var i = 0; i < cells.length; i++) {
+          _loop_1(i);
+        }
+      });
+    };
+  });
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (configureDatepickers);
+
+/***/ }),
+
 /***/ "./resources/react-app/src/components/PDOCrud/functions/configurePage.ts":
 /*!*******************************************************************************!*\
   !*** ./resources/react-app/src/components/PDOCrud/functions/configurePage.ts ***!
@@ -2748,13 +2813,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _setValuesOnSelects__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./setValuesOnSelects */ "./resources/react-app/src/components/PDOCrud/functions/setValuesOnSelects.ts");
 /* harmony import */ var _setCurrencySymblos__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./setCurrencySymblos */ "./resources/react-app/src/components/PDOCrud/functions/setCurrencySymblos.ts");
-/* harmony import */ var _setSearchWorkaround__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./setSearchWorkaround */ "./resources/react-app/src/components/PDOCrud/functions/setSearchWorkaround.ts");
+/* harmony import */ var _setConfigurationReapply__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./setConfigurationReapply */ "./resources/react-app/src/components/PDOCrud/functions/setConfigurationReapply.ts");
 /* harmony import */ var _setOpenModalEvent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./setOpenModalEvent */ "./resources/react-app/src/components/PDOCrud/functions/setOpenModalEvent.ts");
 /* harmony import */ var _setTopScrollBar__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./setTopScrollBar */ "./resources/react-app/src/components/PDOCrud/functions/setTopScrollBar.tsx");
 /* harmony import */ var _setDeadlineColumn__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./setDeadlineColumn */ "./resources/react-app/src/components/PDOCrud/functions/setDeadlineColumn.ts");
 /* harmony import */ var _setURLColumn__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./setURLColumn */ "./resources/react-app/src/components/PDOCrud/functions/setURLColumn.ts");
 /* harmony import */ var _setPhotoLink__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./setPhotoLink */ "./resources/react-app/src/components/PDOCrud/functions/setPhotoLink.tsx");
 /* harmony import */ var _setSearchTrim__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./setSearchTrim */ "./resources/react-app/src/components/PDOCrud/functions/setSearchTrim.ts");
+/* harmony import */ var _configureDatepickers__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./configureDatepickers */ "./resources/react-app/src/components/PDOCrud/functions/configureDatepickers.ts");
+
 
 
 
@@ -2777,9 +2844,10 @@ var configurePage = function configurePage(elemRef, refModal, refModalId, refOnl
   (0,_setCurrencySymblos__WEBPACK_IMPORTED_MODULE_1__["default"])();
   (0,_setOpenModalEvent__WEBPACK_IMPORTED_MODULE_3__["default"])(refModal, refModalId, refOnlineOrderNumber, refURLInput);
   (0,_setTopScrollBar__WEBPACK_IMPORTED_MODULE_4__["default"])(document.querySelector(".panel-body"));
-  (0,_setSearchWorkaround__WEBPACK_IMPORTED_MODULE_2__["default"])(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput);
+  (0,_setConfigurationReapply__WEBPACK_IMPORTED_MODULE_2__["default"])(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput);
   (0,_setPhotoLink__WEBPACK_IMPORTED_MODULE_7__["default"])();
   (0,_setSearchTrim__WEBPACK_IMPORTED_MODULE_8__["default"])();
+  (0,_configureDatepickers__WEBPACK_IMPORTED_MODULE_9__["default"])();
   if (phase < 7) (0,_setDeadlineColumn__WEBPACK_IMPORTED_MODULE_5__["default"])();
   if (phase === 2.1) (0,_setURLColumn__WEBPACK_IMPORTED_MODULE_6__["default"])();
 };
@@ -2807,6 +2875,62 @@ var getColumnFieldIndex = function getColumnFieldIndex(fieldName) {
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (getColumnFieldIndex);
+
+/***/ }),
+
+/***/ "./resources/react-app/src/components/PDOCrud/functions/setConfigurationReapply.ts":
+/*!*****************************************************************************************!*\
+  !*** ./resources/react-app/src/components/PDOCrud/functions/setConfigurationReapply.ts ***!
+  \*****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _configurePage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./configurePage */ "./resources/react-app/src/components/PDOCrud/functions/configurePage.ts");
+
+
+var setConfigurationReapply = function setConfigurationReapply(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput) {
+  var saveBtn = document.querySelector(".pdocrud-button-save");
+  var searchBtn = document.querySelector("#pdocrud_search_btn");
+  var loadGif = document.querySelector("#pdocrud-ajax-loader");
+  var pagesItems = document.querySelectorAll(".page-item > a");
+  var totalPerPage = document.querySelectorAll('#pdocrud_records_per_page > option');
+
+  var applyConfigsAfterTimeout = function applyConfigsAfterTimeout() {
+    return setTimeout(function () {
+      if (loadGif.style.display !== "none") {
+        applyConfigsAfterTimeout();
+        return;
+      }
+
+      (0,_configurePage__WEBPACK_IMPORTED_MODULE_0__["default"])(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput);
+    }, 1000);
+  };
+
+  saveBtn.onclick = function () {
+    return applyConfigsAfterTimeout();
+  };
+
+  searchBtn.onclick = function () {
+    return applyConfigsAfterTimeout();
+  };
+
+  pagesItems.forEach(function (anchor) {
+    return anchor.onclick = function () {
+      return applyConfigsAfterTimeout();
+    };
+  });
+  totalPerPage.forEach(function (option) {
+    return option.onclick = function () {
+      return applyConfigsAfterTimeout();
+    };
+  });
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (setConfigurationReapply);
 
 /***/ }),
 
@@ -3078,57 +3202,6 @@ var setSearchTrim = function setSearchTrim() {
 
 /***/ }),
 
-/***/ "./resources/react-app/src/components/PDOCrud/functions/setSearchWorkaround.ts":
-/*!*************************************************************************************!*\
-  !*** ./resources/react-app/src/components/PDOCrud/functions/setSearchWorkaround.ts ***!
-  \*************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _configurePage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./configurePage */ "./resources/react-app/src/components/PDOCrud/functions/configurePage.ts");
-
-
-var setSearchWorkaround = function setSearchWorkaround(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput) {
-  var searchBtn = document.querySelector("#pdocrud_search_btn");
-  var loadGif = document.querySelector("#pdocrud-ajax-loader");
-  var pagesItems = document.querySelectorAll(".page-item > a");
-  var totalPerPage = document.querySelectorAll('#pdocrud_records_per_page > option');
-
-  var applyConfigsAfterTimeout = function applyConfigsAfterTimeout() {
-    return setTimeout(function () {
-      if (loadGif.style.display !== "none") {
-        applyConfigsAfterTimeout();
-        return;
-      }
-
-      (0,_configurePage__WEBPACK_IMPORTED_MODULE_0__["default"])(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput);
-    }, 1000);
-  };
-
-  searchBtn.onclick = function () {
-    return applyConfigsAfterTimeout();
-  };
-
-  pagesItems.forEach(function (anchor) {
-    return anchor.onclick = function () {
-      return applyConfigsAfterTimeout();
-    };
-  });
-  totalPerPage.forEach(function (option) {
-    return option.onclick = function () {
-      return applyConfigsAfterTimeout();
-    };
-  });
-};
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (setSearchWorkaround);
-
-/***/ }),
-
 /***/ "./resources/react-app/src/components/PDOCrud/functions/setTopScrollBar.tsx":
 /*!**********************************************************************************!*\
   !*** ./resources/react-app/src/components/PDOCrud/functions/setTopScrollBar.tsx ***!
@@ -3177,7 +3250,6 @@ __webpack_require__.r(__webpack_exports__);
 var setURLColumn = function setURLColumn() {
   var headers = document.querySelector(".pdocrud-header-row");
   var rows = document.querySelector(".pdocrud-table > tbody").children;
-  var colIdx = headers.children.length;
   var totalRows = rows.length;
   var newHeader = document.createElement('th');
   newHeader.innerText = "Comentários";
