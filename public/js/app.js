@@ -2907,7 +2907,7 @@ var setConfigurationReapply = function setConfigurationReapply(elemRef, refModal
       }
 
       (0,_configurePage__WEBPACK_IMPORTED_MODULE_0__["default"])(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput);
-    }, 1000);
+    }, 100);
   };
 
   saveBtn.onclick = function () {
