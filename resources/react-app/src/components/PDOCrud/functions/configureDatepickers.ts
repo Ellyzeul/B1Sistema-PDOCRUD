@@ -20,7 +20,7 @@ const configureDatepickers = () => {
       rows.forEach(row => {
         const cells = row.cells
         for(let i = 0; i < cells.length; i++) {
-          if(cells[i].children.length == 0) continue
+          if(cells[i].children.length === 0) continue
           cells[i].replaceWith(cells[i].cloneNode(true) as HTMLTableCellElement)
           cells[i].onclick = () => {
             const attr = cells[i].attributes
