@@ -53,10 +53,10 @@ class Order
             $updateQuery .= "(?, ?),";
             array_push($values, $pair['id'], $pair['address_verified']);
         }
-        $updateQuery = substr_replace($updateQuery, " as new", -1);
+        $updateQuery = substr_replace($updateQuery, " ", -1);
         $updateQuery .= "
             ON DUPLICATE KEY UPDATE
-                address_verified = new.address_verified
+                address_verified = VALUES(address_verified)
         ";
 
         DB::insert($updateQuery, $values);
