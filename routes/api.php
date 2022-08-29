@@ -40,11 +40,13 @@ Route::post('/supplier_url/update', function (Request $request) {
     );
 });
 
-Route::get('/orders/read', function (Request $request) {
-    return OrderController::read(
-        $request->input('phase') ? strval($request->input('phase')) : null
-    );
-});
+Route::controller(OrderController::class)
+    ->prefix('orders')
+    ->group(function () {
+        Route::get('/read', 'read');
+        Route::post('/address-verified/update', 'updateAddressVerified');
+    }
+);
 
 Route::get('/phases/read', function (Request $request) {
     return PhaseController::read(

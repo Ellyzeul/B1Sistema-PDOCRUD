@@ -3,6 +3,11 @@
   max-width: 100px;
 }
 
+.supplier-name-input {
+  max-width: 400px;
+  width: 400px !important;
+}
+
 .photo-link {
   display: flex;
   align-items: center;

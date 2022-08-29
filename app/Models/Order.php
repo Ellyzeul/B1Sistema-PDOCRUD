@@ -1,12 +1,13 @@
 <?php namespace App\Models;
 
+use Illuminate\Support\Facades\DB;
 use \PDOCrud;
-
 
 class Order
 {
     private static array $columnsPerPhase = [
         "id" => ["0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "3.1", "3.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6"],
+        "address_verified" => ["0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "3.1", "3.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6"],
         "id_sellercentral" => ["0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "3.1", "3.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6"],
         "id_phase" => ["0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "3.1", "3.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6"],
         "invoice_number" => ["2.4", "2.5", "2.6", "2.7", "2.8"],
@@ -44,6 +45,26 @@ class Order
         return $response;
     }
 
+    public static function updateAddressVerified(array $toUpdate)
+    {
+        $updateQuery = "INSERT IGNORE INTO order_control (id, address_verified) VALUES ";
+        $values = [];
+        foreach($toUpdate as $pair) {
+            $updateQuery .= "(?, ?),";
+            array_push($values, $pair['id'], $pair['address_verified']);
+        }
+        $updateQuery = substr_replace($updateQuery, " as new", -1);
+        $updateQuery .= "
+            ON DUPLICATE KEY UPDATE
+                address_verified = new.address_verified
+        ";
+
+        DB::insert($updateQuery, $values);
+        return [
+            "message" => "Verificação de endereços atualizada com sucesso."
+        ];
+    }
+
     private static function setFields(PDOCrud $crud, string|null $phase)
     {
         $columns = [];
@@ -55,6 +76,7 @@ class Order
         $crud->crudTableCol($columns);
 
         in_array("id", $columns) ? $crud->colRename("id", "Nº") : null;
+        in_array("address_verified", $columns) ? $crud->colRename("address_verified", "Endereço arrumado") : null;
         in_array("id_sellercentral", $columns) ? $crud->colRename("id_sellercentral", "Exportação") : null;
         in_array("id_phase", $columns) ? $crud->colRename("id_phase", "Fase do processo") : null;
         in_array("invoice_number", $columns) ? $crud->colRename("invoice_number", "NF") : null;
@@ -80,6 +102,7 @@ class Order
     private static function fieldsNotMandatory(PDOCrud $crud, array $columns)
     {
         \in_array("invoice_number", $columns) ? $crud->fieldNotMandatory("invoice_number") : null;
+        \in_array("adrress_verified", $columns) ? $crud->fieldNotMandatory("adrress_verified") : null;
         \in_array("bling_number", $columns) ? $crud->fieldNotMandatory("bling_number") : null;
         \in_array("supplier_name", $columns) ? $crud->fieldNotMandatory("supplier_name") : null;
         \in_array("purchase_date", $columns) ? $crud->fieldNotMandatory("purchase_date") : null;
@@ -127,6 +150,7 @@ class Order
             return "$pair[$key] - $pair[$val]";
         });
 
+        \in_array("address_verified", $columns) ? $crud->bulkCrudUpdate("address_verified", "number") : null;
         $crud->bulkCrudUpdate("id_phase", "select", ['phase_key' => 'phase_val'], $phases);
         \in_array("invoice_number", $columns) ? $crud->bulkCrudUpdate("invoice_number", "text") : null;
         \in_array("bling_number", $columns) ? $crud->bulkCrudUpdate("bling_number", "text") : null;
