@@ -8,7 +8,7 @@ class OrderController extends Controller
 {
     public static function read(Request $request)
     {
-        $phase =- $request->input('phase') 
+        $phase = $request->input('phase') 
             ? strval($request->input('phase')) 
             : null;
         $processed = Order::read($phase);
