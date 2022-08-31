@@ -6,12 +6,13 @@ use Illuminate\Support\Str;
 
 class User
 {
-    public static function create(string $name, string $email, string $password, int $id_section) {
+    public static function create(string $name, string $email, string $password, int $id_section, string $ramal) {
         $inserted = DB::table('users')->insert([
             'email' => $email,
             'name' => $name,
             'password' => Hash::make($password),
             'token' => Str::random(60),
+            'ramal' => $ramal,
             'id_section' => $id_section
         ]);
 
