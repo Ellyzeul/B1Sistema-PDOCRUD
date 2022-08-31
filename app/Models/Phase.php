@@ -13,12 +13,17 @@ class Phase
 
         foreach($results as $item) {
             $urlParts = explode("=", $item->url);
-            $label = isset($urlParts[1]) ? "Fase ".explode(".", $urlParts[1])[0] : "inicio";
+            $label = isset($urlParts[1]) && \is_numeric($urlParts[1]) 
+                ? "Fase ".explode(".", $urlParts[1])[0] 
+                : "inicio";
             if($label == "inicio") {
-                $items[$label] = [[
-                    "name" => "Ir para a geral",
+                $toAppend = [[
+                    "name" => isset($urlParts[1]) ? "Endereços a arrumar" : "Ir para a geral",
                     "url" => $item->url
                 ]];
+                $items[$label] = isset($items[$label])
+                ? array_merge($items[$label], $toAppend)
+                : $toAppend;
                 continue;
             }
             $items[$label] = isset($items[$label]) 
