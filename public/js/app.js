@@ -2836,6 +2836,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./getColumnFieldIndex */ "./resources/react-app/src/components/PDOCrud/functions/getColumnFieldIndex.ts");
+/* harmony import */ var _getTableRows__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getTableRows */ "./resources/react-app/src/components/PDOCrud/functions/getTableRows.ts");
+
 
 var COLUMNS_TO_CHECK = ["Data da compra", "Data de entrega"];
 var DATE_CELL_ATTR = {
@@ -2849,7 +2851,7 @@ var configureDatepickers = function configureDatepickers() {
   }).map(function (column) {
     return (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_0__["default"])(column);
   });
-  var rows = Array.from(document.querySelectorAll(".pdocrud-table > tbody > tr"));
+  var rows = (0,_getTableRows__WEBPACK_IMPORTED_MODULE_1__["default"])();
   var datepickers = [];
   rows.forEach(function (row) {
     datepickers.push.apply(datepickers, indexes.map(function (index) {
@@ -2912,6 +2914,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _configureDatepickers__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./configureDatepickers */ "./resources/react-app/src/components/PDOCrud/functions/configureDatepickers.ts");
 /* harmony import */ var _configureAddressVerifiedColumn__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./configureAddressVerifiedColumn */ "./resources/react-app/src/components/PDOCrud/functions/configureAddressVerifiedColumn.ts");
 /* harmony import */ var _setConditionalStyling__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./setConditionalStyling */ "./resources/react-app/src/components/PDOCrud/functions/setConditionalStyling.ts");
+/* harmony import */ var _setCompaniesIcons__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./setCompaniesIcons */ "./resources/react-app/src/components/PDOCrud/functions/setCompaniesIcons.ts");
+
 
 
 
@@ -2943,6 +2947,7 @@ var configurePage = function configurePage(elemRef, refModal, refModalId, refOnl
   (0,_configureDatepickers__WEBPACK_IMPORTED_MODULE_9__["default"])();
   (0,_configureAddressVerifiedColumn__WEBPACK_IMPORTED_MODULE_10__["default"])();
   (0,_setConditionalStyling__WEBPACK_IMPORTED_MODULE_11__["default"])();
+  (0,_setCompaniesIcons__WEBPACK_IMPORTED_MODULE_12__["default"])();
   if (phase < 7) (0,_setDeadlineColumn__WEBPACK_IMPORTED_MODULE_5__["default"])();
   if (phase === 2.1) (0,_setURLColumn__WEBPACK_IMPORTED_MODULE_6__["default"])();
 };
@@ -2973,6 +2978,79 @@ var getColumnFieldIndex = function getColumnFieldIndex(fieldName) {
 
 /***/ }),
 
+/***/ "./resources/react-app/src/components/PDOCrud/functions/getTableRows.ts":
+/*!******************************************************************************!*\
+  !*** ./resources/react-app/src/components/PDOCrud/functions/getTableRows.ts ***!
+  \******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var rows = null;
+
+var getTableRows = function getTableRows() {
+  if (!rows) {
+    rows = Array.from(document.querySelectorAll(".pdocrud-table > tbody > tr"));
+  }
+
+  return rows;
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (getTableRows);
+
+/***/ }),
+
+/***/ "./resources/react-app/src/components/PDOCrud/functions/setCompaniesIcons.ts":
+/*!***********************************************************************************!*\
+  !*** ./resources/react-app/src/components/PDOCrud/functions/setCompaniesIcons.ts ***!
+  \***********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _services_axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../services/axios */ "./resources/react-app/src/services/axios.ts");
+/* harmony import */ var _getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getColumnFieldIndex */ "./resources/react-app/src/components/PDOCrud/functions/getColumnFieldIndex.ts");
+/* harmony import */ var _getTableRows__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./getTableRows */ "./resources/react-app/src/components/PDOCrud/functions/getTableRows.ts");
+
+
+
+
+var setCompaniesIcons = function setCompaniesIcons() {
+  var colIdx = (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_1__["default"])("Empresa");
+  if (colIdx === -1) return;
+  var rows = (0,_getTableRows__WEBPACK_IMPORTED_MODULE_2__["default"])();
+  _services_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get('/api/company/read-thumbnails').then(function (response) {
+    return response.data;
+  }).then(function (response) {
+    var message = response.message,
+        thumbs = response.thumbs;
+    var thumbsMap = {};
+    thumbs.forEach(function (thumb) {
+      return thumbsMap[thumb.id] = thumb.thumbnail;
+    });
+    rows.forEach(function (row) {
+      var cell = row.cells[colIdx];
+      var id_company = Number(cell.innerText);
+      var icon = document.createElement('img');
+      icon.src = thumbsMap[id_company];
+      icon.height = 35;
+      cell.innerText = "";
+      cell.appendChild(icon);
+    });
+  });
+  return;
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (setCompaniesIcons);
+
+/***/ }),
+
 /***/ "./resources/react-app/src/components/PDOCrud/functions/setConditionalStyling.ts":
 /*!***************************************************************************************!*\
   !*** ./resources/react-app/src/components/PDOCrud/functions/setConditionalStyling.ts ***!
@@ -2985,6 +3063,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./getColumnFieldIndex */ "./resources/react-app/src/components/PDOCrud/functions/getColumnFieldIndex.ts");
+/* harmony import */ var _getTableRows__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getTableRows */ "./resources/react-app/src/components/PDOCrud/functions/getTableRows.ts");
+
 
 
 var setConditionalStyling = function setConditionalStyling() {
@@ -2996,7 +3076,7 @@ var setConditionalStyling = function setConditionalStyling() {
 var fitContentSupplierNameColumn = function fitContentSupplierNameColumn() {
   var supplierNameIdx = (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_0__["default"])("Fornecedor");
   if (supplierNameIdx === -1) return;
-  var rows = Array.from(document.querySelectorAll(".pdocrud-table > tbody > tr"));
+  var rows = (0,_getTableRows__WEBPACK_IMPORTED_MODULE_1__["default"])();
   rows.forEach(function (row) {
     var input = row.cells[supplierNameIdx].children[0];
     input.className += " supplier-name-input";
