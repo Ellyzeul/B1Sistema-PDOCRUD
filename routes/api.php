@@ -4,12 +4,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\SupplierURLController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\NavbarItemController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PhaseController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\QuoteController;
+use App\Http\Controllers\SupplierURLController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -45,8 +46,7 @@ Route::controller(OrderController::class)
     ->group(function () {
         Route::get('/read', 'read');
         Route::post('/address-verified/update', 'updateAddressVerified');
-    }
-);
+    });
 
 Route::get('/phases/read', function (Request $request) {
     return PhaseController::read(
@@ -59,8 +59,7 @@ Route::controller(UserController::class)
     ->group(function() {
         Route::post('/create', 'create');
         Route::post('/login', 'login');
-    }
-);
+    });
 
 Route::controller(PhotoController::class)
     ->prefix('photo')
@@ -68,8 +67,13 @@ Route::controller(PhotoController::class)
         Route::post('/create', 'create');
         Route::get('/read', 'read');
         Route::get('/verify-list', 'verifyFromList');
-    }
-);
+    });
+
+Route::controller(CompanyController::class)
+    ->prefix('company')
+    ->group(function() {
+        Route::get('/read-thumbnails', 'readThumbnails');
+    });
 
 Route::get('/navbar-items/read', function (Request $request) {
     Log::info("Rota - /api/navbar-items/read");

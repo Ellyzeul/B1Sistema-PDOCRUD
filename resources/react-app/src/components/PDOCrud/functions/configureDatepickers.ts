@@ -1,4 +1,5 @@
 import getColumnFieldIndex from "./getColumnFieldIndex"
+import getTableRows from "./getTableRows"
 
 const COLUMNS_TO_CHECK = ["Data da compra", "Data de entrega"]
 const DATE_CELL_ATTR = {month: "data-month", year: "data-year"}
@@ -7,7 +8,7 @@ const configureDatepickers = () => {
   const indexes = COLUMNS_TO_CHECK
     .filter(column => getColumnFieldIndex(column) !== -1)
     .map(column => getColumnFieldIndex(column))
-  const rows = Array.from(document.querySelectorAll(".pdocrud-table > tbody > tr") as NodeListOf<HTMLTableRowElement>)
+  const rows = getTableRows()
 
   const datepickers = [] as HTMLInputElement[]
   rows.forEach(row => {
