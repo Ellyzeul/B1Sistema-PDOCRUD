@@ -1,4 +1,5 @@
 import getColumnFieldIndex from "./getColumnFieldIndex"
+import getTableRows from "./getTableRows"
 
 const setConditionalStyling = () => {
   const getParams = new URLSearchParams(window.location.search)
@@ -10,7 +11,7 @@ const setConditionalStyling = () => {
 const fitContentSupplierNameColumn = () => {
   const supplierNameIdx = getColumnFieldIndex("Fornecedor")
   if(supplierNameIdx === -1) return
-  const rows = Array.from(document.querySelectorAll(".pdocrud-table > tbody > tr") as NodeListOf<HTMLTableRowElement>)
+  const rows = getTableRows()
 
   rows.forEach(row => {
     const input = row.cells[supplierNameIdx].children[0] as HTMLInputElement
