@@ -15,10 +15,11 @@ export const Home = (props: HomeProp) => {
   const [sectionsList, setSectionsList] = useState([] as JSX.Element[])
 
   useEffect(() => {
-    setSectionsList(sections.map(prop => <SectionButton 
+    setSectionsList(sections.map((prop, key) => <SectionButton 
       label={prop.label} 
       icon={prop.icon} 
       url={prop.url} 
+      key={key}
     />))
   }, [sections])
 
