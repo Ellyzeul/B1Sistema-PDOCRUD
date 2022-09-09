@@ -5,6 +5,7 @@ import { UserData } from './components/LoginForm/types';
 import { DropdownProp } from './components/Navbar/Dropdown/types';
 import { NavbarContext } from './contexts/Navbar';
 import { UserDataContext } from './contexts/UserData';
+import { CompaniesPage } from './pages/Companies';
 import { HomePage } from './pages/Home';
 import { ShipmentPage } from './pages/Home/Shipment';
 import { Login } from './pages/Login';
@@ -42,6 +43,7 @@ function App() {
           <Route path='/expedicao' element={getElement(<ShipmentPage/>)} />
           <Route path='/fotos/enviar' element={getElement(<PhotosUploadPage/>)} />
           <Route path='/fotos/pesquisar' element={getElement(<PhotosSearchPage/>)} />
+          <Route path='/empresas' element={getElement(<CompaniesPage/>)} />
         </Routes>
       </NavbarContext.Provider>
     </UserDataContext.Provider>

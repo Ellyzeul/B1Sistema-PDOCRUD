@@ -1,0 +1,15 @@
+.companies-page {
+  height: 100vh;
+  width: 100vw;
+  background-color: #f2f4f5;
+  display: grid;
+  grid-template-rows: 60px calc(100vh - 60px);
+  overflow-y: auto;
+}
+
+.companies {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}

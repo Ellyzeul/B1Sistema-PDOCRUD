@@ -19,4 +19,10 @@ class CompanyController extends Controller
         $response = $this->company->readThumbnails();
         return $response;
     }
+
+    public function readInfo()
+    {
+        $response = $this->company->readInfo();
+        return $response;
+    }
 }
