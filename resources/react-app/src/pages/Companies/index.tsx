@@ -13,7 +13,7 @@ export const CompaniesPage = () => {
     api.get('/api/company/read-info')
       .then(response => response.data as CompanyInfoResponse[])
       .then(response => {
-        setCompanyCards(response.map(company => <CompanyInfoCard
+        setCompanyCards(response.map((company, index) => <CompanyInfoCard
           fantasyName={company.fantasy_name}
           companyName={company.company_name}
           address={company.address}
@@ -22,6 +22,7 @@ export const CompaniesPage = () => {
           municipalRegistration={company.municipal_registration}
           accounts={company.accounts}
           sellercentrals={company.sellercentrals}
+          key={index}
         />))
       })
   }, [setCompanyCards])
