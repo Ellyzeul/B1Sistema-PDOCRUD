@@ -1,0 +1,60 @@
+.company-info-card {
+  min-width: 400px;
+  height: auto;
+  width: 35%;
+  padding: 10px 0;
+  background-color: white;
+  margin: 10px 0;
+  border: 1px solid black;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.company-info-card > div {
+  display: flex;
+  flex-direction: column;
+}
+
+hr {
+  width: 80%;
+}
+
+.company-numbers {
+  display: flex;
+  flex-direction: row !important;
+}
+
+.company-numbers > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.bank-accounts {
+  border: 1px solid black;
+  border-radius: 3px;
+}
+
+.bank-accounts > thead > th {
+  border-bottom: 1px solid black;
+}
+
+.sellercentrals-container {
+  width: 90%;
+}
+
+.sellercentrals-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.sellercentral {
+  padding: 1px 2px;
+  margin-bottom: 1px;
+  border-radius: 3px;
+  background-color: black;
+  color: white;
+}

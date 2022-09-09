@@ -73,6 +73,7 @@ Route::controller(CompanyController::class)
     ->prefix('company')
     ->group(function() {
         Route::get('/read-thumbnails', 'readThumbnails');
+        Route::get('/read-info', 'readInfo');
     });
 
 Route::get('/navbar-items/read', function (Request $request) {
