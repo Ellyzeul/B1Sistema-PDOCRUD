@@ -41,13 +41,15 @@ export const CompanyInfoCard = (props: CompanyInfoCardProp) => {
       <div>
         <table className="bank-accounts">
           <thead>
-            <th>Banco</th>
-            <th>Agência</th>
-            <th>Conta</th>
+            <tr>
+              <th>Banco</th>
+              <th>Agência</th>
+              <th>Conta</th>
+            </tr>
           </thead>
           <tbody>
             {
-              accounts.map(account => <tr>
+              accounts.map((account, index) => <tr key={index}>
                 <td>{account.bank}</td>
                 <td>{account.agency}</td>
                 <td>{account.account}</td>
@@ -60,7 +62,9 @@ export const CompanyInfoCard = (props: CompanyInfoCardProp) => {
       <div className="sellercentrals-container">
         <b>Canais de venda: </b>
         <div className="sellercentrals-list">
-          {sellercentrals.map(sellercentral => <div className="sellercentral">{sellercentral}</div>)}
+          {sellercentrals.map((sellercentral, index) => 
+            <div className="sellercentral" key={index}>{sellercentral}</div>)
+          }
         </div>
       </div>
     </div>
