@@ -37,7 +37,7 @@ hr {
   border-radius: 3px;
 }
 
-.bank-accounts > thead > th {
+.bank-accounts > thead > tr > th {
   border-bottom: 1px solid black;
 }
 
