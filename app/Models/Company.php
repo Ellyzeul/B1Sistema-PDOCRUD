@@ -55,7 +55,7 @@ class Company extends Model
                 "company_name" => $company->company_name,
                 "fantasy_name" => $company->name,
                 "address" => $company->address,
-                "cpnj" => $company->cnpj,
+                "cnpj" => $company->cnpj,
                 "state_registration" => $company->state_registration,
                 "municipal_registration" => $company->municipal_registration,
                 "accounts" => $accounts,
