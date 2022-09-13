@@ -49,7 +49,7 @@ export const PhotoForm = () => {
 
     if(value.length !== 44) return
 
-    input.value = `${Number(value.substring(25, 34))}`
+    input.value = value.substring(29, 34)
   }
 
   return (
