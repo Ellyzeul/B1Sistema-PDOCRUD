@@ -1,7 +1,11 @@
+import { ChangeEventHandler } from "react"
 import api from "../../../services/axios"
 import getColumnFieldIndex from "./getColumnFieldIndex"
 
-const setPhotoLink = () => {
+const onChange = (input: HTMLInputElement) => {
+}
+
+const configureInvoiceField = () => {
   const invoiceIdx = getColumnFieldIndex("NF")
   if(invoiceIdx === -1) return
   const rows = document.querySelector(".pdocrud-table > tbody")?.children as HTMLCollectionOf<HTMLTableRowElement>
@@ -11,6 +15,13 @@ const setPhotoLink = () => {
     const cell = rows[i].children[invoiceIdx] as HTMLTableCellElement
     const input = cell.children[0] as HTMLInputElement
     const invoiceNumber = input.value
+
+    input.oninput = (event) => {
+      const input = event.target as HTMLInputElement
+      const value = input.value
+      if(value.length !== 44) return
+    
+      input.value = value.substring(29, 34)}
 
     numbersList += numbersList === "" ? invoiceNumber : `,${invoiceNumber}`
     cells[invoiceNumber] = cells[invoiceNumber] ? cells[invoiceNumber] : []
@@ -41,4 +52,4 @@ const setPhotoLink = () => {
     }))
 }
 
-export default setPhotoLink
+export default configureInvoiceField

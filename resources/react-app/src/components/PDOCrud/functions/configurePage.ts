@@ -6,7 +6,7 @@ import setOpenModalEvent from "./setOpenModalEvent";
 import setTopScrollBar from "./setTopScrollBar";
 import setDeadlineColumn from "./setDeadlineColumn";
 import setURLColumn from "./setURLColumn";
-import setPhotoLink from "./setPhotoLink";
+import configureInvoiceField from "./configureInvoiceField";
 import setSearchTrim from "./setSearchTrim";
 import configureDatepickers from "./configureDatepickers";
 import configureAddressVerifiedColumn from "./configureAddressVerifiedColumn";
@@ -29,7 +29,7 @@ const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObje
 	setOpenModalEvent(refModal, refModalId, refOnlineOrderNumber, refURLInput)
 	setTopScrollBar(document.querySelector(".panel-body") as HTMLDivElement)
 	setConfigurationReapply(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput)
-	setPhotoLink()
+	configureInvoiceField()
 	setSearchTrim()
 	configureDatepickers()
 	configureAddressVerifiedColumn()
