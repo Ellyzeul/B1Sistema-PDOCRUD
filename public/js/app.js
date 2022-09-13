@@ -2170,7 +2170,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/index.js");
 /* harmony import */ var _App_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./App.css */ "./resources/react-app/src/App.css");
 /* harmony import */ var _contexts_Navbar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./contexts/Navbar */ "./resources/react-app/src/contexts/Navbar.ts");
 /* harmony import */ var _contexts_UserData__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./contexts/UserData */ "./resources/react-app/src/contexts/UserData.ts");
@@ -2179,8 +2179,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pages_Home_Shipment__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./pages/Home/Shipment */ "./resources/react-app/src/pages/Home/Shipment/index.tsx");
 /* harmony import */ var _pages_Login__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./pages/Login */ "./resources/react-app/src/pages/Login/index.tsx");
 /* harmony import */ var _pages_Orders__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./pages/Orders */ "./resources/react-app/src/pages/Orders/index.tsx");
-/* harmony import */ var _pages_Photos_Search__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./pages/Photos/Search */ "./resources/react-app/src/pages/Photos/Search/index.tsx");
-/* harmony import */ var _pages_Photos_Upload__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./pages/Photos/Upload */ "./resources/react-app/src/pages/Photos/Upload/index.tsx");
+/* harmony import */ var _pages_Orders_UploadFile__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./pages/Orders/UploadFile */ "./resources/react-app/src/pages/Orders/UploadFile/index.tsx");
+/* harmony import */ var _pages_Photos_Search__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./pages/Photos/Search */ "./resources/react-app/src/pages/Photos/Search/index.tsx");
+/* harmony import */ var _pages_Photos_Upload__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./pages/Photos/Upload */ "./resources/react-app/src/pages/Photos/Upload/index.tsx");
 var __assign = undefined && undefined.__assign || function () {
   __assign = Object.assign || function (t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -2196,6 +2197,7 @@ var __assign = undefined && undefined.__assign || function () {
 
   return __assign.apply(this, arguments);
 };
+
 
 
 
@@ -2228,7 +2230,7 @@ function App() {
   };
 
   var getElement = function getElement(element) {
-    return isLogged() ? element : (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_12__.Navigate, {
+    return isLogged() ? element : (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_13__.Navigate, {
       to: '/login'
     });
   };
@@ -2250,26 +2252,29 @@ function App() {
     children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_contexts_Navbar__WEBPACK_IMPORTED_MODULE_3__.NavbarContext.Provider, __assign({
       value: [navbarItems, setNavbarItems]
     }, {
-      children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_12__.Routes, {
-        children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_12__.Route, {
+      children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_13__.Routes, {
+        children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_13__.Route, {
           path: '/login',
           element: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Login__WEBPACK_IMPORTED_MODULE_8__.Login, {})
-        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_12__.Route, {
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_13__.Route, {
           path: '/',
           element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Home__WEBPACK_IMPORTED_MODULE_6__.HomePage, {}))
-        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_12__.Route, {
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_13__.Route, {
           path: '/pedidos',
           element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Orders__WEBPACK_IMPORTED_MODULE_9__.OrdersPage, {}))
-        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_12__.Route, {
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_13__.Route, {
+          path: '/arquivo-upload',
+          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Orders_UploadFile__WEBPACK_IMPORTED_MODULE_10__["default"], {}))
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_13__.Route, {
           path: '/expedicao',
           element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Home_Shipment__WEBPACK_IMPORTED_MODULE_7__.ShipmentPage, {}))
-        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_12__.Route, {
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_13__.Route, {
           path: '/fotos/enviar',
-          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Photos_Upload__WEBPACK_IMPORTED_MODULE_11__.PhotosUploadPage, {}))
-        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_12__.Route, {
+          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Photos_Upload__WEBPACK_IMPORTED_MODULE_12__.PhotosUploadPage, {}))
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_13__.Route, {
           path: '/fotos/pesquisar',
-          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Photos_Search__WEBPACK_IMPORTED_MODULE_10__.PhotosSearchPage, {}))
-        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_12__.Route, {
+          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Photos_Search__WEBPACK_IMPORTED_MODULE_11__.PhotosSearchPage, {}))
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_13__.Route, {
           path: '/empresas',
           element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Companies__WEBPACK_IMPORTED_MODULE_5__.CompaniesPage, {}))
         })]
@@ -2455,16 +2460,18 @@ var CompanyInfoCard = function CompanyInfoCard(props) {
       children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("table", __assign({
         className: "bank-accounts"
       }, {
-        children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("thead", {
-          children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("th", {
-            children: "Banco"
-          }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("th", {
-            children: "Ag\xEAncia"
-          }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("th", {
-            children: "Conta"
-          })]
+        children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("thead", {
+          children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("tr", {
+            children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("th", {
+              children: "Banco"
+            }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("th", {
+              children: "Ag\xEAncia"
+            }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("th", {
+              children: "Conta"
+            })]
+          })
         }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("tbody", {
-          children: accounts.map(function (account) {
+          children: accounts.map(function (account, index) {
             return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("tr", {
               children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("td", {
                 children: account.bank
@@ -2473,7 +2480,7 @@ var CompanyInfoCard = function CompanyInfoCard(props) {
               }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("td", {
                 children: account.account
               })]
-            });
+            }, index);
           })
         })]
       }))
@@ -2485,12 +2492,12 @@ var CompanyInfoCard = function CompanyInfoCard(props) {
       }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({
         className: "sellercentrals-list"
       }, {
-        children: sellercentrals.map(function (sellercentral) {
+        children: sellercentrals.map(function (sellercentral, index) {
           return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({
             className: "sellercentral"
           }, {
             children: sellercentral
-          }));
+          }), index);
         })
       }))]
     }))]
@@ -3127,6 +3134,80 @@ var configureDatepickers = function configureDatepickers() {
 
 /***/ }),
 
+/***/ "./resources/react-app/src/components/PDOCrud/functions/configureInvoiceField.tsx":
+/*!****************************************************************************************!*\
+  !*** ./resources/react-app/src/components/PDOCrud/functions/configureInvoiceField.tsx ***!
+  \****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _services_axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../services/axios */ "./resources/react-app/src/services/axios.ts");
+/* harmony import */ var _getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getColumnFieldIndex */ "./resources/react-app/src/components/PDOCrud/functions/getColumnFieldIndex.ts");
+
+
+
+var onChange = function onChange(input) {};
+
+var configureInvoiceField = function configureInvoiceField() {
+  var _a;
+
+  var invoiceIdx = (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_1__["default"])("NF");
+  if (invoiceIdx === -1) return;
+  var rows = (_a = document.querySelector(".pdocrud-table > tbody")) === null || _a === void 0 ? void 0 : _a.children;
+  var cells = {};
+  var numbersList = "";
+
+  for (var i = 1; i < rows.length; i++) {
+    var cell = rows[i].children[invoiceIdx];
+    var input = cell.children[0];
+    var invoiceNumber = input.value;
+
+    input.oninput = function (event) {
+      var input = event.target;
+      var value = input.value;
+      if (value.length !== 44) return;
+      input.value = value.substring(29, 34);
+    };
+
+    numbersList += numbersList === "" ? invoiceNumber : ",".concat(invoiceNumber);
+    cells[invoiceNumber] = cells[invoiceNumber] ? cells[invoiceNumber] : [];
+    cells[invoiceNumber].push(cell);
+  }
+
+  _services_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("/api/photo/verify-list?numbers_list=".concat(numbersList)).then(function (response) {
+    return response.data;
+  }).then(function (response) {
+    return Object.keys(response).forEach(function (number) {
+      if (!response[number]) return;
+      cells[number].forEach(function (cell) {
+        var div = document.createElement('div');
+        var i = document.createElement('i');
+        i.className = "fa-solid fa-image";
+        div.appendChild(i);
+        div.className = "photo-icon";
+
+        div.onclick = function () {
+          var anchor = document.createElement('a');
+          anchor.href = "/fotos/pesquisar?photo_number=".concat(number);
+          anchor.target = "blank";
+          anchor.click();
+        };
+
+        cell.appendChild(div);
+        cell.className = cell.className + " photo-link";
+      });
+    });
+  });
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (configureInvoiceField);
+
+/***/ }),
+
 /***/ "./resources/react-app/src/components/PDOCrud/functions/configurePage.ts":
 /*!*******************************************************************************!*\
   !*** ./resources/react-app/src/components/PDOCrud/functions/configurePage.ts ***!
@@ -3145,7 +3226,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _setTopScrollBar__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./setTopScrollBar */ "./resources/react-app/src/components/PDOCrud/functions/setTopScrollBar.tsx");
 /* harmony import */ var _setDeadlineColumn__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./setDeadlineColumn */ "./resources/react-app/src/components/PDOCrud/functions/setDeadlineColumn.ts");
 /* harmony import */ var _setURLColumn__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./setURLColumn */ "./resources/react-app/src/components/PDOCrud/functions/setURLColumn.ts");
-/* harmony import */ var _setPhotoLink__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./setPhotoLink */ "./resources/react-app/src/components/PDOCrud/functions/setPhotoLink.tsx");
+/* harmony import */ var _configureInvoiceField__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./configureInvoiceField */ "./resources/react-app/src/components/PDOCrud/functions/configureInvoiceField.tsx");
 /* harmony import */ var _setSearchTrim__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./setSearchTrim */ "./resources/react-app/src/components/PDOCrud/functions/setSearchTrim.ts");
 /* harmony import */ var _configureDatepickers__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./configureDatepickers */ "./resources/react-app/src/components/PDOCrud/functions/configureDatepickers.ts");
 /* harmony import */ var _configureAddressVerifiedColumn__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./configureAddressVerifiedColumn */ "./resources/react-app/src/components/PDOCrud/functions/configureAddressVerifiedColumn.ts");
@@ -3178,7 +3259,7 @@ var configurePage = function configurePage(elemRef, refModal, refModalId, refOnl
   (0,_setOpenModalEvent__WEBPACK_IMPORTED_MODULE_3__["default"])(refModal, refModalId, refOnlineOrderNumber, refURLInput);
   (0,_setTopScrollBar__WEBPACK_IMPORTED_MODULE_4__["default"])(document.querySelector(".panel-body"));
   (0,_setConfigurationReapply__WEBPACK_IMPORTED_MODULE_2__["default"])(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput);
-  (0,_setPhotoLink__WEBPACK_IMPORTED_MODULE_7__["default"])();
+  (0,_configureInvoiceField__WEBPACK_IMPORTED_MODULE_7__["default"])();
   (0,_setSearchTrim__WEBPACK_IMPORTED_MODULE_8__["default"])();
   (0,_configureDatepickers__WEBPACK_IMPORTED_MODULE_9__["default"])();
   (0,_configureAddressVerifiedColumn__WEBPACK_IMPORTED_MODULE_10__["default"])();
@@ -3554,70 +3635,6 @@ var openModal = function openModal(modal, modalId, onlineOrderNumber, urlInput, 
 
 /***/ }),
 
-/***/ "./resources/react-app/src/components/PDOCrud/functions/setPhotoLink.tsx":
-/*!*******************************************************************************!*\
-  !*** ./resources/react-app/src/components/PDOCrud/functions/setPhotoLink.tsx ***!
-  \*******************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _services_axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../services/axios */ "./resources/react-app/src/services/axios.ts");
-/* harmony import */ var _getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getColumnFieldIndex */ "./resources/react-app/src/components/PDOCrud/functions/getColumnFieldIndex.ts");
-
-
-
-var setPhotoLink = function setPhotoLink() {
-  var _a;
-
-  var invoiceIdx = (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_1__["default"])("NF");
-  if (invoiceIdx === -1) return;
-  var rows = (_a = document.querySelector(".pdocrud-table > tbody")) === null || _a === void 0 ? void 0 : _a.children;
-  var cells = {};
-  var numbersList = "";
-
-  for (var i = 1; i < rows.length; i++) {
-    var cell = rows[i].children[invoiceIdx];
-    var input = cell.children[0];
-    var invoiceNumber = input.value;
-    numbersList += numbersList === "" ? invoiceNumber : ",".concat(invoiceNumber);
-    cells[invoiceNumber] = cells[invoiceNumber] ? cells[invoiceNumber] : [];
-    cells[invoiceNumber].push(cell);
-  }
-
-  _services_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("/api/photo/verify-list?numbers_list=".concat(numbersList)).then(function (response) {
-    return response.data;
-  }).then(function (response) {
-    return Object.keys(response).forEach(function (number) {
-      if (!response[number]) return;
-      cells[number].forEach(function (cell) {
-        var div = document.createElement('div');
-        var i = document.createElement('i');
-        i.className = "fa-solid fa-image";
-        div.appendChild(i);
-        div.className = "photo-icon";
-
-        div.onclick = function () {
-          var anchor = document.createElement('a');
-          anchor.href = "/fotos/pesquisar?photo_number=".concat(number);
-          anchor.target = "blank";
-          anchor.click();
-        };
-
-        cell.appendChild(div);
-        cell.className = cell.className + " photo-link";
-      });
-    });
-  });
-};
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (setPhotoLink);
-
-/***/ }),
-
 /***/ "./resources/react-app/src/components/PDOCrud/functions/setSearchTrim.ts":
 /*!*******************************************************************************!*\
   !*** ./resources/react-app/src/components/PDOCrud/functions/setSearchTrim.ts ***!
@@ -3964,7 +3981,7 @@ var PhotoForm = function PhotoForm() {
     var input = event.target;
     var value = input.value;
     if (value.length !== 44) return;
-    input.value = "".concat(Number(value.substring(25, 34)));
+    input.value = value.substring(29, 34);
   };
 
   return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
@@ -4424,7 +4441,7 @@ var CompaniesPage = function CompaniesPage() {
     _services_axios__WEBPACK_IMPORTED_MODULE_4__["default"].get('/api/company/read-info').then(function (response) {
       return response.data;
     }).then(function (response) {
-      setCompanyCards(response.map(function (company) {
+      setCompanyCards(response.map(function (company, index) {
         return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_CompanyInfoCard__WEBPACK_IMPORTED_MODULE_2__.CompanyInfoCard, {
           fantasyName: company.fantasy_name,
           companyName: company.company_name,
@@ -4434,7 +4451,7 @@ var CompaniesPage = function CompaniesPage() {
           municipalRegistration: company.municipal_registration,
           accounts: company.accounts,
           sellercentrals: company.sellercentrals
-        });
+        }, index);
       }));
     });
   }, [setCompanyCards]);
@@ -4501,7 +4518,8 @@ var HomePage = function HomePage() {
       icon: "/icons/gestao.png",
       label: "Controle de pedidos",
       url: "/pedidos"
-    }, {
+    }, // {icon: "/icons/upload-de-arquivo.png", label: "Upload de arquivos", url: "/arquivo-upload"},
+    {
       icon: "/icons/expedição.png",
       label: "Expedição",
       url: "/expedicao"
@@ -4555,6 +4573,79 @@ var Login = function Login() {
     children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_LoginForm__WEBPACK_IMPORTED_MODULE_1__.LoginForm, {})
   }));
 };
+
+/***/ }),
+
+/***/ "./resources/react-app/src/pages/Orders/UploadFile/index.tsx":
+/*!*******************************************************************!*\
+  !*** ./resources/react-app/src/pages/Orders/UploadFile/index.tsx ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./style.css */ "./resources/react-app/src/pages/Orders/UploadFile/style.css");
+var __assign = undefined && undefined.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+
+
+
+
+var UploadFilePage = function UploadFilePage() {
+  var uploadTypes = ["Atualização de pedidos"];
+
+  var _a = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
+      selectOptions = _a[0],
+      setSelectOptions = _a[1];
+
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+    setSelectOptions(uploadTypes.map(function (type, idx) {
+      return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("option", {
+        children: type
+      }, idx);
+    }));
+  }, [uploadTypes]);
+  return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({
+    className: "upload-file-page"
+  }, {
+    children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
+      className: "upload-container"
+    }, {
+      children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("select", __assign({
+        name: "",
+        id: ""
+      }, {
+        children: selectOptions
+      })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
+        type: "file",
+        name: "",
+        id: ""
+      })]
+    }))
+  }));
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (UploadFilePage);
 
 /***/ }),
 
@@ -5027,7 +5118,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".company-info-card {\r\n  min-width: 400px;\r\n  height: auto;\r\n  width: 35%;\r\n  padding: 10px 0;\r\n  background-color: white;\r\n  margin: 10px 0;\r\n  border: 1px solid black;\r\n  border-radius: 5px;\r\n  display: flex;\r\n  flex-direction: column;\r\n  justify-content: center;\r\n  align-items: center;\r\n}\r\n\r\n.company-info-card > div {\r\n  display: flex;\r\n  flex-direction: column;\r\n}\r\n\r\nhr {\r\n  width: 80%;\r\n}\r\n\r\n.company-numbers {\r\n  display: flex;\r\n  flex-direction: row !important;\r\n}\r\n\r\n.company-numbers > div {\r\n  display: flex;\r\n  flex-direction: column;\r\n}\r\n\r\n.bank-accounts {\r\n  border: 1px solid black;\r\n  border-radius: 3px;\r\n}\r\n\r\n.bank-accounts > thead > th {\r\n  border-bottom: 1px solid black;\r\n}\r\n\r\n.sellercentrals-container {\r\n  width: 90%;\r\n}\r\n\r\n.sellercentrals-list {\r\n  display: flex;\r\n  flex-wrap: wrap;\r\n  justify-content: space-around;\r\n}\r\n\r\n.sellercentral {\r\n  padding: 1px 2px;\r\n  margin-bottom: 1px;\r\n  border-radius: 3px;\r\n  background-color: black;\r\n  color: white;\r\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".company-info-card {\r\n  min-width: 400px;\r\n  height: auto;\r\n  width: 35%;\r\n  padding: 10px 0;\r\n  background-color: white;\r\n  margin: 10px 0;\r\n  border: 1px solid black;\r\n  border-radius: 5px;\r\n  display: flex;\r\n  flex-direction: column;\r\n  justify-content: center;\r\n  align-items: center;\r\n}\r\n\r\n.company-info-card > div {\r\n  display: flex;\r\n  flex-direction: column;\r\n}\r\n\r\nhr {\r\n  width: 80%;\r\n}\r\n\r\n.company-numbers {\r\n  display: flex;\r\n  flex-direction: row !important;\r\n}\r\n\r\n.company-numbers > div {\r\n  display: flex;\r\n  flex-direction: column;\r\n}\r\n\r\n.bank-accounts {\r\n  border: 1px solid black;\r\n  border-radius: 3px;\r\n}\r\n\r\n.bank-accounts > thead > tr > th {\r\n  border-bottom: 1px solid black;\r\n}\r\n\r\n.sellercentrals-container {\r\n  width: 90%;\r\n}\r\n\r\n.sellercentrals-list {\r\n  display: flex;\r\n  flex-wrap: wrap;\r\n  justify-content: space-around;\r\n}\r\n\r\n.sellercentral {\r\n  padding: 1px 2px;\r\n  margin-bottom: 1px;\r\n  border-radius: 3px;\r\n  background-color: black;\r\n  color: white;\r\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -5364,6 +5455,30 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
 ___CSS_LOADER_EXPORT___.push([module.id, "#login_page {\n\tbackground-color: #000000;\n\twidth: 100%;\n\theight: 100vh;\n\tdisplay: grid;\n\tplace-items: center;\n}\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/pages/Orders/UploadFile/style.css":
+/*!*****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/pages/Orders/UploadFile/style.css ***!
+  \*****************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, ".upload-file-page {\r\n  height: 100vh;\r\n  background-color: #f2f4f5;\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  justify-content: center;\r\n}\r\n\r\n.upload-container {\r\n  height: 70%;\r\n  width: 60%;\r\n  background-color: white;\r\n  border-radius: 5px;\r\n  border: 1px solid black;\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  justify-content: center;\r\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -44591,6 +44706,36 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_2_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!../../../../../node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./style.css */ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/pages/Login/style.css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_2_style_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_2_style_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
+/***/ "./resources/react-app/src/pages/Orders/UploadFile/style.css":
+/*!*******************************************************************!*\
+  !*** ./resources/react-app/src/pages/Orders/UploadFile/style.css ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_6_oneOf_1_use_2_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!../../../../../../node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./style.css */ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].oneOf[1].use[2]!./resources/react-app/src/pages/Orders/UploadFile/style.css");
 
             
 
