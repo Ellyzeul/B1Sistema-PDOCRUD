@@ -4,6 +4,10 @@ use Illuminate\Support\Facades\DB;
 
 class Phase
 {
+    private static array $generalOptions = [
+        "general" => "Ir para a geral", 
+        "não-verificado" => "Endereços a arrumar"
+    ];
     public static function read($email)
     {
         $results = DB::select("CALL select_phases_of_user(?)", [
@@ -18,7 +22,7 @@ class Phase
                 : "inicio";
             if($label == "inicio") {
                 $toAppend = [[
-                    "name" => isset($urlParts[1]) ? "Endereços a arrumar" : "Ir para a geral",
+                    "name" => Phase::$generalOptions[$urlParts[1] ?? "general"], 
                     "url" => $item->url
                 ]];
                 $items[$label] = isset($items[$label])

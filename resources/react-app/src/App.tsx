@@ -10,6 +10,7 @@ import { HomePage } from './pages/Home';
 import { ShipmentPage } from './pages/Home/Shipment';
 import { Login } from './pages/Login';
 import { OrdersPage } from './pages/Orders';
+import UploadFilePage from './pages/Orders/UploadFile';
 import { PhotosSearchPage } from './pages/Photos/Search';
 import { PhotosUploadPage } from './pages/Photos/Upload';
 
@@ -40,6 +41,7 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/' element={getElement(<HomePage/>)} />
           <Route path='/pedidos' element={getElement(<OrdersPage/>)} />
+          <Route path='/arquivo-upload' element={getElement(<UploadFilePage/>)} />
           <Route path='/expedicao' element={getElement(<ShipmentPage/>)} />
           <Route path='/fotos/enviar' element={getElement(<PhotosUploadPage/>)} />
           <Route path='/fotos/pesquisar' element={getElement(<PhotosSearchPage/>)} />
