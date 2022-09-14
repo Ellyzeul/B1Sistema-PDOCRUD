@@ -74,18 +74,38 @@ class Photo extends Model
         return $response;
     }
 
-    public function verifyFromList(string $numberList) {
+    public function verifyFromList(array $numbers) {
+        $params = $this->getSubqueryParams($numbers);
         $results = DB::select(
-            "CALL select_photos_from_list(?)",
-            [$numberList]
+            "SELECT SUBSTRING(name FROM 1 FOR POSITION('.' IN name) - 1) AS name 
+             FROM photos
+             WHERE SUBSTRING(name FROM 1 FOR POSITION('.' IN name) - 1) IN (
+                $params
+             )"
         );
         if(isset($results[0]->critical_warning)) return ["message" => $results[0]->critical_warning];
 
-        $photoNumbers = explode(",", $numberList);
         $response = [];
-        foreach($photoNumbers as $number) $response[$number] = false;
+        foreach($numbers as $number) $response[$number] = false;
         foreach($results as $result) $response[$result->name] = true;
 
         return $response;
+    }
+
+    private function getSubqueryParams(array $numbers)
+    {
+        $patterns = [
+            '/--/',
+            '/"/',
+            '/\'/',
+            '/;/',
+        ];
+        $blankStr = array_fill(0, count($patterns), "");
+        $prepareParams = array_map(function($elem) use ($patterns, $blankStr) {
+            return "'" . \preg_replace($patterns, $blankStr, $elem) . "'";
+        }, $numbers);
+        $subquery = "SELECT " . implode(' UNION SELECT ', $prepareParams);
+
+        return $subquery;
     }
 }
