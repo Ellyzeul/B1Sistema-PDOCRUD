@@ -32,9 +32,13 @@ class PhotoController extends Controller
 
     public static function verifyFromList(Request $request)
     {
-        $numbersList = $request->input('numbers_list') ?? "";
+        $rawNumbers = $request->input('numbers_list') ?? "";
+        $numbers = array_filter(explode(",", $rawNumbers), function($elem) {
+            return $elem != "";
+        });
+
         $photo = new Photo();
-        $response = $photo->verifyFromList($numbersList);
+        $response = $photo->verifyFromList($numbers);
 
         return $response;
     }
