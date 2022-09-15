@@ -2936,6 +2936,11 @@ var Navbar = function Navbar(props) {
     logo.style.filter = "invert(0)";
   };
 
+  var doLogout = function doLogout() {
+    window.localStorage.setItem("userData", "");
+    window.location.pathname = '/login';
+  };
+
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     var toUpdate = [];
     var i = 0;
@@ -2965,13 +2970,20 @@ var Navbar = function Navbar(props) {
       className: "nav-bar-dropdowns"
     }, {
       children: dropdowns
-    })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({
+    })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
       className: "nav-bar-img nav-bar-img-right"
     }, {
-      children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("img", {
+      children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("img", {
         src: "/b1_logo.png",
         alt: ""
-      })
+      }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({
+        className: "logout-btn",
+        onClick: function onClick() {
+          return doLogout();
+        }
+      }, {
+        children: "Logout"
+      }))]
     }))]
   }));
 };
@@ -5268,7 +5280,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".nav-bar {\r\n\theight: 60px;\r\n\tpadding: 0;\r\n\tmargin: 0;\r\n\tdisplay: grid;\r\n\tgrid-template-columns: 70px auto 10%;\r\n\tbackground-color: black;\r\n}\r\n\r\n.nav-bar-img {\r\n\theight: 100%;\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\tjustify-content: center;\r\n}\r\n.nav-bar-img-clickable:hover {\r\n\tcursor: pointer;\r\n\tbackground-color: white;\r\n}\r\n.nav-bar-img > img {\r\n\theight: 55px;\r\n}\r\n\r\n@media only screen and (max-width: 1080px) {\r\n\t.nav-bar-img-right > img {\r\n\t\tdisplay: none;\r\n\t}\r\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".nav-bar {\r\n\theight: 60px;\r\n\tpadding: 0;\r\n\tmargin: 0;\r\n\tdisplay: grid;\r\n\tgrid-template-columns: 70px auto 10%;\r\n\tbackground-color: black;\r\n}\r\n\r\n.nav-bar-img {\r\n\theight: 100%;\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\tjustify-content: center;\r\n}\r\n.nav-bar-img-clickable:hover {\r\n\tcursor: pointer;\r\n\tbackground-color: white;\r\n}\r\n.nav-bar-img > img {\r\n\theight: 55px;\r\n}\r\n\r\n.nav-bar-img-right {\r\n\tposition: relative;\r\n}\r\n\r\n.logout-btn {\r\n\tposition: absolute;\r\n\tbackground-color: white;\r\n\twidth: 100%;\r\n\theight: 100%;\r\n\tdisplay: grid;\r\n\tplace-items: center;\r\n\topacity: 0;\r\n\t-webkit-user-select: none;\r\n\t        user-select: none;\r\n}\r\n\r\n.logout-btn:hover {\r\n\topacity: 1;\r\n\ttransition: 125ms;\r\n\tcursor: pointer;\r\n}\r\n\r\n@media only screen and (max-width: 1080px) {\r\n\t.nav-bar-img-right > img {\r\n\t\tdisplay: none;\r\n\t}\r\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

@@ -26,6 +26,11 @@ export const Navbar = (props: NavbarProp) => {
 		logo.style.filter = "invert(0)"
 	}
 
+	const doLogout = () => {
+		window.localStorage.setItem("userData", "");
+		window.location.pathname = '/login'
+	}
+
 	useEffect(() => {
 		const toUpdate = [] as JSX.Element[]
 		let i = 0
@@ -52,6 +57,7 @@ export const Navbar = (props: NavbarProp) => {
 			</div>
 			<div className="nav-bar-img nav-bar-img-right">
 				<img src="/b1_logo.png" alt="" />
+				<div className="logout-btn" onClick={() => doLogout()}>Logout</div>
 			</div>
 		</nav>
 	)

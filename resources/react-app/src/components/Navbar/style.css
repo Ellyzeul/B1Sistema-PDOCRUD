@@ -21,6 +21,27 @@
 	height: 55px;
 }
 
+.nav-bar-img-right {
+	position: relative;
+}
+
+.logout-btn {
+	position: absolute;
+	background-color: white;
+	width: 100%;
+	height: 100%;
+	display: grid;
+	place-items: center;
+	opacity: 0;
+	user-select: none;
+}
+
+.logout-btn:hover {
+	opacity: 1;
+	transition: 125ms;
+	cursor: pointer;
+}
+
 @media only screen and (max-width: 1080px) {
 	.nav-bar-img-right > img {
 		display: none;
