@@ -2997,24 +2997,23 @@ __webpack_require__.r(__webpack_exports__);
 var configureAddressVerifiedColumn = function configureAddressVerifiedColumn() {
   if (!configureAddressVerifiedColumn.colIdx) configureAddressVerifiedColumn.colIdx = (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_1__["default"])("Endereço arrumado");
   if (configureAddressVerifiedColumn.colIdx === -1) return;
-  var table = document.querySelector(".pdocrud-table");
-  if (!table) return;
-  configureHeader(table, configureAddressVerifiedColumn.colIdx);
-  configureRows(table, configureAddressVerifiedColumn.colIdx);
+  var headers = document.querySelector(".pdocrud-table > thead > tr");
+  var rows = Array.from(document.querySelectorAll(".pdocrud-table > tbody > tr"));
+  if (!headers || !rows) return;
+  configureHeader(headers, configureAddressVerifiedColumn.colIdx);
+  configureRows(rows, configureAddressVerifiedColumn.colIdx);
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (configureAddressVerifiedColumn);
 
-var configureHeader = function configureHeader(table, colIdx) {
-  var thead = table.tHead;
-  var header = thead.rows[0].cells[colIdx];
+var configureHeader = function configureHeader(headers, colIdx) {
+  var header = headers.cells[colIdx];
   var newIcon = document.createElement("i");
   newIcon.className = "fa-solid fa-truck";
   header.children[0].replaceWith(newIcon);
 };
 
-var configureRows = function configureRows(table, colIdx) {
-  var rows = Array.from(table.tBodies[0].rows);
+var configureRows = function configureRows(rows, colIdx) {
   var saveBtn = document.querySelector(".pdocrud-button-save");
   var checkboxes = [];
 
@@ -4271,25 +4270,25 @@ var __assign = undefined && undefined.__assign || function () {
 var TopScrollBar = function TopScrollBar() {
   var scrollRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
   var scrollContentRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
-  var table = document.querySelector(".table-responsive");
+  var tableDiv = document.querySelector(".table-responsive");
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     return updateScrollWidth();
-  }, [scrollContentRef, table]);
+  }, [scrollContentRef, tableDiv]);
 
   var updateScrollWidth = function updateScrollWidth() {
     if (!scrollContentRef.current) return;
     var scrollContent = scrollContentRef.current;
-    var scrollWidth = table.scrollWidth;
+    var scrollWidth = tableDiv.scrollWidth;
     scrollContent.style.width = "".concat(scrollWidth, "px");
   };
 
   var onScroll = function onScroll(event) {
     var scroll = event.target;
-    table.scrollLeft = scroll.scrollLeft;
+    tableDiv.scrollLeft = scroll.scrollLeft;
     updateScrollWidth(); // Ineficiente, corrigir futuramente
   };
 
-  table.addEventListener("scroll", function (event) {
+  tableDiv.addEventListener("scroll", function (event) {
     if (!scrollRef.current) return;
     var toScroll = event.target;
     var scroll = scrollRef.current;

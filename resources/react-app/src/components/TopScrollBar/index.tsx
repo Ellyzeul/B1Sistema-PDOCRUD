@@ -4,25 +4,25 @@ import "./style.css"
 export const TopScrollBar = () => {
   const scrollRef = useRef(null)
   const scrollContentRef = useRef(null)
-  const table = document.querySelector(".table-responsive") as HTMLTableElement
+  const tableDiv = document.querySelector(".table-responsive") as HTMLDivElement
 
-  useEffect(() => updateScrollWidth(), [scrollContentRef, table])
+  useEffect(() => updateScrollWidth(), [scrollContentRef, tableDiv])
 
   const updateScrollWidth = () => {
     if(!scrollContentRef.current) return
     const scrollContent = scrollContentRef.current as HTMLDivElement
-    const scrollWidth = table.scrollWidth
+    const scrollWidth = tableDiv.scrollWidth
 
     scrollContent.style.width = `${scrollWidth}px`
   }
 
   const onScroll: UIEventHandler<HTMLDivElement> = (event) => {
     const scroll = event.target as HTMLDivElement
-    table.scrollLeft = scroll.scrollLeft
+    tableDiv.scrollLeft = scroll.scrollLeft
     updateScrollWidth() // Ineficiente, corrigir futuramente
   }
 
-  table.addEventListener("scroll", (event) => {
+  tableDiv.addEventListener("scroll", (event) => {
     if(!scrollRef.current) return
 
     const toScroll = event.target as HTMLDivElement
