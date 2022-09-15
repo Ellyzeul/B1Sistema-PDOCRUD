@@ -1,9 +1,5 @@
-import { ChangeEventHandler } from "react"
 import api from "../../../services/axios"
 import getColumnFieldIndex from "./getColumnFieldIndex"
-
-const onChange = (input: HTMLInputElement) => {
-}
 
 const configureInvoiceField = () => {
   const invoiceIdx = getColumnFieldIndex("NF")
@@ -28,7 +24,6 @@ const configureInvoiceField = () => {
     cells[invoiceNumber].push(cell)
   }
 
-  console.log(numbersList)
   api.get(`/api/photo/verify-list?numbers_list=${numbersList}`)
     .then(response => response.data as {[key: string]: boolean})
     .then(response => Object.keys(response).forEach(number => {

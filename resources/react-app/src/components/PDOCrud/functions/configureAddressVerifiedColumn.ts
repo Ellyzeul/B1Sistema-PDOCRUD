@@ -1,29 +1,30 @@
 import api from "../../../services/axios"
 import getColumnFieldIndex from "./getColumnFieldIndex"
+import getTableHeaders from "./getTableHeaders"
+import getTableRows from "./getTableRows"
 
 const configureAddressVerifiedColumn: {(): void, colIdx?: number} = () => {
   if(!configureAddressVerifiedColumn.colIdx) configureAddressVerifiedColumn.colIdx = getColumnFieldIndex("Endereço arrumado")
   if(configureAddressVerifiedColumn.colIdx === -1) return
-  const table = document.querySelector(".pdocrud-table") as HTMLTableElement
-  if(!table) return
+  const headers = getTableHeaders()
+  const rows = getTableRows()
+  if(!headers || !rows) return
 
-  configureHeader(table, configureAddressVerifiedColumn.colIdx)
-  configureRows(table, configureAddressVerifiedColumn.colIdx)
+  configureHeader(headers, configureAddressVerifiedColumn.colIdx)
+  configureRows(rows, configureAddressVerifiedColumn.colIdx)
 }
 
 export default configureAddressVerifiedColumn
 
-const configureHeader = (table: HTMLTableElement, colIdx: number) => {
-  const thead = table.tHead as HTMLTableSectionElement
-  const header = thead.rows[0].cells[colIdx] as HTMLTableCellElement
+const configureHeader = (headers: HTMLTableRowElement, colIdx: number) => {
+  const header = headers.cells[colIdx] as HTMLTableCellElement
   const newIcon = document.createElement("i")
   newIcon.className = "fa-solid fa-truck"
   
   header.children[0].replaceWith(newIcon)
 }
 
-const configureRows = (table: HTMLTableElement, colIdx: number) => {
-  const rows = Array.from(table.tBodies[0].rows)
+const configureRows = (rows: HTMLTableRowElement[], colIdx: number) => {
   const saveBtn = document.querySelector(".pdocrud-button-save") as HTMLAnchorElement
   const checkboxes = [] as {id: string, checkbox: HTMLInputElement}[]
   const onKeyDown = (key: string) => {
@@ -42,8 +43,6 @@ const configureRows = (table: HTMLTableElement, colIdx: number) => {
     api.post('/api/orders/address-verified/update', {
       verifieds: request
     })
-      .then(response => response.data)
-      .then(response => console.log(response))
   }
 
   rows.forEach(row => {

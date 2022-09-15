@@ -2991,30 +2991,33 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _services_axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../services/axios */ "./resources/react-app/src/services/axios.ts");
 /* harmony import */ var _getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getColumnFieldIndex */ "./resources/react-app/src/components/PDOCrud/functions/getColumnFieldIndex.ts");
+/* harmony import */ var _getTableHeaders__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./getTableHeaders */ "./resources/react-app/src/components/PDOCrud/functions/getTableHeaders.ts");
+/* harmony import */ var _getTableRows__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./getTableRows */ "./resources/react-app/src/components/PDOCrud/functions/getTableRows.ts");
+
+
 
 
 
 var configureAddressVerifiedColumn = function configureAddressVerifiedColumn() {
   if (!configureAddressVerifiedColumn.colIdx) configureAddressVerifiedColumn.colIdx = (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_1__["default"])("Endereço arrumado");
   if (configureAddressVerifiedColumn.colIdx === -1) return;
-  var table = document.querySelector(".pdocrud-table");
-  if (!table) return;
-  configureHeader(table, configureAddressVerifiedColumn.colIdx);
-  configureRows(table, configureAddressVerifiedColumn.colIdx);
+  var headers = (0,_getTableHeaders__WEBPACK_IMPORTED_MODULE_2__["default"])();
+  var rows = (0,_getTableRows__WEBPACK_IMPORTED_MODULE_3__["default"])();
+  if (!headers || !rows) return;
+  configureHeader(headers, configureAddressVerifiedColumn.colIdx);
+  configureRows(rows, configureAddressVerifiedColumn.colIdx);
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (configureAddressVerifiedColumn);
 
-var configureHeader = function configureHeader(table, colIdx) {
-  var thead = table.tHead;
-  var header = thead.rows[0].cells[colIdx];
+var configureHeader = function configureHeader(headers, colIdx) {
+  var header = headers.cells[colIdx];
   var newIcon = document.createElement("i");
   newIcon.className = "fa-solid fa-truck";
   header.children[0].replaceWith(newIcon);
 };
 
-var configureRows = function configureRows(table, colIdx) {
-  var rows = Array.from(table.tBodies[0].rows);
+var configureRows = function configureRows(rows, colIdx) {
   var saveBtn = document.querySelector(".pdocrud-button-save");
   var checkboxes = [];
 
@@ -3033,10 +3036,6 @@ var configureRows = function configureRows(table, colIdx) {
     });
     _services_axios__WEBPACK_IMPORTED_MODULE_0__["default"].post('/api/orders/address-verified/update', {
       verifieds: request
-    }).then(function (response) {
-      return response.data;
-    }).then(function (response) {
-      return console.log(response);
     });
   };
 
@@ -3149,8 +3148,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getColumnFieldIndex */ "./resources/react-app/src/components/PDOCrud/functions/getColumnFieldIndex.ts");
 
 
-
-var onChange = function onChange(input) {};
 
 var configureInvoiceField = function configureInvoiceField() {
   var _a;
@@ -3295,6 +3292,26 @@ var getColumnFieldIndex = function getColumnFieldIndex(fieldName) {
 
 /***/ }),
 
+/***/ "./resources/react-app/src/components/PDOCrud/functions/getTableHeaders.ts":
+/*!*********************************************************************************!*\
+  !*** ./resources/react-app/src/components/PDOCrud/functions/getTableHeaders.ts ***!
+  \*********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var getTableHeaders = function getTableHeaders() {
+  var headers = document.querySelector(".pdocrud-table > thead > tr");
+  return headers;
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (getTableHeaders);
+
+/***/ }),
+
 /***/ "./resources/react-app/src/components/PDOCrud/functions/getTableRows.ts":
 /*!******************************************************************************!*\
   !*** ./resources/react-app/src/components/PDOCrud/functions/getTableRows.ts ***!
@@ -3306,13 +3323,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-var rows = null;
-
 var getTableRows = function getTableRows() {
-  if (!rows) {
-    rows = Array.from(document.querySelectorAll(".pdocrud-table > tbody > tr"));
-  }
-
+  var rows = Array.from(document.querySelectorAll(".pdocrud-table > tbody > tr"));
   return rows;
 };
 
@@ -3342,26 +3354,36 @@ var setCompaniesIcons = function setCompaniesIcons() {
   var colIdx = (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_1__["default"])("Empresa");
   if (colIdx === -1) return;
   var rows = (0,_getTableRows__WEBPACK_IMPORTED_MODULE_2__["default"])();
+  var thumbsMap = {};
+
+  if (Object.keys(thumbsMap).length !== 0) {
+    setIcons(thumbsMap, rows, colIdx);
+    return;
+  }
+
   _services_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get('/api/company/read-thumbnails').then(function (response) {
     return response.data;
   }).then(function (response) {
     var message = response.message,
         thumbs = response.thumbs;
-    var thumbsMap = {};
     thumbs.forEach(function (thumb) {
       return thumbsMap[thumb.id] = thumb.thumbnail;
     });
-    rows.forEach(function (row) {
-      var cell = row.cells[colIdx];
-      var id_company = Number(cell.innerText);
-      var icon = document.createElement('img');
-      icon.src = thumbsMap[id_company];
-      icon.height = 35;
-      cell.innerText = "";
-      cell.appendChild(icon);
-    });
+    setIcons(thumbsMap, rows, colIdx);
   });
   return;
+};
+
+var setIcons = function setIcons(thumbsMap, rows, colIdx) {
+  rows.forEach(function (row) {
+    var cell = row.cells[colIdx];
+    var id_company = Number(cell.innerText);
+    var icon = document.createElement('img');
+    icon.src = thumbsMap[id_company];
+    icon.height = 35;
+    cell.innerText = "";
+    cell.appendChild(icon);
+  });
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (setCompaniesIcons);
@@ -3416,6 +3438,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _configurePage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./configurePage */ "./resources/react-app/src/components/PDOCrud/functions/configurePage.ts");
+/* harmony import */ var _getTableHeaders__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getTableHeaders */ "./resources/react-app/src/components/PDOCrud/functions/getTableHeaders.ts");
+
 
 
 var setConfigurationReapply = function setConfigurationReapply(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput) {
@@ -3424,6 +3448,7 @@ var setConfigurationReapply = function setConfigurationReapply(elemRef, refModal
   var loadGif = document.querySelector("#pdocrud-ajax-loader");
   var pagesItems = document.querySelectorAll(".page-item > a");
   var totalPerPage = document.querySelectorAll('#pdocrud_records_per_page > option');
+  var headers = Array.from((0,_getTableHeaders__WEBPACK_IMPORTED_MODULE_1__["default"])().cells);
 
   var applyConfigsAfterTimeout = function applyConfigsAfterTimeout() {
     return setTimeout(function () {
@@ -3451,6 +3476,11 @@ var setConfigurationReapply = function setConfigurationReapply(elemRef, refModal
   });
   totalPerPage.forEach(function (option) {
     return option.onclick = function () {
+      return applyConfigsAfterTimeout();
+    };
+  });
+  headers.forEach(function (header) {
+    return header.onclick = function () {
       return applyConfigsAfterTimeout();
     };
   });
@@ -4272,25 +4302,25 @@ var __assign = undefined && undefined.__assign || function () {
 var TopScrollBar = function TopScrollBar() {
   var scrollRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
   var scrollContentRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
-  var table = document.querySelector(".table-responsive");
+  var tableDiv = document.querySelector(".table-responsive");
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     return updateScrollWidth();
-  }, [scrollContentRef, table]);
+  }, [scrollContentRef, tableDiv]);
 
   var updateScrollWidth = function updateScrollWidth() {
     if (!scrollContentRef.current) return;
     var scrollContent = scrollContentRef.current;
-    var scrollWidth = table.scrollWidth;
+    var scrollWidth = tableDiv.scrollWidth;
     scrollContent.style.width = "".concat(scrollWidth, "px");
   };
 
   var onScroll = function onScroll(event) {
     var scroll = event.target;
-    table.scrollLeft = scroll.scrollLeft;
+    tableDiv.scrollLeft = scroll.scrollLeft;
     updateScrollWidth(); // Ineficiente, corrigir futuramente
   };
 
-  table.addEventListener("scroll", function (event) {
+  tableDiv.addEventListener("scroll", function (event) {
     if (!scrollRef.current) return;
     var toScroll = event.target;
     var scroll = scrollRef.current;

@@ -41,7 +41,7 @@ $config["characterset"] = "utf8";
 $config["salt"] = "@3dsfsdf**9934324";
 /************************crud table settings ************************/
 //records to be shown per page
-$config["recordsPerPage"] = 100;
+$config["recordsPerPage"] = 25;
 //adjacents links
 $config["adjacents"] = 1;
 //show pagination links (true = show)
