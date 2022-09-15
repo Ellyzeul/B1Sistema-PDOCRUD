@@ -75,6 +75,7 @@ class Photo extends Model
     }
 
     public function verifyFromList(array $numbers) {
+        if($numbers == []) return [];
         $params = $this->getSubqueryParams($numbers);
         $results = DB::select(
             "SELECT SUBSTRING(name FROM 1 FOR POSITION('.' IN name) - 1) AS name 
@@ -83,7 +84,6 @@ class Photo extends Model
                 $params
              )"
         );
-        if(isset($results[0]->critical_warning)) return ["message" => $results[0]->critical_warning];
 
         $response = [];
         foreach($numbers as $number) $response[$number] = false;
