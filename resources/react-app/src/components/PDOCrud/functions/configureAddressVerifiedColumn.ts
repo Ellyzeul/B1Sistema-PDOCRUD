@@ -42,8 +42,6 @@ const configureRows = (table: HTMLTableElement, colIdx: number) => {
     api.post('/api/orders/address-verified/update', {
       verifieds: request
     })
-      .then(response => response.data)
-      .then(response => console.log(response))
   }
 
   rows.forEach(row => {
