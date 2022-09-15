@@ -2991,14 +2991,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _services_axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../services/axios */ "./resources/react-app/src/services/axios.ts");
 /* harmony import */ var _getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getColumnFieldIndex */ "./resources/react-app/src/components/PDOCrud/functions/getColumnFieldIndex.ts");
+/* harmony import */ var _getTableHeaders__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./getTableHeaders */ "./resources/react-app/src/components/PDOCrud/functions/getTableHeaders.ts");
+/* harmony import */ var _getTableRows__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./getTableRows */ "./resources/react-app/src/components/PDOCrud/functions/getTableRows.ts");
+
+
 
 
 
 var configureAddressVerifiedColumn = function configureAddressVerifiedColumn() {
   if (!configureAddressVerifiedColumn.colIdx) configureAddressVerifiedColumn.colIdx = (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_1__["default"])("Endereço arrumado");
   if (configureAddressVerifiedColumn.colIdx === -1) return;
-  var headers = document.querySelector(".pdocrud-table > thead > tr");
-  var rows = Array.from(document.querySelectorAll(".pdocrud-table > tbody > tr"));
+  var headers = (0,_getTableHeaders__WEBPACK_IMPORTED_MODULE_2__["default"])();
+  var rows = (0,_getTableRows__WEBPACK_IMPORTED_MODULE_3__["default"])();
   if (!headers || !rows) return;
   configureHeader(headers, configureAddressVerifiedColumn.colIdx);
   configureRows(rows, configureAddressVerifiedColumn.colIdx);
@@ -3288,6 +3292,26 @@ var getColumnFieldIndex = function getColumnFieldIndex(fieldName) {
 
 /***/ }),
 
+/***/ "./resources/react-app/src/components/PDOCrud/functions/getTableHeaders.ts":
+/*!*********************************************************************************!*\
+  !*** ./resources/react-app/src/components/PDOCrud/functions/getTableHeaders.ts ***!
+  \*********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var getTableHeaders = function getTableHeaders() {
+  var headers = document.querySelector(".pdocrud-table > thead > tr");
+  return headers;
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (getTableHeaders);
+
+/***/ }),
+
 /***/ "./resources/react-app/src/components/PDOCrud/functions/getTableRows.ts":
 /*!******************************************************************************!*\
   !*** ./resources/react-app/src/components/PDOCrud/functions/getTableRows.ts ***!
@@ -3414,6 +3438,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _configurePage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./configurePage */ "./resources/react-app/src/components/PDOCrud/functions/configurePage.ts");
+/* harmony import */ var _getTableHeaders__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getTableHeaders */ "./resources/react-app/src/components/PDOCrud/functions/getTableHeaders.ts");
+
 
 
 var setConfigurationReapply = function setConfigurationReapply(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput) {
@@ -3422,6 +3448,7 @@ var setConfigurationReapply = function setConfigurationReapply(elemRef, refModal
   var loadGif = document.querySelector("#pdocrud-ajax-loader");
   var pagesItems = document.querySelectorAll(".page-item > a");
   var totalPerPage = document.querySelectorAll('#pdocrud_records_per_page > option');
+  var headers = Array.from((0,_getTableHeaders__WEBPACK_IMPORTED_MODULE_1__["default"])().cells);
 
   var applyConfigsAfterTimeout = function applyConfigsAfterTimeout() {
     return setTimeout(function () {
@@ -3449,6 +3476,11 @@ var setConfigurationReapply = function setConfigurationReapply(elemRef, refModal
   });
   totalPerPage.forEach(function (option) {
     return option.onclick = function () {
+      return applyConfigsAfterTimeout();
+    };
+  });
+  headers.forEach(function (header) {
+    return header.onclick = function () {
       return applyConfigsAfterTimeout();
     };
   });
