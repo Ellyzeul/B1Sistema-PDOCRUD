@@ -3033,10 +3033,6 @@ var configureRows = function configureRows(table, colIdx) {
     });
     _services_axios__WEBPACK_IMPORTED_MODULE_0__["default"].post('/api/orders/address-verified/update', {
       verifieds: request
-    }).then(function (response) {
-      return response.data;
-    }).then(function (response) {
-      return console.log(response);
     });
   };
 
@@ -3149,8 +3145,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getColumnFieldIndex */ "./resources/react-app/src/components/PDOCrud/functions/getColumnFieldIndex.ts");
 
 
-
-var onChange = function onChange(input) {};
 
 var configureInvoiceField = function configureInvoiceField() {
   var _a;
@@ -3306,13 +3300,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-var rows = null;
-
 var getTableRows = function getTableRows() {
-  if (!rows) {
-    rows = Array.from(document.querySelectorAll(".pdocrud-table > tbody > tr"));
-  }
-
+  var rows = Array.from(document.querySelectorAll(".pdocrud-table > tbody > tr"));
   return rows;
 };
 
@@ -3342,26 +3331,36 @@ var setCompaniesIcons = function setCompaniesIcons() {
   var colIdx = (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_1__["default"])("Empresa");
   if (colIdx === -1) return;
   var rows = (0,_getTableRows__WEBPACK_IMPORTED_MODULE_2__["default"])();
+  var thumbsMap = {};
+
+  if (Object.keys(thumbsMap).length !== 0) {
+    setIcons(thumbsMap, rows, colIdx);
+    return;
+  }
+
   _services_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get('/api/company/read-thumbnails').then(function (response) {
     return response.data;
   }).then(function (response) {
     var message = response.message,
         thumbs = response.thumbs;
-    var thumbsMap = {};
     thumbs.forEach(function (thumb) {
       return thumbsMap[thumb.id] = thumb.thumbnail;
     });
-    rows.forEach(function (row) {
-      var cell = row.cells[colIdx];
-      var id_company = Number(cell.innerText);
-      var icon = document.createElement('img');
-      icon.src = thumbsMap[id_company];
-      icon.height = 35;
-      cell.innerText = "";
-      cell.appendChild(icon);
-    });
+    setIcons(thumbsMap, rows, colIdx);
   });
   return;
+};
+
+var setIcons = function setIcons(thumbsMap, rows, colIdx) {
+  rows.forEach(function (row) {
+    var cell = row.cells[colIdx];
+    var id_company = Number(cell.innerText);
+    var icon = document.createElement('img');
+    icon.src = thumbsMap[id_company];
+    icon.height = 35;
+    cell.innerText = "";
+    cell.appendChild(icon);
+  });
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (setCompaniesIcons);
