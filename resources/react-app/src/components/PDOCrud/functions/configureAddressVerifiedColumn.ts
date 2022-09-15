@@ -1,11 +1,13 @@
 import api from "../../../services/axios"
 import getColumnFieldIndex from "./getColumnFieldIndex"
+import getTableHeaders from "./getTableHeaders"
+import getTableRows from "./getTableRows"
 
 const configureAddressVerifiedColumn: {(): void, colIdx?: number} = () => {
   if(!configureAddressVerifiedColumn.colIdx) configureAddressVerifiedColumn.colIdx = getColumnFieldIndex("Endereço arrumado")
   if(configureAddressVerifiedColumn.colIdx === -1) return
-  const headers = document.querySelector(".pdocrud-table > thead > tr") as HTMLTableRowElement
-  const rows = Array.from(document.querySelectorAll(".pdocrud-table > tbody > tr")) as HTMLTableRowElement[]
+  const headers = getTableHeaders()
+  const rows = getTableRows()
   if(!headers || !rows) return
 
   configureHeader(headers, configureAddressVerifiedColumn.colIdx)
