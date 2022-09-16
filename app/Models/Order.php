@@ -5,6 +5,29 @@ use \PDOCrud;
 
 class Order
 {
+    private static array $columnsRename = [
+        "id" => "Nº",
+        "address_verified" => "Endereço verificado",
+        "id_company" => "Empresa",
+        "id_sellercentral" => "Canal de Venda",
+        "id_phase" => "Fase do processo",
+        "invoice_number" => "NF",
+        "online_order_number" => "ORIGEM",
+        "bling_number" => "Nº Bling",
+        "order_date" => "Data do pedido",
+        "expected_date" => "Data prevista",
+        "isbn" => "ISBN",
+        "selling_price" => "Valor",
+        "supplier_name" => "Fornecedor",
+        "purchase_date" => "Data da compra",
+        "id_delivery_address" => "Endereço de entrega",
+        "supplier_purchase_number" => "Nº Compra fornecedor",
+        "id_delivery_method" => "Forma de envio",
+        "tracking_code" => "Código de rastreio",
+        "collection_code" => "Código de coleta",
+        "delivered_date" => "Data de entrega",
+        "ask_rating" => "Pedir avaliação"
+    ];
     private static array $columnsPerPhase = [
         "id" => ["0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "3.1", "3.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado"],
         "address_verified" => ["0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "3.1", "3.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado"],
