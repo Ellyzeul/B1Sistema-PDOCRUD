@@ -180,6 +180,30 @@ Class PDOCrud {
     public $htmlTRStyle = ""; // css style for the html table row (tr)
     public $htmlTDStyle = ""; // css style for the html table col (td)
 
+    private static array $columnsRename = [
+        "Id" => "Nº",
+        "Address verified" => "Endereço verificado",
+        "Id company" => "Empresa",
+        "Id sellercentral" => "Canal de Venda",
+        "Id phase" => "Fase do processo",
+        "Invoice number" => "NF",
+        "Online order number" => "ORIGEM",
+        "Bling number" => "Nº Bling",
+        "Order date" => "Data do pedido",
+        "Expected date" => "Data prevista",
+        "Isbn" => "ISBN",
+        "Selling price" => "Valor",
+        "Supplier name" => "Fornecedor",
+        "Purchase date" => "Data da compra",
+        "Id delivery address" => "Endereço de entrega",
+        "Supplier purchase number" => "Nº Compra fornecedor",
+        "Id delivery method" => "Forma de envio",
+        "Tracking code" => "Código de rastreio",
+        "Collection code" => "Código de coleta",
+        "Delivered date" => "Data de entrega",
+        "Ask rating" => "Pedir avaliação"
+    ];
+
     /**
      * Constructor 
      * @param   string   $multi              If multiple instance of form used on the same page, then set this true to avoid loading multiple js/css
@@ -6322,12 +6346,18 @@ Class PDOCrud {
         if ($this->append)
             $colCount = $objPHPExcel->getActiveSheet()->getHighestRow() + 1;
 
-        foreach ($excelArray as $rows) {
+            $isHeader = true;
+            foreach ($excelArray as $rows) {
             $cellLoop = 0;
             foreach ($rows as $row) {
-                $objPHPExcel->getActiveSheet()->setCellValue($cells[$cellLoop] . $colCount, $row);
+                $value = $row;
+                if($isHeader) {
+                    $value = PDOCrud::$columnsRename[$row] ?? $value;
+                }
+                $objPHPExcel->getActiveSheet()->setCellValue($cells[$cellLoop] . $colCount, $value);
                 $cellLoop++;
             }
+            $isHeader = false;
             $colCount++;
         }
         if ($this->excelFormat == "2007") {
