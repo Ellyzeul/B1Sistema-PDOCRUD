@@ -1,23 +1,13 @@
-import { useEffect, useState } from "react"
+import { Navbar } from "../../../components/Navbar"
+import { UploadFile } from "../../../components/UploadFile"
 import "./style.css"
 
 const UploadFilePage = () => {
-  const uploadTypes = [
-    "Atualização de pedidos"
-  ]
-  const [selectOptions, setSelectOptions] = useState([] as JSX.Element[])
-
-  useEffect(() => {
-    setSelectOptions(uploadTypes.map((type, idx) => <option key={idx}>
-      {type}
-    </option>))
-  }, [uploadTypes])
-
   return (
-    <div className="upload-file-page">
-      <div className="upload-container">
-        <select name="" id="">{selectOptions}</select>
-        <input type="file" name="" id="" />
+    <div id="upload-file-page">
+      <Navbar items={[]} />
+      <div className="upload-file-container">
+        <UploadFile />
       </div>
     </div>
   )

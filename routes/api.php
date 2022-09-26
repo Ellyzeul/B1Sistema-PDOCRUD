@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\NavbarItemController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PhaseController;
@@ -74,6 +75,12 @@ Route::controller(CompanyController::class)
     ->group(function() {
         Route::get('/read-thumbnails', 'readThumbnails');
         Route::get('/read-info', 'readInfo');
+    });
+
+Route::controller(FileUploadController::class)
+    ->prefix('file-upload')
+    ->group(function() {
+        Route::post('/order-update', 'orderUpdate');
     });
 
 Route::get('/navbar-items/read', function (Request $request) {
