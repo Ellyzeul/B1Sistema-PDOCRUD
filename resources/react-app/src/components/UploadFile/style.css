@@ -1,0 +1,79 @@
+.upload-container {
+  height: 70%;
+  width: 60%;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid black;
+  display: grid;
+  grid-template-rows: 30% 25% 45%;
+}
+
+.upload-container > div {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#upload-type {
+  padding: 5px;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 3px;
+  transition: 125ms;
+}
+#upload-type:hover {
+  cursor: pointer;
+  background-color: black;
+  color: white;
+  transition: 125ms;
+}
+
+#upload-input {
+  display: none;
+}
+
+#upload-box {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  border: 2px dashed black;
+  border-radius: 3px;
+  display: grid;
+  grid-template-columns: 30% 70%;
+  user-select: none;
+}
+#upload-box:hover {
+  transition: 125ms;
+  background-color: black;
+  border-color: white;
+  color: white;
+  cursor: pointer;
+}
+#upload-box > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.fa-file {
+  font-size: xx-large;
+}
+
+.upload-box-unable {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.386);
+  color: #ffffff00;
+}
+.upload-box-unable:hover {
+  background-color: black;
+  color: white;
+  cursor: auto;
+}
+.upload-box-enable {
+  position: absolute;
+  opacity: 0;
+}
