@@ -1,18 +1,11 @@
-.upload-file-page {
-  height: 100vh;
-  background-color: #f2f4f5;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+#upload-file-page {
+  display: grid;
+  grid-template-rows: 60px calc(100vh - 60px);
 }
 
-.upload-container {
-  height: 70%;
-  width: 60%;
-  background-color: white;
-  border-radius: 5px;
-  border: 1px solid black;
+.upload-file-container {
+  height: 100%;
+  background-color: #f2f4f5;
   display: flex;
   flex-direction: column;
   align-items: center;

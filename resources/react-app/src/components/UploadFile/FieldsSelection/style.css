@@ -1,0 +1,54 @@
+.fields-selection {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-rows: 35% 65%;
+}
+
+.fields-selection > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.fields-selection-list {
+  overflow-y: auto;
+}
+
+.fields-selection-send-button {
+  border: none;
+  padding: 4px 8px;
+  background-color: rgb(41, 138, 70);
+  color: white;
+  border-radius: 3px;
+}
+.fields-selection-send-button:hover {
+  cursor: pointer;
+  background-color: rgb(11, 97, 37);
+}
+
+.field-toogle-disabled, .field-toogle-enabled, .field-untoogle {
+  height: 30px;
+  width: 200px;
+  border-radius: 3px;
+  margin: 0 0 5px 4px;
+  background-color: aqua;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  user-select: none;
+}
+.field-toogle-disabled:hover, .field-toogle-enabled:hover {
+  cursor: pointer;
+}
+.field-untoogle {
+  background-color: rgba(84, 84, 84, 0.35);
+}
+.field-toogle-disabled {
+  background-color: rgb(84, 84, 84);
+}
+.field-toogle-enabled {
+  background-color: rgb(9, 146, 37);
+}
