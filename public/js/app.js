@@ -4368,6 +4368,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _services_axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/axios */ "./resources/react-app/src/services/axios.ts");
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.mjs");
 var __assign = undefined && undefined.__assign || function () {
   __assign = Object.assign || function (t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -4383,6 +4384,7 @@ var __assign = undefined && undefined.__assign || function () {
 
   return __assign.apply(this, arguments);
 };
+
 
 
 
@@ -4422,6 +4424,7 @@ var FieldsSelection = function FieldsSelection(props) {
   };
 
   var sendUpdate = function sendUpdate() {
+    var loadingToastId = react_toastify__WEBPACK_IMPORTED_MODULE_4__.toast.loading("Processando...");
     var filteredUpdate = update.map(function (row) {
       var filteredRow = {};
       fields.forEach(function (field) {
@@ -4434,7 +4437,8 @@ var FieldsSelection = function FieldsSelection(props) {
     }).then(function (response) {
       return response.data;
     }).then(function (response) {
-      return console.log(response);
+      react_toastify__WEBPACK_IMPORTED_MODULE_4__.toast.dismiss(loadingToastId);
+      react_toastify__WEBPACK_IMPORTED_MODULE_4__.toast.success("Pedidos atualizados");
     });
   };
 
@@ -4465,7 +4469,7 @@ var FieldsSelection = function FieldsSelection(props) {
       className: "fields-selection-list"
     }, {
       children: selections
-    }))]
+    })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_toastify__WEBPACK_IMPORTED_MODULE_4__.ToastContainer, {})]
   }));
 };
 
