@@ -2,6 +2,7 @@ import { FieldSelectionProp } from "./types"
 import "./style.css"
 import { MouseEventHandler, useEffect, useState } from "react"
 import api from "../../../services/axios"
+import { toast, ToastContainer } from "react-toastify"
 
 export const FieldsSelection = (props: FieldSelectionProp) => {
   const { upload_type, fields, update } = props
@@ -28,6 +29,7 @@ export const FieldsSelection = (props: FieldSelectionProp) => {
   }
 
   const sendUpdate: MouseEventHandler = () => {
+    const loadingToastId = toast.loading("Processando...")
     const filteredUpdate = update
       .map(row => {
         const filteredRow = {} as {[key: string]: string}
@@ -41,7 +43,10 @@ export const FieldsSelection = (props: FieldSelectionProp) => {
       upload_data: filteredUpdate
     })
       .then(response => response.data)
-      .then(response => console.log(response))
+      .then((response) => {
+        toast.dismiss(loadingToastId)
+        toast.success("Pedidos atualizados")
+      })
   }
 
   useEffect(() => {
@@ -64,6 +69,7 @@ export const FieldsSelection = (props: FieldSelectionProp) => {
         <button className="fields-selection-send-button" onClick={sendUpdate}>Enviar</button>
       </div>
       <div className="fields-selection-list">{selections}</div>
+      <ToastContainer/>
     </section>
   )
 }
