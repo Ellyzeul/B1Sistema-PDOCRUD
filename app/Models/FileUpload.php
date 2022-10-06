@@ -50,11 +50,20 @@ class FileUpload extends Model
         $id = $registry["id"];
         $onlineOrderNumber = $registry["online_order_number"];
 
+        $registry = $this->treatUpdateDate($registry);
         DB::table("order_control")
             ->where("id", $id)
             ->where("online_order_number", $onlineOrderNumber)
             ->update($registry);
 
         return "Registro $id atualizado";
+    }
+
+    private function treatUpdateDate(array $registry)
+    {
+        if(isset($registry["purchase_date"])) $registry["purchase_date"] = \explode("T", $registry["purchase_date"])[0];
+        if(isset($registry["delivered_date"])) $registry["delivered_date"] = \explode("T", $registry["delivered_date"])[0];
+
+        return $registry;
     }
 }
