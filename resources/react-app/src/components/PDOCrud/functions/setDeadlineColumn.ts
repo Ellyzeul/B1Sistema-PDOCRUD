@@ -1,4 +1,4 @@
-import { intervalToDuration } from "date-fns";
+import { differenceInCalendarDays } from "date-fns";
 import getColumnFieldIndex from "./getColumnFieldIndex";
 
 type SetNewColumnPrototype = {
@@ -45,12 +45,10 @@ const setDeadlineColumn = () => {
 		if(end < start) return "Prazo vencido"
 		if(end === start) return "O prazo é hoje"
 
-		const interval = intervalToDuration({
-			start: start,
-			end: end
-		})
+		const interval = differenceInCalendarDays(end, start)
+		console.log(interval)
 
-		return `${(interval.days || 0) + 1} dias restantes`
+		return `${interval || 0} dias restantes`
 	}
 	setNewColumn("Dias para entrega", generateData)
 }
