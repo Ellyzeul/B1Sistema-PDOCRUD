@@ -1,7 +1,7 @@
 export const uploadTypes = [
   {message: "Selecionar...", value: "select"},
   {message: "Atualização de pedidos", value: "order-update"},
-  // {message: "Envio de pedidos", value: "order-upload"},
+  {message: "Envio de pedidos", value: "order-insert"},
 ]
 
 export const fields = {
@@ -27,5 +27,14 @@ export const fields = {
     {label: "Data de entrega", field_name: "delivered_date", updatable: true, required: false},
     {label: "Pedir avaliação", field_name: "ask_rating", updatable: true, required: false},
     {label: "Endereço verificado", field_name: "address_verified", updatable: true, required: false},
+  ],
+  "order-insert": [
+    {label: "ID da empresa", field_name: "id_company", updatable: true, required: true},
+    {label: "ID do país", field_name: "id_sellercentral", updatable: true, required: true},
+    {label: "Nº Amazon", field_name: "online_order_number", updatable: true, required: true},
+    {label: "Data do pedido", field_name: "order_date", updatable: true, required: true},
+    {label: "Data prevista", field_name: "expected_date", updatable: true, required: true},
+    {label: "ISBN", field_name: "isbn", updatable: true, required: true},
+    {label: "Valor", field_name: "selling_price", updatable: true, required: true},
   ]
 } as {[key: string]: {label: string, field_name: string, updatable: boolean, required: boolean}[]}
