@@ -43,7 +43,8 @@ export const FieldsSelection = (props: FieldSelectionProp) => {
       upload_data: filteredUpdate
     })
       .then(response => response.data)
-      .then((response) => {
+      .then(response => {
+        console.log(response)
         toast.dismiss(loadingToastId)
         toast.success("Pedidos atualizados")
       })

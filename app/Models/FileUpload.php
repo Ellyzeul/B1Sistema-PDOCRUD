@@ -56,7 +56,7 @@ class FileUpload extends Model
             ->where("online_order_number", $onlineOrderNumber)
             ->update($registry);
 
-        return "Registro $id atualizado";
+        return "Pedido $onlineOrderNumber atualizado";
     }
 
     private function treatUpdateDate(array $registry)
@@ -64,6 +64,41 @@ class FileUpload extends Model
         if(isset($registry["purchase_date"])) $registry["purchase_date"] = \explode("T", $registry["purchase_date"])[0];
         if(isset($registry["delivered_date"])) $registry["delivered_date"] = \explode("T", $registry["delivered_date"])[0];
 
+        return $registry;
+    }
+
+    public function orderInsert(array $data)
+    {
+        $responses = [];
+
+        foreach($data as $registry) {
+            array_push($responses, $this->insertRegistry($registry));
+        }
+
+        return $responses;
+    }
+
+    private function insertRegistry(array $registry)
+    {
+        $onlineOrderNumber = $registry["online_order_number"];
+        $registry = $this->treatInsertDate($registry);
+        DB::table("order_control")
+            ->insert($registry);
+        
+        return "Pedido $onlineOrderNumber inserido";
+    }
+
+    private function treatInsertDate(array $registry)
+    {
+        $registry["order_date"] = date("Y-m-d", strtotime($registry["order_date"]));
+
+        $expectedDate = strtotime($registry["expected_date"]);
+        $deliveryHour = intval(date("H", $expectedDate));
+        $subtractDay = ($deliveryHour > 0) && ($deliveryHour < 7);
+        $registry["expected_date"] = $subtractDay
+            ? date("Y-m-d", strtotime("-1 day", $expectedDate))
+            : date("Y-m-d", $expectedDate);
+        
         return $registry;
     }
 }

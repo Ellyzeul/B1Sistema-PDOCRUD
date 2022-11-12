@@ -4435,6 +4435,7 @@ var FieldsSelection = function FieldsSelection(props) {
     }).then(function (response) {
       return response.data;
     }).then(function (response) {
+      console.log(response);
       react_toastify__WEBPACK_IMPORTED_MODULE_4__.toast.dismiss(loadingToastId);
       react_toastify__WEBPACK_IMPORTED_MODULE_4__.toast.success("Pedidos atualizados");
     });
@@ -4491,8 +4492,10 @@ var uploadTypes = [{
 }, {
   message: "Atualização de pedidos",
   value: "order-update"
-} // {message: "Envio de pedidos", value: "order-upload"},
-];
+}, {
+  message: "Envio de pedidos",
+  value: "order-insert"
+}];
 var fields = {
   "order-update": [{
     label: "Nº",
@@ -4599,6 +4602,42 @@ var fields = {
     field_name: "address_verified",
     updatable: true,
     required: false
+  }],
+  "order-insert": [{
+    label: "ID da empresa",
+    field_name: "id_company",
+    updatable: true,
+    required: true
+  }, {
+    label: "ID do país",
+    field_name: "id_sellercentral",
+    updatable: true,
+    required: true
+  }, {
+    label: "Nº Amazon",
+    field_name: "online_order_number",
+    updatable: true,
+    required: true
+  }, {
+    label: "Data do pedido",
+    field_name: "order_date",
+    updatable: true,
+    required: true
+  }, {
+    label: "Data prevista",
+    field_name: "expected_date",
+    updatable: true,
+    required: true
+  }, {
+    label: "ISBN",
+    field_name: "isbn",
+    updatable: true,
+    required: true
+  }, {
+    label: "Valor",
+    field_name: "selling_price",
+    updatable: true,
+    required: true
   }]
 };
 

@@ -81,6 +81,7 @@ Route::controller(FileUploadController::class)
     ->prefix('file-upload')
     ->group(function() {
         Route::post('/order-update', 'orderUpdate');
+        Route::post('/order-insert', 'orderInsert');
     });
 
 Route::get('/navbar-items/read', function (Request $request) {

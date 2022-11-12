@@ -13,7 +13,7 @@ export const UploadFile = () => {
   const inputFileRef = useRef(null)
   const blockRef = useRef(null)
 
-  const onChangeSelect: () =>void = () => {
+  const onChangeSelect: () => void = () => {
     if(!selectRef.current || !blockRef.current) return onChangeSelect()
     const select = selectRef.current as HTMLSelectElement
     const block = blockRef.current as HTMLDivElement
