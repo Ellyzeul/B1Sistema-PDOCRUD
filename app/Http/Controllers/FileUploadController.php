@@ -17,11 +17,11 @@ class FileUploadController extends Controller
         return $response;
     }
 
-    public function orderInsert(Request $request)
+    public function orderAmazonInsert(Request $request)
     {
         $fileUpload = new FileUpload();
         $data = $request->input("upload_data");
-        $response = $fileUpload->orderInsert($data);
+        $response = $fileUpload->orderAmazonInsert($data);
 
         return $response;
     }

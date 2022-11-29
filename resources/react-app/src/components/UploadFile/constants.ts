@@ -1,7 +1,8 @@
 export const uploadTypes = [
   {message: "Selecionar...", value: "select"},
   {message: "Atualização de pedidos", value: "order-update"},
-  {message: "Envio de pedidos", value: "order-insert"},
+  {message: "Envio de pedidos Amazon", value: "order-amazon-insert"},
+  {message: "Ingestão de notas do FSist", value: "fsist-ingestion"},
 ]
 
 export const fields = {
@@ -28,7 +29,7 @@ export const fields = {
     {label: "Pedir avaliação", field_name: "ask_rating", updatable: true, required: false},
     {label: "Endereço verificado", field_name: "address_verified", updatable: true, required: false},
   ],
-  "order-insert": [
+  "order-amazon-insert": [
     {label: "ID da empresa", field_name: "id_company", updatable: true, required: true},
     {label: "ID do país", field_name: "id_sellercentral", updatable: true, required: true},
     {label: "Nº Amazon", field_name: "online_order_number", updatable: true, required: true},
@@ -36,5 +37,27 @@ export const fields = {
     {label: "Data prevista", field_name: "expected_date", updatable: true, required: true},
     {label: "ISBN", field_name: "isbn", updatable: true, required: true},
     {label: "Valor", field_name: "selling_price", updatable: true, required: true},
+  ],
+  "fsist-ingestion": [
+    {label: "Emissão Data/Hora", field_name: "emission", updatable: true, required: true},
+    {label: "Tipo", field_name: "type", updatable: true, required: true},
+    {label: "Status", field_name: "status", updatable: true, required: true},
+    {label: "Valor", field_name: "value", updatable: true, required: true},
+    {label: "Tem XML", field_name: "has_xml", updatable: true, required: true},
+    {label: "Origem", field_name: "origin", updatable: true, required: true},
+    {label: "CFOPs", field_name: "cfops", updatable: true, required: true},
+    {label: "Etiqueta", field_name: "tag", updatable: true, required: true},
+    {label: "Emitente CNPJ", field_name: "emitent_cnpj", updatable: true, required: true},
+    {label: "Emitente", field_name: "emitent_name", updatable: true, required: true},
+    {label: "Emitente IE", field_name: "emitent_ie", updatable: true, required: true},
+    {label: "Emitente UF", field_name: "emitent_uf", updatable: true, required: true},
+    {label: "Destinatário CNPJ/CPF", field_name: "recipient_cpf_cnpj", updatable: true, required: true},
+    {label: "Destinatário", field_name: "recipient_name", updatable: true, required: true},
+    {label: "Destinatário IE", field_name: "recipient_ie", updatable: true, required: true},
+    {label: "Destinatário UF", field_name: "recipient_uf", updatable: true, required: true},
+    {label: "Transportadora CNPJ/CPF", field_name: "deliverer_cpf_cnpj", updatable: true, required: true},
+    {label: "Transportadora", field_name: "deliverer_name", updatable: true, required: true},
+    {label: "Transportadora IE", field_name: "deliverer_ie", updatable: true, required: true},
+    {label: "Transportadora UF", field_name: "deliverer_uf", updatable: true, required: true},
   ]
 } as {[key: string]: {label: string, field_name: string, updatable: boolean, required: boolean}[]}

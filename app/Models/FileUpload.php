@@ -67,28 +67,28 @@ class FileUpload extends Model
         return $registry;
     }
 
-    public function orderInsert(array $data)
+    public function orderAmazonInsert(array $data)
     {
         $responses = [];
 
         foreach($data as $registry) {
-            array_push($responses, $this->insertRegistry($registry));
+            array_push($responses, $this->insertAmazonRegistry($registry));
         }
 
         return $responses;
     }
 
-    private function insertRegistry(array $registry)
+    private function insertAmazonRegistry(array $registry)
     {
         $onlineOrderNumber = $registry["online_order_number"];
-        $registry = $this->treatInsertDate($registry);
+        $registry = $this->treatInsertAmazonDate($registry);
         DB::table("order_control")
             ->insert($registry);
         
         return "Pedido $onlineOrderNumber inserido";
     }
 
-    private function treatInsertDate(array $registry)
+    private function treatInsertAmazonDate(array $registry)
     {
         $registry["order_date"] = date("Y-m-d", strtotime($registry["order_date"]));
 

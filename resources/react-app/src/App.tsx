@@ -13,6 +13,7 @@ import { OrdersPage } from './pages/Orders';
 import UploadFilePage from './pages/Orders/UploadFile';
 import { PhotosSearchPage } from './pages/Photos/Search';
 import { PhotosUploadPage } from './pages/Photos/Upload';
+import TrackingPage from './pages/Tracking';
 
 function App() {
   const userDataRaw = window.localStorage.getItem("userData")
@@ -46,6 +47,7 @@ function App() {
           <Route path='/fotos/enviar' element={getElement(<PhotosUploadPage/>)} />
           <Route path='/fotos/pesquisar' element={getElement(<PhotosSearchPage/>)} />
           <Route path='/empresas' element={getElement(<CompaniesPage/>)} />
+          <Route path='/rastreamento' element={getElement(<TrackingPage/>)} />
         </Routes>
       </NavbarContext.Provider>
     </UserDataContext.Provider>

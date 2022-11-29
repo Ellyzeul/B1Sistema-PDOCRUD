@@ -4493,8 +4493,11 @@ var uploadTypes = [{
   message: "Atualização de pedidos",
   value: "order-update"
 }, {
-  message: "Envio de pedidos",
-  value: "order-insert"
+  message: "Envio de pedidos Amazon",
+  value: "order-amazon-insert"
+}, {
+  message: "Ingestão de notas do FSist",
+  value: "fsist-ingestion"
 }];
 var fields = {
   "order-update": [{
@@ -4603,7 +4606,7 @@ var fields = {
     updatable: true,
     required: false
   }],
-  "order-insert": [{
+  "order-amazon-insert": [{
     label: "ID da empresa",
     field_name: "id_company",
     updatable: true,
@@ -4636,6 +4639,107 @@ var fields = {
   }, {
     label: "Valor",
     field_name: "selling_price",
+    updatable: true,
+    required: true
+  }],
+  "fsist-ingestion": [{
+    label: "Emissão Data/Hora",
+    field_name: "emission",
+    updatable: true,
+    required: true
+  }, {
+    label: "Tipo",
+    field_name: "type",
+    updatable: true,
+    required: true
+  }, {
+    label: "Status",
+    field_name: "status",
+    updatable: true,
+    required: true
+  }, {
+    label: "Valor",
+    field_name: "value",
+    updatable: true,
+    required: true
+  }, {
+    label: "Tem XML",
+    field_name: "has_xml",
+    updatable: true,
+    required: true
+  }, {
+    label: "Origem",
+    field_name: "origin",
+    updatable: true,
+    required: true
+  }, {
+    label: "CFOPs",
+    field_name: "cfops",
+    updatable: true,
+    required: true
+  }, {
+    label: "Etiqueta",
+    field_name: "tag",
+    updatable: true,
+    required: true
+  }, {
+    label: "Emitente CNPJ",
+    field_name: "emitent_cnpj",
+    updatable: true,
+    required: true
+  }, {
+    label: "Emitente",
+    field_name: "emitent_name",
+    updatable: true,
+    required: true
+  }, {
+    label: "Emitente IE",
+    field_name: "emitent_ie",
+    updatable: true,
+    required: true
+  }, {
+    label: "Emitente UF",
+    field_name: "emitent_uf",
+    updatable: true,
+    required: true
+  }, {
+    label: "Destinatário CNPJ/CPF",
+    field_name: "recipient_cpf_cnpj",
+    updatable: true,
+    required: true
+  }, {
+    label: "Destinatário",
+    field_name: "recipient_name",
+    updatable: true,
+    required: true
+  }, {
+    label: "Destinatário IE",
+    field_name: "recipient_ie",
+    updatable: true,
+    required: true
+  }, {
+    label: "Destinatário UF",
+    field_name: "recipient_uf",
+    updatable: true,
+    required: true
+  }, {
+    label: "Transportadora CNPJ/CPF",
+    field_name: "deliverer_cpf_cnpj",
+    updatable: true,
+    required: true
+  }, {
+    label: "Transportadora",
+    field_name: "deliverer_name",
+    updatable: true,
+    required: true
+  }, {
+    label: "Transportadora IE",
+    field_name: "deliverer_ie",
+    updatable: true,
+    required: true
+  }, {
+    label: "Transportadora UF",
+    field_name: "deliverer_uf",
     updatable: true,
     required: true
   }]
@@ -4753,15 +4857,24 @@ var UploadFile = function UploadFile() {
         var update = [];
         sheet.eachRow(function (row, index) {
           var toPush = {};
+          var fieldsKeys = Object.keys(validFields).map(function (key) {
+            return Number(key);
+          });
 
           if (index === 1) {
             readHeader(row);
             return;
           }
 
-          row.eachCell(function (cell) {
-            return toPush[validFields[cell.col]] = cell.value;
+          fieldsKeys.forEach(function (key) {
+            return toPush[validFields[key]] = row.getCell(key).value;
           });
+
+          if (index === 2) {
+            console.log(validFields);
+            console.log(toPush);
+          }
+
           update.push(toPush);
         });
         setUpdate(update);
