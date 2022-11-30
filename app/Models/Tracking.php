@@ -32,12 +32,14 @@ class Tracking extends Model
 				'trackings.delivery_expected_date',
 				'trackings.observation',
 			)
+			->where('order_control.id_phase', '=', '5.1')
+			->orWhere('order_control.id_phase', '=', '5.2')
 			->get();
 		
 		return $results;
 	}
 
-	public function updateOrInsertTracking(string $trackingCode, string $deliveryMethod)
+	public function updateOrInsertTracking(string $trackingCode, string | null $deliveryMethod)
 	{
 		if(!isset($this->supportedServices[$deliveryMethod])) return ["Serviço não suportado", 400];
 
@@ -61,8 +63,11 @@ class Tracking extends Model
 		$response = Http::withBasicAuth(env('CORREIOS_USERNAME'), env('CORREIOS_PASSWORD'))
 			->post('https://apps3.correios.com.br/areletronico/v1/ars/ultimoevento', [
 				'objetos' => [$trackingCode]
-			])[0]['eventos'][0];
+			]);
 		
+		if(!isset($response[0]['eventos'][0])) return [];
+		$response = $response[0]['eventos'][0];
+
 		return [
 			"status" => $response['descricaoEvento'],
 			"last_update_date" => date('Y-m-d', strtotime(str_replace('/', '-', $response['dataEvento']))),
@@ -88,10 +93,15 @@ class Tracking extends Model
 		foreach($results as $result) {
 			$toPush = ['tracking_code' => $result->tracking_code];
 
-			$this->updateOrInsertTracking(
-				$result->tracking_code, 
-				$result->delivery_method
-			);
+			try {
+				$this->updateOrInsertTracking(
+					$result->tracking_code, 
+					$result->delivery_method
+				);
+			}
+			catch(Exception $e) {
+				continue;
+			}
 		}
 	}
 }
