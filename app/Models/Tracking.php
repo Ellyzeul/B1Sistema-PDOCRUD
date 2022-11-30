@@ -12,7 +12,8 @@ class Tracking extends Model
 	use HasFactory;
 
 	private array $supportedServices = [
-		"Correios" => true
+		"Correios" => true,
+		"Jadlog" => true,
 	];
 
 	public function read()
@@ -45,6 +46,7 @@ class Tracking extends Model
 
 		$response = null;
 		if($deliveryMethod == "Correios") $response = $this->fetchCorreios($trackingCode);
+		if($deliveryMethod == "Jadlog") $response = $this->fetchJadlog($trackingCode);
 
 		DB::table('trackings')->updateOrInsert(
 			['tracking_code' => $trackingCode],
@@ -72,6 +74,27 @@ class Tracking extends Model
 			"status" => $response['descricaoEvento'],
 			"last_update_date" => date('Y-m-d', strtotime(str_replace('/', '-', $response['dataEvento']))),
 			"details" => "{$response['nomeUnidade']} - {$response['municipio']} - {$response['uf']}",
+		];
+	}
+
+	private function fetchJadlog(string $shipmentId)
+	{
+		$response = Http::withToken(env('JADLOG_API_KEY'))
+			->post('www.jadlog.com.br/embarcador/api/tracking/consultar', [
+				'consulta' => [['shipmentId' => $shipmentId]]
+			]);
+
+		if(!isset($response['consulta'][0]['tracking']['eventos'][0])) return [];
+
+		$deliveryExpectedDate = $response['consulta'][0]['previsaoEntrega'];
+		$eventsList = $response['consulta'][0]['tracking']['eventos'];
+		$lastEvent = array_pop($eventsList);
+
+		return [
+			"status" => $lastEvent['status'],
+			"last_update_date" => date('Y-m-d', strtotime(str_replace('/', '-', $lastEvent['data']))),
+			"details" => $lastEvent['unidade'],
+			"delivery_expected_date" => $deliveryExpectedDate,
 		];
 	}
 
