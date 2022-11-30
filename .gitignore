@@ -17,3 +17,4 @@ PDOCRUD_LICENSE.txt
 public/photos/*.jpg
 public/photos/*.jpeg
 public/photos/*.png
+*.zip
