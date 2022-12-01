@@ -14,6 +14,7 @@ class Tracking extends Model
 	private array $supportedServices = [
 		"Correios" => true,
 		"Jadlog" => true,
+		"DHL" => true,
 	];
 
 	public function read()
@@ -47,6 +48,7 @@ class Tracking extends Model
 		$response = null;
 		if($deliveryMethod == "Correios") $response = $this->fetchCorreios($trackingCode);
 		if($deliveryMethod == "Jadlog") $response = $this->fetchJadlog($trackingCode);
+		if($deliveryMethod == "DHL") $response = $this->fetchDHL($trackingCode);
 
 		DB::table('trackings')->updateOrInsert(
 			['tracking_code' => $trackingCode],
@@ -96,6 +98,29 @@ class Tracking extends Model
 			"details" => $lastEvent['unidade'],
 			"delivery_expected_date" => $deliveryExpectedDate,
 		];
+	}
+
+	private function fetchDHL(string $trackingCode)
+	{
+		$response = Http::withHeaders(["DHL-API-Key" => env('DHL_API_KEY')])
+			->get("https://api-eu.dhl.com/track/shipments?trackingNumber=$trackingCode&language=pt");
+		
+		if(!isset($response['shipments'][0]['events'][0])) return [];
+
+		$lastEvent = $response['shipments'][0]['events'][0];
+		$status = $lastEvent['description'];
+		$lastUpdateDate = $lastEvent['timestamp'];
+		$deliveryExpectedDate = $response['shipments'][0]['estimatedTimeOfDelivery'] ?? null;
+		$details = ($lastEvent['remark'] ?? "") . " " . ($lastEvent['nextSteps'] ?? "");
+
+		$toReturn = [
+			"status" => $status,
+			"last_update_date" => date('Y-m-d', strtotime($lastUpdateDate)),
+			"details" => $details
+		];
+		isset($deliveryExpectedDate) ? $toReturn['delivery_expected_date'] = $deliveryExpectedDate : null;
+
+		return $toReturn;
 	}
 
 	private function updateDB()
