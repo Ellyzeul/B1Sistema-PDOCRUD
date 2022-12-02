@@ -88,16 +88,18 @@ class Tracking extends Model
 
 		if(!isset($response['consulta'][0]['tracking']['eventos'][0])) return [];
 
-		$deliveryExpectedDate = $response['consulta'][0]['previsaoEntrega'];
+		$deliveryExpectedDate = $response['consulta'][0]['previsaoEntrega'] ?? null;
 		$eventsList = $response['consulta'][0]['tracking']['eventos'];
 		$lastEvent = array_pop($eventsList);
 
-		return [
+		$toReturn = [
 			"status" => $lastEvent['status'],
 			"last_update_date" => date('Y-m-d', strtotime(str_replace('/', '-', $lastEvent['data']))),
 			"details" => $lastEvent['unidade'],
-			"delivery_expected_date" => $deliveryExpectedDate,
 		];
+		if(isset($deliveryExpectedDate)) $toReturn["delivery_expected_date"] = $deliveryExpectedDate;
+
+		return $toReturn;
 	}
 
 	private function fetchDHL(string $trackingCode)
