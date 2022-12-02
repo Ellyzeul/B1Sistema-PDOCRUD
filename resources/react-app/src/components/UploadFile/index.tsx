@@ -60,17 +60,22 @@ export const UploadFile = () => {
         .then(wb => {
           const sheet = wb.getWorksheet(1)
           const update = [] as {[key: string]: string}[]
-
+          
           sheet.eachRow((row, index) => {
             const toPush = {} as {[key: string]: string}
+            const fieldsKeys = Object.keys(validFields).map(key => Number(key))
             if(index === 1) {
               readHeader(row)
               return
             }
 
-            row.eachCell(cell => 
-              toPush[validFields[cell.col]] = cell.value as string
+            fieldsKeys.forEach(key => 
+              toPush[validFields[key]] = row.getCell(key).value as string
             )
+            if(index === 2) {
+              console.log(validFields)
+              console.log(toPush)
+            }
             update.push(toPush)
           })
           setUpdate(update)

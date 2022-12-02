@@ -12,6 +12,7 @@ use App\Http\Controllers\PhaseController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\QuoteController;
 use App\Http\Controllers\SupplierURLController;
+use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -81,7 +82,7 @@ Route::controller(FileUploadController::class)
     ->prefix('file-upload')
     ->group(function() {
         Route::post('/order-update', 'orderUpdate');
-        Route::post('/order-insert', 'orderInsert');
+        Route::post('/order-amazon-insert', 'orderAmazonInsert');
     });
 
 Route::get('/navbar-items/read', function (Request $request) {
@@ -94,3 +95,10 @@ Route::get('/navbar-items/read', function (Request $request) {
 Route::get('/quotes/read', function (Request $request) {
     return QuoteController::read();
 });
+
+Route::controller(TrackingController::class)
+    ->prefix('tracking')
+    ->group(function() {
+        Route::get('/read', 'read');
+        Route::post('/update', 'update');
+    });
