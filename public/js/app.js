@@ -4456,55 +4456,132 @@ var updateRow = function updateRow(trackingCode, deliveryMethod, row, fields) {
   console.log(row.children[0].props);
 };
 
+var getRows = function getRows(data, fieldsKeys) {
+  var rowsElements = [];
+  data.forEach(function (row, idx) {
+    var btnCell = (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("td", __assign({
+      className: "tracking-update-button",
+      onClick: function onClick(event) {
+        return updateRow(row.tracking_code, row.delivery_method, rowElement.props, fields);
+      }
+    }, {
+      children: "Atualizar"
+    }));
+
+    var rowElement = (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("tr", {
+      children: __spreadArray([btnCell], fieldsKeys.map(function (key, idx) {
+        return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("td", {
+          children: fields[key].editable ? (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("textarea", {
+            defaultValue: row[key]
+          }) : row[key]
+        }, idx);
+      }), true)
+    }, idx);
+
+    rowsElements.push(rowElement);
+  });
+  return rowsElements;
+};
+
+var getFilteredData = function getFilteredData(data, filterInput, filterField) {
+  if (!filterInput.current) return data;
+  if (!filterField.current) return data;
+  var input = filterInput.current;
+  var searchTerm = input.value;
+  if (searchTerm === "") return data;
+  var select = filterField.current;
+  var key = select.value;
+  return data.filter(function (row) {
+    return row[key].startsWith(searchTerm);
+  });
+};
+
 var TrackingTable = function TrackingTable(props) {
   var data = props.data;
   var fieldsKeys = Object.keys(fields);
 
-  var _a = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null),
-      headers = _a[0],
-      setHeaders = _a[1];
+  var _a = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
+      filterFields = _a[0],
+      setFilterFields = _a[1];
 
-  var _b = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
-      rows = _b[0],
-      setRows = _b[1];
+  var _b = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null),
+      headers = _b[0],
+      setHeaders = _b[1];
+
+  var _c = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
+      rows = _c[0],
+      setRows = _c[1];
+
+  var filterField = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+  var filterInput = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+
+  var headerSort = function headerSort(field) {
+    var filtered = getFilteredData(data, filterInput, filterField).sort(function (a, b) {
+      return a[field] > b[field] ? 1 : -1;
+    });
+    setRows(getRows(filtered, fieldsKeys));
+  };
+
+  var filterData = function filterData() {
+    return setRows(getRows(getFilteredData(data, filterInput, filterField), fieldsKeys));
+  };
+
+  var filterDataHotkey = function filterDataHotkey(event) {
+    return event.key === "Enter" ? filterData() : null;
+  };
 
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     var headerElements = [];
-    var rowElements = [];
+    var optionsElements = [];
+    var rowsElements = getRows(data, fieldsKeys);
     fieldsKeys.forEach(function (key, idx) {
-      return headerElements.push((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("th", {
+      headerElements.push((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("th", __assign({
+        onClick: function onClick() {
+          return headerSort(key);
+        }
+      }, {
         children: fields[key].label
-      }, idx));
+      }), idx));
+      optionsElements.push((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("option", __assign({
+        value: key
+      }, {
+        children: fields[key].label
+      }), idx));
     });
     setHeaders((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("tr", {
       children: __spreadArray([(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("th", {})], headerElements, true)
     }));
-    data.forEach(function (row, idx) {
-      var btnCell = (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("td", __assign({
-        className: "tracking-update-button",
-        onClick: function onClick(event) {
-          return updateRow(row.tracking_code, row.delivery_method, rowElement.props, fields);
-        }
-      }, {
-        children: "Atualizar"
-      }));
-
-      var rowElement = (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("tr", {
-        children: __spreadArray([btnCell], fieldsKeys.map(function (key, idx) {
-          return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("td", {
-            children: fields[key].editable ? (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("textarea", {
-              defaultValue: row[key]
-            }) : row[key]
-          }, idx);
-        }), true)
-      }, idx);
-
-      rowElements.push(rowElement);
-    });
-    setRows(rowElements);
+    setFilterFields(optionsElements);
+    setRows(rowsElements);
   }, []);
-  return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-    children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("table", __assign({
+  return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
+    className: "tracking-table-container"
+  }, {
+    children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
+      className: "tracking-nav-buttons"
+    }, {
+      children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
+        className: "tracking-filter"
+      }, {
+        children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
+          ref: filterInput,
+          type: "text",
+          placeholder: "Pesquisa",
+          onKeyDown: filterDataHotkey
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("select", __assign({
+          ref: filterField
+        }, {
+          children: filterFields
+        })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({
+          onClick: filterData
+        }, {
+          children: "Filtrar"
+        }))]
+      })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("select", {
+        name: "",
+        id: ""
+      })]
+    })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("table", __assign({
       className: "tracking-table"
     }, {
       children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("thead", {
@@ -4513,7 +4590,7 @@ var TrackingTable = function TrackingTable(props) {
         children: rows
       })]
     })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_toastify__WEBPACK_IMPORTED_MODULE_4__.ToastContainer, {})]
-  });
+  }));
 };
 
 /***/ }),
@@ -6258,7 +6335,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".tracking-table {\r\n  width: 100%;\r\n  height: 100%;\r\n  height: min-content;\r\n  background-color: white;\r\n  border: none;\r\n}\r\n\r\n.tracking-table > thead {\r\n  background-color: black;\r\n  color: white;\r\n  height: 70px;\r\n  word-wrap: break-word;\r\n}\r\n\r\n.tracking-table > tbody {\r\n  font-family: Arial, Helvetica, sans-serif;\r\n}\r\n\r\n.tracking-table > tbody {\r\n  height: 100%;\r\n}\r\n\r\n.tracking-table > tbody > tr {\r\n  min-height: 50px;\r\n}\r\n\r\n.tracking-table > tbody > tr > td, .tracking-table > tbody > tr > td > textarea {\r\n  height: 100%;\r\n}\r\n.tracking-table > tbody > tr > td > textarea {\r\n  padding: 0;\r\n  margin: 0;\r\n  width: 100%;\r\n}\r\n\r\n.tracking-update-button {\r\n  background-color: rgb(51, 160, 51);\r\n  color: white;\r\n  border-radius: 3px;\r\n  padding: 0 2px;\r\n}\r\n.tracking-update-button:hover {\r\n  cursor: pointer;\r\n  background-color: rgb(26, 90, 26);\r\n  transition: 125ms;\r\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".tracking-table-container {\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\n.tracking-nav-buttons {\r\n  height: 70px;\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: space-between;\r\n  font-family: Arial, Helvetica, sans-serif;\r\n}\r\n.tracking-nav-buttons > * {\r\n  margin: 0 15px;\r\n}\r\n\r\n.tracking-filter > input {\r\n  border: none;\r\n  border-bottom: 1px solid black;\r\n  border-radius: 3px 0 0 3px;\r\n  outline: none;\r\n  height: 7px;\r\n  padding: 10px;\r\n}\r\n.tracking-filter > select {\r\n  border: none;\r\n  height: 27px;\r\n  border-bottom: 1px solid black;\r\n}\r\n.tracking-filter > select:hover {\r\n  background-color: black;\r\n  color: white;\r\n  cursor: pointer;\r\n}\r\n.tracking-filter > button {\r\n  border: none;\r\n  height: 27px;\r\n  border-bottom: 1px solid black;\r\n  border-radius: 0 3px 3px 0;\r\n  cursor: pointer;\r\n}\r\n.tracking-filter > button:hover {\r\n  background-color: black;\r\n  color: white;\r\n}\r\n\r\n.tracking-table {\r\n  width: 100%;\r\n  height: 100%;\r\n  height: min-content;\r\n  background-color: white;\r\n  border: none;\r\n}\r\n\r\n.tracking-table > thead {\r\n  background-color: black;\r\n  color: white;\r\n  height: 70px;\r\n  word-wrap: break-word;\r\n  -webkit-user-select: none;\r\n          user-select: none;\r\n}\r\n.tracking-table > thead > tr > th:hover {\r\n  background-color: rgb(44, 44, 44);\r\n  color: rgb(183, 183, 183);\r\n  transition: 125ms;\r\n  cursor: pointer;\r\n}\r\n\r\n.tracking-table > tbody {\r\n  font-family: Arial, Helvetica, sans-serif;\r\n  font-size: small;\r\n}\r\n\r\n.tracking-table > tbody {\r\n  height: 100%;\r\n}\r\n\r\n.tracking-table > tbody > tr {\r\n  min-height: 50px;\r\n}\r\n\r\n.tracking-table > tbody > tr > td, .tracking-table > tbody > tr > td > textarea {\r\n  border-right: 1px solid black;\r\n  border-bottom: 1px solid black;\r\n  height: 100%;\r\n}\r\n.tracking-table > tbody > tr > td > textarea {\r\n  padding: 0;\r\n  margin: 0;\r\n  width: 100%;\r\n}\r\n\r\n.tracking-update-button {\r\n  background-color: rgb(51, 160, 51);\r\n  color: white;\r\n  border-radius: 3px;\r\n  padding: 0 2px;\r\n}\r\n.tracking-update-button:hover {\r\n  cursor: pointer;\r\n  background-color: rgb(26, 90, 26);\r\n  transition: 125ms;\r\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
