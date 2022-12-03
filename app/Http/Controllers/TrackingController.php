@@ -34,7 +34,7 @@ class TrackingController extends Controller
 
 		$trackingCode = $request->input('tracking_code');
 		$field = $request->input('field');
-		$value = $request->input('value');
+		$value = $request->input('value') ?? "";
 
 		$response = $tracking->updateField($trackingCode, $field, $value);
 
