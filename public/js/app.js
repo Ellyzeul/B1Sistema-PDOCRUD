@@ -4421,6 +4421,7 @@ var fields = {
     label: "Última movimentação"
   },
   last_update_date: {
+    isDate: true,
     editable: false,
     label: "Data da movimentação"
   },
@@ -4429,12 +4430,19 @@ var fields = {
     label: "Detalhes"
   },
   expected_date: {
+    isDate: true,
     editable: false,
     label: "Prazo para o cliente"
   },
   delivery_expected_date: {
+    isDate: true,
     editable: false,
     label: "Prazo da transportadora"
+  },
+  api_calling_date: {
+    isDate: true,
+    editable: false,
+    label: "Última atualização"
   },
   observation: {
     editable: true,
@@ -4446,19 +4454,31 @@ var updateRow = function updateRow(trackingCode, deliveryMethod, row, fields) {
   _services_axios__WEBPACK_IMPORTED_MODULE_3__["default"].post('/api/tracking/update', {
     tracking_code: trackingCode,
     delivery_method: deliveryMethod
-  }).then(function (response) {
-    return response.data;
-  }).then(function (response) {
-    react_toastify__WEBPACK_IMPORTED_MODULE_4__.toast.success("Rastreio atualizado!");
-  })["catch"](function (err) {
+  }).then(function (_) {
+    return react_toastify__WEBPACK_IMPORTED_MODULE_4__.toast.success("Rastreio atualizado!");
+  })["catch"](function (_) {
     return react_toastify__WEBPACK_IMPORTED_MODULE_4__.toast.error("Ocorreu algum erro... Entrar em contato com o setor de TI");
   });
   console.log(row.children[0].props);
 };
 
-var getRows = function getRows(data, fieldsKeys) {
+var updateField = function updateField(trackingCode, input, field) {
+  var value = input.value;
+  _services_axios__WEBPACK_IMPORTED_MODULE_3__["default"].post('/api/tracking/update-field', {
+    tracking_code: trackingCode,
+    field: field,
+    value: value
+  }).then(function (_) {
+    return react_toastify__WEBPACK_IMPORTED_MODULE_4__.toast.success('Observação atualizada!');
+  })["catch"](function (_) {
+    return react_toastify__WEBPACK_IMPORTED_MODULE_4__.toast.error('Erro ao salvar a observação...');
+  });
+};
+
+var getRows = function getRows(data, fieldsKeys, actualPage) {
   var rowsElements = [];
-  data.forEach(function (row, idx) {
+  var offset = actualPage * ROWS_PER_PAGE;
+  data.slice(offset, offset + ROWS_PER_PAGE).forEach(function (row, idx) {
     var btnCell = (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("td", __assign({
       className: "tracking-update-button",
       onClick: function onClick(event) {
@@ -4472,8 +4492,14 @@ var getRows = function getRows(data, fieldsKeys) {
       children: __spreadArray([btnCell], fieldsKeys.map(function (key, idx) {
         return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("td", {
           children: fields[key].editable ? (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("textarea", {
+            onKeyDown: function onKeyDown(event) {
+              if (event.key !== "Enter") return;
+              var input = event.target;
+              updateField(row.tracking_code, input, key);
+              input.blur();
+            },
             defaultValue: row[key]
-          }) : row[key]
+          }) : fields[key].isDate ? row[key] ? new Date(row[key]).toLocaleDateString("pt-BR") : "" : row[key]
         }, idx);
       }), true)
     }, idx);
@@ -4496,21 +4522,34 @@ var getFilteredData = function getFilteredData(data, filterInput, filterField) {
   });
 };
 
+var ROWS_PER_PAGE = 20;
 var TrackingTable = function TrackingTable(props) {
   var data = props.data;
   var fieldsKeys = Object.keys(fields);
 
-  var _a = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
-      filterFields = _a[0],
-      setFilterFields = _a[1];
+  var _a = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(data),
+      filteredData = _a[0],
+      setFilteredData = _a[1];
 
-  var _b = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null),
-      headers = _b[0],
-      setHeaders = _b[1];
+  var _b = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
+      filterFields = _b[0],
+      setFilterFields = _b[1];
 
   var _c = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
-      rows = _c[0],
-      setRows = _c[1];
+      selectOptions = _c[0],
+      setSelectOptions = _c[1];
+
+  var _d = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null),
+      headers = _d[0],
+      setHeaders = _d[1];
+
+  var _e = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
+      rows = _e[0],
+      setRows = _e[1];
+
+  var _f = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(0),
+      actualPage = _f[0],
+      setActualPage = _f[1];
 
   var filterField = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
   var filterInput = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
@@ -4519,21 +4558,29 @@ var TrackingTable = function TrackingTable(props) {
     var filtered = getFilteredData(data, filterInput, filterField).sort(function (a, b) {
       return a[field] > b[field] ? 1 : -1;
     });
-    setRows(getRows(filtered, fieldsKeys));
+    setRows(getRows(filtered, fieldsKeys, actualPage));
   };
 
   var filterData = function filterData() {
-    return setRows(getRows(getFilteredData(data, filterInput, filterField), fieldsKeys));
+    return setFilteredData(getFilteredData(data, filterInput, filterField));
   };
 
   var filterDataHotkey = function filterDataHotkey(event) {
     return event.key === "Enter" ? filterData() : null;
   };
 
+  var changePage = function changePage(event) {
+    var select = event.target;
+    var newPage = Number(select.value) - 1;
+    setActualPage(newPage);
+  };
+
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
-    var headerElements = [];
     var optionsElements = [];
-    var rowsElements = getRows(data, fieldsKeys);
+    var selectElements = [];
+    var headerElements = [];
+    var rowsElements = getRows(filteredData, fieldsKeys, actualPage);
+    var totalPages = Math.ceil(filteredData.length / ROWS_PER_PAGE);
     fieldsKeys.forEach(function (key, idx) {
       headerElements.push((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("th", __assign({
         onClick: function onClick() {
@@ -4548,12 +4595,20 @@ var TrackingTable = function TrackingTable(props) {
         children: fields[key].label
       }), idx));
     });
+
+    for (var i = 0; i < totalPages; i++) {
+      selectElements.push((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("option", {
+        children: i + 1
+      }, i));
+    }
+
+    setFilterFields(optionsElements);
+    setSelectOptions(selectElements);
     setHeaders((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("tr", {
       children: __spreadArray([(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("th", {})], headerElements, true)
     }));
-    setFilterFields(optionsElements);
     setRows(rowsElements);
-  }, []);
+  }, [filteredData, actualPage]);
   return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
     className: "tracking-table-container"
   }, {
@@ -4577,9 +4632,14 @@ var TrackingTable = function TrackingTable(props) {
         }, {
           children: "Filtrar"
         }))]
-      })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("select", {
-        name: "",
-        id: ""
+      })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+        children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
+          children: "P\xE1gina "
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("select", __assign({
+          onChange: changePage
+        }, {
+          children: selectOptions
+        }))]
       })]
     })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("table", __assign({
       className: "tracking-table"

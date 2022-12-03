@@ -9,24 +9,34 @@ const fields = {
   delivery_method: {editable: false, label: "⛟"},
   online_order_number: {editable: false, label: "ORIGEM"},
   status: {editable: false, label: "Última movimentação"},
-  last_update_date: {editable: false, label: "Data da movimentação"},
+  last_update_date: {isDate: true, editable: false, label: "Data da movimentação"},
   details: {editable: false, label: "Detalhes"},
-  expected_date: {editable: false, label: "Prazo para o cliente"},
-  delivery_expected_date: {editable: false, label: "Prazo da transportadora"},
+  expected_date: {isDate: true, editable: false, label: "Prazo para o cliente"},
+  delivery_expected_date: {isDate: true, editable: false, label: "Prazo da transportadora"},
+  api_calling_date: {isDate: true, editable: false, label: "Última atualização"},
   observation: {editable: true, label: "Observação"},
-} as {[key: string]: {editable: boolean, label: string}}
+} as {[key: string]: {isDate?: boolean, editable: boolean, label: string}}
 
 const updateRow = (trackingCode: string, deliveryMethod: string, row: any, fields: {[key: string]: {editable: boolean, label: string}}) => {
   api.post('/api/tracking/update', {
     tracking_code: trackingCode,
     delivery_method: deliveryMethod
   })
-    .then(response => response.data)
-    .then(response => {
-      toast.success("Rastreio atualizado!")
-    })
-    .catch(err => toast.error("Ocorreu algum erro... Entrar em contato com o setor de TI"))
+    .then(_ => toast.success("Rastreio atualizado!"))
+    .catch(_ => toast.error("Ocorreu algum erro... Entrar em contato com o setor de TI"))
   console.log(row.children[0].props)
+}
+
+const updateField = (trackingCode: string, input: HTMLInputElement, field: string) => {
+  const value = input.value
+
+  api.post('/api/tracking/update-field', {
+    tracking_code: trackingCode,
+    field: field,
+    value: value
+  })
+    .then(_ => toast.success('Observação atualizada!'))
+    .catch(_ => toast.error('Erro ao salvar a observação...'))
 }
 
 const getRows = (data: {[key: string]: string}[], fieldsKeys: string[], actualPage: number) => {
@@ -42,8 +52,16 @@ const getRows = (data: {[key: string]: string}[], fieldsKeys: string[], actualPa
       btnCell, 
       ...fieldsKeys.map((key, idx) => <td key={idx}>{
         fields[key].editable
-        ? <textarea defaultValue={row[key]}></textarea>
-        : row[key]
+        ? <textarea 
+            onKeyDown={(event) => {
+              if(event.key !== "Enter") return
+              const input = event.target as HTMLInputElement
+              updateField(row.tracking_code, input, key)
+              input.blur()
+            }} 
+            defaultValue={row[key]}
+          ></textarea>
+        : fields[key].isDate ? row[key] ? (new Date(row[key])).toLocaleDateString("pt-BR") : "" : row[key]
         }</td>
     )]}</tr>
     rowsElements.push(rowElement)

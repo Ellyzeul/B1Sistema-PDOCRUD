@@ -101,4 +101,5 @@ Route::controller(TrackingController::class)
     ->group(function() {
         Route::get('/read', 'read');
         Route::post('/update', 'update');
+        Route::post('/update-field', 'updateField');
     });

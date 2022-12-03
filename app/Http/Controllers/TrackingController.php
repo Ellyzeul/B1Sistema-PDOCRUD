@@ -27,4 +27,17 @@ class TrackingController extends Controller
 
 		return response($response, $statusCode);
 	}
+
+	public function updateField(Request $request)
+	{
+		$tracking = new Tracking();
+
+		$trackingCode = $request->input('tracking_code');
+		$field = $request->input('field');
+		$value = $request->input('value');
+
+		$response = $tracking->updateField($trackingCode, $field, $value);
+
+		return $response;
+	}
 }
