@@ -68,7 +68,7 @@ const getFilteredData = (
   return data.filter(row => row[key].startsWith(searchTerm))
 }
 
-const ROWS_PER_PAGE = 5
+const ROWS_PER_PAGE = 20
 
 export const TrackingTable = (props: TrackingTableProp) => {
   const { data } = props as {data: {[key: string]: string}[]}
