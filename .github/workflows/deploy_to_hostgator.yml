@@ -1,7 +1,7 @@
 name: Deploy na Hostgator
 on:
   push:
-    branches: [ master, Development ]
+    branches: [ main ]
 jobs:
   build:
     runs-on: ubuntu-latest
