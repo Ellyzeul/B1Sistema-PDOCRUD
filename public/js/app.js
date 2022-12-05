@@ -4561,7 +4561,7 @@ var TrackingTable = function TrackingTable(props) {
 
   var headerSort = function headerSort(field) {
     var filtered = getFilteredData(data, filterInput, filterField).sort(function (a, b) {
-      return a[field] > b[field] ? 1 : -1;
+      return a[field] < b[field] ? 1 : -1;
     });
     setRows(getRows(filtered, fieldsKeys, actualPage));
   };
