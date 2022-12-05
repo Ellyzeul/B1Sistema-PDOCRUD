@@ -2170,19 +2170,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/index.js");
 /* harmony import */ var _App_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./App.css */ "./resources/react-app/src/App.css");
 /* harmony import */ var _contexts_Navbar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./contexts/Navbar */ "./resources/react-app/src/contexts/Navbar.ts");
 /* harmony import */ var _contexts_UserData__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./contexts/UserData */ "./resources/react-app/src/contexts/UserData.ts");
 /* harmony import */ var _pages_Companies__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pages/Companies */ "./resources/react-app/src/pages/Companies/index.tsx");
 /* harmony import */ var _pages_Home__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./pages/Home */ "./resources/react-app/src/pages/Home/index.tsx");
-/* harmony import */ var _pages_Home_Shipment__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./pages/Home/Shipment */ "./resources/react-app/src/pages/Home/Shipment/index.tsx");
-/* harmony import */ var _pages_Login__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./pages/Login */ "./resources/react-app/src/pages/Login/index.tsx");
-/* harmony import */ var _pages_Orders__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./pages/Orders */ "./resources/react-app/src/pages/Orders/index.tsx");
-/* harmony import */ var _pages_Orders_UploadFile__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./pages/Orders/UploadFile */ "./resources/react-app/src/pages/Orders/UploadFile/index.tsx");
-/* harmony import */ var _pages_Photos_Search__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./pages/Photos/Search */ "./resources/react-app/src/pages/Photos/Search/index.tsx");
-/* harmony import */ var _pages_Photos_Upload__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./pages/Photos/Upload */ "./resources/react-app/src/pages/Photos/Upload/index.tsx");
-/* harmony import */ var _pages_Tracking__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./pages/Tracking */ "./resources/react-app/src/pages/Tracking/index.tsx");
+/* harmony import */ var _pages_Home_Attendance__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./pages/Home/Attendance */ "./resources/react-app/src/pages/Home/Attendance/index.tsx");
+/* harmony import */ var _pages_Home_Shipment__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./pages/Home/Shipment */ "./resources/react-app/src/pages/Home/Shipment/index.tsx");
+/* harmony import */ var _pages_Login__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./pages/Login */ "./resources/react-app/src/pages/Login/index.tsx");
+/* harmony import */ var _pages_Orders__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./pages/Orders */ "./resources/react-app/src/pages/Orders/index.tsx");
+/* harmony import */ var _pages_Orders_UploadFile__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./pages/Orders/UploadFile */ "./resources/react-app/src/pages/Orders/UploadFile/index.tsx");
+/* harmony import */ var _pages_Photos_Search__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./pages/Photos/Search */ "./resources/react-app/src/pages/Photos/Search/index.tsx");
+/* harmony import */ var _pages_Photos_Upload__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./pages/Photos/Upload */ "./resources/react-app/src/pages/Photos/Upload/index.tsx");
+/* harmony import */ var _pages_Tracking__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./pages/Tracking */ "./resources/react-app/src/pages/Tracking/index.tsx");
 var __assign = undefined && undefined.__assign || function () {
   __assign = Object.assign || function (t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -2198,6 +2199,7 @@ var __assign = undefined && undefined.__assign || function () {
 
   return __assign.apply(this, arguments);
 };
+
 
 
 
@@ -2232,7 +2234,7 @@ function App() {
   };
 
   var getElement = function getElement(element) {
-    return isLogged() ? element : (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_14__.Navigate, {
+    return isLogged() ? element : (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Navigate, {
       to: '/login'
     });
   };
@@ -2254,34 +2256,37 @@ function App() {
     children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_contexts_Navbar__WEBPACK_IMPORTED_MODULE_3__.NavbarContext.Provider, __assign({
       value: [navbarItems, setNavbarItems]
     }, {
-      children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_14__.Routes, {
-        children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_14__.Route, {
+      children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Routes, {
+        children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
           path: '/login',
-          element: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Login__WEBPACK_IMPORTED_MODULE_8__.Login, {})
-        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_14__.Route, {
+          element: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Login__WEBPACK_IMPORTED_MODULE_9__.Login, {})
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
           path: '/',
           element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Home__WEBPACK_IMPORTED_MODULE_6__.HomePage, {}))
-        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_14__.Route, {
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
           path: '/pedidos',
-          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Orders__WEBPACK_IMPORTED_MODULE_9__.OrdersPage, {}))
-        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_14__.Route, {
+          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Orders__WEBPACK_IMPORTED_MODULE_10__.OrdersPage, {}))
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
           path: '/arquivo-upload',
-          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Orders_UploadFile__WEBPACK_IMPORTED_MODULE_10__["default"], {}))
-        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_14__.Route, {
+          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Orders_UploadFile__WEBPACK_IMPORTED_MODULE_11__["default"], {}))
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
           path: '/expedicao',
-          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Home_Shipment__WEBPACK_IMPORTED_MODULE_7__.ShipmentPage, {}))
-        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_14__.Route, {
+          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Home_Shipment__WEBPACK_IMPORTED_MODULE_8__.ShipmentPage, {}))
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
           path: '/fotos/enviar',
-          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Photos_Upload__WEBPACK_IMPORTED_MODULE_12__.PhotosUploadPage, {}))
-        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_14__.Route, {
+          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Photos_Upload__WEBPACK_IMPORTED_MODULE_13__.PhotosUploadPage, {}))
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
           path: '/fotos/pesquisar',
-          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Photos_Search__WEBPACK_IMPORTED_MODULE_11__.PhotosSearchPage, {}))
-        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_14__.Route, {
+          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Photos_Search__WEBPACK_IMPORTED_MODULE_12__.PhotosSearchPage, {}))
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
+          path: '/atendimento',
+          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Home_Attendance__WEBPACK_IMPORTED_MODULE_7__.Attendance, {}))
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
+          path: '/rastreamento',
+          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Tracking__WEBPACK_IMPORTED_MODULE_14__["default"], {}))
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
           path: '/empresas',
           element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Companies__WEBPACK_IMPORTED_MODULE_5__.CompaniesPage, {}))
-        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_14__.Route, {
-          path: '/rastreamento',
-          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Tracking__WEBPACK_IMPORTED_MODULE_13__["default"], {}))
         })]
       })
     }))
@@ -5407,6 +5412,33 @@ var CompaniesPage = function CompaniesPage() {
 
 /***/ }),
 
+/***/ "./resources/react-app/src/pages/Home/Attendance/index.tsx":
+/*!*****************************************************************!*\
+  !*** ./resources/react-app/src/pages/Home/Attendance/index.tsx ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Attendance": () => (/* binding */ Attendance)
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _components_Home__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../components/Home */ "./resources/react-app/src/components/Home/index.tsx");
+
+
+var Attendance = function Attendance() {
+  return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_Home__WEBPACK_IMPORTED_MODULE_1__.Home, {
+    sections: [{
+      icon: "/icons/rastreamento.png",
+      label: "Rastreamento dos pedidos",
+      url: "/rastreamento"
+    }]
+  });
+};
+
+/***/ }),
+
 /***/ "./resources/react-app/src/pages/Home/Shipment/index.tsx":
 /*!***************************************************************!*\
   !*** ./resources/react-app/src/pages/Home/Shipment/index.tsx ***!
@@ -5463,6 +5495,10 @@ var HomePage = function HomePage() {
       icon: "/icons/expedição.png",
       label: "Expedição",
       url: "/expedicao"
+    }, {
+      icon: "/icons/atendimento.png",
+      label: "Atendimento",
+      url: "/atendimento"
     }, {
       icon: "/icons/companhia.png",
       label: "Empresas",
