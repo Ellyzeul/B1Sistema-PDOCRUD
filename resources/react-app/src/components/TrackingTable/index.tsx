@@ -102,7 +102,7 @@ export const TrackingTable = (props: TrackingTableProp) => {
 
   const headerSort = (field: string) => {
     const filtered = getFilteredData(data, filterInput, filterField)
-      .sort((a, b) => a[field] > b[field] ? 1 : -1)
+      .sort((a, b) => a[field] < b[field] ? 1 : -1)
 
     setRows(getRows(filtered, fieldsKeys, actualPage))
   }
