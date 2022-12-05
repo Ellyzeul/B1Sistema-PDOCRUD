@@ -1,19 +1,18 @@
-name: Publicar na Hostgator
+name: Deploy na Hostgator
 on:
   push:
-    branches:
-      - main
+    branches: [ master, Development ]
 jobs:
-  FTP-Deploy-Action:
-    name: FTP-Deploy-Action
+  build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2.1.0
-      with:
-        fetch-depth: 2
-    - name: FTP-Deploy-Action
-      uses: SamKirkland/FTP-Deploy-Action@3.1.1
-      with:
-        ftp-server: ${{ secrets.HOSTGATOR_FTP_SERVER }}
-        ftp-username: ${{ secrets.HOSTGATOR_FTP_USER }}
-        ftp-password: ${{ secrets.HOSTGATOR_FTP_PASS }}
+      - uses: actions/checkout@v2
+      # Here is the deployment action
+      - name: Upload from public_html via FTP
+        uses: airvzxf/ftp-deployment-action@latest
+        with:
+          server: ${{ secrets.HOSTGATOR_FTP_SERVER }}
+          user: ${{ secrets.HOSTGATOR_FTP_USERNAME }}
+          password: ${{ secrets.HOSTGATOR_FTP_PASSWORD }}
+          local_dir: "./repositories/B1Sistema-PDOCRUD"
+          delete: "false"

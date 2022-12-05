@@ -15,7 +15,9 @@ class Tracking extends Model
 		"Correios" => true,
 		"Jadlog" => true,
 		"DHL" => true,
+		// "FedEx" => true,
 	];
+	private static string | null $fedexToken = null;
 
 	public function read()
 	{
@@ -32,6 +34,7 @@ class Tracking extends Model
 				'trackings.details',
 				'order_control.expected_date',
 				'trackings.delivery_expected_date',
+				'trackings.api_calling_date',
 				'trackings.observation',
 			)
 			->where('order_control.id_phase', '=', '5.1')
@@ -49,6 +52,9 @@ class Tracking extends Model
 		if($deliveryMethod == "Correios") $response = $this->fetchCorreios($trackingCode);
 		if($deliveryMethod == "Jadlog") $response = $this->fetchJadlog($trackingCode);
 		if($deliveryMethod == "DHL") $response = $this->fetchDHL($trackingCode);
+		// if($deliveryMethod == "FedEx") $response = $this->fetchFedex($trackingCode);
+
+		if(count($response) > 0) $response['api_calling_date'] = date("Y-m-d");
 
 		DB::table('trackings')->updateOrInsert(
 			['tracking_code' => $trackingCode],
@@ -60,6 +66,19 @@ class Tracking extends Model
 		return isset($response)
 			? [$response, 200]
 			: ["Erro na atualização", 500];
+	}
+
+	public function updateField(string $trackingCode, string $field, string $value)
+	{
+		DB::table('trackings')
+			->where('tracking_code', '=', $trackingCode)
+			->update([
+				$field => $value
+			]);
+		
+		return [
+			"message" => "Campo atualizado"
+		];
 	}
 
 	private function fetchCorreios(string $trackingCode)
@@ -124,6 +143,42 @@ class Tracking extends Model
 
 		return $toReturn;
 	}
+
+	// private function fetchFedex(string $trackingCode)
+	// {
+	// 	if(!isset(Tracking::$fedexToken)) $this->generateFedexToken();
+	// 	$response = Http::withHeaders(["X-locale" => "pt_BR"])
+	// 		->withToken(Tracking::$fedexToken)
+	// 		->post('https://apis.fedex.com/track/v1/associatedshipments', [
+	// 			"masterTrackingNumberInfo" => [
+	// 				"trackingNumberInfo" => [
+	// 					"trackingNumber" => $trackingCode
+	// 				]
+	// 			],
+	// 			"associatedType" => "STANDARD_MPS"
+	// 		]);
+		
+	// 	if($response->getStatusCode() == 401) {
+	// 		Tracking::$fedexToken = null;
+	// 		return $this->fetchFedex($trackingCode);
+	// 	}
+
+	// 	return [];
+	// }
+
+	// private function generateFedexToken()
+	// {
+	// 	$response = Http::withHeaders(["X-locale" => "pt_BR"])
+	// 		->asForm()
+	// 		->post('https://apis.fedex.com/oauth/token', [
+	// 			"grant_type" => "client_credentials",
+	// 			"client_id" => env('FEDEX_CLIENT_ID'),
+	// 			"client_secret" => env('FEDEX_CLIENT_SECRET')
+	// 		]);
+
+	// 	var_dump($response);
+	// 	Tracking::$fedexToken = $response['access_token'];
+	// }
 
 	private function updateDB()
 	{

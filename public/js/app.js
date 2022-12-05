@@ -2170,19 +2170,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/index.js");
 /* harmony import */ var _App_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./App.css */ "./resources/react-app/src/App.css");
 /* harmony import */ var _contexts_Navbar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./contexts/Navbar */ "./resources/react-app/src/contexts/Navbar.ts");
 /* harmony import */ var _contexts_UserData__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./contexts/UserData */ "./resources/react-app/src/contexts/UserData.ts");
 /* harmony import */ var _pages_Companies__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pages/Companies */ "./resources/react-app/src/pages/Companies/index.tsx");
 /* harmony import */ var _pages_Home__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./pages/Home */ "./resources/react-app/src/pages/Home/index.tsx");
-/* harmony import */ var _pages_Home_Shipment__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./pages/Home/Shipment */ "./resources/react-app/src/pages/Home/Shipment/index.tsx");
-/* harmony import */ var _pages_Login__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./pages/Login */ "./resources/react-app/src/pages/Login/index.tsx");
-/* harmony import */ var _pages_Orders__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./pages/Orders */ "./resources/react-app/src/pages/Orders/index.tsx");
-/* harmony import */ var _pages_Orders_UploadFile__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./pages/Orders/UploadFile */ "./resources/react-app/src/pages/Orders/UploadFile/index.tsx");
-/* harmony import */ var _pages_Photos_Search__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./pages/Photos/Search */ "./resources/react-app/src/pages/Photos/Search/index.tsx");
-/* harmony import */ var _pages_Photos_Upload__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./pages/Photos/Upload */ "./resources/react-app/src/pages/Photos/Upload/index.tsx");
-/* harmony import */ var _pages_Tracking__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./pages/Tracking */ "./resources/react-app/src/pages/Tracking/index.tsx");
+/* harmony import */ var _pages_Home_Attendance__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./pages/Home/Attendance */ "./resources/react-app/src/pages/Home/Attendance/index.tsx");
+/* harmony import */ var _pages_Home_Shipment__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./pages/Home/Shipment */ "./resources/react-app/src/pages/Home/Shipment/index.tsx");
+/* harmony import */ var _pages_Login__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./pages/Login */ "./resources/react-app/src/pages/Login/index.tsx");
+/* harmony import */ var _pages_Orders__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./pages/Orders */ "./resources/react-app/src/pages/Orders/index.tsx");
+/* harmony import */ var _pages_Orders_UploadFile__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./pages/Orders/UploadFile */ "./resources/react-app/src/pages/Orders/UploadFile/index.tsx");
+/* harmony import */ var _pages_Photos_Search__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./pages/Photos/Search */ "./resources/react-app/src/pages/Photos/Search/index.tsx");
+/* harmony import */ var _pages_Photos_Upload__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./pages/Photos/Upload */ "./resources/react-app/src/pages/Photos/Upload/index.tsx");
+/* harmony import */ var _pages_Tracking__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./pages/Tracking */ "./resources/react-app/src/pages/Tracking/index.tsx");
 var __assign = undefined && undefined.__assign || function () {
   __assign = Object.assign || function (t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -2198,6 +2199,7 @@ var __assign = undefined && undefined.__assign || function () {
 
   return __assign.apply(this, arguments);
 };
+
 
 
 
@@ -2232,7 +2234,7 @@ function App() {
   };
 
   var getElement = function getElement(element) {
-    return isLogged() ? element : (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_14__.Navigate, {
+    return isLogged() ? element : (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Navigate, {
       to: '/login'
     });
   };
@@ -2254,34 +2256,37 @@ function App() {
     children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_contexts_Navbar__WEBPACK_IMPORTED_MODULE_3__.NavbarContext.Provider, __assign({
       value: [navbarItems, setNavbarItems]
     }, {
-      children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_14__.Routes, {
-        children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_14__.Route, {
+      children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Routes, {
+        children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
           path: '/login',
-          element: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Login__WEBPACK_IMPORTED_MODULE_8__.Login, {})
-        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_14__.Route, {
+          element: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Login__WEBPACK_IMPORTED_MODULE_9__.Login, {})
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
           path: '/',
           element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Home__WEBPACK_IMPORTED_MODULE_6__.HomePage, {}))
-        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_14__.Route, {
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
           path: '/pedidos',
-          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Orders__WEBPACK_IMPORTED_MODULE_9__.OrdersPage, {}))
-        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_14__.Route, {
+          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Orders__WEBPACK_IMPORTED_MODULE_10__.OrdersPage, {}))
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
           path: '/arquivo-upload',
-          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Orders_UploadFile__WEBPACK_IMPORTED_MODULE_10__["default"], {}))
-        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_14__.Route, {
+          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Orders_UploadFile__WEBPACK_IMPORTED_MODULE_11__["default"], {}))
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
           path: '/expedicao',
-          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Home_Shipment__WEBPACK_IMPORTED_MODULE_7__.ShipmentPage, {}))
-        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_14__.Route, {
+          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Home_Shipment__WEBPACK_IMPORTED_MODULE_8__.ShipmentPage, {}))
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
           path: '/fotos/enviar',
-          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Photos_Upload__WEBPACK_IMPORTED_MODULE_12__.PhotosUploadPage, {}))
-        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_14__.Route, {
+          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Photos_Upload__WEBPACK_IMPORTED_MODULE_13__.PhotosUploadPage, {}))
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
           path: '/fotos/pesquisar',
-          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Photos_Search__WEBPACK_IMPORTED_MODULE_11__.PhotosSearchPage, {}))
-        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_14__.Route, {
+          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Photos_Search__WEBPACK_IMPORTED_MODULE_12__.PhotosSearchPage, {}))
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
+          path: '/atendimento',
+          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Home_Attendance__WEBPACK_IMPORTED_MODULE_7__.Attendance, {}))
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
+          path: '/rastreamento',
+          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Tracking__WEBPACK_IMPORTED_MODULE_14__["default"], {}))
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
           path: '/empresas',
           element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Companies__WEBPACK_IMPORTED_MODULE_5__.CompaniesPage, {}))
-        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_14__.Route, {
-          path: '/rastreamento',
-          element: getElement((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_pages_Tracking__WEBPACK_IMPORTED_MODULE_13__["default"], {}))
         })]
       })
     }))
@@ -4421,6 +4426,7 @@ var fields = {
     label: "Última movimentação"
   },
   last_update_date: {
+    isDate: true,
     editable: false,
     label: "Data da movimentação"
   },
@@ -4429,12 +4435,19 @@ var fields = {
     label: "Detalhes"
   },
   expected_date: {
+    isDate: true,
     editable: false,
     label: "Prazo para o cliente"
   },
   delivery_expected_date: {
+    isDate: true,
     editable: false,
     label: "Prazo da transportadora"
+  },
+  api_calling_date: {
+    isDate: true,
+    editable: false,
+    label: "Última atualização"
   },
   observation: {
     editable: true,
@@ -4446,65 +4459,194 @@ var updateRow = function updateRow(trackingCode, deliveryMethod, row, fields) {
   _services_axios__WEBPACK_IMPORTED_MODULE_3__["default"].post('/api/tracking/update', {
     tracking_code: trackingCode,
     delivery_method: deliveryMethod
-  }).then(function (response) {
-    return response.data;
-  }).then(function (response) {
-    react_toastify__WEBPACK_IMPORTED_MODULE_4__.toast.success("Rastreio atualizado!");
-  })["catch"](function (err) {
+  }).then(function (_) {
+    return react_toastify__WEBPACK_IMPORTED_MODULE_4__.toast.success("Rastreio atualizado!");
+  })["catch"](function (_) {
     return react_toastify__WEBPACK_IMPORTED_MODULE_4__.toast.error("Ocorreu algum erro... Entrar em contato com o setor de TI");
   });
   console.log(row.children[0].props);
 };
 
+var updateField = function updateField(trackingCode, input, field) {
+  var value = input.value;
+  _services_axios__WEBPACK_IMPORTED_MODULE_3__["default"].post('/api/tracking/update-field', {
+    tracking_code: trackingCode,
+    field: field,
+    value: value
+  }).then(function (_) {
+    return react_toastify__WEBPACK_IMPORTED_MODULE_4__.toast.success('Observação atualizada!');
+  })["catch"](function (_) {
+    return react_toastify__WEBPACK_IMPORTED_MODULE_4__.toast.error('Erro ao salvar a observação...');
+  });
+};
+
+var getRows = function getRows(data, fieldsKeys, actualPage) {
+  var rowsElements = [];
+  var offset = actualPage * ROWS_PER_PAGE;
+  data.slice(offset, offset + ROWS_PER_PAGE).forEach(function (row, idx) {
+    var btnCell = (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("td", __assign({
+      className: "tracking-update-button",
+      onClick: function onClick(event) {
+        return updateRow(row.tracking_code, row.delivery_method, rowElement.props, fields);
+      }
+    }, {
+      children: "Atualizar"
+    }));
+
+    var rowElement = (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("tr", {
+      children: __spreadArray([btnCell], fieldsKeys.map(function (key, idx) {
+        return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("td", {
+          children: fields[key].editable ? (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("textarea", {
+            onKeyDown: function onKeyDown(event) {
+              if (event.key !== "Enter") return;
+              var input = event.target;
+              updateField(row.tracking_code, input, key);
+              input.blur();
+            },
+            defaultValue: row[key]
+          }) : fields[key].isDate ? row[key] ? new Date(row[key]).toLocaleDateString("pt-BR") : "" : row[key]
+        }, idx);
+      }), true)
+    }, idx);
+
+    rowsElements.push(rowElement);
+  });
+  return rowsElements;
+};
+
+var getFilteredData = function getFilteredData(data, filterInput, filterField) {
+  if (!filterInput.current) return data;
+  if (!filterField.current) return data;
+  var input = filterInput.current;
+  var searchTerm = input.value;
+  if (searchTerm === "") return data;
+  var select = filterField.current;
+  var key = select.value;
+  return data.filter(function (row) {
+    return row[key].startsWith(searchTerm);
+  });
+};
+
+var ROWS_PER_PAGE = 20;
 var TrackingTable = function TrackingTable(props) {
   var data = props.data;
   var fieldsKeys = Object.keys(fields);
 
-  var _a = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null),
-      headers = _a[0],
-      setHeaders = _a[1];
+  var _a = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(data),
+      filteredData = _a[0],
+      setFilteredData = _a[1];
 
   var _b = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
-      rows = _b[0],
-      setRows = _b[1];
+      filterFields = _b[0],
+      setFilterFields = _b[1];
+
+  var _c = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
+      selectOptions = _c[0],
+      setSelectOptions = _c[1];
+
+  var _d = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null),
+      headers = _d[0],
+      setHeaders = _d[1];
+
+  var _e = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
+      rows = _e[0],
+      setRows = _e[1];
+
+  var _f = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(0),
+      actualPage = _f[0],
+      setActualPage = _f[1];
+
+  var filterField = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+  var filterInput = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+
+  var headerSort = function headerSort(field) {
+    var filtered = getFilteredData(data, filterInput, filterField).sort(function (a, b) {
+      return a[field] > b[field] ? 1 : -1;
+    });
+    setRows(getRows(filtered, fieldsKeys, actualPage));
+  };
+
+  var filterData = function filterData() {
+    return setFilteredData(getFilteredData(data, filterInput, filterField));
+  };
+
+  var filterDataHotkey = function filterDataHotkey(event) {
+    return event.key === "Enter" ? filterData() : null;
+  };
+
+  var changePage = function changePage(event) {
+    var select = event.target;
+    var newPage = Number(select.value) - 1;
+    setActualPage(newPage);
+  };
 
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+    var optionsElements = [];
+    var selectElements = [];
     var headerElements = [];
-    var rowElements = [];
+    var rowsElements = getRows(filteredData, fieldsKeys, actualPage);
+    var totalPages = Math.ceil(filteredData.length / ROWS_PER_PAGE);
     fieldsKeys.forEach(function (key, idx) {
-      return headerElements.push((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("th", {
+      headerElements.push((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("th", __assign({
+        onClick: function onClick() {
+          return headerSort(key);
+        }
+      }, {
         children: fields[key].label
-      }, idx));
+      }), idx));
+      optionsElements.push((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("option", __assign({
+        value: key
+      }, {
+        children: fields[key].label
+      }), idx));
     });
+
+    for (var i = 0; i < totalPages; i++) {
+      selectElements.push((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("option", {
+        children: i + 1
+      }, i));
+    }
+
+    setFilterFields(optionsElements);
+    setSelectOptions(selectElements);
     setHeaders((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("tr", {
       children: __spreadArray([(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("th", {})], headerElements, true)
     }));
-    data.forEach(function (row, idx) {
-      var btnCell = (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("td", __assign({
-        className: "tracking-update-button",
-        onClick: function onClick(event) {
-          return updateRow(row.tracking_code, row.delivery_method, rowElement.props, fields);
-        }
+    setRows(rowsElements);
+  }, [filteredData, actualPage]);
+  return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
+    className: "tracking-table-container"
+  }, {
+    children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
+      className: "tracking-nav-buttons"
+    }, {
+      children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({
+        className: "tracking-filter"
       }, {
-        children: "Atualizar"
-      }));
-
-      var rowElement = (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("tr", {
-        children: __spreadArray([btnCell], fieldsKeys.map(function (key, idx) {
-          return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("td", {
-            children: fields[key].editable ? (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("textarea", {
-              defaultValue: row[key]
-            }) : row[key]
-          }, idx);
-        }), true)
-      }, idx);
-
-      rowElements.push(rowElement);
-    });
-    setRows(rowElements);
-  }, []);
-  return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-    children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("table", __assign({
+        children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
+          ref: filterInput,
+          type: "text",
+          placeholder: "Pesquisa",
+          onKeyDown: filterDataHotkey
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("select", __assign({
+          ref: filterField
+        }, {
+          children: filterFields
+        })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({
+          onClick: filterData
+        }, {
+          children: "Filtrar"
+        }))]
+      })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+        children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
+          children: "P\xE1gina "
+        }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("select", __assign({
+          onChange: changePage
+        }, {
+          children: selectOptions
+        }))]
+      })]
+    })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("table", __assign({
       className: "tracking-table"
     }, {
       children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("thead", {
@@ -4513,7 +4655,7 @@ var TrackingTable = function TrackingTable(props) {
         children: rows
       })]
     })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_toastify__WEBPACK_IMPORTED_MODULE_4__.ToastContainer, {})]
-  });
+  }));
 };
 
 /***/ }),
@@ -5270,6 +5412,33 @@ var CompaniesPage = function CompaniesPage() {
 
 /***/ }),
 
+/***/ "./resources/react-app/src/pages/Home/Attendance/index.tsx":
+/*!*****************************************************************!*\
+  !*** ./resources/react-app/src/pages/Home/Attendance/index.tsx ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Attendance": () => (/* binding */ Attendance)
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _components_Home__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../components/Home */ "./resources/react-app/src/components/Home/index.tsx");
+
+
+var Attendance = function Attendance() {
+  return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_Home__WEBPACK_IMPORTED_MODULE_1__.Home, {
+    sections: [{
+      icon: "/icons/rastreamento.png",
+      label: "Rastreamento dos pedidos",
+      url: "/rastreamento"
+    }]
+  });
+};
+
+/***/ }),
+
 /***/ "./resources/react-app/src/pages/Home/Shipment/index.tsx":
 /*!***************************************************************!*\
   !*** ./resources/react-app/src/pages/Home/Shipment/index.tsx ***!
@@ -5326,6 +5495,10 @@ var HomePage = function HomePage() {
       icon: "/icons/expedição.png",
       label: "Expedição",
       url: "/expedicao"
+    }, {
+      icon: "/icons/atendimento.png",
+      label: "Atendimento",
+      url: "/atendimento"
     }, {
       icon: "/icons/companhia.png",
       label: "Empresas",
@@ -6258,7 +6431,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".tracking-table {\r\n  width: 100%;\r\n  height: 100%;\r\n  height: min-content;\r\n  background-color: white;\r\n  border: none;\r\n}\r\n\r\n.tracking-table > thead {\r\n  background-color: black;\r\n  color: white;\r\n  height: 70px;\r\n  word-wrap: break-word;\r\n}\r\n\r\n.tracking-table > tbody {\r\n  font-family: Arial, Helvetica, sans-serif;\r\n}\r\n\r\n.tracking-table > tbody {\r\n  height: 100%;\r\n}\r\n\r\n.tracking-table > tbody > tr {\r\n  min-height: 50px;\r\n}\r\n\r\n.tracking-table > tbody > tr > td, .tracking-table > tbody > tr > td > textarea {\r\n  height: 100%;\r\n}\r\n.tracking-table > tbody > tr > td > textarea {\r\n  padding: 0;\r\n  margin: 0;\r\n  width: 100%;\r\n}\r\n\r\n.tracking-update-button {\r\n  background-color: rgb(51, 160, 51);\r\n  color: white;\r\n  border-radius: 3px;\r\n  padding: 0 2px;\r\n}\r\n.tracking-update-button:hover {\r\n  cursor: pointer;\r\n  background-color: rgb(26, 90, 26);\r\n  transition: 125ms;\r\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".tracking-table-container {\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\n.tracking-nav-buttons {\r\n  height: 70px;\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: space-between;\r\n  font-family: Arial, Helvetica, sans-serif;\r\n}\r\n.tracking-nav-buttons > * {\r\n  margin: 0 15px;\r\n}\r\n\r\n.tracking-filter > input {\r\n  border: none;\r\n  border-bottom: 1px solid black;\r\n  border-radius: 3px 0 0 3px;\r\n  outline: none;\r\n  height: 7px;\r\n  padding: 10px;\r\n}\r\n.tracking-filter > select {\r\n  border: none;\r\n  height: 27px;\r\n  border-bottom: 1px solid black;\r\n}\r\n.tracking-filter > select:hover {\r\n  background-color: black;\r\n  color: white;\r\n  cursor: pointer;\r\n}\r\n.tracking-filter > button {\r\n  border: none;\r\n  height: 27px;\r\n  border-bottom: 1px solid black;\r\n  border-radius: 0 3px 3px 0;\r\n  cursor: pointer;\r\n}\r\n.tracking-filter > button:hover {\r\n  background-color: black;\r\n  color: white;\r\n}\r\n\r\n.tracking-table {\r\n  width: 100%;\r\n  height: 100%;\r\n  height: min-content;\r\n  background-color: white;\r\n  border: none;\r\n}\r\n\r\n.tracking-table > thead {\r\n  background-color: black;\r\n  color: white;\r\n  height: 70px;\r\n  word-wrap: break-word;\r\n  -webkit-user-select: none;\r\n          user-select: none;\r\n}\r\n.tracking-table > thead > tr > th:hover {\r\n  background-color: rgb(44, 44, 44);\r\n  color: rgb(183, 183, 183);\r\n  transition: 125ms;\r\n  cursor: pointer;\r\n}\r\n\r\n.tracking-table > tbody {\r\n  font-family: Arial, Helvetica, sans-serif;\r\n  font-size: small;\r\n}\r\n\r\n.tracking-table > tbody {\r\n  height: 100%;\r\n}\r\n\r\n.tracking-table > tbody > tr {\r\n  min-height: 50px;\r\n}\r\n\r\n.tracking-table > tbody > tr > td, .tracking-table > tbody > tr > td > textarea {\r\n  border-right: 1px solid black;\r\n  border-bottom: 1px solid black;\r\n  height: 100%;\r\n}\r\n.tracking-table > tbody > tr > td > textarea {\r\n  padding: 0;\r\n  margin: 0;\r\n  width: 100%;\r\n}\r\n\r\n.tracking-update-button {\r\n  background-color: rgb(51, 160, 51);\r\n  color: white;\r\n  border-radius: 3px;\r\n  padding: 0 2px;\r\n}\r\n.tracking-update-button:hover {\r\n  cursor: pointer;\r\n  background-color: rgb(26, 90, 26);\r\n  transition: 125ms;\r\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

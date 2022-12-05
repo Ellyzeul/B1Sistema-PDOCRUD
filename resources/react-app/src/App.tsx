@@ -7,6 +7,7 @@ import { NavbarContext } from './contexts/Navbar';
 import { UserDataContext } from './contexts/UserData';
 import { CompaniesPage } from './pages/Companies';
 import { HomePage } from './pages/Home';
+import { Attendance } from './pages/Home/Attendance';
 import { ShipmentPage } from './pages/Home/Shipment';
 import { Login } from './pages/Login';
 import { OrdersPage } from './pages/Orders';
@@ -46,8 +47,9 @@ function App() {
           <Route path='/expedicao' element={getElement(<ShipmentPage/>)} />
           <Route path='/fotos/enviar' element={getElement(<PhotosUploadPage/>)} />
           <Route path='/fotos/pesquisar' element={getElement(<PhotosSearchPage/>)} />
-          <Route path='/empresas' element={getElement(<CompaniesPage/>)} />
+          <Route path='/atendimento' element={getElement(<Attendance/>)} />
           <Route path='/rastreamento' element={getElement(<TrackingPage/>)} />
+          <Route path='/empresas' element={getElement(<CompaniesPage/>)} />
         </Routes>
       </NavbarContext.Provider>
     </UserDataContext.Provider>
