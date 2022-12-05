@@ -14,5 +14,5 @@ jobs:
           server: ${{ secrets.HOSTGATOR_FTP_SERVER }}
           user: ${{ secrets.HOSTGATOR_FTP_USERNAME }}
           password: ${{ secrets.HOSTGATOR_FTP_PASSWORD }}
-          local_dir: "./repositories/B1Sistema-PDOCRUD"
+          local_dir: "./"
           delete: "false"
