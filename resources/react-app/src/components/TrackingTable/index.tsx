@@ -3,6 +3,7 @@ import { TrackingTableProp } from "./types"
 import "./style.css"
 import api from "../../services/axios"
 import { toast, ToastContainer } from "react-toastify"
+import { Workbook } from "exceljs"
 
 const fields = {
   tracking_code: {editable: false, label: "Rastreio"},
@@ -122,6 +123,47 @@ export const TrackingTable = (props: TrackingTableProp) => {
     setActualPage(newPage)
   }
 
+  const downloadExcel = () => {
+    const idToast = toast.info('Processando...')
+    const orderNumbers = Array.from(new Set(data.map(row => row.online_order_number)))
+    api.post('/api/tracking/read-for-excel', {
+      order_numbers: orderNumbers
+    })
+      .then(response => response.data)
+      .then(response => {
+        const { columns, data } = response
+        const xlsxColumns = [] as {key: string, header: string}[]
+        Object.keys(data[0]).forEach((key) => xlsxColumns.push({
+          key: key,
+          header: columns[key]
+        }))
+        const workbook = new Workbook()
+        const worksheet = workbook.addWorksheet("Pedidos")
+        toast.dismiss(idToast)
+
+        worksheet.columns = xlsxColumns
+        worksheet.addRows(data)
+
+        workbook.xlsx.writeBuffer()
+          .then(buffer => new Blob([buffer], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}))
+          .then(blob => new File([blob], 'Rastreamento.xlsx'))
+          .then(file => {
+            const url = URL.createObjectURL(file)
+            const anchor = document.createElement('a')
+            anchor.href = url
+            anchor.click()
+
+            URL.revokeObjectURL(url)
+            toast.success('Excel gerado!')
+          })
+          .catch(_ => toast.error('Erro. Tente novamente ou contate o TI em caso de muitos erros...'))
+      })
+      .catch(_ => {
+        toast.dismiss(idToast)
+        toast.error('Algum erro interno ocorreu...')
+      })
+  }
+
   useEffect(() => {
     const optionsElements = [] as JSX.Element[]
     const selectElements = [] as JSX.Element[]
@@ -164,6 +206,14 @@ export const TrackingTable = (props: TrackingTableProp) => {
           <select ref={filterField}>{filterFields}</select>
           <button onClick={filterData}>Filtrar</button>
         </div>
+        <button className="tracking-download-xlsx" onClick={downloadExcel}>
+          <div className="tracking-download-xslx-img-container xlsx-color-light-green">
+            <img src="/icons/download-white.png" alt="Excel" />
+          </div>
+          <div className="tracking-download-xslx-img-container xlsx-color-dark-green xlsx-download-hiddable">
+            <img src="/icons/excel-white.png" alt="Excel" />
+          </div>
+        </button>
         <div>
           <span>Página </span>
           <select onChange={changePage}>{selectOptions}</select>

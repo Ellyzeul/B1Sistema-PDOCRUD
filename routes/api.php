@@ -100,6 +100,7 @@ Route::controller(TrackingController::class)
     ->prefix('tracking')
     ->group(function() {
         Route::get('/read', 'read');
+        Route::post('/read-for-excel', 'readForExcel');
         Route::post('/update', 'update');
         Route::post('/update-field', 'updateField');
     });

@@ -89,6 +89,11 @@ class Order
         ];
     }
 
+    public static function getColumnsNames()
+    {
+        return Order::$columnsRename;
+    }
+
     private static function setFields(PDOCrud $crud, string|null $phase)
     {
         $columns = [];
