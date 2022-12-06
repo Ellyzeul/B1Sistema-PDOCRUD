@@ -16,6 +16,17 @@ class TrackingController extends Controller
 
 		return $response;
 	}
+
+	public function readForExcel(Request $request)
+	{
+		$tracking = new Tracking();
+
+		$orderNumbers = $request->input('order_numbers');
+
+		$response = $tracking->readForExcel($orderNumbers);
+
+		return $response;
+	}
 	
 	public function update(Request $request)
 	{

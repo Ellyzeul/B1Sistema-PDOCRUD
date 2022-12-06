@@ -44,6 +44,27 @@ class Tracking extends Model
 		return $results;
 	}
 
+	public function readForExcel(array $orderNumbers)
+	{
+		$results = DB::table('order_control')
+			->whereIn('online_order_number', $orderNumbers)
+			->select(
+				'id',
+				'online_order_number',
+				'id_phase',
+				'id_delivery_method',
+				'tracking_code',
+				'delivered_date',
+				'ask_rating'
+			)
+			->get();
+		
+		return [
+			"columns" => Order::getColumnsNames(),
+			"data" => $results
+		];
+	}
+
 	public function updateOrInsertTracking(string $trackingCode, string | null $deliveryMethod)
 	{
 		if(!isset($this->supportedServices[$deliveryMethod])) return ["Serviço não suportado", 400];
