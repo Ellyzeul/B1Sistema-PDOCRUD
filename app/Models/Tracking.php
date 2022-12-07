@@ -21,8 +21,6 @@ class Tracking extends Model
 
 	public function read()
 	{
-		$this->updateDB();
-
 		$results = DB::table('trackings')
 			->join('order_control', 'trackings.tracking_code', '=', 'order_control.tracking_code')
 			->select(
