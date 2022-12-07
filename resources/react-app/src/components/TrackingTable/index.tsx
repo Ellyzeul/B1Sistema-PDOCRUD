@@ -84,7 +84,9 @@ const getFilteredData = (
   const select = filterField.current as HTMLSelectElement
   const key = select.value
 
-  return data.filter(row => row[key].startsWith(searchTerm))
+  console.log(data)
+  console.log(key)
+  return data.filter(row => String(row[key]).startsWith(searchTerm))
 }
 
 const ROWS_PER_PAGE = 20
