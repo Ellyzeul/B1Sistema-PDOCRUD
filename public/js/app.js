@@ -4525,8 +4525,10 @@ var getFilteredData = function getFilteredData(data, filterInput, filterField) {
   if (searchTerm === "") return data;
   var select = filterField.current;
   var key = select.value;
+  console.log(data);
+  console.log(key);
   return data.filter(function (row) {
-    return row[key].startsWith(searchTerm);
+    return String(row[key]).startsWith(searchTerm);
   });
 };
 

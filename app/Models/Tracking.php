@@ -49,11 +49,8 @@ class Tracking extends Model
 			->select(
 				'id',
 				'online_order_number',
-				'id_phase',
-				'id_delivery_method',
 				'tracking_code',
 				'delivered_date',
-				'ask_rating'
 			)
 			->get();
 		
