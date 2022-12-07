@@ -4617,6 +4617,7 @@ var TrackingTable = function TrackingTable(props) {
         var url = URL.createObjectURL(file);
         var anchor = document.createElement('a');
         anchor.href = url;
+        anchor.download = "Rastreamento.xlsx";
         anchor.click();
         URL.revokeObjectURL(url);
         react_toastify__WEBPACK_IMPORTED_MODULE_4__.toast.success('Excel gerado!');

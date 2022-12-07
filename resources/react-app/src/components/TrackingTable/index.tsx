@@ -151,6 +151,7 @@ export const TrackingTable = (props: TrackingTableProp) => {
             const url = URL.createObjectURL(file)
             const anchor = document.createElement('a')
             anchor.href = url
+            anchor.download = "Rastreamento.xlsx"
             anchor.click()
 
             URL.revokeObjectURL(url)
