@@ -84,8 +84,6 @@ const getFilteredData = (
   const select = filterField.current as HTMLSelectElement
   const key = select.value
 
-  console.log(data)
-  console.log(key)
   return data.filter(row => String(row[key]).startsWith(searchTerm))
 }
 
@@ -133,18 +131,37 @@ export const TrackingTable = (props: TrackingTableProp) => {
     })
       .then(response => response.data)
       .then(response => {
-        const { columns, data } = response
+        const { columns, data: xlsxRows } = response as {columns: {[key: string]: string}, data: {
+          tracking_code: string,
+          online_order_number: string,
+          [key: string]: string
+        }[]}
         const xlsxColumns = [] as {key: string, header: string}[]
-        Object.keys(data[0]).forEach((key) => xlsxColumns.push({
-          key: key,
-          header: columns[key]
-        }))
+        Object.keys(xlsxRows[0]).forEach((key) => {
+          xlsxColumns.push({
+            key: key,
+            header: columns[key]
+          })
+        })
         const workbook = new Workbook()
         const worksheet = workbook.addWorksheet("Pedidos")
         toast.dismiss(idToast)
 
-        worksheet.columns = xlsxColumns
-        worksheet.addRows(data)
+        worksheet.columns = [
+          ...xlsxColumns,
+          {key: "status", header: "Última movimentação"},
+          {key: "last_update_date", header: "Data da movimentação"},
+        ]
+        const rows = xlsxRows.map(row => {
+          const tracking = data.find(tracking => (tracking.tracking_code === row.tracking_code) && (tracking.online_order_number === row.online_order_number))
+
+          return {
+            ...row,
+            status: tracking !== undefined ? tracking.status : null,
+            last_update_date: tracking !== undefined ? tracking.last_update_date : null,
+          }
+        })
+        worksheet.addRows(rows)
 
         workbook.xlsx.writeBuffer()
           .then(buffer => new Blob([buffer], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}))

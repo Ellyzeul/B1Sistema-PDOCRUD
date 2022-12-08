@@ -4525,8 +4525,6 @@ var getFilteredData = function getFilteredData(data, filterInput, filterField) {
   if (searchTerm === "") return data;
   var select = filterField.current;
   var key = select.value;
-  console.log(data);
-  console.log(key);
   return data.filter(function (row) {
     return String(row[key]).startsWith(searchTerm);
   });
@@ -4595,11 +4593,12 @@ var TrackingTable = function TrackingTable(props) {
     }).then(function (response) {
       return response.data;
     }).then(function (response) {
-      var columns = response.columns,
-          data = response.data;
+      var _a = response,
+          columns = _a.columns,
+          xlsxRows = _a.data;
       var xlsxColumns = [];
-      Object.keys(data[0]).forEach(function (key) {
-        return xlsxColumns.push({
+      Object.keys(xlsxRows[0]).forEach(function (key) {
+        xlsxColumns.push({
           key: key,
           header: columns[key]
         });
@@ -4607,8 +4606,23 @@ var TrackingTable = function TrackingTable(props) {
       var workbook = new exceljs__WEBPACK_IMPORTED_MODULE_5__.Workbook();
       var worksheet = workbook.addWorksheet("Pedidos");
       react_toastify__WEBPACK_IMPORTED_MODULE_4__.toast.dismiss(idToast);
-      worksheet.columns = xlsxColumns;
-      worksheet.addRows(data);
+      worksheet.columns = __spreadArray(__spreadArray([], xlsxColumns, true), [{
+        key: "status",
+        header: "Última movimentação"
+      }, {
+        key: "last_update_date",
+        header: "Data da movimentação"
+      }], false);
+      var rows = xlsxRows.map(function (row) {
+        var tracking = data.find(function (tracking) {
+          return tracking.tracking_code === row.tracking_code && tracking.online_order_number === row.online_order_number;
+        });
+        return __assign(__assign({}, row), {
+          status: tracking !== undefined ? tracking.status : null,
+          last_update_date: tracking !== undefined ? tracking.last_update_date : null
+        });
+      });
+      worksheet.addRows(rows);
       workbook.xlsx.writeBuffer().then(function (buffer) {
         return new Blob([buffer], {
           type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
