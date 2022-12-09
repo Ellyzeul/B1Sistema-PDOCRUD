@@ -47,7 +47,7 @@ const getRows = (data: {[key: string]: string}[], fieldsKeys: string[], actualPa
   data.slice(offset, offset + ROWS_PER_PAGE).forEach((row, idx) => {
     const btnCell = <td 
       className="tracking-update-button" 
-      onClick={event => updateRow(row.tracking_code, row.delivery_method, rowElement.props, fields)}
+      onClick={() => updateRow(row.tracking_code, row.delivery_method, rowElement.props, fields)}
     >Atualizar</td>
     const rowElement = <tr key={idx}>{[
       btnCell, 
@@ -60,7 +60,7 @@ const getRows = (data: {[key: string]: string}[], fieldsKeys: string[], actualPa
               updateField(row.tracking_code, input, key)
               input.blur()
             }} 
-            defaultValue={row[key]}
+            value={row[key]}
           ></textarea>
         : fields[key].isDate ? row[key] ? (new Date(row[key])).toLocaleDateString("pt-BR") : "" : row[key]
         }</td>
