@@ -4489,7 +4489,7 @@ var getRows = function getRows(data, fieldsKeys, actualPage) {
   data.slice(offset, offset + ROWS_PER_PAGE).forEach(function (row, idx) {
     var btnCell = (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("td", __assign({
       className: "tracking-update-button",
-      onClick: function onClick(event) {
+      onClick: function onClick() {
         return updateRow(row.tracking_code, row.delivery_method, rowElement.props, fields);
       }
     }, {
@@ -4506,7 +4506,7 @@ var getRows = function getRows(data, fieldsKeys, actualPage) {
               updateField(row.tracking_code, input, key);
               input.blur();
             },
-            defaultValue: row[key]
+            value: row[key]
           }) : fields[key].isDate ? row[key] ? new Date(row[key]).toLocaleDateString("pt-BR") : "" : row[key]
         }, idx);
       }), true)
