@@ -4499,15 +4499,16 @@ var getRows = function getRows(data, fieldsKeys, actualPage) {
     var rowElement = (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("tr", {
       children: __spreadArray([btnCell], fieldsKeys.map(function (key, idx) {
         return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("td", {
-          children: fields[key].editable ? (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("textarea", {
+          children: fields[key].editable ? (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("textarea", __assign({
             onKeyDown: function onKeyDown(event) {
               if (event.key !== "Enter") return;
               var input = event.target;
               updateField(row.tracking_code, input, key);
               input.blur();
-            },
-            defaultValue: row[key]
-          }) : fields[key].isDate ? row[key] ? new Date(row[key]).toLocaleDateString("pt-BR") : "" : row[key]
+            }
+          }, {
+            children: row[key]
+          })) : fields[key].isDate ? row[key] ? new Date(row[key]).toLocaleDateString("pt-BR") : "" : row[key]
         }, idx);
       }), true)
     }, idx);
