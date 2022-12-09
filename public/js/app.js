@@ -4506,7 +4506,7 @@ var getRows = function getRows(data, fieldsKeys, actualPage) {
               updateField(row.tracking_code, input, key);
               input.blur();
             },
-            value: row[key]
+            defaultValue: row[key]
           }) : fields[key].isDate ? row[key] ? new Date(row[key]).toLocaleDateString("pt-BR") : "" : row[key]
         }, idx);
       }), true)
