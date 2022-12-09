@@ -60,7 +60,8 @@ const getRows = (data: {[key: string]: string}[], fieldsKeys: string[], actualPa
               updateField(row.tracking_code, input, key)
               input.blur()
             }} 
-          >{row[key]}</textarea>
+            defaultValue={row[key]}
+          ></textarea>
         : fields[key].isDate ? row[key] ? (new Date(row[key])).toLocaleDateString("pt-BR") : "" : row[key]
         }</td>
     )]}</tr>
