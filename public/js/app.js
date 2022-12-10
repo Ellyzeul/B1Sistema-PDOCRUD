@@ -4360,6 +4360,71 @@ var TopScrollBar = function TopScrollBar() {
 
 /***/ }),
 
+/***/ "./resources/react-app/src/components/TrackingTable/Cells/Textarea/index.tsx":
+/*!***********************************************************************************!*\
+  !*** ./resources/react-app/src/components/TrackingTable/Cells/Textarea/index.tsx ***!
+  \***********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Textarea": () => (/* binding */ Textarea)
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _functions_updateField__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../functions/updateField */ "./resources/react-app/src/components/TrackingTable/functions/updateField.ts");
+
+
+var Textarea = function Textarea(props) {
+  var defaultValue = props.defaultValue,
+      tracking_code = props.tracking_code,
+      field_name = props.field_name;
+  return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("textarea", {
+    onKeyDown: function onKeyDown(event) {
+      if (event.key !== "Enter") return;
+      var input = event.target;
+      (0,_functions_updateField__WEBPACK_IMPORTED_MODULE_1__["default"])(tracking_code, input, field_name);
+      input.blur();
+    },
+    defaultValue: defaultValue
+  });
+};
+
+/***/ }),
+
+/***/ "./resources/react-app/src/components/TrackingTable/functions/updateField.ts":
+/*!***********************************************************************************!*\
+  !*** ./resources/react-app/src/components/TrackingTable/functions/updateField.ts ***!
+  \***********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.mjs");
+/* harmony import */ var _services_axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../services/axios */ "./resources/react-app/src/services/axios.ts");
+
+
+
+var updateField = function updateField(trackingCode, input, field) {
+  var value = input.value;
+  _services_axios__WEBPACK_IMPORTED_MODULE_1__["default"].post('/api/tracking/update-field', {
+    tracking_code: trackingCode,
+    field: field,
+    value: value
+  }).then(function (_) {
+    return react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.success('Observação atualizada!');
+  })["catch"](function (_) {
+    return react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error('Erro ao salvar a observação...');
+  });
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (updateField);
+
+/***/ }),
+
 /***/ "./resources/react-app/src/components/TrackingTable/index.tsx":
 /*!********************************************************************!*\
   !*** ./resources/react-app/src/components/TrackingTable/index.tsx ***!
@@ -4379,6 +4444,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.mjs");
 /* harmony import */ var exceljs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! exceljs */ "./node_modules/exceljs/dist/exceljs.min.js");
 /* harmony import */ var exceljs__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(exceljs__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _Cells_Textarea__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Cells/Textarea */ "./resources/react-app/src/components/TrackingTable/Cells/Textarea/index.tsx");
 var __assign = undefined && undefined.__assign || function () {
   __assign = Object.assign || function (t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -4404,6 +4470,7 @@ var __spreadArray = undefined && undefined.__spreadArray || function (to, from, 
   }
   return to.concat(ar || Array.prototype.slice.call(from));
 };
+
 
 
 
@@ -4470,19 +4537,6 @@ var updateRow = function updateRow(trackingCode, deliveryMethod, row, fields) {
   console.log(row.children[0].props);
 };
 
-var updateField = function updateField(trackingCode, input, field) {
-  var value = input.value;
-  _services_axios__WEBPACK_IMPORTED_MODULE_3__["default"].post('/api/tracking/update-field', {
-    tracking_code: trackingCode,
-    field: field,
-    value: value
-  }).then(function (_) {
-    return react_toastify__WEBPACK_IMPORTED_MODULE_4__.toast.success('Observação atualizada!');
-  })["catch"](function (_) {
-    return react_toastify__WEBPACK_IMPORTED_MODULE_4__.toast.error('Erro ao salvar a observação...');
-  });
-};
-
 var getRows = function getRows(data, fieldsKeys, actualPage) {
   var rowsElements = [];
   var offset = actualPage * ROWS_PER_PAGE;
@@ -4499,16 +4553,11 @@ var getRows = function getRows(data, fieldsKeys, actualPage) {
     var rowElement = (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("tr", {
       children: __spreadArray([btnCell], fieldsKeys.map(function (key, idx) {
         return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("td", {
-          children: fields[key].editable ? (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("textarea", __assign({
-            onKeyDown: function onKeyDown(event) {
-              if (event.key !== "Enter") return;
-              var input = event.target;
-              updateField(row.tracking_code, input, key);
-              input.blur();
-            }
-          }, {
-            children: row[key]
-          })) : fields[key].isDate ? row[key] ? new Date(row[key]).toLocaleDateString("pt-BR") : "" : row[key]
+          children: fields[key].editable ? (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_Cells_Textarea__WEBPACK_IMPORTED_MODULE_6__.Textarea, {
+            defaultValue: row[key],
+            tracking_code: row.tracking_code,
+            field_name: key
+          }) : fields[key].isDate ? row[key] ? new Date(row[key]).toLocaleDateString("pt-BR") : "" : row[key]
         }, idx);
       }), true)
     }, idx);
@@ -4554,7 +4603,14 @@ var TrackingTable = function TrackingTable(props) {
 
   var _e = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
       rows = _e[0],
-      setRows = _e[1];
+      setPartialRows = _e[1];
+
+  var setRows = function setRows(rows) {
+    setPartialRows([]);
+    setTimeout(function () {
+      return setPartialRows(rows);
+    }, 1);
+  };
 
   var _f = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(0),
       actualPage = _f[0],
