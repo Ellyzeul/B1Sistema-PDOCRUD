@@ -4,6 +4,7 @@ import "./style.css"
 import api from "../../services/axios"
 import { toast, ToastContainer } from "react-toastify"
 import { Workbook } from "exceljs"
+import { Textarea } from "./Cells/Textarea"
 
 const fields = {
   tracking_code: {editable: false, label: "Rastreio"},
@@ -28,18 +29,6 @@ const updateRow = (trackingCode: string, deliveryMethod: string, row: any, field
   console.log(row.children[0].props)
 }
 
-const updateField = (trackingCode: string, input: HTMLInputElement, field: string) => {
-  const value = input.value
-
-  api.post('/api/tracking/update-field', {
-    tracking_code: trackingCode,
-    field: field,
-    value: value
-  })
-    .then(_ => toast.success('Observação atualizada!'))
-    .catch(_ => toast.error('Erro ao salvar a observação...'))
-}
-
 const getRows = (data: {[key: string]: string}[], fieldsKeys: string[], actualPage: number) => {
   const rowsElements = [] as JSX.Element[]
   const offset = actualPage * ROWS_PER_PAGE
@@ -51,19 +40,13 @@ const getRows = (data: {[key: string]: string}[], fieldsKeys: string[], actualPa
     >Atualizar</td>
     const rowElement = <tr key={idx}>{[
       btnCell, 
-      ...fieldsKeys.map((key, idx) => <td key={idx}>{
+      ...fieldsKeys.map((key, idx) => {
+        return <td key={idx}>{
         fields[key].editable
-        ? <textarea 
-            onKeyDown={(event) => {
-              if(event.key !== "Enter") return
-              const input = event.target as HTMLInputElement
-              updateField(row.tracking_code, input, key)
-              input.blur()
-            }} 
-          >{row[key]}</textarea>
+        ? <Textarea defaultValue={row[key]} tracking_code={row.tracking_code} field_name={key}/>
         : fields[key].isDate ? row[key] ? (new Date(row[key])).toLocaleDateString("pt-BR") : "" : row[key]
         }</td>
-    )]}</tr>
+    })]}</tr>
     rowsElements.push(rowElement)
   })
 
@@ -95,7 +78,11 @@ export const TrackingTable = (props: TrackingTableProp) => {
   const [filterFields, setFilterFields] = useState([] as JSX.Element[])
   const [selectOptions, setSelectOptions] = useState([] as JSX.Element[])
   const [headers, setHeaders] = useState(null as JSX.Element | null)
-  const [rows, setRows] = useState([] as JSX.Element[])
+  const [rows, setPartialRows] = useState([] as JSX.Element[])
+  const setRows = (rows: JSX.Element[]) => {
+    setPartialRows([])
+    setTimeout(() => setPartialRows(rows), 1)
+  }
   const [actualPage, setActualPage] = useState(0)
   const filterField = useRef(null)
   const filterInput = useRef(null)
