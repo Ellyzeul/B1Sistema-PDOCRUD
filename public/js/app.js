@@ -3155,10 +3155,10 @@ var configureDatepickers = function configureDatepickers() {
 
 /***/ }),
 
-/***/ "./resources/react-app/src/components/PDOCrud/functions/configureInvoiceField.tsx":
-/*!****************************************************************************************!*\
-  !*** ./resources/react-app/src/components/PDOCrud/functions/configureInvoiceField.tsx ***!
-  \****************************************************************************************/
+/***/ "./resources/react-app/src/components/PDOCrud/functions/configureInvoiceField.ts":
+/*!***************************************************************************************!*\
+  !*** ./resources/react-app/src/components/PDOCrud/functions/configureInvoiceField.ts ***!
+  \***************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -3245,12 +3245,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _setTopScrollBar__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./setTopScrollBar */ "./resources/react-app/src/components/PDOCrud/functions/setTopScrollBar.tsx");
 /* harmony import */ var _setDeadlineColumn__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./setDeadlineColumn */ "./resources/react-app/src/components/PDOCrud/functions/setDeadlineColumn.ts");
 /* harmony import */ var _setURLColumn__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./setURLColumn */ "./resources/react-app/src/components/PDOCrud/functions/setURLColumn.ts");
-/* harmony import */ var _configureInvoiceField__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./configureInvoiceField */ "./resources/react-app/src/components/PDOCrud/functions/configureInvoiceField.tsx");
+/* harmony import */ var _configureInvoiceField__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./configureInvoiceField */ "./resources/react-app/src/components/PDOCrud/functions/configureInvoiceField.ts");
 /* harmony import */ var _setSearchTrim__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./setSearchTrim */ "./resources/react-app/src/components/PDOCrud/functions/setSearchTrim.ts");
 /* harmony import */ var _configureDatepickers__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./configureDatepickers */ "./resources/react-app/src/components/PDOCrud/functions/configureDatepickers.ts");
 /* harmony import */ var _configureAddressVerifiedColumn__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./configureAddressVerifiedColumn */ "./resources/react-app/src/components/PDOCrud/functions/configureAddressVerifiedColumn.ts");
 /* harmony import */ var _setConditionalStyling__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./setConditionalStyling */ "./resources/react-app/src/components/PDOCrud/functions/setConditionalStyling.ts");
 /* harmony import */ var _setCompaniesIcons__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./setCompaniesIcons */ "./resources/react-app/src/components/PDOCrud/functions/setCompaniesIcons.ts");
+/* harmony import */ var _configureSellercentralColumn__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./configureSellercentralColumn */ "./resources/react-app/src/components/PDOCrud/functions/configureSellercentralColumn.ts");
+
 
 
 
@@ -3282,6 +3284,7 @@ var configurePage = function configurePage(elemRef, refModal, refModalId, refOnl
   (0,_setSearchTrim__WEBPACK_IMPORTED_MODULE_8__["default"])();
   (0,_configureDatepickers__WEBPACK_IMPORTED_MODULE_9__["default"])();
   (0,_configureAddressVerifiedColumn__WEBPACK_IMPORTED_MODULE_10__["default"])();
+  (0,_configureSellercentralColumn__WEBPACK_IMPORTED_MODULE_13__["default"])();
   (0,_setConditionalStyling__WEBPACK_IMPORTED_MODULE_11__["default"])();
   (0,_setCompaniesIcons__WEBPACK_IMPORTED_MODULE_12__["default"])();
   if (phase < 7) (0,_setDeadlineColumn__WEBPACK_IMPORTED_MODULE_5__["default"])();
@@ -3289,6 +3292,102 @@ var configurePage = function configurePage(elemRef, refModal, refModalId, refOnl
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (configurePage);
+
+/***/ }),
+
+/***/ "./resources/react-app/src/components/PDOCrud/functions/configureSellercentralColumn.ts":
+/*!**********************************************************************************************!*\
+  !*** ./resources/react-app/src/components/PDOCrud/functions/configureSellercentralColumn.ts ***!
+  \**********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./getColumnFieldIndex */ "./resources/react-app/src/components/PDOCrud/functions/getColumnFieldIndex.ts");
+/* harmony import */ var _getTableRows__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getTableRows */ "./resources/react-app/src/components/PDOCrud/functions/getTableRows.ts");
+
+
+
+var configureSellercentralColumn = function configureSellercentralColumn() {
+  var rows = (0,_getTableRows__WEBPACK_IMPORTED_MODULE_1__["default"])();
+  var sellercentralIdx = (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_0__["default"])("Canal de venda");
+  var orderNumberIdx = (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_0__["default"])("ORIGEM");
+  var isbnIdx = (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_0__["default"])("ISBN");
+  if (sellercentralIdx === -1 || orderNumberIdx === -1 || isbnIdx === -1) return;
+  rows.forEach(function (row) {
+    var _a, _b, _c;
+
+    var children = row.children;
+    var cell = children[sellercentralIdx];
+    var sellercentral = (_a = cell.textContent) === null || _a === void 0 ? void 0 : _a.trim();
+    var orderNumber = ((_b = children[orderNumberIdx].textContent) === null || _b === void 0 ? void 0 : _b.trim()) || "";
+    var isbn = ((_c = children[isbnIdx].textContent) === null || _c === void 0 ? void 0 : _c.trim()) || "";
+    var div = document.createElement("div");
+    var sellPageAnchor = document.createElement('a');
+    sellPageAnchor.href = sellercentral ? sellercentrals[sellercentral].sell_page(orderNumber) : "";
+    sellPageAnchor.target = "_blank";
+    sellPageAnchor.text = sellercentral || "";
+    var productPageAnchor = document.createElement('a');
+    productPageAnchor.href = sellercentral ? sellercentrals[sellercentral].product_page(orderNumber) : "";
+    productPageAnchor.target = "_blank";
+    var icon = document.createElement('img');
+    icon.src = '/icons/url_16x16.png';
+    productPageAnchor.appendChild(icon);
+    div.appendChild(sellPageAnchor);
+    div.appendChild(productPageAnchor);
+    div.style.display = "flex";
+    div.style.justifyContent = "space-evenly";
+    cell.textContent = "";
+    cell.appendChild(div);
+  });
+};
+
+var sellercentrals = {
+  "Amazon-BR": {
+    sell_page: function sell_page(onlineOrderNumber) {
+      return "https://sellercentral.amazon.com.br/orders-v3/order/".concat(onlineOrderNumber);
+    },
+    product_page: function product_page(isbn) {
+      return "https://www.amazon.com.br/s?k=".concat(isbn, "&__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&ref=nb_sb_noss");
+    }
+  },
+  "Amazon-CA": {
+    sell_page: function sell_page(onlineOrderNumber) {
+      return "https://sellercentral.amazon.com.br/orders-v3/order/".concat(onlineOrderNumber);
+    },
+    product_page: function product_page(isbn) {
+      return "https://www.amazon.ca/s?k=".concat(isbn, "&__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&ref=nb_sb_noss");
+    }
+  },
+  "Amazon-UK": {
+    sell_page: function sell_page(onlineOrderNumber) {
+      return "https://sellercentral.amazon.com.br/orders-v3/order/".concat(onlineOrderNumber);
+    },
+    product_page: function product_page(isbn) {
+      return "https://www.amazon.co.uk/s?k=".concat(isbn, "&__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&ref=nb_sb_noss");
+    }
+  },
+  "Amazon-US": {
+    sell_page: function sell_page(onlineOrderNumber) {
+      return "https://sellercentral.amazon.com.br/orders-v3/order/".concat(onlineOrderNumber);
+    },
+    product_page: function product_page(isbn) {
+      return "https://www.amazon.com/s?k=".concat(isbn, "&__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&ref=nb_sb_noss");
+    }
+  },
+  "Seline-BR": {
+    sell_page: function sell_page(onlineOrderNumber) {
+      return "https://livrariaseline.lojavirtualnuvem.com.br/admin/v2/orders?page=1&q=%23".concat(onlineOrderNumber, "&status=all");
+    },
+    product_page: function product_page(isbn) {
+      return "https://www.livrariaseline.com.br/search/?q=".concat(isbn);
+    }
+  }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (configureSellercentralColumn);
 
 /***/ }),
 
