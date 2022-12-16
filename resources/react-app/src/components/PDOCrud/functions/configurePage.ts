@@ -12,6 +12,7 @@ import configureDatepickers from "./configureDatepickers";
 import configureAddressVerifiedColumn from "./configureAddressVerifiedColumn";
 import setConditionalStyling from "./setConditionalStyling";
 import setCompaniesIcons from "./setCompaniesIcons";
+import configureSellercentralColumn from "./configureSellercentralColumn";
 
 const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObject<null>, refModalId: MutableRefObject<null>, refOnlineOrderNumber: MutableRefObject<null>, refURLInput: MutableRefObject<null>) => {
 	if(!elemRef.current) return
@@ -33,6 +34,7 @@ const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObje
 	setSearchTrim()
 	configureDatepickers()
 	configureAddressVerifiedColumn()
+	configureSellercentralColumn()
 	setConditionalStyling()
 	setCompaniesIcons()
 	if(phase < 7) setDeadlineColumn()
