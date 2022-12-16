@@ -3331,7 +3331,7 @@ var configureSellercentralColumn = function configureSellercentralColumn() {
     sellPageAnchor.target = "_blank";
     sellPageAnchor.text = sellercentral || "";
     var productPageAnchor = document.createElement('a');
-    productPageAnchor.href = sellercentral ? sellercentrals[sellercentral].product_page(orderNumber) : "";
+    productPageAnchor.href = sellercentral ? sellercentrals[sellercentral].product_page(isbn) : "";
     productPageAnchor.target = "_blank";
     var icon = document.createElement('img');
     icon.src = '/icons/url_16x16.png';
@@ -3628,20 +3628,20 @@ __webpack_require__.r(__webpack_exports__);
 var setCurrencySymbols = function setCurrencySymbols() {
   var rows = document.querySelectorAll('.pdocrud-data-row');
   var valueIdx = (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_0__["default"])("Valor");
-  var sellercentralIdx = (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_0__["default"])("Exportação");
+  var sellercentralIdx = (0,_getColumnFieldIndex__WEBPACK_IMPORTED_MODULE_0__["default"])("Canal de venda");
   if (valueIdx === -1 || sellercentralIdx === -1) return;
   var regex = [{
-    regex: /Brasil/,
+    regex: /(Amazon-BR|Seline-BR)/,
     symbol: "R$"
   }, {
-    regex: /Canadá/,
+    regex: /Amazon-CA/,
     symbol: "CA$"
   }, {
-    regex: /Estados Unidos/,
-    symbol: "US$"
-  }, {
-    regex: /Reino Unido/,
+    regex: /Amazon-UK/,
     symbol: "£"
+  }, {
+    regex: /Amazon-US/,
+    symbol: "US$"
   }];
 
   var getCurrency = function getCurrency(country) {
