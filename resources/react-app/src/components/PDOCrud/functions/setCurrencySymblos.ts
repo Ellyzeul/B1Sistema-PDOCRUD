@@ -3,14 +3,14 @@ import getColumnFieldIndex from "./getColumnFieldIndex"
 const setCurrencySymbols = () => {
 	const rows = document.querySelectorAll('.pdocrud-data-row') as NodeListOf<HTMLTableCellElement>
 	const valueIdx = getColumnFieldIndex("Valor")
-	const sellercentralIdx = getColumnFieldIndex("Exportação")
+	const sellercentralIdx = getColumnFieldIndex("Canal de venda")
 
 	if(valueIdx === -1 || sellercentralIdx === -1) return
 	const regex = [
-		{regex: /Brasil/, symbol: "R$"},
-		{regex: /Canadá/, symbol: "CA$"},
-		{regex: /Estados Unidos/, symbol: "US$"},
-		{regex: /Reino Unido/, symbol: "£"},
+		{regex: /(Amazon-BR|Seline-BR)/, symbol: "R$"},
+		{regex: /Amazon-CA/, symbol: "CA$"},
+		{regex: /Amazon-UK/, symbol: "£"},
+		{regex: /Amazon-US/, symbol: "US$"},
 	]
 	const getCurrency = (country: string) => {
 		return regex

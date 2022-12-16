@@ -24,7 +24,7 @@ const configureSellercentralColumn = () => {
     sellPageAnchor.text = sellercentral || ""
 
     const productPageAnchor = document.createElement('a')
-    productPageAnchor.href = sellercentral ? sellercentrals[sellercentral].product_page(orderNumber) : ""
+    productPageAnchor.href = sellercentral ? sellercentrals[sellercentral].product_page(isbn) : ""
     productPageAnchor.target = "_blank"
     const icon = document.createElement('img')
     icon.src = '/icons/url_16x16.png'
