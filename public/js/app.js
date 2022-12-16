@@ -3356,7 +3356,7 @@ var sellercentrals = {
   },
   "Amazon-CA": {
     sell_page: function sell_page(onlineOrderNumber) {
-      return "https://sellercentral.amazon.com.br/orders-v3/order/".concat(onlineOrderNumber);
+      return "https://sellercentral.amazon.ca/orders-v3/order/".concat(onlineOrderNumber);
     },
     product_page: function product_page(isbn) {
       return "https://www.amazon.ca/s?k=".concat(isbn, "&__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&ref=nb_sb_noss");
@@ -3364,7 +3364,7 @@ var sellercentrals = {
   },
   "Amazon-UK": {
     sell_page: function sell_page(onlineOrderNumber) {
-      return "https://sellercentral.amazon.com.br/orders-v3/order/".concat(onlineOrderNumber);
+      return "https://sellercentral.amazon.co.uk/orders-v3/order/".concat(onlineOrderNumber);
     },
     product_page: function product_page(isbn) {
       return "https://www.amazon.co.uk/s?k=".concat(isbn, "&__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&ref=nb_sb_noss");
@@ -3372,7 +3372,7 @@ var sellercentrals = {
   },
   "Amazon-US": {
     sell_page: function sell_page(onlineOrderNumber) {
-      return "https://sellercentral.amazon.com.br/orders-v3/order/".concat(onlineOrderNumber);
+      return "https://sellercentral.amazon.com/orders-v3/order/".concat(onlineOrderNumber);
     },
     product_page: function product_page(isbn) {
       return "https://www.amazon.com/s?k=".concat(isbn, "&__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&ref=nb_sb_noss");

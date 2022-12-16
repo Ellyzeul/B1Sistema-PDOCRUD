@@ -46,15 +46,15 @@ const sellercentrals = {
     product_page: (isbn: string) => `https://www.amazon.com.br/s?k=${isbn}&__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&ref=nb_sb_noss`
   },
   "Amazon-CA": {
-    sell_page: (onlineOrderNumber: string) => `https://sellercentral.amazon.com.br/orders-v3/order/${onlineOrderNumber}`,
+    sell_page: (onlineOrderNumber: string) => `https://sellercentral.amazon.ca/orders-v3/order/${onlineOrderNumber}`,
     product_page: (isbn: string) => `https://www.amazon.ca/s?k=${isbn}&__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&ref=nb_sb_noss`
   },
   "Amazon-UK": {
-    sell_page: (onlineOrderNumber: string) => `https://sellercentral.amazon.com.br/orders-v3/order/${onlineOrderNumber}`,
+    sell_page: (onlineOrderNumber: string) => `https://sellercentral.amazon.co.uk/orders-v3/order/${onlineOrderNumber}`,
     product_page: (isbn: string) => `https://www.amazon.co.uk/s?k=${isbn}&__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&ref=nb_sb_noss`
   },
   "Amazon-US": {
-    sell_page: (onlineOrderNumber: string) => `https://sellercentral.amazon.com.br/orders-v3/order/${onlineOrderNumber}`,
+    sell_page: (onlineOrderNumber: string) => `https://sellercentral.amazon.com/orders-v3/order/${onlineOrderNumber}`,
     product_page: (isbn: string) => `https://www.amazon.com/s?k=${isbn}&__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&ref=nb_sb_noss`
   },
   "Seline-BR": {
