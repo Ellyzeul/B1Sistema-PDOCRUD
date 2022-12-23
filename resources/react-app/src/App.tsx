@@ -9,6 +9,7 @@ import { CompaniesPage } from './pages/Companies';
 import DashboardOrders from './pages/Dashboards/Orders';
 import { HomePage } from './pages/Home';
 import { Attendance } from './pages/Home/Attendance';
+import { Dashboards } from './pages/Home/Dashboards';
 import { ShipmentPage } from './pages/Home/Shipment';
 import { Login } from './pages/Login';
 import { OrdersPage } from './pages/Orders';
@@ -50,6 +51,7 @@ function App() {
           <Route path='/fotos/pesquisar' element={getElement(<PhotosSearchPage/>)} />
           <Route path='/atendimento' element={getElement(<Attendance/>)} />
           <Route path='/rastreamento' element={getElement(<TrackingPage/>)} />
+          <Route path='/dashboard' element={getElement(<Dashboards/>)} />
           <Route path='/dashboard/pedidos' element={getElement(<DashboardOrders/>)} />
           <Route path='/empresas' element={getElement(<CompaniesPage/>)} />
         </Routes>
