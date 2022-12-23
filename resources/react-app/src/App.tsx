@@ -6,6 +6,7 @@ import { DropdownProp } from './components/Navbar/Dropdown/types';
 import { NavbarContext } from './contexts/Navbar';
 import { UserDataContext } from './contexts/UserData';
 import { CompaniesPage } from './pages/Companies';
+import DashboardOrders from './pages/Dashboards/Orders';
 import { HomePage } from './pages/Home';
 import { Attendance } from './pages/Home/Attendance';
 import { ShipmentPage } from './pages/Home/Shipment';
@@ -49,6 +50,7 @@ function App() {
           <Route path='/fotos/pesquisar' element={getElement(<PhotosSearchPage/>)} />
           <Route path='/atendimento' element={getElement(<Attendance/>)} />
           <Route path='/rastreamento' element={getElement(<TrackingPage/>)} />
+          <Route path='/dashboard/pedidos' element={getElement(<DashboardOrders/>)} />
           <Route path='/empresas' element={getElement(<CompaniesPage/>)} />
         </Routes>
       </NavbarContext.Provider>

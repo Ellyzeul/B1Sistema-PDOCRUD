@@ -47,6 +47,7 @@ Route::controller(OrderController::class)
     ->prefix('orders')
     ->group(function () {
         Route::get('/read', 'read');
+        Route::get('/get-total-orders-in-phase', 'getTotalOrdersInPhase');
         Route::post('/address-verified/update', 'updateAddressVerified');
     });
 

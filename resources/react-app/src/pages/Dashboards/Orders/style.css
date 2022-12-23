@@ -1,0 +1,30 @@
+#dashboard-order-page {
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  grid-template-rows: 60px calc(100vh - 60px);
+}
+
+#page-content {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  grid-template-rows: 15% 85%;
+  grid-template-areas: 
+    'title title'
+    'chart infos'
+  ;
+  background-color: #f2f4f5;
+}
+
+#dashboard-title {
+  grid-area: title;
+  font-size: large;
+}
+
+#infos-table {
+  grid-area: infos;
+  width: 90%;
+  height: 90%;
+}
