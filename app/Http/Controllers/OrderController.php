@@ -26,4 +26,11 @@ class OrderController extends Controller
 
         return $response;
     }
+
+    public static function getTotalOrdersInPhase()
+    {
+        $response = Order::getTotalOrdersInPhase();
+
+        return $response;
+    }
 }

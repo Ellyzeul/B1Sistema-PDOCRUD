@@ -89,6 +89,21 @@ class Order
         ];
     }
 
+    public static function getTotalOrdersInPhase()
+    {
+        $results = DB::table('phases')
+            ->select(
+                'phases.id', 
+                DB::raw('COUNT(order_control.id) as total'), 
+                'phases.color'
+            )
+            ->leftJoin('order_control', 'phases.id', '=', 'order_control.id_phase')
+            ->groupBy('phases.id')
+            ->get();
+        
+        return $results;
+    }
+
     public static function getColumnsNames()
     {
         return Order::$columnsRename;
