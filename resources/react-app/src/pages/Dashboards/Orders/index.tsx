@@ -2,7 +2,7 @@ import { Table, TableBody, TableCell, TableRow } from "@mui/material"
 import { DataGrid } from "@mui/x-data-grid"
 import { GridColDef } from "@mui/x-data-grid/models"
 import { useEffect, useState } from "react"
-import { Cell, Text, Pie, PieChart, PieLabelRenderProps, PieLabel } from "recharts"
+import { Cell, Text, Pie, PieChart, PieLabelRenderProps, PieLabel, Label, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Bar, ResponsiveContainer } from "recharts"
 import { Navbar } from "../../../components/Navbar"
 import api from "../../../services/axios"
 import './style.css'
@@ -37,9 +37,7 @@ const DashboardOrders = () => {
     const y = circleY + radius * Math.sin(-mAngle * RADIAN);
     
     return (
-      <text x={x} y={y} textAnchor="middle" dominantBaseline={"central"} style={{color: 'black'}}>
-        {`${id} - ${total} Pedidos`}
-      </text>
+      <Label position="outside">{total}</Label>
     )
   }
 
@@ -48,21 +46,22 @@ const DashboardOrders = () => {
       <Navbar items={[]} />
       <div id="page-content">
         <div id="dashboard-title">Pedidos nas fases</div>
-        <PieChart width={400} height={400}>
-          <Pie data={data} dataKey="total" nameKey="id" cx="50%" cy="50%" outerRadius={200} label={renderLabel}>
-            {data.map(phase => <Cell key={`cell-${phase.id}`} fill={`#${phase.color}`} stroke="#000000" textAnchor="A" />)}
-          </Pie>
-        </PieChart>
-        <div id="infos-table">
-          <DataGrid 
-            columns={DATAGRID_FIELDS} 
-            rows={data.map(({ id, total }) => ({id: id, total: total}))} 
-            style={{
-              width: "100%",
-              backgroundColor: "white",
-            }}
-            hideFooter 
-          />
+        <div id="chart-container">
+          <ResponsiveContainer>
+            <BarChart 
+              width={200} 
+              height={100} 
+              data={data.map(({ id, total, color }) => ({id: id, Total: total, color: color}))}
+            >
+              <CartesianGrid strokeDasharray={'3 3'} />
+              <XAxis dataKey='id' />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey='Total'>
+                {data.map(bar => <Cell id={bar.id} fill={`#${bar.color}`} stroke="black" />)}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>

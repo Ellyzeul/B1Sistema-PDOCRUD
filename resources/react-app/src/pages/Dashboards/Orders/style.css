@@ -11,20 +11,14 @@
   display: grid;
   place-items: center;
   grid-template-rows: 15% 85%;
-  grid-template-areas: 
-    'title title'
-    'chart infos'
-  ;
   background-color: #f2f4f5;
 }
 
 #dashboard-title {
-  grid-area: title;
   font-size: large;
 }
 
-#infos-table {
-  grid-area: infos;
-  width: 90%;
-  height: 90%;
+#chart-container {
+  width: 95%;
+  height: 85%;
 }
