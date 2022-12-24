@@ -98,6 +98,8 @@ class Order
                 'phases.color'
             )
             ->leftJoin('order_control', 'phases.id', '=', 'order_control.id_phase')
+            ->where('phases.id', '<', '7')
+            ->orWhere('phases.id', '8.1')
             ->groupBy('phases.id')
             ->get();
         
