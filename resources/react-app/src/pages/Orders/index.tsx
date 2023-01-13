@@ -1,4 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react"
+import { ToastContainer } from "react-toastify"
 import { UserData } from "../../components/LoginForm/types"
 import { Navbar } from "../../components/Navbar"
 import { DropdownProp } from "../../components/Navbar/Dropdown/types"
@@ -65,6 +66,7 @@ export const OrdersPage = () => {
 				refOnlineOrderNumber={refOnlineOrderNumber} 
 				refURLInput={refURLInput} 
 			/>
+			<ToastContainer/>
 		</>
 	)
 }

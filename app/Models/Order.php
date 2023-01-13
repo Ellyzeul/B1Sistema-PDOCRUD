@@ -1,6 +1,9 @@
 <?php namespace App\Models;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AskRating;
 use \PDOCrud;
 
 class Order
@@ -36,7 +39,7 @@ class Order
         "id_phase" => ["0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "3.1", "3.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado"],
         "invoice_number" => ["2.4", "2.5", "2.6", "2.7", "2.8"],
         "online_order_number" => ["0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "3.1", "3.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado"],
-        "bling_number" => ["2.4", "2.5", "2.6", "2.7", "2.8", "não-verificado"],
+        "bling_number" => ["2.4", "2.5", "2.6", "2.7", "2.8", "6.2", "não-verificado"],
         "order_date" => ["2.1", "2.3", "3.1", "3.2", "não-verificado"],
         "expected_date" => ["0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "3.1", "3.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado"],
         "isbn" => ["0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "3.1", "3.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado"],
@@ -109,6 +112,77 @@ class Order
     public static function getColumnsNames()
     {
         return Order::$columnsRename;
+    }
+
+    public static function sendAskRatingEmail(string $orderId)
+    {
+        [ $blingNumber, $apiKey, $fromEmail, $companyName, $isNational ] = Order::getMailingInfo($orderId);
+
+        $blingResponse = Order::getBlingRequest($apiKey, $blingNumber);
+        if(isset($blingResponse['error'])) return $blingResponse['error'];
+
+        [ $clientName, $clientEmail, $orderNumber, $bookName ] = $blingResponse;
+
+        Mail::to($clientEmail)
+            ->send(new AskRating(
+                $fromEmail, 
+                $isNational,
+                $clientName, 
+                $orderNumber, 
+                $bookName, 
+                $companyName, 
+            ));
+        
+        DB::table('order_control')
+            ->where('id', $orderId)
+            ->update(['ask_rating' => 2]);
+
+        return [["message" => "E-mail enviado com sucesso!"], 200];
+    }
+
+    private static function getMailingInfo(string $orderId)
+    {
+        $result = DB::table('order_control')
+            ->join('mailer_info', 'order_control.id_company', '=', 'mailer_info.id_company')
+            ->select(
+                'order_control.bling_number', 
+                'mailer_info.token_name', 
+                'mailer_info.from_email', 
+                'mailer_info.company_name', 
+                DB::raw('(
+                    SELECT IF(POSITION("BR" IN name) > 0, 1, 0) 
+                    FROM sellercentrals
+                    WHERE id = order_control.id_sellercentral
+                ) AS is_national')
+            )
+            ->where('order_control.id', $orderId)
+            ->first();
+        
+        return [
+            $result->bling_number, 
+            env($result->token_name), 
+            $result->from_email, 
+            $result->company_name, 
+            $result->is_national == 1, 
+        ];
+    }
+
+    private static function getBlingRequest(string $apiKey, string $blingNumber)
+    {
+        $response = Http::get("https://bling.com.br/Api/v2/pedido/$blingNumber/json?apikey=$apiKey");
+        if(!$response->ok()) return ["error" => [
+            ["message" => "Erro na requisição de dados no Bling. Tente novamente mais tarde..."], 
+            500
+        ]];
+
+        $order = $response['retorno']['pedidos'][0]['pedido'];
+
+        return [
+            $order['cliente']['nome'],
+            $order['cliente']['email'],
+            $order['numeroPedidoLoja'],
+            $order['itens'][0]['item']['descricao'],
+        ];
     }
 
     private static function setFields(PDOCrud $crud, string|null $phase)
@@ -211,7 +285,8 @@ class Order
         \in_array("delivered_date", $columns) ? $crud->bulkCrudUpdate("delivered_date", "date") : null;
         \in_array("ask_rating", $columns) ? $crud->bulkCrudUpdate("ask_rating", "select", ['askrating_key' => 'askrating_val'], [
             [1, "Sim"],
-            [0, "Não"]
+            [0, "Não"],
+            [2, "Enviada"],
         ]) : null;
 
         return $crud;

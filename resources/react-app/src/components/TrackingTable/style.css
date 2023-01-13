@@ -1,139 +1,15 @@
-.tracking-table-container {
-  width: 100%;
-  height: 100%;
-}
-
-.tracking-nav-buttons {
-  height: 70px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-family: Arial, Helvetica, sans-serif;
-}
-.tracking-nav-buttons > * {
-  margin: 0 15px;
-}
-
-.tracking-filter > input {
-  border: none;
-  border-bottom: 1px solid black;
-  border-radius: 3px 0 0 3px;
-  outline: none;
-  height: 7px;
-  padding: 10px;
-}
-.tracking-filter > select {
-  border: none;
-  height: 27px;
-  border-bottom: 1px solid black;
-}
-.tracking-filter > select:hover {
-  background-color: black;
+.fa-rotate {
+  background-color: green;
   color: white;
-  cursor: pointer;
-}
-.tracking-filter > button {
-  border: none;
-  height: 27px;
-  border-bottom: 1px solid black;
-  border-radius: 0 3px 3px 0;
-  cursor: pointer;
-}
-.tracking-filter > button:hover {
-  background-color: black;
-  color: white;
-}
-
-.tracking-download-xlsx {
-  height: 35px;
-  width: 35px;
-  display: flex;
-  border: none;
-  background-color: rgba(0, 0, 0, 0);
-  position: relative;
-}
-.tracking-download-xlsx:hover {
-  cursor: pointer;
-}
-.tracking-download-xslx-img-container {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: grid;
-  place-items: center;
-  color: white;
+  padding: 5px;
   border-radius: 3px;
 }
-.xlsx-color-dark-green {
-  background-color: #155532;
-}
-.xlsx-color-light-green {
-  background-color: #33c481;
-}
-.xlsx-download-hiddable:hover {
-  opacity: 0;
-}
-.tracking-download-xslx-img-container > img {
-  width: 60%;
-  height: 60%;
+.fa-rotate:hover {
+  cursor: pointer;
+  background-color: lightgreen;
 }
 
-.tracking-table {
+#tracking-table-container {
   width: 100%;
   height: 100%;
-  height: min-content;
-  background-color: white;
-  border: none;
-}
-
-.tracking-table > thead {
-  background-color: black;
-  color: white;
-  height: 70px;
-  word-wrap: break-word;
-  user-select: none;
-}
-.tracking-table > thead > tr > th:hover {
-  background-color: rgb(44, 44, 44);
-  color: rgb(183, 183, 183);
-  transition: 125ms;
-  cursor: pointer;
-}
-
-.tracking-table > tbody {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: small;
-}
-
-.tracking-table > tbody {
-  height: 100%;
-}
-
-.tracking-table > tbody > tr {
-  min-height: 50px;
-}
-
-.tracking-table > tbody > tr > td, .tracking-table > tbody > tr > td > textarea {
-  border-right: 1px solid black;
-  border-bottom: 1px solid black;
-  height: 100%;
-}
-.tracking-table > tbody > tr > td > textarea {
-  padding: 0;
-  margin: 0;
-  width: 100%;
-}
-
-.tracking-update-button {
-  background-color: rgb(51, 160, 51);
-  color: white;
-  border-radius: 3px;
-  padding: 0 2px;
-}
-.tracking-update-button:hover {
-  cursor: pointer;
-  background-color: rgb(26, 90, 26);
-  transition: 125ms;
 }

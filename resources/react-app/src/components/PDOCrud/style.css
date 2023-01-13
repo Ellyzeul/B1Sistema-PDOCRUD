@@ -25,3 +25,16 @@
   cursor: pointer;
   transition: 125ms;
 }
+
+.order-control-ask-rating-button {
+  border: none;
+  background-color: inherit;
+  padding: 2px;
+  border-radius: 3px;
+  color: black;
+}
+.order-control-ask-rating-button:hover {
+  background-color: black;
+  color: white;
+  transition: 125ms;
+}
