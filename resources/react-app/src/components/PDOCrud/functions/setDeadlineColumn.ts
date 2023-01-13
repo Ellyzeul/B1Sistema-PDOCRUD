@@ -33,13 +33,17 @@ const setNewColumn: SetNewColumnPrototype = (fieldname: string, generateData: (r
 }
 setNewColumn.columns = {}
 
-const setDeadlineColumn = () => {
+const setDeadlineColumn = (phase: number) => {
 	setNewColumn.columns = {}
 	const generateData = (row: HTMLTableRowElement) => {
 		const expectedDateIdx = getColumnFieldIndex("Data prevista")
 		const askRatingIdx = getColumnFieldIndex("Pedir avaliação")
 		const idIdx = getColumnFieldIndex("Nº")
-		const isAskable = ((row.children[askRatingIdx] as HTMLTableCellElement).children[0] as HTMLSelectElement).selectedIndex === 1
+		const isAskable = 
+			((row.children[askRatingIdx] as HTMLTableCellElement)
+				.children[0] as HTMLSelectElement)
+				.selectedIndex === 1
+			&& phase === 6.2
 		const div = document.createElement('div')
 		if(expectedDateIdx === -1) return div
 		const date = (row.children[expectedDateIdx] as HTMLTableCellElement)
