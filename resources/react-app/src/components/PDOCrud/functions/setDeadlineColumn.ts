@@ -45,6 +45,7 @@ const setDeadlineColumn = (phase: number) => {
 				.selectedIndex === 1
 			&& phase === 6.2
 		const div = document.createElement('div')
+
 		if(expectedDateIdx === -1) return div
 		const date = (row.children[expectedDateIdx] as HTMLTableCellElement)
 			.outerText.split('/')
@@ -54,15 +55,14 @@ const setDeadlineColumn = (phase: number) => {
 
 		if(end < start) {
 			div.innerText = "Prazo vencido"
-			return div
 		}
-		if(end === start) {
+		else if(end === start) {
 			div.innerText = "O prazo é hoje"
-			return div
 		}
-
-		const interval = differenceInCalendarDays(end, start)
-		div.innerText = `${interval || 0} dias restantes`
+		else {
+			const interval = differenceInCalendarDays(end, start)
+			div.innerText = `${interval || 0} dias restantes`
+		}
 
 		if(isAskable) {
 			const button = document.createElement('button')
