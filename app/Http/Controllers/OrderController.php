@@ -33,4 +33,13 @@ class OrderController extends Controller
 
         return $response;
     }
+
+    public static function sendAskRatingEmail(Request $request)
+    {
+        $orderId = $request->input('order_id');
+
+        [$response, $statusCode] = Order::sendAskRatingEmail($orderId);
+
+        return response($response, $statusCode);
+    }
 }

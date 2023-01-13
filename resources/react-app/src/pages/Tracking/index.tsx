@@ -1,22 +1,24 @@
 import { useEffect, useState } from "react"
 import { Navbar } from "../../components/Navbar"
-import { TrackingTable } from "../../components/TrackingTable"
+import TrackingTable from "../../components/TrackingTable"
 import api from "../../services/axios"
 import "./style.css"
 
 const TrackingPage = () => {
-  const [table, setTable] = useState(null as JSX.Element | null)
+  const [data, setData] = useState([] as any[])
 
   useEffect(() => {
     api.get('/api/tracking/read')
       .then(response => response.data)
-      .then(response => setTable(<TrackingTable data={response} />))
+      .then(response => setData(response))
   }, [])
+
+  useEffect(() => console.log(data), [data])
 
   return (
     <div className="tracking-page-container">
       <Navbar items={[]} />
-      {table}
+      <TrackingTable data={data} />
     </div>
   )
 }
