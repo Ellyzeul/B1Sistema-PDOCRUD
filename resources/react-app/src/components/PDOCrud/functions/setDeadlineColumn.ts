@@ -39,12 +39,16 @@ const setDeadlineColumn = (phase: number) => {
 		const expectedDateIdx = getColumnFieldIndex("Data prevista")
 		const askRatingIdx = getColumnFieldIndex("Pedir avaliação")
 		const idIdx = getColumnFieldIndex("Nº")
+		const selectedOption = ((row.children[askRatingIdx] as HTMLTableCellElement)
+		.children[0] as HTMLSelectElement)
+		.selectedIndex
 		const isAskable = 
-			((row.children[askRatingIdx] as HTMLTableCellElement)
-				.children[0] as HTMLSelectElement)
-				.selectedIndex === 1
-			&& phase === 6.2
+			(selectedOption === 1 && phase === 6.2) || 
+			((selectedOption === 1 || selectedOption === 3) && phase === 6.21)
 		const div = document.createElement('div')
+		console.log(phase)
+		console.log(selectedOption)
+		console.log(isAskable)
 
 		if(expectedDateIdx === -1) return div
 		const date = (row.children[expectedDateIdx] as HTMLTableCellElement)
@@ -77,7 +81,7 @@ const setDeadlineColumn = (phase: number) => {
 					.then(response => {
 						toast.success(response.message)
 						const select = (row.children[askRatingIdx] as HTMLTableCellElement).children[0] as HTMLSelectElement
-						select.selectedIndex = 3
+						select.selectedIndex = select.selectedIndex === 3 ? 4 : 3
 					})
 					.catch(err => {
 						toast.error(err.response.data.message)
