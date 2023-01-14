@@ -123,8 +123,7 @@ class Order
 
         [ $clientName, $clientEmail, $orderNumber, $bookName ] = $blingResponse;
 
-        // Mail::to($clientEmail)
-        Mail::to("gabrielaug.240@gmail.com")
+        Mail::to($clientEmail)
             ->send(new AskRating(
                 $fromEmail, 
                 $isNational,
