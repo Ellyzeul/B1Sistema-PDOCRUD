@@ -6,11 +6,15 @@ import "./style.css"
 
 const TrackingPage = () => {
   const [data, setData] = useState([] as any[])
+  const [trackingTable, setTrackingTable] = useState(null as JSX.Element | null)
 
   useEffect(() => {
     api.get('/api/tracking/read')
       .then(response => response.data)
-      .then(response => setData(response))
+      .then(response => {
+        setData(response)
+        setTrackingTable(<TrackingTable data={response} />)
+      })
   }, [])
 
   useEffect(() => console.log(data), [data])
@@ -18,7 +22,7 @@ const TrackingPage = () => {
   return (
     <div className="tracking-page-container">
       <Navbar items={[]} />
-      <TrackingTable data={data} />
+      {trackingTable}
     </div>
   )
 }
