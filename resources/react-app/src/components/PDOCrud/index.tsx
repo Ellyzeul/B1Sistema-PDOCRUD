@@ -26,7 +26,7 @@ export const PDOCrud = (props: PDOCrudProp) => {
 
 	useEffect(() => {
 		if(!elemRef.current) return
-		setConfigurations()
+		setTimeout(setConfigurations, 10)
 	}, [elemRef, rawHTML])
 
 	return (
