@@ -2,16 +2,17 @@
 
 use App\Models\Order;
 use Illuminate\Http\Request;
-use \PDOCrud;
 
 class OrderController extends Controller
 {
     public static function read(Request $request)
     {
+        $order = new Order();
+
         $phase = $request->input('phase') 
             ? strval($request->input('phase')) 
             : null;
-        $processed = Order::read($phase);
+        $processed = $order->read($phase);
         $response = [
             "html" => $processed
         ];
@@ -21,24 +22,30 @@ class OrderController extends Controller
 
     public static function updateAddressVerified(Request $request)
     {
+        $order = new Order();
+
         $toUpdate = $request->input("verifieds");
-        $response = Order::updateAddressVerified($toUpdate);
+        $response = $order->updateAddressVerified($toUpdate);
 
         return $response;
     }
 
     public static function getTotalOrdersInPhase()
     {
-        $response = Order::getTotalOrdersInPhase();
+        $order = new Order();
+
+        $response = $order->getTotalOrdersInPhase();
 
         return $response;
     }
 
     public static function sendAskRatingEmail(Request $request)
     {
+        $order = new Order();
+
         $orderId = $request->input('order_id');
 
-        [$response, $statusCode] = Order::sendAskRatingEmail($orderId);
+        [$response, $statusCode] = $order->sendAskRatingEmail($orderId);
 
         return response($response, $statusCode);
     }
