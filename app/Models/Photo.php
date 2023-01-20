@@ -17,13 +17,13 @@ class Photo extends Model
     public function __construct()
     {
         $sep = DIRECTORY_SEPARATOR;
-        $this->savePath = $_SERVER['DOCUMENT_ROOT'] . $sep . "static" . $sep . "photos";
+        $this->savePath = storage_path('app/public') . $sep . "photos";
         $this->readPath = 
             (isset($_SERVER["HTTPS"]) ? "https" : "http") . "://" . (
                 $_SERVER['SERVER_NAME'] == "localhost" || $_SERVER['SERVER_NAME'] == "127.0.0.1"
                 ? $_SERVER['SERVER_NAME'] . ":" . $_SERVER["SERVER_PORT"]
                 : $_SERVER['SERVER_NAME']
-            ) . "/static/photos/";
+            ) . "/storage/photos/";
     }
 
     public function create(UploadedFile $photoFile, string $photoName)
