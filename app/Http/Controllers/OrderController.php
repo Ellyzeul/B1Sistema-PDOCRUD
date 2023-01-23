@@ -7,11 +7,12 @@ class OrderController extends Controller
 {
     public static function read(Request $request)
     {
-        $order = new Order();
-
+        
         $phase = $request->input('phase') 
             ? strval($request->input('phase')) 
             : null;
+
+        $order = new Order();
         $processed = $order->read($phase);
         $response = [
             "html" => $processed
@@ -22,9 +23,9 @@ class OrderController extends Controller
 
     public static function updateAddressVerified(Request $request)
     {
-        $order = new Order();
-
         $toUpdate = $request->input("verifieds");
+        
+        $order = new Order();
         $response = $order->updateAddressVerified($toUpdate);
 
         return $response;
@@ -44,7 +45,6 @@ class OrderController extends Controller
         $order = new Order();
 
         $orderId = $request->input('order_id');
-
         [$response, $statusCode] = $order->sendAskRatingEmail($orderId);
 
         return response($response, $statusCode);

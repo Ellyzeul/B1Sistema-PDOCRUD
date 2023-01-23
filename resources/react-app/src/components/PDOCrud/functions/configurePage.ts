@@ -39,7 +39,6 @@ const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObje
 	configureSellercentralColumn()
 	setConditionalStyling()
 	setCompaniesIcons()
-	if(phase === 6.1) setDaysAfterDeliveryColumn()
 	if(phase < 7 && (phase !== 6.2 && phase !== 6.21)) setDeadlineColumn(phase)
 	if(phase >= 6.2 && phase < 6.3) setSendEmailColumn(phase)
 	if(phase === 2.1) setURLColumn()

@@ -38,8 +38,6 @@ class PhotoController extends Controller
 
     public static function verifyFromList(Request $request)
     {
-        Log::notice("Verificação se fotos em uma lista existem");
-
         $rawNumbers = $request->input('numbers_list') ?? "";
         $numbers = array_filter(explode(",", $rawNumbers), function($elem) {
             return $elem != "";
