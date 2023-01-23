@@ -1,23 +1,26 @@
 <?php namespace App\Models;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use \PDOCrud;
 
 class Photo extends Model
 {
     use HasFactory;
 
+    private FilesystemAdapter $disk;
     private string $savePath;
     private string $readPath;
 
     public function __construct()
     {
-        $sep = DIRECTORY_SEPARATOR;
-        $this->savePath = storage_path('app/public') . $sep . "photos";
+        $this->disk = Storage::disk('orders-photos');
+        $this->savePath = storage_path('app/public/photos');
         $this->readPath = 
             (isset($_SERVER["HTTPS"]) ? "https" : "http") . "://" . (
                 $_SERVER['SERVER_NAME'] == "localhost" || $_SERVER['SERVER_NAME'] == "127.0.0.1"
@@ -28,21 +31,19 @@ class Photo extends Model
 
     public function create(UploadedFile $photoFile, string $photoName)
     {
-        Log::info("Tentando salvar a foto " . $photoName);
+        [$number, $extension] = explode(".", $photoName);
 
-        DB::table("photos")->insert([
-            "name" => $photoName
-        ]);
-        $result = DB::select("CALL select_most_recent_photo_number(?)", [
-            $photoName
-        ])[0];
+        $copies = array_filter(
+            $this->disk->files(), 
+            function($item) use ($number) {
+                return str_starts_with($item, $number);
+            }
+        );
+        $copyNumber = count($copies);
 
-        $nameParts = explode(".", $photoName);
-        $photoDesc = $nameParts[0];
-        $photoExtension = $nameParts[1];
-        $photoNumber = $result->number;
-        $photoNameWoutExt = $photoDesc.($photoNumber == 0 ? '' : "_$photoNumber");
-        $saveName = $photoNameWoutExt.".$photoExtension";
+        $saveName = $copyNumber == 0
+            ? "$number.$extension"
+            : $number . "_" . $copyNumber . "." . $extension;
 
         $photoFile->move(
             $this->savePath, 
@@ -50,62 +51,45 @@ class Photo extends Model
         );
 
         return [
-            "message" => "Foto $photoNameWoutExt salva com sucesso!"
+            "message" => "Foto $photoName salva com sucesso!"
         ];
     }
 
     public function read(string $photoNamePattern)
     {
-        $results = DB::select("CALL select_photos_using_pattern(?)", [
-            $photoNamePattern
-        ]);
-        $response = [
-            "message" => "Fotos com o padrão buscado foram retornadas!",
-            "photos" => []
-        ];
+        $photos = $this->disk->files();
 
-        foreach($results as $result) {
-            array_push(
-                $response["photos"], 
-                $this->readPath . $result->name
-            );
+        $links = array_map(function($item) {
+            return $this->readPath . $item;
+        }, array_filter($photos, function($item) use ($photoNamePattern) {
+            return str_starts_with($item, $photoNamePattern);
+        }));
+
+        return [
+            "message" => "Fotos com o padrão buscado foram retornadas!",
+            "photos" => array_values($links)
+        ];
+    }
+
+    public function verifyFromList(array $numbers)
+    {
+        $response = [];
+        $photos = $this->disk->files();
+        foreach($numbers as $number) {
+            $response[$number] = $this->array_some($photos, function($photo) use ($number) {
+                return str_starts_with($photo, $number);
+            });
         }
 
         return $response;
     }
 
-    public function verifyFromList(array $numbers) {
-        if($numbers == []) return [];
-        $params = $this->getSubqueryParams($numbers);
-        $results = DB::select(
-            "SELECT SUBSTRING(name FROM 1 FOR POSITION('.' IN name) - 1) AS name 
-             FROM photos
-             WHERE SUBSTRING(name FROM 1 FOR POSITION('.' IN name) - 1) IN (
-                $params
-             )"
-        );
-
-        $response = [];
-        foreach($numbers as $number) $response[$number] = false;
-        foreach($results as $result) $response[$result->name] = true;
-
-        return $response;
-    }
-
-    private function getSubqueryParams(array $numbers)
+    private function array_some(array $array, callable $fn)
     {
-        $patterns = [
-            '/--/',
-            '/"/',
-            '/\'/',
-            '/;/',
-        ];
-        $blankStr = array_fill(0, count($patterns), "");
-        $prepareParams = array_map(function($elem) use ($patterns, $blankStr) {
-            return "'" . \preg_replace($patterns, $blankStr, $elem) . "'";
-        }, $numbers);
-        $subquery = "SELECT " . implode(' UNION SELECT ', $prepareParams);
+        foreach($array as $value) {
+            if($fn($value)) return true;
+        }
 
-        return $subquery;
+        return false;
     }
 }
