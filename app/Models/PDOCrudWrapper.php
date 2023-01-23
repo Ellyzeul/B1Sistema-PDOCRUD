@@ -31,7 +31,8 @@ class PDOCrudWrapper extends Model
         "tracking_code" => "Código de rastreio",
         "collection_code" => "Código de coleta",
         "delivered_date" => "Data de entrega",
-        "ask_rating" => "Pedir avaliação"
+        "ask_rating" => "Pedir avaliação",
+        "ready_to_6_2" => "Pronto para 6.2",
     ];
     private array $columnsPerPhase = [
         "id" => ["0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "3.1", "3.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado"],
@@ -55,6 +56,7 @@ class PDOCrudWrapper extends Model
         "collection_code" => ["2.4", "2.5", "2.6", "2.7", "2.8"],
         "delivered_date" => ["2.4", "2.5", "2.6", "2.7", "2.8", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6"],
         "ask_rating" => ["0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6"],
+        "ready_to_6_2" => ["6.1"],
     ];
 
     public function getHTML(string|null $phase)
@@ -110,6 +112,7 @@ class PDOCrudWrapper extends Model
         in_array("collection_code", $columns) ? $crud->colRename("collection_code", "Código de coleta") : null;
         in_array("delivered_date", $columns) ? $crud->colRename("delivered_date", "Data de entrega") : null;
         in_array("ask_rating", $columns) ? $crud->colRename("ask_rating", "Pedir avaliação") : null;
+        in_array("ready_to_6_2", $columns) ? $crud->colRename("ready_to_6_2", "Pronto para 6.2") : null;
         
         return [$crud, $columns];
     }

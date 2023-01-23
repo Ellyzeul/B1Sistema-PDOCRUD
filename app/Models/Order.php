@@ -10,6 +10,8 @@ class Order
 {
     public function read(string|null $phase)
     {
+        if($phase === "6.1") $this->updateReadyTo6_2();
+
         $pdocrud = new PDOCrudWrapper();
         $crud = $pdocrud->getHTML($phase);
 
@@ -129,5 +131,12 @@ class Order
             $order['numeroPedidoLoja'],
             $order['itens'][0]['item']['descricao'],
         ];
+    }
+
+    private function updateReadyTo6_2()
+    {
+        DB::table('order_control')
+            ->where('id_phase', '6.1')
+            ->update(['ready_to_6_2' => DB::raw('IF(DATEDIFF(NOW(), delivered_date) < 5, "Não", "Sim")')]);
     }
 }

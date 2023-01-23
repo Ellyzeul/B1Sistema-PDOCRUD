@@ -201,7 +201,8 @@ Class PDOCrud {
         "Tracking code" => "Código de rastreio",
         "Collection code" => "Código de coleta",
         "Delivered date" => "Data de entrega",
-        "Ask rating" => "Pedir avaliação"
+        "Ask rating" => "Pedir avaliação",
+        "Ready to 6 2" => "Pronto para 6.2",
     ];
 
     /**
