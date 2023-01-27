@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('companies', function (Blueprint $table) {
-            $table->id();
+            $table->tinyIncrements();
             $table->string('name', 45);
             $table->tinyText('thumbnail')->nullable();
             $table->string('company_name', 120)->nullable();
