@@ -84,6 +84,16 @@ class Photo extends Model
         return $response;
     }
 
+    public function exclude(string $photoName)
+    {
+
+        $this->disk->delete($photoName);
+
+        return [
+            "message" => "A imagem $photoName foi deletada!"
+        ];
+    }
+
     private function array_some(array $array, callable $fn)
     {
         foreach($array as $value) {

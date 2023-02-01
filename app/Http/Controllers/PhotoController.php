@@ -48,4 +48,14 @@ class PhotoController extends Controller
 
         return $response;
     }
+
+    public static function exclude(Request $request)
+    {
+        
+        $photo = new Photo();
+
+        $response = $photo->exclude($request->photoName);
+
+        return $response;
+    }
 }

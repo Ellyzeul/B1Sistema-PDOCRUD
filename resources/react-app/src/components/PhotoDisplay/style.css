@@ -56,6 +56,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  visibility: hidden;
 }
 
 .image-overlay-delete-button, .image-overlay-cancel-button {

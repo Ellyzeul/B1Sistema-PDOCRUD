@@ -71,6 +71,7 @@ Route::controller(PhotoController::class)
         Route::post('/create', 'create');
         Route::get('/read', 'read');
         Route::get('/verify-list', 'verifyFromList');
+        Route::delete('/exclude', 'exclude');
     });
 
 Route::controller(CompanyController::class)
