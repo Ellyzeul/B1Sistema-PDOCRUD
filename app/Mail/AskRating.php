@@ -33,7 +33,7 @@ class AskRating extends Mailable
         return $this
             ->from($this->sender, $this->companyName)
             ->subject('Atualização do pedido Amazon de ID ' . $this->orderNumber)
-            ->markdown($this->isNational
+            ->text($this->isNational
                 ? 'emails.ask-rating.national'
                 : 'emails.ask-rating.international'
             );
