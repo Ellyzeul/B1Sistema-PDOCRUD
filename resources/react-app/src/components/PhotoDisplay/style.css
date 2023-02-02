@@ -42,6 +42,7 @@
   justify-content: center;
   background-color: red;
   border-radius: 10px 0;
+  visibility: hidden;
 }
 
 .image-overlay-delete-confirm {
@@ -56,6 +57,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  visibility: hidden;
 }
 
 .image-overlay-delete-button, .image-overlay-cancel-button {
@@ -78,4 +80,7 @@
 
 .image-overlay-cancel-button {
   background-color: gray;
+}
+.image-overlay-cancel-button:hover {
+  cursor: pointer;
 }

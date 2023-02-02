@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 
 class User
 {
-    public static function create(string $name, string $email, string $password, int $id_section, string $ramal) {
+    public static function create(string $name, string $email, string $password, int $id_section, string | null $ramal) {
         $inserted = DB::table('users')->insert([
             'email' => $email,
             'name' => $name,
