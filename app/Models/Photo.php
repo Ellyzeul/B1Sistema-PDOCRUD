@@ -86,7 +86,6 @@ class Photo extends Model
 
     public function exclude(string $photoName)
     {
-
         $this->disk->delete($photoName);
 
         return [
