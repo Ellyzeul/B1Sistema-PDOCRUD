@@ -2,7 +2,8 @@ export const uploadTypes = [
   {message: "Selecionar...", value: "select"},
   {message: "Atualização de pedidos", value: "order-update"},
   {message: "Envio de pedidos Amazon", value: "order-amazon-insert"},
-  {message: "Ingestão de notas do FSist", value: "fsist-ingestion"},
+  {message: "Envio de endereços dos pedidos", value: "order-address-insert"},
+  // {message: "Ingestão de notas do FSist", value: "fsist-ingestion"},
 ]
 
 export const fields = {
@@ -37,6 +38,19 @@ export const fields = {
     {label: "Data prevista", field_name: "expected_date", updatable: true, required: true},
     {label: "ISBN", field_name: "isbn", updatable: true, required: true},
     {label: "Valor", field_name: "selling_price", updatable: true, required: true},
+  ],
+  "order-address-insert": [
+    {label: "Nº Pedido", field_name: "online_order_number", updatable: true, required: true},
+    {label: "Bairro", field_name: "county", updatable: true, required: true},
+    {label: "Telefone", field_name: "cellphone", updatable: true, required: true},
+    {label: "Destinatário", field_name: "recipient_name", updatable: true, required: true},
+    {label: "Endereço 1", field_name: "address_1", updatable: true, required: true},
+    {label: "Endereço 2", field_name: "address_2", updatable: true, required: true},
+    {label: "Endereço 3", field_name: "address_3", updatable: true, required: true},
+    {label: "Cidade", field_name: "city", updatable: true, required: true},
+    {label: "Estado", field_name: "state", updatable: true, required: true},
+    {label: "CEP", field_name: "postal_code", updatable: true, required: true},
+    {label: "País", field_name: "country", updatable: true, required: true},
   ],
   "fsist-ingestion": [
     {label: "Emissão Data/Hora", field_name: "emission", updatable: true, required: true},

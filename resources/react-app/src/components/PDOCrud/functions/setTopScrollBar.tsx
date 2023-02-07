@@ -1,4 +1,4 @@
-import { TopScrollBar } from "../../TopScrollBar";
+import { TopScrollBar } from "../components/TopScrollBar";
 import { createRoot } from "react-dom/client";
 
 const setTopScrollBar = (panelBody: HTMLDivElement) => {
