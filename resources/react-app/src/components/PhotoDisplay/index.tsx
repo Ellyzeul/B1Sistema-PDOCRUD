@@ -2,7 +2,7 @@ import { PhotoDisplayProp } from "./types"
 import "./style.css"
 import { MouseEventHandler, useRef } from "react"
 import api from "../../services/axios"
-import { toast, ToastContainer } from "react-toastify"
+import { toast } from "react-toastify"
 
 export const PhotoDisplay = (props: PhotoDisplayProp) => {
   const { url } = props

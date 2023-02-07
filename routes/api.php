@@ -50,6 +50,7 @@ Route::controller(OrderController::class)
         Route::get('/get-total-orders-in-phase', 'getTotalOrdersInPhase');
         Route::post('/address-verified/update', 'updateAddressVerified');
         Route::post('/ask-rating/send', 'sendAskRatingEmail');
+        Route::get('/address/get', 'getAddress');
     });
 
 Route::get('/phases/read', function (Request $request) {
@@ -86,6 +87,7 @@ Route::controller(FileUploadController::class)
     ->group(function() {
         Route::post('/order-update', 'orderUpdate');
         Route::post('/order-amazon-insert', 'orderAmazonInsert');
+        Route::post('/order-address-insert', 'orderAddressInsert');
     });
 
 Route::get('/navbar-items/read', function (Request $request) {

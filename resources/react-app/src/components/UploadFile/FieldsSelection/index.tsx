@@ -46,7 +46,11 @@ export const FieldsSelection = (props: FieldSelectionProp) => {
       .then(response => {
         console.log(response)
         toast.dismiss(loadingToastId)
-        toast.success("Pedidos atualizados")
+        toast.success("Envio concluído com êxito!")
+      })
+      .catch(() => {
+        toast.dismiss(loadingToastId)
+        toast.error('Algum erro interno ocorreu...')
       })
   }
 

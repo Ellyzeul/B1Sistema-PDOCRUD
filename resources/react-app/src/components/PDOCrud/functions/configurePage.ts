@@ -14,7 +14,6 @@ import setConditionalStyling from "./setConditionalStyling";
 import setCompaniesIcons from "./setCompaniesIcons";
 import configureSellercentralColumn from "./configureSellercentralColumn";
 import setSendEmailColumn from "./setSendEmailColumn";
-import setDaysAfterDeliveryColumn from "./setDaysAfterDeliveryColumn";
 
 const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObject<null>, refModalId: MutableRefObject<null>, refOnlineOrderNumber: MutableRefObject<null>, refURLInput: MutableRefObject<null>) => {
 	if(!elemRef.current) return
