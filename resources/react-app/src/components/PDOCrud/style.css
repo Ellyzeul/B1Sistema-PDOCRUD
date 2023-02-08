@@ -59,25 +59,3 @@
   cursor: not-allowed;
   pointer-events: none;
 }
-
-.container-modal {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 100%;
-}
-
-.modal-content {
-  padding-left: 2.5vw;
-  display: grid;
-  height: 15vh;
-  width: 20vw;
-  align-items: center;
-}
-
-.button-container {
-  position: relative;
-  justify-content: space-between;
-}
-

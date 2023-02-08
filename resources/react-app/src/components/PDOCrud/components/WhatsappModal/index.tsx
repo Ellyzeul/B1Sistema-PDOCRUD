@@ -1,6 +1,7 @@
 import WhatsappModalProp from "./types"
 import { Button, Modal } from "@mui/material"
 import api from "../../../../services/axios"
+import "./style.css"
 import { MouseEventHandler, useEffect, useRef, useState } from "react"
 
 export const WhatsappModal = (props: WhatsappModalProp) => {
@@ -63,20 +64,18 @@ export const WhatsappModal = (props: WhatsappModalProp) => {
                 <i className="fa-brands fa-whatsapp"></i>
             </button>
             <Modal
+                className="whatsapp-modal" 
                 open={isOpen}
                 onClose={() => setIsOpen(false)}
-                aria-labelledby="whatsapp-modal"
             >
-                <div className="container-modal">
-                    <div className="modal-content">
-                        <label>
-                            Nº de celular do cliente: 
-                            <input type="text" ref={inputRef} required></input>
-                        </label>
-                        <div className="button-container">
-                            <button onClick={() => setIsOpen(false)}>Cancelar</button>    
-                            <button onClick={onClick}>Enviar mensagem</button>
-                        </div>
+                <div className="whatsapp-modal-container">
+                    <div className="close-whatsapp-modal" onClick={() => setIsOpen(false)}>
+                         <i className="fa-solid fa-xmark"></i>
+                    </div>
+                    <div className="whatsapp-container-block">
+                        <label>Nº de celular do cliente: </label>
+                        <input type="text" ref={inputRef} required></input>
+                        <button id="whatsapp-modal-btn" className="whatsapp-modal-btn" onClick={onClick}>Enviar mensagem</button>
                     </div>
                 </div>
             </Modal>

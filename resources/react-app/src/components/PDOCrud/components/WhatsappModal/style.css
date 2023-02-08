@@ -1,0 +1,53 @@
+.whatsapp-modal {
+    display: grid;
+    place-items: center;
+}
+
+.whatsapp-modal-btn {
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: white;
+    font-weight: bold;
+}
+
+.whatsapp-modal-btn:hover {
+    background-color: #07bc0c;
+    color: white;
+}
+
+.whatsapp-modal-container {
+    height: 20vh;
+    width: 20vw;
+    position: relative;
+    background-color: white;
+    border-radius: 3px;
+    display: grid;
+}
+
+.close-whatsapp-modal {
+    padding: 5px 12px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: large;
+    background-color: white;
+    color: black;
+    border-radius: 100%;
+}
+
+.close-whatsapp-modal:hover {
+    cursor: pointer;
+    filter: invert(1);
+    transition: 125ms;
+}
+
+.whatsapp-container-block {
+    width: 90%;
+    height: 100%;
+    display: grid; 
+    place-items: center;
+    position: relative;
+    padding: 30px 50px 20px;
+}
+
