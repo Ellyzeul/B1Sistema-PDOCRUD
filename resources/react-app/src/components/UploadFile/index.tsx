@@ -72,10 +72,6 @@ export const UploadFile = () => {
             fieldsKeys.forEach(key => 
               toPush[validFields[key]] = row.getCell(key).value as string
             )
-            if(index === 2) {
-              console.log(validFields)
-              console.log(toPush)
-            }
             update.push(toPush)
           })
           setUpdate(update)
@@ -99,6 +95,17 @@ export const UploadFile = () => {
           <select ref={selectRef} id="upload-type" onChange={onChangeSelect}>
             {selectOptions}
           </select>
+          {
+            updloadType.length > 0 && updloadType !== "select"
+            ? <>Modelo: <a 
+                id="excel-template" 
+                href={`/upload-file/template/${uploadTypes.find(elem => elem.value === updloadType)?.message}.xlsx`}
+                download
+              >
+              <i className="fa-solid fa-file-excel"></i>
+            </a></>
+            : null
+          }
         </span>
       </div>
       <div>

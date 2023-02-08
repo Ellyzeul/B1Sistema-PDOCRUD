@@ -5,47 +5,46 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    public static function read(Request $request)
-    {
-        
-        $phase = $request->input('phase') 
-            ? strval($request->input('phase')) 
-            : null;
+	public static function read(Request $request)
+	{
+		$phase = $request->input('phase') 
+			? strval($request->input('phase')) 
+			: null;
 
-        $order = new Order();
-        $processed = $order->read($phase);
-        $response = [
-            "html" => $processed
-        ];
+		$order = new Order();
+		$processed = $order->read($phase);
+		$response = [
+			"html" => $processed
+		];
 
-        return $response;
-    }
+		return $response;
+	}
 
-    public static function updateAddressVerified(Request $request)
-    {
-        $toUpdate = $request->input("verifieds");
-        
-        $order = new Order();
-        $response = $order->updateAddressVerified($toUpdate);
+	public static function updateAddressVerified(Request $request)
+	{
+		$toUpdate = $request->input("verifieds");
+		
+		$order = new Order();
+		$response = $order->updateAddressVerified($toUpdate);
 
-        return $response;
-    }
+		return $response;
+	}
 
-    public static function getTotalOrdersInPhase()
-    {
-        $order = new Order();
+	public static function getTotalOrdersInPhase()
+	{
+		$order = new Order();
 
-        $response = $order->getTotalOrdersInPhase();
+		$response = $order->getTotalOrdersInPhase();
 
-        return $response;
-    }
+		return $response;
+	}
 
-    public static function sendAskRatingEmail(Request $request)
-    {
-        $order = new Order();
+	public static function sendAskRatingEmail(Request $request)
+	{
+		$order = new Order();
 
-        $orderId = $request->input('order_id');
-        [$response, $statusCode] = $order->sendAskRatingEmail($orderId);
+		$orderId = $request->input('order_id');
+		[$response, $statusCode] = $order->sendAskRatingEmail($orderId);
 
         return response($response, $statusCode);
     }
@@ -60,4 +59,14 @@ class OrderController extends Controller
 
         return response($response, $statusCode);
     }    
+
+	public static function getAddress(Request $request)
+	{
+			$order = new Order();
+
+			$orderNumber = $request->input('order_number');
+			$response = $order->getAddress($orderNumber);
+
+			return $response;
+	}
 }

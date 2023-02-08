@@ -104,6 +104,13 @@ class Order
         ];
     }    
 
+    public function getAddress(string $orderNumber)
+    {
+        return DB::table('order_addresses')
+            ->where('online_order_number', $orderNumber)
+            ->first();
+    }
+
     public static function getColumnsNames()
     {
         $pdocrud = new PDOCrudWrapper();

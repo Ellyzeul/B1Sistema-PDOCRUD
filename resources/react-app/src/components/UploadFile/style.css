@@ -77,3 +77,14 @@
   position: absolute;
   opacity: 0;
 }
+
+#excel-template {
+  color: black;
+  padding: 4px 8px;
+  border-radius: 50%;
+}
+#excel-template:hover {
+  cursor: pointer;
+  color: white;
+  background-color: green;
+}

@@ -1,0 +1,52 @@
+.address-modal-btn {
+  color: black;
+  font-size: larger;
+}
+
+.address-modal {
+  display: grid;
+  place-items: center;
+}
+
+.address-modal-container {
+  width: 80vw;
+  height: 85vh;
+  position: relative;
+  background-color: white;
+  border-radius: 3px;
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+
+.address-container-block {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 0 5px;
+}
+
+.address-modal-amazon-address {
+  padding-bottom: 20px;
+}
+
+.open-address-modal {
+  border: none;
+  background-color: inherit;
+}
+
+.close-address-modal {
+  padding: 5px 12px;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: large;
+  background-color: white;
+  color: black;
+  border-radius: 100%;
+}
+.close-address-modal:hover {
+  cursor: pointer;
+  filter: invert(1);
+  transition: 125ms;
+}
