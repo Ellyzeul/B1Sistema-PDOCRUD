@@ -18,7 +18,7 @@ class NavbarItem extends Model
         $items = [];
 
         foreach($results as $item) {
-            $items[$item->label] = isset($items[$item->label]) 
+            $items[$item->label] = isset($items[$item->label])  
                 ? array_merge($items[$item->label], [$item->url])
                 : [$item->url];
         }

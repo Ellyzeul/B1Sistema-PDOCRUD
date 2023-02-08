@@ -49,4 +49,15 @@ class OrderController extends Controller
 
         return response($response, $statusCode);
     }
+
+    public static function getAskRatingWhatsapp(Request $request)
+    {
+        $order = new Order();
+        
+        $orderId = $request->input('order_id');
+        
+        [$response, $statusCode] = $order->getAskRatingWhatsapp($orderId);
+
+        return response($response, $statusCode);
+    }    
 }
