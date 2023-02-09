@@ -25,37 +25,3 @@
   cursor: pointer;
   transition: 125ms;
 }
-
-.order-control-ask-rating-button {
-  border: none;
-  background-color: inherit;
-  padding: 2px;
-  height: 80%;
-  width: 20px;
-  border-radius: 100%;
-  color: black;
-}
-.order-control-ask-rating-button:hover {
-  background-color: black;
-  color: white;
-  transition: 125ms;
-}
-
-.order-control-ask-rating-div {
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.order-control-ask-rating-desactivated-button-wpp {
-  border: none;
-  background-color: inherit;
-  padding: 2px;
-  height: 80%;
-  width: 20px;
-  border-radius: 100%; 
-  color: red;
-  cursor: not-allowed;
-  pointer-events: none;
-}

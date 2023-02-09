@@ -55,6 +55,7 @@ const AddressModal = (props: AddressModalProp) => {
                 {orderAddress.postal_code ? `, ${orderAddress.postal_code}` : null}
                 {orderAddress.country ? `, ${orderAddress.country}` : null}
               </p>
+              {orderAddress.cellphone ? <p><strong>Celular: </strong>{orderAddress.cellphone}</p> : null}
             </div>
           </div>
           <div className="address-container-block"></div>
