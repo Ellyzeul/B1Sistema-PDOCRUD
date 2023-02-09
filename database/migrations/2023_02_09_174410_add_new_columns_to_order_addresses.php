@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::table('order_addresses', function (Blueprint $table) {
             $table->string('buyer_name', 120)->nullable();
+            $table->string('buyer_email', 120)->nullable();
             $table->string('expected_date', 10)->nullable();
             $table->decimal('price', $precision = 8, $scale = 2)->nullable();
             $table->decimal('freight', $precision = 5, $scale = 2)->nullable();
