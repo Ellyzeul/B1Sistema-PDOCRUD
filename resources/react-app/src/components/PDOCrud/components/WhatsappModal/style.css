@@ -1,0 +1,104 @@
+.whatsapp-modal {
+    display: grid;
+    place-items: center;
+}
+
+.whatsapp-modal-btn {
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: white;
+    font-weight: bold;
+}
+
+.whatsapp-modal-btn:hover {
+    background-color: #07bc0c;
+    color: white;
+}
+
+.whatsapp-modal-container {
+    height: 30vh;
+    width: 30vw;
+    position: relative;
+    background-color: white;
+    border-radius: 3px;
+}
+
+.whatsapp-container-block {
+    width: 100%;
+    height: 100%;
+    display: grid; 
+    place-items: center;
+    position: relative;
+}
+
+.close-whatsapp-modal {
+    padding: 5px 12px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    z-index: 10;
+    font-size: large;
+    background-color: white;
+    color: black;
+    border-radius: 100%;
+}
+.close-whatsapp-modal:hover {
+    cursor: pointer;
+    filter: invert(1);
+    transition: 125ms;
+}
+
+.whatsapp-modal-input {
+    border: none;
+    border-radius: 5px;
+    padding: 4px;
+    outline: none;
+}
+.whatsapp-modal-input:hover, .whatsapp-modal-input:focus {
+    background-color: rgb(230, 230, 230);
+    transition: 125ms;
+}
+
+.whatsapp-modal-example {
+    width: 100%;
+    display: grid;
+    place-items: center;
+    color:rgb(156, 156, 156);
+    user-select: none;
+}
+
+.order-control-ask-rating-desactivated-button-wpp {
+    border: none;
+    background-color: inherit;
+    height: 80%;
+    width: 20px;
+    border-radius: 100%; 
+    color: rgb(156, 156, 156) !important;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.order-control-ask-rating-button {
+    border: none;
+    background-color: inherit;
+    padding: 3px 4px;
+    border-radius: 100%;
+    color: black;
+}
+.order-control-ask-rating-button:hover {
+    background-color: black;
+    color: white;
+    transition: 125ms;
+}
+  
+.order-control-ask-rating-div {
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.order-control-ask-rating-button-wpp, .order-control-ask-rating-desactivated-button-wpp {
+    padding: 1px 5px;
+}

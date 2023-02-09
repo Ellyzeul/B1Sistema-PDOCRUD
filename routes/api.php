@@ -49,7 +49,8 @@ Route::controller(OrderController::class)
         Route::get('/read', 'read');
         Route::get('/get-total-orders-in-phase', 'getTotalOrdersInPhase');
         Route::post('/address-verified/update', 'updateAddressVerified');
-        Route::post('/ask-rating/send', 'sendAskRatingEmail');
+        Route::post('/ask-rating/mail/send', 'sendAskRatingEmail');
+        Route::get('/ask-rating/whatsapp/get', 'getAskRatingWhatsapp');
         Route::get('/address/get', 'getAddress');
     });
 

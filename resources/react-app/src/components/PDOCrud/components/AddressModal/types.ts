@@ -13,4 +13,5 @@ export type OrderAddress = {
   state: string | null,
   postal_code: string | null,
   country: string | null,
+  cellphone: string | null,
 }

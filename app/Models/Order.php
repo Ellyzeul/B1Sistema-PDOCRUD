@@ -64,7 +64,7 @@ class Order
 
         [ $clientName, $clientEmail, $orderNumber, $bookName ] = $blingResponse;
 
-        Mail::to($clientEmail)
+        Mail::to("daniel.monteiro@biblio1.com.br")
             ->send(new AskRating(
                 $fromEmail, 
                 $isNational,
@@ -80,6 +80,29 @@ class Order
 
         return [["message" => "E-mail enviado com sucesso!"], 200];
     }
+   
+    public function getAskRatingWhatsapp(string $orderId)
+    {
+        [ $blingNumber, $apiKey, $fromEmail, $companyName, $isNational ] = Order::getMailingInfo($orderId);
+
+        $blingResponse = Order::getBlingRequest($apiKey, $blingNumber);
+        if(isset($blingResponse['error'])) return $blingResponse['error'];
+
+        [ $clientName, $clientEmail, $orderNumber, $bookName, $phone] = $blingResponse;
+
+        return [
+            [
+                "formatted_message" => view('whatsapp/ask-rating/national', [
+                    'orderNumber' => $orderNumber,
+                    'clientName' => $clientName,
+                    'bookName' => $bookName,
+                    'companyName' => $companyName,
+                ])->render(),
+                "cellphone" => $phone
+            ], 
+            200
+        ];
+    }    
 
     public function getAddress(string $orderNumber)
     {
@@ -137,6 +160,7 @@ class Order
             $order['cliente']['email'],
             $order['numeroPedidoLoja'],
             $order['itens'][0]['item']['descricao'],
+            $order['cliente']['celular'],
         ];
     }
 
