@@ -33,7 +33,6 @@ class FileUpload extends Model
 		"ask_rating" => true,
 		"address_verified" => true,
 	];
-	private array $orderAddressesFields = ['recipient_name', 'address_1', 'address_2', 'address_3', 'county', 'city', 'state', 'postal_code', 'country'];
 
 	public function orderUpdate(array $data)
 	{
@@ -59,11 +58,19 @@ class FileUpload extends Model
 
 	public function orderAddressInsert(array $data)
 	{
+		$treatedData = array_map(function($registry) {
+			if(isset($registry['expected_date'])) $registry = $this->treatExpectedDate($registry);
+			return $registry;
+		}, $data);
+		$fields = count($treatedData) > 0
+			? array_keys($treatedData[0])
+			: [];
+
 		DB::table('order_addresses')
 			->upsert(
-				$data,
+				$treatedData,
 				['online_order_number'],
-				$this->orderAddressesFields
+				$fields
 			);
 		
 		return [
@@ -87,10 +94,15 @@ class FileUpload extends Model
 
 	private function treatUpdateDate(array $registry)
 	{
-		if(isset($registry["purchase_date"])) $registry["purchase_date"] = \explode("T", $registry["purchase_date"])[0];
-		if(isset($registry["delivered_date"])) $registry["delivered_date"] = \explode("T", $registry["delivered_date"])[0];
+		if(isset($registry["purchase_date"])) $registry["purchase_date"] = $this->getPlainDate($registry["purchase_date"]);
+		if(isset($registry["delivered_date"])) $registry["delivered_date"] = $this->getPlainDate($registry["delivered_date"]);
 
 		return $registry;
+	}
+
+	private function getPlainDate(string $date)
+	{
+		return \explode("T", $date)[0];
 	}
 
 	private function insertAmazonRegistry(array $registry)
@@ -105,8 +117,21 @@ class FileUpload extends Model
 
 	private function treatInsertAmazonDate(array $registry)
 	{
+		$registry = $this->treatOrderDate($registry);
+		$registry = $this->treatExpectedDate($registry);
+		
+		return $registry;
+	}
+
+	private function treatOrderDate(array $registry)
+	{
 		$registry["order_date"] = date("Y-m-d", strtotime($registry["order_date"]));
 
+		return $registry;
+	}
+
+	private function treatExpectedDate(array $registry)
+	{
 		$expectedDate = strtotime($registry["expected_date"]);
 		$deliveryHour = intval(date("H", $expectedDate));
 		$subtractDay = ($deliveryHour > 0) && ($deliveryHour < 7);
