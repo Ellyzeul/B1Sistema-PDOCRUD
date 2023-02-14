@@ -69,4 +69,26 @@ class OrderController extends Controller
 
 			return $response;
 	}
+
+	public static function getTrakingId(Request $request)
+	{
+		$order = new Order();
+
+		$blingNumber = $request->input('blingNumber');
+		$orderId = $request->input('orderId');
+		$response = $order->getTrakingId($blingNumber, $orderId);
+
+		return $response;
+	}
+
+	public static function getTrakingService(Request $request)
+	{
+		$order = new Order();
+
+		$blingNumber = $request->input('blingNumber');
+		$orderId = $request->input('orderId');
+		$response = $order->getTrakingService($blingNumber, $orderId);
+
+		return $response;
+	}
 }
