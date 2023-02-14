@@ -39,6 +39,7 @@ export const FieldsSelection = (props: FieldSelectionProp) => {
 
         return filteredRow
       })
+    console.log(JSON.stringify(filteredUpdate))
     api.post(`/api/file-upload/${upload_type}`, {
       upload_data: filteredUpdate
     })

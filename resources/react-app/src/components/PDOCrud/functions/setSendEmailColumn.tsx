@@ -46,7 +46,7 @@ const setSendEmailColumn = (phase: number) => {
     })
 
     div.style.display = 'flex'
-    div.style.flexDirection = 'column'
+    div.style.justifyContent = 'center'
     div.appendChild(mail_button)
 
     const wpp_button = createWhatsappButton(row, companyIdx, parseInt(orderId))

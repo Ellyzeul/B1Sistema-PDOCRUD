@@ -42,8 +42,8 @@ const AddressModal = (props: AddressModalProp) => {
           </div>
           <div className="address-container-block">
             <div>
-              <p><strong>Nº do pedido: </strong>{orderNumber}</p>
-              <p className="address-modal-amazon-address"><strong>Endereço</strong></p>
+              <p className="address-modal-amazon-address"><strong>Nº do pedido: </strong>{orderNumber}</p>
+              {orderAddress.buyer_name ? <p><strong>Cliente: </strong>{orderAddress.buyer_name}</p> : null}
               {orderAddress.recipient_name ? <p><strong>Destinatário: </strong>{orderAddress.recipient_name}</p> : null}
               {orderAddress.address_1 ? <p><strong>Endereço 1: </strong>{orderAddress.address_1}</p> : null}
               {orderAddress.address_2 ? <p><strong>Endereço 2: </strong>{orderAddress.address_2}</p> : null}
@@ -55,6 +55,17 @@ const AddressModal = (props: AddressModalProp) => {
                 {orderAddress.postal_code ? `, ${orderAddress.postal_code}` : null}
                 {orderAddress.country ? `, ${orderAddress.country}` : null}
               </p>
+              {orderAddress.buyer_phone ? <p><strong>Celular do cliente: </strong>{orderAddress.buyer_phone}</p> : null}
+              {orderAddress.ship_phone ? <p><strong>Celular do destinatário: </strong>{orderAddress.ship_phone}</p> : null}
+              {orderAddress.expected_date ? <p><strong>Data prevista: </strong>{(new Date(orderAddress.expected_date)).toLocaleDateString('pt-BR')}</p> : null}
+              {orderAddress.price ? <p><strong>Valor: </strong>{orderAddress.price}</p> : null}
+              {orderAddress.price ? <p><strong>Frete: </strong>{orderAddress.freight}</p> : null}
+              {
+                orderAddress.item_tax || orderAddress.freight_tax 
+                  ? <p><strong>Imposto: </strong>{Number(orderAddress.item_tax) + Number(orderAddress.freight_tax)}</p> 
+                  : null
+              }
+              <p><strong>Total: </strong>{Number(orderAddress.price) + Number(orderAddress.freight) + Number(orderAddress.item_tax) + Number(orderAddress.freight_tax)}</p>
             </div>
           </div>
           <div className="address-container-block"></div>

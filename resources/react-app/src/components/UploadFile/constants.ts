@@ -42,7 +42,10 @@ export const fields = {
   "order-address-insert": [
     {label: "Nº Pedido", field_name: "online_order_number", updatable: true, required: true},
     {label: "Bairro", field_name: "county", updatable: true, required: true},
-    {label: "Telefone", field_name: "cellphone", updatable: true, required: true},
+    {label: "Telefone do comprador", field_name: "buyer_phone", updatable: true, required: true},
+    {label: "Telefone do destinatário", field_name: "ship_phone", updatable: true, required: true},
+    {label: "Comprador", field_name: "buyer_name", updatable: true, required: true},
+    {label: "E-mail", field_name: "buyer_email", updatable: true, required: true},
     {label: "Destinatário", field_name: "recipient_name", updatable: true, required: true},
     {label: "Endereço 1", field_name: "address_1", updatable: true, required: true},
     {label: "Endereço 2", field_name: "address_2", updatable: true, required: true},
@@ -51,6 +54,11 @@ export const fields = {
     {label: "Estado", field_name: "state", updatable: true, required: true},
     {label: "CEP", field_name: "postal_code", updatable: true, required: true},
     {label: "País", field_name: "country", updatable: true, required: true},
+    {label: "Data Prevista", field_name: "expected_date", updatable: true, required: true},
+    {label: "Valor", field_name: "price", updatable: true, required: true},
+    {label: "Frete", field_name: "freight", updatable: true, required: true},
+    {label: "Taxa do produto", field_name: "item_tax", updatable: true, required: true},
+    {label: "Taxa do frete", field_name: "freight_tax", updatable: true, required: true},
   ],
   "fsist-ingestion": [
     {label: "Emissão Data/Hora", field_name: "emission", updatable: true, required: true},
