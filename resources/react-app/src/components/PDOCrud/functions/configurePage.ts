@@ -15,7 +15,7 @@ import setCompaniesIcons from "./setCompaniesIcons";
 import configureSellercentralColumn from "./configureSellercentralColumn";
 import setSendEmailColumn from "./setSendEmailColumn";
 import setTrackingCodeUpdateButton from "./setTrackingCodeUpdateButton";
-import setTrackingServiceUpdateButton from "./setTrackingServiceUpdateButton";
+import setDeliveryMethodUpdateButton from "./setDeliveryMethodUpdateButton";
 
 const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObject<null>, refModalId: MutableRefObject<null>, refOnlineOrderNumber: MutableRefObject<null>, refURLInput: MutableRefObject<null>) => {
 	if(!elemRef.current) return
@@ -40,7 +40,7 @@ const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObje
 	configureSellercentralColumn()
 	setConditionalStyling()
 	setCompaniesIcons()
-	setTrackingServiceUpdateButton()
+	setDeliveryMethodUpdateButton()
 	setTrackingCodeUpdateButton()
 	if(phase < 7 && (phase !== 6.2 && phase !== 6.21)) setDeadlineColumn(phase)
 	if(phase >= 6.2 && phase < 6.3) setSendEmailColumn(phase)

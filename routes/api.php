@@ -52,8 +52,8 @@ Route::controller(OrderController::class)
         Route::post('/ask-rating/mail/send', 'sendAskRatingEmail');
         Route::get('/ask-rating/whatsapp/get', 'getAskRatingWhatsapp');
         Route::get('/address/get', 'getAddress');
-        Route::patch('/traking-id/update', 'getTrakingId');
-        Route::patch('/traking-service/update', 'getTrakingService');
+        Route::patch('/traking-id/update', 'updateTrackingCode');
+        Route::patch('/traking-service/update', 'updateDeliveryMethod');
     });
 
 Route::get('/phases/read', function (Request $request) {

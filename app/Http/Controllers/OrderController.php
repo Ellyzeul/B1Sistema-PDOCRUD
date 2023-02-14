@@ -49,45 +49,45 @@ class OrderController extends Controller
         return response($response, $statusCode);
     }
 
-    public static function getAskRatingWhatsapp(Request $request)
-    {
-        $order = new Order();
-        
-        $orderId = $request->input('order_id');
-        
-        [$response, $statusCode] = $order->getAskRatingWhatsapp($orderId);
+	public static function getAskRatingWhatsapp(Request $request)
+	{
+		$order = new Order();
+		
+		$orderId = $request->input('order_id');
+		
+		[$response, $statusCode] = $order->getAskRatingWhatsapp($orderId);
 
-        return response($response, $statusCode);
-    }    
+		return response($response, $statusCode);
+	}    
 
 	public static function getAddress(Request $request)
 	{
-			$order = new Order();
-
-			$orderNumber = $request->input('order_number');
-			$response = $order->getAddress($orderNumber);
-
-			return $response;
-	}
-
-	public static function getTrakingId(Request $request)
-	{
 		$order = new Order();
 
-		$blingNumber = $request->input('blingNumber');
-		$orderId = $request->input('orderId');
-		$response = $order->getTrakingId($blingNumber, $orderId);
+		$orderNumber = $request->input('order_number');
+		$response = $order->getAddress($orderNumber);
 
 		return $response;
 	}
 
-	public static function getTrakingService(Request $request)
+	public static function updateTrackingCode(Request $request)
 	{
 		$order = new Order();
 
-		$blingNumber = $request->input('blingNumber');
-		$orderId = $request->input('orderId');
-		$response = $order->getTrakingService($blingNumber, $orderId);
+		$orderId = $request->input('order_id');
+		$blingNumber = $request->input('bling_number');
+		$response = $order->updateTrackingCode($orderId, $blingNumber);
+
+		return $response;
+	}
+
+	public static function updateDeliveryMethod(Request $request)
+	{
+		$order = new Order();
+
+		$orderId = $request->input('order_id');
+		$blingNumber = $request->input('bling_number');
+		$response = $order->updateDeliveryMethod($orderId, $blingNumber);
 
 		return $response;
 	}
