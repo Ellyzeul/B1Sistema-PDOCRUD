@@ -161,7 +161,6 @@ class Order
             ->where('id', $orderId)
             ->update(['tracking_code' => $trackingCode]);
 
-
         return [[
             'message' => 'Código de rastreio atualizado!',
             'tracking_code' => $trackingCode

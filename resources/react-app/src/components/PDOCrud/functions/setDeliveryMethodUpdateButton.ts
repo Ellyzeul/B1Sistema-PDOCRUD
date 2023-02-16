@@ -16,15 +16,20 @@ const setDeliveryMethodUpdateButton = () => {
 		const cell = row.cells[deliveryMethodIdx]
 		const blingNumber = (row.cells[numberBlingIdx].children[0] as HTMLInputElement).value
 		const orderId = row.cells[idIdx].textContent?.trim()
-
 		const deliveryMethodSelect = (cell.children[0] as HTMLSelectElement)
-
+		const container = document.createElement('div')
+		const select = cell.children[0]
 		const icon = document.createElement("i")
-		icon.className = "fa-solid fa-cloud-arrow-down icon-css"
 
+		container.style.display = "grid"
+		container.style.gridTemplateColumns = "90% 10%"
+
+		cell.removeChild(select)
+		container.appendChild(select)
+
+		icon.className = "fa-solid fa-cloud-arrow-down icon-css"
 		icon.style.position = "relative"
-		icon.style.paddingTop = "1px"
-		icon.style.paddingLeft = "110px"
+		icon.style.paddingTop = "10px"
 
 		icon.addEventListener("click", () =>{
 			api.patch('/api/orders/traking-service/update', {
@@ -41,7 +46,8 @@ const setDeliveryMethodUpdateButton = () => {
 				.catch(() => toast.error("Falha na requisição de dados do Bling..."))
 		})
 
-		cell.appendChild(icon)
+		container.appendChild(icon)
+		cell.appendChild(container)
 	})
 
 	document.styleSheets[1].addRule('.icon-css:hover', 'cursor: pointer;');

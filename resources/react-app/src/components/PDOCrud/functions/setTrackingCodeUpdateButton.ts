@@ -16,24 +16,20 @@ const setTrackingCodeUpdateButton = () => {
 		const cell = row.cells[trackingCodeIdx]
 		const blingNumber = (row.cells[numberBlingIdx].children[0] as HTMLInputElement).value
 		const orderId = row.cells[orderIdx].textContent?.trim()
-		
 		const trackingCodeInput = (cell.children[0] as HTMLInputElement)
-		
+		const container = document.createElement("div")
+		const input = cell.children[0]
 		const icon = document.createElement("i")
+
+		cell.removeChild(input)
+		container.appendChild(input)
+		container.style.display = "grid"
+		container.style.gridTemplateColumns = "90% 10%"
+
 		icon.classList.add("fa-solid")
 		icon.classList.add("fa-cloud-arrow-down")
 		icon.classList.add("icon-css")
-
-		cell.style.display = "grid"
-		cell.style.gridTemplateColumns = "90% 10%"
-
 		icon.style.paddingTop = "10px"
-
-		trackingCodeInput.style.gridColumnStart = "1"
-		trackingCodeInput.style.gridColumnEnd = "1"
-
-		icon.style.gridColumnStart = "2"
-		icon.style.gridColumnEnd = "2"
 		
 		icon.addEventListener("click", () =>{
 			api.patch('/api/orders/traking-id/update', {
@@ -50,7 +46,8 @@ const setTrackingCodeUpdateButton = () => {
 				.catch(() => toast.error("Falha na requisição de dados do Bling..."))
 		})
 
-		cell.appendChild(icon)
+		container.appendChild(icon)
+		cell.appendChild(container)
 	})
 
 	document.styleSheets[1].addRule('.icon-css:hover', 'cursor: pointer;');
