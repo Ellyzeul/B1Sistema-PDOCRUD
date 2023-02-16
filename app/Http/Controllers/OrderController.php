@@ -49,24 +49,46 @@ class OrderController extends Controller
         return response($response, $statusCode);
     }
 
-    public static function getAskRatingWhatsapp(Request $request)
-    {
-        $order = new Order();
-        
-        $orderId = $request->input('order_id');
-        
-        [$response, $statusCode] = $order->getAskRatingWhatsapp($orderId);
+	public static function getAskRatingWhatsapp(Request $request)
+	{
+		$order = new Order();
+		
+		$orderId = $request->input('order_id');
+		
+		[$response, $statusCode] = $order->getAskRatingWhatsapp($orderId);
 
-        return response($response, $statusCode);
-    }    
+		return response($response, $statusCode);
+	}    
 
 	public static function getAddress(Request $request)
 	{
-			$order = new Order();
+		$order = new Order();
 
-			$orderNumber = $request->input('order_number');
-			$response = $order->getAddress($orderNumber);
+		$orderNumber = $request->input('order_number');
+		$response = $order->getAddress($orderNumber);
 
-			return $response;
+		return $response;
+	}
+
+	public static function updateTrackingCode(Request $request)
+	{
+		$order = new Order();
+
+		$orderId = $request->input('order_id');
+		$blingNumber = $request->input('bling_number');
+		$response = $order->updateTrackingCode($orderId, $blingNumber);
+
+		return $response;
+	}
+
+	public static function updateDeliveryMethod(Request $request)
+	{
+		$order = new Order();
+
+		$orderId = $request->input('order_id');
+		$blingNumber = $request->input('bling_number');
+		$response = $order->updateDeliveryMethod($orderId, $blingNumber);
+
+		return $response;
 	}
 }
