@@ -7,13 +7,15 @@ const setDeliveryMethodUpdateButton = () => {
 	const deliveryMethodIdx = getColumnFieldIndex("Forma de envio")
 	const numberBlingIdx = getColumnFieldIndex("Nº Bling")
 	const idIdx = getColumnFieldIndex("Nº")
+	const companyIdx = getColumnFieldIndex("Empresa")
 
-	if(deliveryMethodIdx === -1 || numberBlingIdx === -1 || idIdx === -1) return
+	if(deliveryMethodIdx === -1 || numberBlingIdx === -1 || idIdx === -1 || companyIdx === -1) return
 
 	const rows = getTableRows()
 
 	rows.forEach(row => {
 		const cell = row.cells[deliveryMethodIdx]
+		const companyId = row.cells[companyIdx].textContent
 		const blingNumber = (row.cells[numberBlingIdx].children[0] as HTMLInputElement).value
 		const orderId = row.cells[idIdx].textContent?.trim()
 		const deliveryMethodSelect = (cell.children[0] as HTMLSelectElement)
@@ -33,6 +35,7 @@ const setDeliveryMethodUpdateButton = () => {
 
 		icon.addEventListener("click", () =>{
 			api.patch('/api/orders/traking-service/update', {
+				company_id: companyId,
 				order_id: orderId,
 				bling_number: blingNumber
 			})

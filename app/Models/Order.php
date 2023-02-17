@@ -148,9 +148,10 @@ class Order
         return $pdocrud->getColumnsNames();
     }
 
-    public function updateTrackingCode(string $orderId, string $blingNumber)
+    public function updateTrackingCode(string $companyId, string $orderId, string $blingNumber)
     {
-        $apiKey = env('SELINE_BLING_API_TOKEN');
+        if($companyId == 0) $apiKey = env('SELINE_BLING_API_TOKEN');
+        if($companyId == 1) $apiKey = env('B1_BLING_API_TOKEN');
 
         $blingResponse = Order::getBlingTrakingCodeRequest($apiKey, $blingNumber);
         if(isset($blingResponse['error'])) return $blingResponse['error'];
@@ -167,9 +168,10 @@ class Order
         ], 200];
     }
 
-    public function updateDeliveryMethod(string $orderId, string $blingNumber)
+    public function updateDeliveryMethod(string $companyId, string $orderId, string $blingNumber)
     {
-        $apiKey = env('SELINE_BLING_API_TOKEN');
+        if($companyId == 0) $apiKey = env('SELINE_BLING_API_TOKEN');
+        if($companyId == 1) $apiKey = env('B1_BLING_API_TOKEN');
 
         $blingResponse = Order::getBlingDeliveryMethodRequest($apiKey, $blingNumber);
         if(isset($blingResponse['error'])) return ['message' => 'Erro na requisição de dados ao Bling...'];
@@ -238,7 +240,11 @@ class Order
 
         $order = $response['retorno']['pedidos'][0]['pedido'];
 
-        return $order['transporte']['volumes'][0]['volume']['codigoRastreamento'];        
+        $trackingCode = $order['transporte']['volumes'][0]['volume']['codigoRastreamento'];
+
+        if($trackingCode == "") $trackingCode = $order['transporte']['volumes'][0]['volume']['remessa']['numero'];
+
+        return $trackingCode;         
     }
 
     private function getBlingDeliveryMethodRequest(string $apiKey, string $blingNumber)
