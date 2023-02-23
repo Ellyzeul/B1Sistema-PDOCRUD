@@ -7,13 +7,15 @@ const setTrackingCodeUpdateButton = () => {
 	const trackingCodeIdx = getColumnFieldIndex("Código de rastreio")
 	const numberBlingIdx = getColumnFieldIndex("Nº Bling")
 	const orderIdx = getColumnFieldIndex("Nº")
+	const companyIdx = getColumnFieldIndex("Empresa")
 
-	if(trackingCodeIdx === -1 || numberBlingIdx === -1 || orderIdx === -1) return
+	if(trackingCodeIdx === -1 || numberBlingIdx === -1 || orderIdx === -1 || companyIdx === -1) return
 
 	const rows = getTableRows()
 
 	rows.forEach(row => {
 		const cell = row.cells[trackingCodeIdx]
+		const companyId = row.cells[companyIdx].textContent
 		const blingNumber = (row.cells[numberBlingIdx].children[0] as HTMLInputElement).value
 		const orderId = row.cells[orderIdx].textContent?.trim()
 		const trackingCodeInput = (cell.children[0] as HTMLInputElement)
@@ -33,6 +35,7 @@ const setTrackingCodeUpdateButton = () => {
 		
 		icon.addEventListener("click", () =>{
 			api.patch('/api/orders/traking-id/update', {
+				company_id: companyId,
 				order_id: orderId,
 				bling_number: blingNumber
 			})
