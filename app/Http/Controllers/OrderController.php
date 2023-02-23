@@ -74,9 +74,10 @@ class OrderController extends Controller
 	{
 		$order = new Order();
 
+		$companyId = $request->input('company_id');
 		$orderId = $request->input('order_id');
 		$blingNumber = $request->input('bling_number');
-		$response = $order->updateTrackingCode($orderId, $blingNumber);
+		$response = $order->updateTrackingCode($companyId, $orderId, $blingNumber);
 
 		return $response;
 	}
@@ -85,9 +86,10 @@ class OrderController extends Controller
 	{
 		$order = new Order();
 
+		$companyId = $request->input('company_id');
 		$orderId = $request->input('order_id');
 		$blingNumber = $request->input('bling_number');
-		$response = $order->updateDeliveryMethod($orderId, $blingNumber);
+		$response = $order->updateDeliveryMethod($companyId, $orderId, $blingNumber);
 
 		return $response;
 	}
