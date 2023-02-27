@@ -3,11 +3,13 @@ import { MouseEventHandler, useEffect, useState } from "react"
 import { AddressModalProp, OrderAddress } from "./types"
 import "./style.css"
 import api from "../../../../services/axios"
+import SellercentralAddress from "./SellercentralAddress"
+import BlingAddress from "./BlingAddress"
 
 const AddressModal = (props: AddressModalProp) => {
   const { orderNumber } = props
   const [isOpen, setIsOpen] = useState(false)
-  const [orderAddress, setOrderAddress] = useState({} as OrderAddress)
+  const [{ sellercentral, bling }, setOrderAddress] = useState({} as OrderAddress)
 
   const handleOpen: MouseEventHandler = event => {
     event.preventDefault()
@@ -17,7 +19,7 @@ const AddressModal = (props: AddressModalProp) => {
   const handleClose = () => setIsOpen(false)
 
   useEffect(() => {
-    if(!isOpen || !!orderAddress.online_order_number) return
+    if(!isOpen || !!sellercentral) return
     api.get(`/api/orders/address/get?order_number=${orderNumber}`)
       .then(response => response.data as OrderAddress)
       .then(setOrderAddress)
@@ -41,34 +43,19 @@ const AddressModal = (props: AddressModalProp) => {
             <i className="fa-solid fa-xmark"></i>
           </div>
           <div className="address-container-block">
-            <div>
-              <p className="address-modal-amazon-address"><strong>Nº do pedido: </strong>{orderNumber}</p>
-              {orderAddress.buyer_name ? <p><strong>Cliente: </strong>{orderAddress.buyer_name}</p> : null}
-              {orderAddress.recipient_name ? <p><strong>Destinatário: </strong>{orderAddress.recipient_name}</p> : null}
-              {orderAddress.address_1 ? <p><strong>Endereço 1: </strong>{orderAddress.address_1}</p> : null}
-              {orderAddress.address_2 ? <p><strong>Endereço 2: </strong>{orderAddress.address_2}</p> : null}
-              {orderAddress.address_3 ? <p><strong>Endereço 3: </strong>{orderAddress.address_3}</p> : null}
-              {orderAddress.county ? <p><strong>Bairro: </strong>{orderAddress.county}</p> : null}
-              <p>{orderAddress.online_order_number && <strong>Cidade: </strong>}
-                {orderAddress.city}
-                {orderAddress.state ? `, ${orderAddress.state}` : null}
-                {orderAddress.postal_code ? `, ${orderAddress.postal_code}` : null}
-                {orderAddress.country ? `, ${orderAddress.country}` : null}
-              </p>
-              {orderAddress.buyer_phone ? <p><strong>Celular do cliente: </strong>{orderAddress.buyer_phone}</p> : null}
-              {orderAddress.ship_phone ? <p><strong>Celular do destinatário: </strong>{orderAddress.ship_phone}</p> : null}
-              {orderAddress.expected_date ? <p><strong>Data prevista: </strong>{(new Date(orderAddress.expected_date)).toLocaleDateString('pt-BR')}</p> : null}
-              {orderAddress.price ? <p><strong>Valor: </strong>{orderAddress.price}</p> : null}
-              {orderAddress.price ? <p><strong>Frete: </strong>{orderAddress.freight}</p> : null}
-              {
-                orderAddress.item_tax || orderAddress.freight_tax 
-                  ? <p><strong>Imposto: </strong>{Number(orderAddress.item_tax) + Number(orderAddress.freight_tax)}</p> 
-                  : null
-              }
-              <p><strong>Total: </strong>{Number(orderAddress.price) + Number(orderAddress.freight) + Number(orderAddress.item_tax) + Number(orderAddress.freight_tax)}</p>
-            </div>
+            {
+              sellercentral
+                ? <SellercentralAddress orderNumber={orderNumber} address={sellercentral} />
+                : <p>Sem endereço Amazon...</p>
+            }
           </div>
-          <div className="address-container-block"></div>
+          <div className="address-container-block">
+            {
+              bling
+                ? <BlingAddress address={bling} />
+                : <p>Sem endereço Bling...</p>
+            }
+          </div>
         </div>
       </Modal>
     </>

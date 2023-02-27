@@ -3,6 +3,11 @@ export type AddressModalProp = {
 }
 
 export type OrderAddress = {
+  sellercentral: SellercentralAddress,
+  bling: BlingAddress
+}
+
+export type SellercentralAddress = {
   online_order_number: string,
   buyer_name: string | null,
   recipient_name: string | null,
@@ -22,4 +27,21 @@ export type OrderAddress = {
   freight: number | null,
   item_tax: number | null,
   freight_tax: number | null,
+}
+
+export type BlingAddress = {
+  bling_number: string,
+  buyer_name: string | null,
+  cpf_cnpj: string | null,
+  ie: string | null,
+  address: string | null,
+  number: string | null,
+  complement: string | null,
+  city: string | null,
+  county: string | null,
+  email: string | null,
+  cellphone: string | null,
+  landline_phone: string | null,
+  postal_code: string | null,
+  uf: string | null,
 }
