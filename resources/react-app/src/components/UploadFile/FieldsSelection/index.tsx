@@ -45,7 +45,6 @@ export const FieldsSelection = (props: FieldSelectionProp) => {
     })
       .then(response => response.data)
       .then(response => {
-        console.log(response)
         toast.dismiss(loadingToastId)
         toast.success("Envio concluído com êxito!")
       })
