@@ -20,6 +20,8 @@ const BlingAddress = (props: BlingAddressProp) => {
       {address.cpf_cnpj && <p><strong>CPF/CNPJ: </strong>{address.cpf_cnpj}</p>}
       {address.ie && <p><strong>Inscrição Estadual: </strong>{address.ie}</p>}
       {address.email && <p><strong>E-mail: </strong>{address.email}</p>}
+      {address.total_items && <p><strong>Livros no pedido: </strong>{address.total_items}</p>}
+      {address.total_value && <p><strong>Valor total: </strong>{address.total_value}</p>}
     </div>
   )
 }

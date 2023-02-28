@@ -242,8 +242,12 @@ class Order
         $response = $this->makeBlingRequest($apikey, $blingNumber);
         if(isset($response['error'])) return $response;
 
-        $rawAddress = $response['retorno']['pedidos'][0]['pedido'];
-        $client = $rawAddress['cliente'];
+        $order = $response['retorno']['pedidos'][0]['pedido'];
+        $client = $order['cliente'];
+        $totalItems = array_reduce(
+            array_map(fn ($item) => intval($item['item']['quantidade']), $order['itens']), 
+            fn ($acc, $qnt) => $acc + $qnt
+        );
 
         return [
             'buyer_name' => $client['nome'],
@@ -259,6 +263,8 @@ class Order
             'landline_phone' => $client['fone'],
             'postal_code' => $client['cep'],
             'uf' => $client['uf'],
+            'total_items' => $totalItems,
+            'total_value' => $order['totalvenda'],
         ];
     }
 
