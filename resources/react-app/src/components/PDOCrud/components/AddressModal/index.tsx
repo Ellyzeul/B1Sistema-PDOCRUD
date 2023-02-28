@@ -42,19 +42,21 @@ const AddressModal = (props: AddressModalProp) => {
           <div className="close-address-modal" onClick={handleClose}>
             <i className="fa-solid fa-xmark"></i>
           </div>
-          <div className="address-container-block">
-            {
-              sellercentral
-                ? <SellercentralAddress orderNumber={orderNumber} address={sellercentral} />
-                : <p>Sem endereço Amazon...</p>
-            }
-          </div>
-          <div className="address-container-block">
-            {
-              bling
-                ? <BlingAddress address={bling} />
-                : <p>Sem endereço Bling...</p>
-            }
+          <div className="address-modal-scrollable-container">
+            <div className="address-container-block">
+              {
+                sellercentral
+                  ? <SellercentralAddress orderNumber={orderNumber} address={sellercentral} />
+                  : <p>Sem endereço Amazon...</p>
+              }
+            </div>
+            <div className="address-container-block">
+              {
+                bling
+                  ? <BlingAddress address={bling} />
+                  : <p>Sem endereço Bling...</p>
+              }
+            </div>
           </div>
         </div>
       </Modal>
