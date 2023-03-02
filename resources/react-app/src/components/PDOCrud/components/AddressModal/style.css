@@ -6,6 +6,7 @@
 .address-modal {
   display: grid;
   place-items: center;
+  font-size: medium;
 }
 
 .address-modal-container {
@@ -14,16 +15,47 @@
   position: relative;
   background-color: white;
   border-radius: 3px;
-  display: grid;
-  grid-template-columns: 50% 50%;
 }
 
-.address-container-block {
+.address-modal-scrollable-container {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  overflow-y: auto;
+  padding-top: 50px;
+}
+
+.address-container-block, .address-container-bling-block {
   width: 100%;
   height: 100%;
   display: grid;
   place-items: center;
   padding: 0 5px;
+}
+
+.address-container-bling-block {
+  grid-template-columns: max-content auto;
+  place-items: center start;
+}
+.address-container-bling-block > div {
+  display: flex;
+  flex-direction: column;
+}
+.address-container-bling-block > div > input, .address-container-bling-block > div > select {
+  border: none;
+  border-radius: 4px;
+  border: 1px solid rgb(231, 231, 231);
+  padding: 2px 3px;
+  background-color: inherit;
+  outline: none;
+}
+.address-container-bling-block > div > input:hover, .address-container-bling-block > div > select:hover {
+  background-color: rgb(231, 231, 231);
+  transition: 125ms;
+}
+.address-container-bling-block > div > input:focus {
+  background-color: rgb(247, 247, 247);
 }
 
 .address-modal-amazon-address {
@@ -48,5 +80,20 @@
 .close-address-modal:hover {
   cursor: pointer;
   filter: invert(1);
+  transition: 125ms;
+}
+
+.address-modal-save-address {
+  position: absolute;
+  bottom: 20px;
+  right: 40px;
+  padding: 10px 8px;
+  color: white;
+  background-color: rgb(38, 114, 38);
+  border: none;
+  border-radius: 4px;
+}
+.address-modal-save-address:hover {
+  background-color: rgb(16, 159, 16);
   transition: 125ms;
 }

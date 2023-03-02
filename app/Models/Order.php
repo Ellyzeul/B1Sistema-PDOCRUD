@@ -41,6 +41,11 @@ class Order
         "Pickup" => 5
     ];
 
+    private array $blingAPIKeys = [
+        0 => 'SELINE_BLING_API_TOKEN',
+        1 => 'B1_BLING_API_TOKEN',
+    ];
+
     public function read(string|null $phase)
     {
         if($phase === "6.1") $this->updateReadyTo6_2();
@@ -90,9 +95,9 @@ class Order
 
     public function sendAskRatingEmail(string $orderId)
     {
-        [ $blingNumber, $apiKey, $fromEmail, $companyName, $isNational ] = Order::getMailingInfo($orderId);
+        [ $blingNumber, $apikey, $fromEmail, $companyName, $isNational ] = Order::getMailingInfo($orderId);
 
-        $blingResponse = Order::getBlingMessagingInfo($apiKey, $blingNumber);
+        $blingResponse = Order::getBlingMessagingInfo($apikey, $blingNumber);
         if(isset($blingResponse['error'])) return $blingResponse['error'];
 
         [ $clientName, $clientEmail, $orderNumber, $bookName ] = $blingResponse;
@@ -116,9 +121,9 @@ class Order
    
     public function getAskRatingWhatsapp(string $orderId)
     {
-        [ $blingNumber, $apiKey, $fromEmail, $companyName, $isNational ] = Order::getMailingInfo($orderId);
+        [ $blingNumber, $apikey, $fromEmail, $companyName, $isNational ] = Order::getMailingInfo($orderId);
 
-        $blingResponse = Order::getBlingMessagingInfo($apiKey, $blingNumber);
+        $blingResponse = Order::getBlingMessagingInfo($apikey, $blingNumber);
         if(isset($blingResponse['error'])) return $blingResponse['error'];
 
         [ $clientName, $clientEmail, $orderNumber, $bookName, $phone] = $blingResponse;
@@ -136,9 +141,27 @@ class Order
 
     public function getAddress(string $orderNumber)
     {
-        return DB::table('order_addresses')
+        $response = [];
+        $blingData = DB::table('order_control')
+            ->select('id_company', 'bling_number')
             ->where('online_order_number', $orderNumber)
             ->first();
+        $companyId = $blingData->id_company;
+        $blingNumber = $blingData->bling_number;
+        $apikey = env($this->blingAPIKeys[$companyId]);
+        $blingAddress = isset($blingNumber)
+            ? $this->getBlingAddress($apikey, $blingNumber)
+            : ['error' => 'Sem número do Bling'];
+
+        $response['sellercentral'] = DB::table('order_addresses')
+            ->where('online_order_number', $orderNumber)
+            ->first();
+
+        $response['bling'] = isset($blingAddress['error'])
+            ? null
+            : array_merge($blingAddress, ['bling_number' => $blingNumber]);
+        
+        return $response;
     }
 
     public static function getColumnsNames()
@@ -150,10 +173,8 @@ class Order
 
     public function updateTrackingCode(string $companyId, string $orderId, string $blingNumber)
     {
-        if($companyId == 0) $apiKey = env('SELINE_BLING_API_TOKEN');
-        if($companyId == 1) $apiKey = env('B1_BLING_API_TOKEN');
-
-        $blingResponse = Order::getBlingTrakingCodeRequest($apiKey, $blingNumber);
+        $apikey = env($this->blingAPIKeys[$companyId]);
+        $blingResponse = Order::getBlingTrakingCodeRequest($apikey, $blingNumber);
         if(isset($blingResponse['error'])) return $blingResponse['error'];
 
         $trackingCode = $blingResponse;
@@ -170,10 +191,9 @@ class Order
 
     public function updateDeliveryMethod(string $companyId, string $orderId, string $blingNumber)
     {
-        if($companyId == 0) $apiKey = env('SELINE_BLING_API_TOKEN');
-        if($companyId == 1) $apiKey = env('B1_BLING_API_TOKEN');
+        $apikey = env($this->blingAPIKeys[$companyId]);
 
-        $blingResponse = Order::getBlingDeliveryMethodRequest($apiKey, $blingNumber);
+        $blingResponse = Order::getBlingDeliveryMethodRequest($apikey, $blingNumber);
         if(isset($blingResponse['error'])) return ['message' => 'Erro na requisição de dados ao Bling...'];
 
         $deliveryMethod = $blingResponse;
@@ -217,9 +237,40 @@ class Order
         ];
     }
 
-    private function getBlingMessagingInfo(string $apiKey, string $blingNumber)
+    private function getBlingAddress(string $apikey, string $blingNumber)
     {
-        $response = $this->makeBlingRequest($apiKey, $blingNumber);
+        $response = $this->makeBlingRequest($apikey, $blingNumber);
+        if(isset($response['error'])) return $response;
+
+        $order = $response['retorno']['pedidos'][0]['pedido'];
+        $client = $order['cliente'];
+        $totalItems = array_reduce(
+            array_map(fn ($item) => intval($item['item']['quantidade']), $order['itens']), 
+            fn ($acc, $qnt) => $acc + $qnt
+        );
+
+        return [
+            'buyer_name' => $client['nome'],
+            'cpf_cnpj' => $client['cnpj'],
+            'ie' => $client['ie'],
+            'address' => $client['endereco'],
+            'number' => $client['numero'],
+            'complement' =>$client['complemento'],
+            'city' => $client['cidade'],
+            'county' => $client['bairro'],
+            'email' => $client['email'],
+            'cellphone' => $client['celular'],
+            'landline_phone' => $client['fone'],
+            'postal_code' => $client['cep'],
+            'uf' => $client['uf'],
+            'total_items' => $totalItems,
+            'total_value' => $order['totalvenda'],
+        ];
+    }
+
+    private function getBlingMessagingInfo(string $apikey, string $blingNumber)
+    {
+        $response = $this->makeBlingRequest($apikey, $blingNumber);
         if(isset($response['error'])) return $response;
 
         $order = $response['retorno']['pedidos'][0]['pedido'];
@@ -233,9 +284,9 @@ class Order
         ];
     }
 
-    private function getBlingTrakingCodeRequest(string $apiKey, string $blingNumber)
+    private function getBlingTrakingCodeRequest(string $apikey, string $blingNumber)
     {
-        $response = $this->makeBlingRequest($apiKey, $blingNumber);
+        $response = $this->makeBlingRequest($apikey, $blingNumber);
         if(isset($response['error'])) return $response;
 
         $order = $response['retorno']['pedidos'][0]['pedido'];
@@ -247,9 +298,9 @@ class Order
         return $trackingCode;         
     }
 
-    private function getBlingDeliveryMethodRequest(string $apiKey, string $blingNumber)
+    private function getBlingDeliveryMethodRequest(string $apikey, string $blingNumber)
     {
-        $response = $this->makeBlingRequest($apiKey, $blingNumber);
+        $response = $this->makeBlingRequest($apikey, $blingNumber);
         if(isset($response['error'])) return $response;
 
         $order = $response['retorno']['pedidos'][0]['pedido'];
@@ -257,9 +308,9 @@ class Order
         return $order['transporte']['volumes'][0]['volume']['servico'];        
     }
 
-    private function makeBlingRequest(string $apiKey, string $blingNumber)
+    private function makeBlingRequest(string $apikey, string $blingNumber)
     {
-        $response = Http::get("https://bling.com.br/Api/v2/pedido/$blingNumber/json?apikey=$apiKey");
+        $response = Http::get("https://bling.com.br/Api/v2/pedido/$blingNumber/json?apikey=$apikey");
         if(!$response->ok()) return ["error" => [
             ["message" => "Erro na requisição de dados no Bling. Tente novamente mais tarde..."], 
             500
