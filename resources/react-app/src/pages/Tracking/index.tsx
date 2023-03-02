@@ -17,8 +17,6 @@ const TrackingPage = () => {
       })
   }, [])
 
-  useEffect(() => console.log(data), [data])
-
   return (
     <div className="tracking-page-container">
       <Navbar items={[]} />

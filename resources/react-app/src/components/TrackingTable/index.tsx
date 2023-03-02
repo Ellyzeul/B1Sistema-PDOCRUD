@@ -61,7 +61,6 @@ const updateRow = (trackingCode: string, deliveryMethod: string, row: any, field
   })
     .then(_ => toast.success("Rastreio atualizado!"))
     .catch(_ => toast.error("Ocorreu algum erro... Entrar em contato com o setor de TI"))
-  console.log(row.children[0].props)
 }
 
 const getRows = (data: {[key: string]: string}[], fieldsKeys: string[], actualPage: number) => {
