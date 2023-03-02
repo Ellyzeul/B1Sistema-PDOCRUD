@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Date;
 
 class Tracking extends Model
 {
@@ -98,19 +99,33 @@ class Tracking extends Model
 	}
 
 	private function fetchCorreios(string $trackingCode)
-	{
-		$response = Http::withBasicAuth(env('CORREIOS_USERNAME'), env('CORREIOS_PASSWORD'))
-			->post('https://apps3.correios.com.br/areletronico/v1/ars/ultimoevento', [
-				'objetos' => [$trackingCode]
-			]);
-		
-		if(!isset($response[0]['eventos'][0])) return [];
-		$response = $response[0]['eventos'][0];
+	{	
+		$today = Date::today();
+		// $today = Date::createFromDate("2023-03-01"); 
+
+		if(!$this->existsApiCredentialDB('correios')) $this->generateCorreiosToken();
+
+		$str_json = str_replace("\\", "", $this->readApiCredentialDB('correios'));
+		$CORREIOS_API_KEY = explode('"', explode('"token":', $str_json)[1])[1];
+		$expires_in = explode("T", str_replace('"', '', explode(",", explode('"expiraEm":', $str_json)[1])[0]))[0];
+
+		if((!$CORREIOS_API_KEY) || Date::parse($expires_in)->diffAsCarbonInterval($today)->format("%d")!=1){
+			$this->generateCorreiosToken();
+			$str_json = str_replace("\\", "", $this->readApiCredentialDB('correios'));
+			$CORREIOS_API_KEY = str_replace('"', '', explode('"', explode('"token":', $str_json)[1])[1]);
+		} 
+
+		$response = Http::withHeaders(["X-locale" => "pt_BR"])
+			->withToken($CORREIOS_API_KEY)
+			->get("https://api.correios.com.br/srorastro/v1/objetos/$trackingCode");
+
+		if(!isset($response['objetos'][0]['eventos'][0])) return [];
+		$response = $response['objetos'][0]['eventos'][0];
 
 		return [
-			"status" => $response['descricaoEvento'],
-			"last_update_date" => date('Y-m-d', strtotime(str_replace('/', '-', $response['dataEvento']))),
-			"details" => "{$response['nomeUnidade']} - {$response['municipio']} - {$response['uf']}",
+			"status" => $response['descricao'],
+			"last_update_date" => date('Y-m-d', strtotime(str_replace('/', '-', $response['dtHrCriado']))),
+			"details" => "{$response['unidade']['tipo']} - {$response['unidade']['endereco']['cidade']} - {$response['unidade']['endereco']['uf']}",
 		];
 	}
 
@@ -192,7 +207,17 @@ class Tracking extends Model
 				"client_secret" => env('FEDEX_CLIENT_SECRET')
 			]);
 
-		$_SESSION['FEDEX_API_KEY'] = $response['access_token'];
+			$this->writeApiCredentialDB('fedex', $response);
+	}
+
+	private function generateCorreiosToken()
+	{
+		$response = Http::withBasicAuth(env('CORREIOS_USERNAME'), env('CORREIOS_PASSWORD'))
+			->post('https://api.correios.com.br/token/v1/autentica/cartaopostagem', [
+				'numero' => env('CORREIOS_CARTAO_POSTAGEM')
+			]);
+
+		$this->writeApiCredentialDB('correios', $response);
 	}
 
 	private function updateDB()
@@ -223,5 +248,33 @@ class Tracking extends Model
 				continue;
 			}
 		}
+	}
+
+	private function readApiCredentialDB(string $id)
+	{
+		$credential = DB::table('api_credentials')
+			->select('key')
+			->where('id', $id)
+			->get();
+
+		return $credential;
+	}
+
+	private function writeApiCredentialDB(string $id, string $key)
+	{
+		DB::table('api_credentials')
+			->upsert([
+		  		'id' => $id,
+		  		'key' => $key
+			], ['key']);
+	}
+	
+	private function existsApiCredentialDB(string $id)
+	{
+		$credential = DB::table('api_credentials')
+			->where('id', $id)
+			->exists(); 
+
+		return $credential;
 	}
 }
