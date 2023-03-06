@@ -126,7 +126,7 @@ const AddressModal = (props: AddressModalProp) => {
             </div>
             <div className="address-container-block">
               {
-                sellercentral?.id_sellercentral === 4 
+                cotation !== 1
                   ? <CotationMessage 
                     cotation={cotation} 
                     cotation_date={(cotationDateRef.current as HTMLInputElement | null)?.value || ''} 
