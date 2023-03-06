@@ -78,6 +78,7 @@ Data da Compra ${cotationDate.replaceAll('/', '.')} // Dólar do Dia R$ ${String
     const tax = truncateNumber(Number(item_tax) + Number(freight_tax))
     const subtotal = truncateNumber(Number(price) + Number(freight) + tax)
     const cotation = truncateNumber(Number(cotations['USD']))
+    const subtotalBRL = truncateFormatted(Math.round(truncateNumber((Number(price) * cotation) + truncateNumber(Number(freight) * cotation) + truncateNumber(tax * cotation)) * 100) / 100)
     const input = cotationDateRef.current as HTMLInputElement
     const cotationDate = (new Date(`${input.value} 00:00`)).toLocaleDateString('pt-BR')
 
@@ -86,7 +87,7 @@ Data da Compra ${cotationDate.replaceAll('/', '.')} // Dólar do Dia R$ ${String
 BOOK // Amazon.com //
 Item 1 - US$ ${price} = R$${truncateFormatted(Number(price) * cotation)}  // Frete - U$ ${freight} = R$ ${truncateFormatted(Number(freight) * cotation)}
 TAX = US$ ${tax} = R$ ${truncateFormatted(tax * cotation)}
-Subtotal US$  ${subtotal} = R$ ${truncateFormatted(subtotal * cotation)}
+Subtotal US$  ${subtotal} = R$ ${subtotalBRL}
 Data da Compra ${cotationDate.replaceAll('/', '.')} // Dólar do Dia R$ ${String(cotation).replace('.', ',')}`
     )
   }
