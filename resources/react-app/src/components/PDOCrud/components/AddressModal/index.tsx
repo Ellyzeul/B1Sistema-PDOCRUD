@@ -8,7 +8,7 @@ import BlingAddress from "./BlingAddress"
 import { toast } from "react-toastify"
 import CotationMessage from "./CotationMessage"
 
-const CURRENCIES = ['USD', 'CAD', 'EUR']
+const CURRENCIES = ['USD', 'CAD', 'GBP']
 
 const AddressModal = (props: AddressModalProp) => {
   const { orderNumber } = props
@@ -52,6 +52,7 @@ const AddressModal = (props: AddressModalProp) => {
   const generateCADMessage = () => {
     if(!cotationDateRef.current) return ''
     const truncateNumber = (num: number) => Math.floor(num * 100) / 100
+    const truncateFormatted = (num: number) => String(truncateNumber(num)).replace('.', ',')
     const { online_order_number, price, freight, item_tax, freight_tax } = sellercentral
     const tax = truncateNumber(Number(item_tax) + Number(freight_tax))
     const subtotal = truncateNumber(Number(price) + Number(freight) + tax)
@@ -62,16 +63,17 @@ const AddressModal = (props: AddressModalProp) => {
     return (
 `Nº Pedido Loja: ${online_order_number}
 BOOK // Amazon.ca //
-Item 1 - CA$ ${price} = R$${truncateNumber(Number(price) * cotation)}  // Frete - CA$ ${freight} = R$ ${truncateNumber(Number(freight) * cotation)}
-TAX = CA$ ${tax} = R$ ${truncateNumber(tax * cotation)}
-Subtotal CA$  ${subtotal} = R$ ${truncateNumber(subtotal * cotation)}
-Data da Compra ${cotationDate.replaceAll('/', '.')} // Dólar do Dia R$ ${cotation}`
+Item 1 - CA$ ${price} = R$${truncateFormatted(Number(price) * cotation)}  // Frete - CA$ ${freight} = R$ ${truncateFormatted(Number(freight) * cotation)}
+TAX = CA$ ${tax} = R$ ${truncateFormatted(tax * cotation)}
+Subtotal CA$  ${subtotal} = R$ ${truncateFormatted(subtotal * cotation)}
+Data da Compra ${cotationDate.replaceAll('/', '.')} // Dólar do Dia R$ ${String(cotation).replace('.', ',')}`
     )
   }
 
   const generateUSDMessage = () => {
     if(!cotationDateRef.current) return ''
     const truncateNumber = (num: number) => Math.floor(num * 100) / 100
+    const truncateFormatted = (num: number) => String(truncateNumber(num)).replace('.', ',')
     const { online_order_number, price, freight, item_tax, freight_tax } = sellercentral
     const tax = truncateNumber(Number(item_tax) + Number(freight_tax))
     const subtotal = truncateNumber(Number(price) + Number(freight) + tax)
@@ -82,30 +84,31 @@ Data da Compra ${cotationDate.replaceAll('/', '.')} // Dólar do Dia R$ ${cotati
     return (
 `Nº Pedido Loja: ${online_order_number}
 BOOK // Amazon.com //
-Item 1 - US$ ${price} = R$${truncateNumber(Number(price) * cotation)}  // Frete - U$ ${freight} = R$ ${truncateNumber(Number(freight) * cotation)}
-TAX = US$ ${tax} = R$ ${truncateNumber(tax * cotation)}
-Subtotal US$  ${subtotal} = R$ ${truncateNumber(subtotal * cotation)}
-Data da Compra ${cotationDate.replaceAll('/', '.')} // Dólar do Dia R$ ${cotation}`
+Item 1 - US$ ${price} = R$${truncateFormatted(Number(price) * cotation)}  // Frete - U$ ${freight} = R$ ${truncateFormatted(Number(freight) * cotation)}
+TAX = US$ ${tax} = R$ ${truncateFormatted(tax * cotation)}
+Subtotal US$  ${subtotal} = R$ ${truncateFormatted(subtotal * cotation)}
+Data da Compra ${cotationDate.replaceAll('/', '.')} // Dólar do Dia R$ ${String(cotation).replace('.', ',')}`
     )
   }
 
-  const generateEURMessage = () => {
+  const generateGBPMessage = () => {
     if(!cotationDateRef.current) return ''
     const truncateNumber = (num: number) => Math.floor(num * 100) / 100
+    const truncateFormatted = (num: number) => String(truncateNumber(num)).replace('.', ',')
     const { online_order_number, price, freight, item_tax, freight_tax } = sellercentral
     const tax = truncateNumber(Number(item_tax) + Number(freight_tax))
     const subtotal = truncateNumber(Number(price) + Number(freight) + tax)
-    const cotation = truncateNumber(Number(cotations['EUR']))
+    const cotation = truncateNumber(Number(cotations['GBP']))
     const input = cotationDateRef.current as HTMLInputElement
     const cotationDate = (new Date(`${input.value} 00:00`)).toLocaleDateString('pt-BR')
 
     return (
 `Nº Pedido Loja: ${online_order_number}
 BOOK // Amazon.co.uk //
-Item 1 - € ${price} = R$${truncateNumber(Number(price) * cotation)}  // Frete - € ${freight} = R$ ${truncateNumber(Number(freight) * cotation)}
-TAX = € ${tax} = R$ ${truncateNumber(tax * cotation)}
-Subtotal €  ${subtotal} = R$ ${truncateNumber(subtotal * cotation)}
-Data da Compra ${cotationDate.replaceAll('/', '.')} // Euro do Dia R$ ${cotation}`
+Item 1 - £ ${price} = R$${truncateFormatted(Number(price) * cotation)}  // Frete - £ ${freight} = R$ ${truncateFormatted(Number(freight) * cotation)}
+TAX = £ ${tax} = R$ ${truncateFormatted(tax * cotation)}
+Subtotal £  ${subtotal} = R$ ${truncateFormatted(subtotal * cotation)}
+Data da Compra ${cotationDate.replaceAll('/', '.')} // Libra do Dia R$ ${String(cotation).replace('.', ',')}`
     )
   }
 
@@ -152,7 +155,7 @@ Data da Compra ${cotationDate.replaceAll('/', '.')} // Euro do Dia R$ ${cotation
             <div className="address-container-block">
               {cotations['USD'] ? <CotationMessage message={generateUSDMessage()} currency="USD" /> : null}
               {cotations['CAD'] ? <CotationMessage message={generateCADMessage()} currency="CAD" /> : null}
-              {cotations['EUR'] ? <CotationMessage message={generateEURMessage()} currency="EUR" /> : null}
+              {cotations['GBP'] ? <CotationMessage message={generateGBPMessage()} currency="GBP" /> : null}
               {
                 bling
                   ? <BlingAddress address={bling} />
