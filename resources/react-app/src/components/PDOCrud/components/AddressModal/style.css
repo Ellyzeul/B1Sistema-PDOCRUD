@@ -83,17 +83,35 @@
   transition: 125ms;
 }
 
-.address-modal-save-address {
+.dolar-cotation-widget {
   position: absolute;
-  bottom: 20px;
-  right: 40px;
-  padding: 10px 8px;
-  color: white;
-  background-color: rgb(38, 114, 38);
-  border: none;
-  border-radius: 4px;
+  top: 15px;
+  right: 80px;
+  display: flex;
+  font-size: small;
 }
-.address-modal-save-address:hover {
-  background-color: rgb(16, 159, 16);
-  transition: 125ms;
+.dolar-cotation-widget > * {
+  margin-right: 5px;
+}
+
+.cotation-message-container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto auto;
+}
+.cotation-message {
+  text-align: left;
+  position: relative;
+}
+.cotation-message-copy {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  border-radius: 4px;
+  padding: 4px;
+}
+.cotation-message-copy:hover {
+  background-color: black;
+  color: white;
+  cursor: pointer;
 }
