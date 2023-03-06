@@ -156,6 +156,11 @@ class Order
         $response['sellercentral'] = DB::table('order_addresses')
             ->where('online_order_number', $orderNumber)
             ->first();
+        $response['sellercentral']->id_sellercentral = DB::table('order_control')
+            ->select('id_sellercentral')
+            ->where('online_order_number', $orderNumber)
+            ->first()
+            ->id_sellercentral;
 
         $response['bling'] = isset($blingAddress['error'])
             ? null
