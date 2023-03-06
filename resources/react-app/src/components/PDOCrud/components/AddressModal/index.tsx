@@ -8,14 +8,51 @@ import BlingAddress from "./BlingAddress"
 import { toast } from "react-toastify"
 import CotationMessage from "./CotationMessage"
 
-const CURRENCIES = ['USD', 'CAD', 'GBP']
+const CURRENCIES = {
+  1: {
+    currency: null,
+    prefix: null,
+    name: null,
+    amazon_link: null,
+  },
+  2: {
+    currency: 'CAD',
+    prefix: 'CA$',
+    name: 'Dólar canadense',
+    amazon_link: 'Amazon.ca',
+  },
+  3: {
+    currency: 'GBP',
+    prefix: '£',
+    name: 'Libra esterlina',
+    amazon_link: 'Amazon.co.uk',
+  },
+  4: {
+    currency: 'USD',
+    prefix: 'US$',
+    name: 'Dólar americano',
+    amazon_link: 'Amazon.com',
+  },
+  5: {
+    currency: null,
+    prefix: null,
+    name: null,
+    amazon_link: null,
+  },
+  6: {
+    currency: null,
+    prefix: null,
+    name: null,
+    amazon_link: null,
+  },
+}
 
 const AddressModal = (props: AddressModalProp) => {
   const { orderNumber } = props
   const [isOpen, setIsOpen] = useState(false)
   const [{ sellercentral, bling }, setOrderAddress] = useState({} as OrderAddress)
   const cotationDateRef = useRef(null)
-  const [cotations, setCotations] = useState({} as {[key: string]: number | null})
+  const [cotation, setCotation] = useState(1)
 
   const handleOpen: MouseEventHandler = event => {
     event.preventDefault()
@@ -24,7 +61,7 @@ const AddressModal = (props: AddressModalProp) => {
 
   const handleClose = () => setIsOpen(false)
 
-  const getCotations = async () => {
+  const getCotation = () => {
     if(!cotationDateRef.current) return
     const cotationDateInput = cotationDateRef.current as HTMLInputElement
     const cotationDate = cotationDateInput.value.replaceAll('-', '')
@@ -32,85 +69,19 @@ const AddressModal = (props: AddressModalProp) => {
       toast.error('Insira uma data para cotação...')
       return
     }
-    const toUpdate = {} as {[key: string]: number | null}
+    const { currency } = CURRENCIES[sellercentral.id_sellercentral]
+    if(currency === null) {
+      toast.error('Este pedido é nacional, sem cotação...')
+      return
+    }
 
-    CURRENCIES.forEach((currency) => {
-      api.get(`https://economia.awesomeapi.com.br/json/daily/${currency}-BRL?start_date=${cotationDate}&end_date=${cotationDate}`)
-        .then(response => response.data)
-        .then(([{ ask }]) => toUpdate[currency] = ask as number)
-        .catch(() => {
-          toast.error(`Sem cotação ${currency}-BRL para este dia...`)
-          toUpdate[currency] = null
-        })
-        .then(() => {
-          if(Object.keys(toUpdate).length !== CURRENCIES.length) return
-          setCotations(toUpdate)
-        })
+    api.get(`https://economia.awesomeapi.com.br/json/daily/${currency}-BRL?start_date=${cotationDate}&end_date=${cotationDate}`)
+      .then(response => response.data)
+      .then(([{ ask }]) => setCotation(Math.floor(ask * 100) / 100))
+      .catch(() => {
+        toast.error(`Sem cotação ${currency}-BRL para este dia...`)
+        setCotation(1)
     })
-  }
-
-  const generateCADMessage = () => {
-    if(!cotationDateRef.current) return ''
-    const truncateNumber = (num: number) => Math.floor(num * 100) / 100
-    const truncateFormatted = (num: number) => String(truncateNumber(num)).replace('.', ',')
-    const { online_order_number, price, freight, item_tax, freight_tax } = sellercentral
-    const tax = truncateNumber(Number(item_tax) + Number(freight_tax))
-    const subtotal = truncateNumber(Number(price) + Number(freight) + tax)
-    const cotation = truncateNumber(Number(cotations['CAD']))
-    const input = cotationDateRef.current as HTMLInputElement
-    const cotationDate = (new Date(`${input.value} 00:00`)).toLocaleDateString('pt-BR')
-
-    return (
-`Nº Pedido Loja: ${online_order_number}
-BOOK // Amazon.ca //
-Item 1 - CA$ ${price} = R$${truncateFormatted(Number(price) * cotation)}  // Frete - CA$ ${freight} = R$ ${truncateFormatted(Number(freight) * cotation)}
-TAX = CA$ ${tax} = R$ ${truncateFormatted(tax * cotation)}
-Subtotal CA$  ${subtotal} = R$ ${truncateFormatted(subtotal * cotation)}
-Data da Compra ${cotationDate.replaceAll('/', '.')} // Dólar do Dia R$ ${String(cotation).replace('.', ',')}`
-    )
-  }
-
-  const generateUSDMessage = () => {
-    if(!cotationDateRef.current) return ''
-    const truncateNumber = (num: number) => Math.floor(num * 100) / 100
-    const truncateFormatted = (num: number) => String(truncateNumber(num)).replace('.', ',')
-    const { online_order_number, price, freight, item_tax, freight_tax } = sellercentral
-    const tax = truncateNumber(Number(item_tax) + Number(freight_tax))
-    const subtotal = truncateNumber(Number(price) + Number(freight) + tax)
-    const cotation = truncateNumber(Number(cotations['USD']))
-    const subtotalBRL = truncateFormatted(Math.round(truncateNumber((Number(price) * cotation) + truncateNumber(Number(freight) * cotation) + truncateNumber(tax * cotation)) * 100) / 100)
-    const input = cotationDateRef.current as HTMLInputElement
-    const cotationDate = (new Date(`${input.value} 00:00`)).toLocaleDateString('pt-BR')
-
-    return (
-`Nº Pedido Loja: ${online_order_number}
-BOOK // Amazon.com //
-Item 1 - US$ ${price} = R$${truncateFormatted(Number(price) * cotation)}  // Frete - U$ ${freight} = R$ ${truncateFormatted(Number(freight) * cotation)}
-TAX = US$ ${tax} = R$ ${truncateFormatted(tax * cotation)}
-Subtotal US$  ${subtotal} = R$ ${subtotalBRL}
-Data da Compra ${cotationDate.replaceAll('/', '.')} // Dólar do Dia R$ ${String(cotation).replace('.', ',')}`
-    )
-  }
-
-  const generateGBPMessage = () => {
-    if(!cotationDateRef.current) return ''
-    const truncateNumber = (num: number) => Math.floor(num * 100) / 100
-    const truncateFormatted = (num: number) => String(truncateNumber(num)).replace('.', ',')
-    const { online_order_number, price, freight, item_tax, freight_tax } = sellercentral
-    const tax = truncateNumber(Number(item_tax) + Number(freight_tax))
-    const subtotal = truncateNumber(Number(price) + Number(freight) + tax)
-    const cotation = truncateNumber(Number(cotations['GBP']))
-    const input = cotationDateRef.current as HTMLInputElement
-    const cotationDate = (new Date(`${input.value} 00:00`)).toLocaleDateString('pt-BR')
-
-    return (
-`Nº Pedido Loja: ${online_order_number}
-BOOK // Amazon.co.uk //
-Item 1 - £ ${price} = R$${truncateFormatted(Number(price) * cotation)}  // Frete - £ ${freight} = R$ ${truncateFormatted(Number(freight) * cotation)}
-TAX = £ ${tax} = R$ ${truncateFormatted(tax * cotation)}
-Subtotal £  ${subtotal} = R$ ${truncateFormatted(subtotal * cotation)}
-Data da Compra ${cotationDate.replaceAll('/', '.')} // Libra do Dia R$ ${String(cotation).replace('.', ',')}`
-    )
   }
 
   useEffect(() => {
@@ -119,10 +90,6 @@ Data da Compra ${cotationDate.replaceAll('/', '.')} // Libra do Dia R$ ${String(
       .then(response => response.data as OrderAddress)
       .then(setOrderAddress)
   }, [isOpen])
-
-  useEffect(() => {
-    console.log(cotations)
-  }, [cotations])
 
   return (
     <>
@@ -143,20 +110,31 @@ Data da Compra ${cotationDate.replaceAll('/', '.')} // Libra do Dia R$ ${String(
           </div>
           <div className="dolar-cotation-widget">
             <input ref={cotationDateRef} type="date"/>
-            <button onClick={getCotations}>Puxar cotação</button>
+            <button onClick={getCotation}>Puxar cotação</button>
           </div>
           <div className="address-modal-scrollable-container">
             <div className="address-container-block">
               {
                 sellercentral
-                  ? <SellercentralAddress orderNumber={orderNumber} address={sellercentral} />
+                  ? <SellercentralAddress 
+                    orderNumber={orderNumber} 
+                    cotation={cotation} 
+                    address={sellercentral} 
+                  />
                   : <p>Sem endereço Amazon...</p>
               }
             </div>
             <div className="address-container-block">
-              {cotations['USD'] ? <CotationMessage message={generateUSDMessage()} currency="USD" /> : null}
-              {cotations['CAD'] ? <CotationMessage message={generateCADMessage()} currency="CAD" /> : null}
-              {cotations['GBP'] ? <CotationMessage message={generateGBPMessage()} currency="GBP" /> : null}
+              {
+                sellercentral?.id_sellercentral === 4 
+                  ? <CotationMessage 
+                    cotation={cotation} 
+                    cotation_date={(cotationDateRef.current as HTMLInputElement | null)?.value || ''} 
+                    sellercentral={sellercentral} 
+                    currency={CURRENCIES[sellercentral.id_sellercentral]} 
+                  /> 
+                  : null
+              }
               {
                 bling
                   ? <BlingAddress address={bling} />
