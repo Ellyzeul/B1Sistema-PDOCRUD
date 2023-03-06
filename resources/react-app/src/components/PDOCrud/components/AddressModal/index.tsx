@@ -61,7 +61,7 @@ const AddressModal = (props: AddressModalProp) => {
 
     return (
 `Nº Pedido Loja: ${online_order_number}
-BOOK // Amazon.com //
+BOOK // Amazon.ca //
 Item 1 - CA$ ${price} = R$${truncateNumber(Number(price) * cotation)}  // Frete - CA$ ${freight} = R$ ${truncateNumber(Number(freight) * cotation)}
 TAX = CA$ ${tax} = R$ ${truncateNumber(tax * cotation)}
 Subtotal CA$  ${subtotal} = R$ ${truncateNumber(subtotal * cotation)}
@@ -101,7 +101,7 @@ Data da Compra ${cotationDate.replaceAll('/', '.')} // Dólar do Dia R$ ${cotati
 
     return (
 `Nº Pedido Loja: ${online_order_number}
-BOOK // Amazon.com //
+BOOK // Amazon.co.uk //
 Item 1 - € ${price} = R$${truncateNumber(Number(price) * cotation)}  // Frete - € ${freight} = R$ ${truncateNumber(Number(freight) * cotation)}
 TAX = € ${tax} = R$ ${truncateNumber(tax * cotation)}
 Subtotal €  ${subtotal} = R$ ${truncateNumber(subtotal * cotation)}
