@@ -17,6 +17,7 @@ const TrackingTableRow = (props: TrackingTableRowProp) => {
       <TableCell>{row.details}</TableCell>
       <TableCell>{(new Date(row.expected_date)).toLocaleDateString('pt-BR')}</TableCell>
       <TableCell>{(new Date(row.delivery_expected_date)).toLocaleDateString('pt-BR')}</TableCell>
+      <TableCell>{(new Date(row.client_deadline)).toLocaleDateString('pt-BR')}</TableCell>
       <TableCell>{(new Date(row.api_calling_date)).toLocaleDateString('pt-BR')}</TableCell>
       <TableCell>
         <textarea 

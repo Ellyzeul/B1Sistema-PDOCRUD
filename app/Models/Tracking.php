@@ -32,6 +32,7 @@ class Tracking extends Model
 				'trackings.details',
 				'order_control.expected_date',
 				'trackings.delivery_expected_date',
+				'trackings.client_deadline',
 				'trackings.api_calling_date',
 				'trackings.observation',
 			)
@@ -78,7 +79,6 @@ class Tracking extends Model
 				? $response
 				: []
 		);
-		$response["token"] = env('FEDEX_API_TOKEN');
 
 		return isset($response)
 			? [$response, 200]
@@ -101,18 +101,17 @@ class Tracking extends Model
 	private function fetchCorreios(string $trackingCode)
 	{	
 		$today = Date::today();
-		// $today = Date::createFromDate("2023-03-01"); 
 
 		if(!$this->existsApiCredentialDB('correios')) $this->generateCorreiosToken();
 
-		$str_json = str_replace("\\", "", $this->readApiCredentialDB('correios'));
-		$CORREIOS_API_KEY = explode('"', explode('"token":', $str_json)[1])[1];
-		$expires_in = explode("T", str_replace('"', '', explode(",", explode('"expiraEm":', $str_json)[1])[0]))[0];
+		$json = json_decode(json_decode($this->readApiCredentialDB('correios')->key));
+		$CORREIOS_API_KEY = $json->token;
+		$expires_in = explode("T", $json->expiraEm)[0];
 
 		if((!$CORREIOS_API_KEY) || Date::parse($expires_in)->diffAsCarbonInterval($today)->format("%d")!=1){
 			$this->generateCorreiosToken();
-			$str_json = str_replace("\\", "", $this->readApiCredentialDB('correios'));
-			$CORREIOS_API_KEY = str_replace('"', '', explode('"', explode('"token":', $str_json)[1])[1]);
+			$json = json_decode(json_decode($this->readApiCredentialDB('correios')->key));
+			$CORREIOS_API_KEY = $json->token;
 		} 
 
 		$response = Http::withHeaders(["X-locale" => "pt_BR"])
@@ -122,12 +121,26 @@ class Tracking extends Model
 		if(!isset($response['objetos'][0]['eventos'][0])) return [];
 		$response = $response['objetos'][0]['eventos'][0];
 
+		$street = $response['unidade']['endereco']['logradouro'] ?? "";
+		$complement = $response['unidade']['endereco']['complemento'] ?? "";
+		$number = $response['unidade']['endereco']['numero'] ?? "";
+		$district = $response['unidade']['endereco']['bairro'] ?? "";
+		$cep = $response['unidade']['endereco']['cep'] ?? "";
+		
+		$info = $response['detalhe'] ?? null;
+
 		return [
 			"status" => $response['descricao'],
 			"last_update_date" => date('Y-m-d', strtotime(str_replace('/', '-', $response['dtHrCriado']))),
-			"details" => "{$response['unidade']['tipo']} - {$response['unidade']['endereco']['cidade']} - {$response['unidade']['endereco']['uf']}",
+			"details" => "{$response['unidade']['tipo']}" 
+						." - {$response['unidade']['endereco']['cidade']}" 
+						." - {$response['unidade']['endereco']['uf']} "
+						."$street $complement $number $district $cep $info",
+
+			"client_deadline" => $response['dtLimiteRetirada'] ?? null,
 		];
 	}
+
 
 	private function fetchJadlog(string $shipmentId)
 	{
@@ -255,7 +268,7 @@ class Tracking extends Model
 		$credential = DB::table('api_credentials')
 			->select('key')
 			->where('id', $id)
-			->get();
+			->first();
 
 		return $credential;
 	}
@@ -265,7 +278,7 @@ class Tracking extends Model
 		DB::table('api_credentials')
 			->upsert([
 		  		'id' => $id,
-		  		'key' => $key
+		  		'key' => json_encode($key)
 			], ['key']);
 	}
 	
