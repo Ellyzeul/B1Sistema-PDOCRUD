@@ -17,6 +17,7 @@ const fields = {
   details: {editable: false, label: "Detalhes"},
   expected_date: {isDate: true, editable: false, label: "Prazo para o cliente"},
   delivery_expected_date: {isDate: true, editable: false, label: "Prazo da transportadora"},
+  client_deadline: {isDate: true, editable: false, label: "Prazo para retirada"},
   api_calling_date: {isDate: true, editable: false, label: "Última atualização"},
   observation: {editable: true, label: "Observação"},
 } as {[key: string]: {isDate?: boolean, editable: boolean, label: string}}
@@ -38,6 +39,7 @@ interface TextareaProp {
   tracking_code: string,
   field_name: string
 }
+
 const Textarea = (props: TextareaProp) => {
   const { defaultValue, tracking_code, field_name } = props
 

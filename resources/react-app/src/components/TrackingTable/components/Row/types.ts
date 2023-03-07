@@ -8,6 +8,7 @@ interface TrackingTableRowProp {
     details: string,
     expected_date: string,
     delivery_expected_date: string,
+    client_deadline: string,
     api_calling_date: string,
     observation: string,
   }
