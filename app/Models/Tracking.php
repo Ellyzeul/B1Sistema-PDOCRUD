@@ -141,7 +141,6 @@ class Tracking extends Model
 		];
 	}
 
-
 	private function fetchJadlog(string $shipmentId)
 	{
 		$response = Http::withToken(env('JADLOG_API_KEY'))
