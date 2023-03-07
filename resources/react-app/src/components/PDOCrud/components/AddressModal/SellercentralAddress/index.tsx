@@ -1,7 +1,8 @@
 import SellercentralAddressProp from "./types"
 
 const SellercentralAddress = (props: SellercentralAddressProp) => {
-  const { orderNumber, address } = props
+  const { orderNumber, cotation, address } = props
+  const truncateNumber = (num: number) => Math.floor(num * 100) / 100
 
   return (
     <div>
@@ -23,14 +24,14 @@ const SellercentralAddress = (props: SellercentralAddressProp) => {
       {address.ship_phone && <p><strong>Celular do destinatário: </strong>{address.ship_phone}</p>}
       {address.buyer_email && <p><strong>E-mail: </strong>{address.buyer_email}</p>}
       {address.expected_date && <p><strong>Data prevista: </strong>{(new Date(`${address.expected_date} 00:00`)).toLocaleDateString('pt-BR')}</p>}
-      {address.price && <p><strong>Valor: </strong>{address.price}</p>}
-      {address.price && <p><strong>Frete: </strong>{address.freight}</p>}
+      {address.price && <p><strong>Valor: </strong>{cotation !== 1 ? 'R$': ''}{truncateNumber(address.price * cotation)}</p>}
+      {address.freight && <p><strong>Frete: </strong>{cotation !== 1 ? 'R$': ''}{truncateNumber(address.freight * cotation)}</p>}
       {
         address.item_tax || address.freight_tax 
-          ? <p><strong>Imposto: </strong>{Number(address.item_tax) + Number(address.freight_tax)}</p> 
+          ? <p><strong>Imposto: </strong>{cotation !== 1 ? 'R$': ''}{truncateNumber(truncateNumber(Number(address.item_tax) + Number(address.freight_tax)) * cotation)}</p> 
           : null
       }
-      <p><strong>Total: </strong>{Number(address.price) + Number(address.freight) + Number(address.item_tax) + Number(address.freight_tax)}</p>
+      <p><strong>Total: </strong>{cotation !== 1 ? 'R$': ''}{truncateNumber(truncateNumber(Number(address.price) * cotation) + truncateNumber(Number(address.freight) * cotation) + truncateNumber((Number(address.item_tax) + Number(address.freight_tax)) * cotation))}</p>
     </div>
   )
 }
