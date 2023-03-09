@@ -80,7 +80,34 @@ class FileUpload extends Model
 
 	public function orderEstanteInsert(array $data)
 	{
-		return;
+		//order_control
+		$order_date = $data['order_date'];
+		$online_order_number = $data['online_order_number'];
+		$isbn = $data['isbn'];
+		$selling_price = $data['price'];
+
+		//order_addresses
+		$address_1 = $data['address_1'];
+		$address_2 = $data['address_2'];
+		$address_3 = $data['address_3'];
+		$state = $data['state'];
+		$city = $data['city'];
+		$county = $data['county'];
+		$postal_code = $data['postal_code'];
+
+
+		// DB::table('order_control')
+		// 	->upsert(
+
+		// 	);
+
+		return [
+			'order_date' => $order_date,
+			'online_order_number' => $online_order_number,
+			'isbn' => $isbn,
+
+			'message' => 'Dados da Estante Virtual carregados com sucesso!' 
+		];
 	}
 
 	private function updateRegistry(array $registry)
