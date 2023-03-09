@@ -78,6 +78,11 @@ class FileUpload extends Model
 		];
 	}
 
+	public function orderEstanteInsert(array $data)
+	{
+		return;
+	}
+
 	private function updateRegistry(array $registry)
 	{
 		$id = $registry["id"];
