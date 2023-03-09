@@ -80,7 +80,38 @@ class FileUpload extends Model
 
 	public function orderEstanteInsert(array $data)
 	{
-		return;
+		$orderData = array_map(fn ($registry) => [
+			'id_company' => 0, 
+			'id_sellercentral' => 6, 
+			'online_order_number' => $registry['online_order_number'], 
+			'order_date' => date('Y-m-d', strtotime($registry['order_date'])), 
+			'expected_date' => date('Y-m-d', strtotime($registry['expected_date'])), 
+			'isbn' => $registry['isbn'], 
+			'selling_price' => $registry['price'], 
+		], $data);
+
+		$orderAddress = array_map(fn ($registry) => [
+			'online_order_number' => $registry['online_order_number'], 
+			'recipient_name' => $registry['recipient_name'], 
+			'address_1' => $registry['address_1'], 
+			'address_2' => $registry['address_2'], 
+			'address_3' => $registry['address_2'], 
+			'county' => $registry['county'], 
+			'city' => $registry['city'], 
+			'state' => $registry['state'], 
+			'postal_code' => $registry['postal_code'], 
+			'freight' => $registry['freight'], 
+			'item_tax' => $registry['item_tax'], 
+			'price' => $registry['price'], 
+		], $data);
+
+		DB::table('order_control')
+			->insert($orderData);
+		$this->orderAddressInsert($orderAddress);
+
+		return [
+			'message' => 'Pedidos da Estante Virtual inseridos com sucesso!'
+		];
 	}
 
 	private function updateRegistry(array $registry)
