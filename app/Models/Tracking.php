@@ -189,24 +189,57 @@ class Tracking extends Model
 
 	private function fetchFedex(string $trackingCode)
 	{
-		if(!isset($_SESSION['FEDEX_API_TOKEN'])) $this->generateFedexToken();
+
+		if(!$this->existsApiCredentialDB('fedex')) $this->generateFedexToken();
+
+		$json = json_decode($this->readApiCredentialDB('fedex')->key);
+
+		if($json == ""){
+			$this->generateFedexToken();
+			$json = json_decode($this->readApiCredentialDB('fedex')->key);
+		} 
+		
+		$FEDEX_API_TOKEN = $json->access_token;
+	
+		var_dump($FEDEX_API_TOKEN);
+		
 		$response = Http::withHeaders(["X-locale" => "pt_BR"])
-			->withToken($_SESSION['FEDEX_API_TOKEN'])
-			->post('https://apis.fedex.com/track/v1/associatedshipments', [
-				"masterTrackingNumberInfo" => [
-					"trackingNumberInfo" => [
-						"trackingNumber" => $trackingCode
+			->withToken($FEDEX_API_TOKEN)
+			->post('https://apis.fedex.com/track/v1/trackingnumbers', [
+				"trackingInfo" => [
+					[
+						"trackingNumberInfo" => [
+							"trackingNumber" => $trackingCode
+						]
 					]
 				],
-				"associatedType" => "STANDARD_MPS"
+				"includeDetailedScans" => true
 			]);
 		
+
 		if($response->getStatusCode() == 401) {
-			$_SESSION['FEDEX_API_KEY'] = null;
+			echo "entrou";
+			$this->writeApiCredentialDB('fedex', "");
 			return $this->fetchFedex($trackingCode);
 		}
 
-		return [];
+		$scanEvents = $response['output']['completeTrackResults'][0]['trackResults'][0]['scanEvents'][0];
+		
+		$lastUpdateDate = $scanEvents['date'];
+
+		$exceptionDescription = $scanEvents['exceptionDescription'] ?? "";
+		$scanLocation = $scanEvents['scanLocation'];
+		$city = $scanLocation['city'] ?? "";
+		$stateOrProvinceCode = $scanLocation['stateOrProvinceCode'] ?? "";
+		$postalCode = $scanLocation['postalCode'] ?? "";
+		$countryName = $scanLocation['countryName'] ?? "";
+
+		return [
+			'status' => "{$scanEvents['eventDescription']}",
+			"last_update_date" => date('Y-m-d', strtotime($lastUpdateDate)),
+			"details" => "$city $stateOrProvinceCode $postalCode $countryName $exceptionDescription"
+						
+		];
 	}
 
 	private function generateFedexToken()
@@ -277,7 +310,7 @@ class Tracking extends Model
 		DB::table('api_credentials')
 			->upsert([
 		  		'id' => $id,
-		  		'key' => json_encode($key)
+		  		'key' => $key
 			], ['key']);
 	}
 	
