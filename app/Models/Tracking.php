@@ -104,7 +104,7 @@ class Tracking extends Model
 
 		if(!$this->existsApiCredentialDB('correios')) $this->generateCorreiosToken();
 
-		$json = json_decode(json_decode($this->readApiCredentialDB('correios')->key));
+		$json = json_decode($this->readApiCredentialDB('correios')->key);
 		$CORREIOS_API_KEY = $json->token;
 		$expires_in = explode("T", $json->expiraEm)[0];
 

@@ -80,7 +80,7 @@ const getRows = (data: {[key: string]: string}[], fieldsKeys: string[], actualPa
         return <td key={idx}>{
         fields[key].editable
         ? <Textarea defaultValue={row[key]} tracking_code={row.tracking_code} field_name={key}/>
-        : fields[key].isDate ? row[key] ? (new Date(row[key])).toLocaleDateString("pt-BR") : "" : row[key]
+        : fields[key].isDate ? row[key] ? (new Date(`${row[key]} 00:00`)).toLocaleDateString("pt-BR") : "" : row[key]
         }</td>
     })]}</tr>
     rowsElements.push(rowElement)
