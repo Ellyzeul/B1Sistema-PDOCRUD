@@ -3,6 +3,7 @@ export const uploadTypes = [
   {message: "Atualização de pedidos", value: "order-update"},
   {message: "Envio de pedidos Amazon", value: "order-amazon-insert"},
   {message: "Envio de endereços dos pedidos", value: "order-address-insert"},
+  {message: "Envio de pedidos da Estante Virtual", value: "order-estante-insert"},
   // {message: "Ingestão de notas do FSist", value: "fsist-ingestion"},
 ]
 
@@ -90,6 +91,7 @@ export const fields = {
     {label: "Juros (R$)", field_name: "item_tax", updatable: true, required: true}, 
     {label: "Preço do Livro (R$)", field_name: "price", updatable: true, required: true}, 
     {label: "Valor Total (R$)", field_name: "value", updatable: true, required: true}, 
+    {label: "Data prevista", field_name: "expected_date", updatable: true, required: true}, 
   ],
   "fsist-ingestion": [
     {label: "Emissão Data/Hora", field_name: "emission", updatable: true, required: true},

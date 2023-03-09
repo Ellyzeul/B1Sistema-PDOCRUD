@@ -39,12 +39,11 @@ export const FieldsSelection = (props: FieldSelectionProp) => {
 
         return filteredRow
       })
-    console.log(JSON.stringify(filteredUpdate))
     api.post(`/api/file-upload/${upload_type}`, {
       upload_data: filteredUpdate
     })
       .then(response => response.data)
-      .then(response => {
+      .then(_ => {
         toast.dismiss(loadingToastId)
         toast.success("Envio concluído com êxito!")
       })
