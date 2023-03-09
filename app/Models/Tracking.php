@@ -104,14 +104,14 @@ class Tracking extends Model
 
 		if(!$this->existsApiCredentialDB('correios')) $this->generateCorreiosToken();
 
-		$json = json_decode($this->readApiCredentialDB('correios')->key);
-		$CORREIOS_API_KEY = $json->token;
-		$expires_in = explode("T", $json->expiraEm)[0];
+		$apikey = json_decode($this->readApiCredentialDB('correios')->key);
+		$CORREIOS_API_KEY = $apikey->token;
+		$expires_in = explode("T", $apikey->expiraEm)[0];
 
 		if((!$CORREIOS_API_KEY) || Date::parse($expires_in)->diffAsCarbonInterval($today)->format("%d")!=1){
 			$this->generateCorreiosToken();
-			$json = json_decode(json_decode($this->readApiCredentialDB('correios')->key));
-			$CORREIOS_API_KEY = $json->token;
+			$apikey = json_decode(json_decode($this->readApiCredentialDB('correios')->key));
+			$CORREIOS_API_KEY = $apikey->token;
 		} 
 
 		$response = Http::withHeaders(["X-locale" => "pt_BR"])
@@ -189,22 +189,19 @@ class Tracking extends Model
 
 	private function fetchFedex(string $trackingCode)
 	{
-
 		if(!$this->existsApiCredentialDB('fedex')) $this->generateFedexToken();
 
-		$json = json_decode($this->readApiCredentialDB('fedex')->key);
+		$apikey = json_decode($this->readApiCredentialDB('fedex')->key);
 
-		if($json == ""){
+		if(!isset($apikey)){
 			$this->generateFedexToken();
-			$json = json_decode($this->readApiCredentialDB('fedex')->key);
-		} 
-		
-		$FEDEX_API_TOKEN = $json->access_token;
+			$apikey = json_decode($this->readApiCredentialDB('fedex')->key);
+		}
 	
-		var_dump($FEDEX_API_TOKEN);
+		var_dump($apikey->access_token);
 		
 		$response = Http::withHeaders(["X-locale" => "pt_BR"])
-			->withToken($FEDEX_API_TOKEN)
+			->withToken($apikey->access_token)
 			->post('https://apis.fedex.com/track/v1/trackingnumbers', [
 				"trackingInfo" => [
 					[
@@ -215,11 +212,11 @@ class Tracking extends Model
 				],
 				"includeDetailedScans" => true
 			]);
-		
 
+		var_dump($response->getStatusCode());
+		return;
 		if($response->getStatusCode() == 401) {
-			echo "entrou";
-			$this->writeApiCredentialDB('fedex', "");
+			$this->writeApiCredentialDB('fedex', null);
 			return $this->fetchFedex($trackingCode);
 		}
 
@@ -235,24 +232,23 @@ class Tracking extends Model
 		$countryName = $scanLocation['countryName'] ?? "";
 
 		return [
-			'status' => "{$scanEvents['eventDescription']}",
-			"last_update_date" => date('Y-m-d', strtotime($lastUpdateDate)),
-			"details" => "$city $stateOrProvinceCode $postalCode $countryName $exceptionDescription"
-						
+			'status' => $scanEvents['eventDescription'], 
+			'last_update_date' => date('Y-m-d', strtotime($lastUpdateDate)), 
+			'details' => "$city $stateOrProvinceCode $postalCode $countryName $exceptionDescription", 
 		];
 	}
 
 	private function generateFedexToken()
 	{
-		$response = Http::withHeaders(["X-locale" => "pt_BR"])
+		$response = Http::withHeaders(['X-locale' => 'pt_BR'])
 			->asForm()
 			->post('https://apis.fedex.com/oauth/token', [
-				"grant_type" => "client_credentials",
-				"client_id" => env('FEDEX_CLIENT_ID'),
-				"client_secret" => env('FEDEX_CLIENT_SECRET')
+				'grant_type' => 'client_credentials',
+				'client_id' => env('FEDEX_CLIENT_ID'),
+				'client_secret' => env('FEDEX_CLIENT_SECRET')
 			]);
 
-			$this->writeApiCredentialDB('fedex', $response);
+		$this->writeApiCredentialDB('fedex', $response);
 	}
 
 	private function generateCorreiosToken()
@@ -305,21 +301,19 @@ class Tracking extends Model
 		return $credential;
 	}
 
-	private function writeApiCredentialDB(string $id, string $key)
+	private function writeApiCredentialDB(string $id, string | null $key)
 	{
 		DB::table('api_credentials')
 			->upsert([
-		  		'id' => $id,
-		  		'key' => $key
+				'id' => $id,
+				'key' => $key
 			], ['key']);
 	}
 	
 	private function existsApiCredentialDB(string $id)
 	{
-		$credential = DB::table('api_credentials')
+		return DB::table('api_credentials')
 			->where('id', $id)
-			->exists(); 
-
-		return $credential;
+			->exists();
 	}
 }
