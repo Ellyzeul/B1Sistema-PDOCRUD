@@ -34,4 +34,13 @@ class FileUploadController extends Controller
 
         return $response;
     }
+
+    public function orderEstanteInsert(Request $request)
+    {
+        $fileUpload = new FileUpload();
+        $data = $request->input('upload_data');
+        $response = $fileUpload->orderEstanteInsert($data);
+
+        return $response;
+    }
 }

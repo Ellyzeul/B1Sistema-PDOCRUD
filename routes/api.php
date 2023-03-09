@@ -91,6 +91,7 @@ Route::controller(FileUploadController::class)
         Route::post('/order-update', 'orderUpdate');
         Route::post('/order-amazon-insert', 'orderAmazonInsert');
         Route::post('/order-address-insert', 'orderAddressInsert');
+        Route::post('/order-estante-insert', 'orderEstanteInsert');
     });
 
 Route::get('/navbar-items/read', function (Request $request) {

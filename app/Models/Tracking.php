@@ -104,14 +104,14 @@ class Tracking extends Model
 
 		if(!$this->existsApiCredentialDB('correios')) $this->generateCorreiosToken();
 
-		$json = json_decode($this->readApiCredentialDB('correios')->key);
-		$CORREIOS_API_KEY = $json->token;
-		$expires_in = explode("T", $json->expiraEm)[0];
+		$apikey = $this->readApiCredentialDB('correios');
+		$CORREIOS_API_KEY = $apikey->token;
+		$expires_in = explode("T", $apikey->expiraEm)[0];
 
 		if((!$CORREIOS_API_KEY) || Date::parse($expires_in)->diffAsCarbonInterval($today)->format("%d")!=1){
 			$this->generateCorreiosToken();
-			$json = json_decode(json_decode($this->readApiCredentialDB('correios')->key));
-			$CORREIOS_API_KEY = $json->token;
+			$apikey = json_decode($this->readApiCredentialDB('correios'));
+			$CORREIOS_API_KEY = $apikey->token;
 		} 
 
 		$response = Http::withHeaders(["X-locale" => "pt_BR"])
@@ -189,37 +189,73 @@ class Tracking extends Model
 
 	private function fetchFedex(string $trackingCode)
 	{
-		if(!isset($_SESSION['FEDEX_API_TOKEN'])) $this->generateFedexToken();
-		$response = Http::withHeaders(["X-locale" => "pt_BR"])
-			->withToken($_SESSION['FEDEX_API_TOKEN'])
-			->post('https://apis.fedex.com/track/v1/associatedshipments', [
-				"masterTrackingNumberInfo" => [
-					"trackingNumberInfo" => [
-						"trackingNumber" => $trackingCode
-					]
-				],
-				"associatedType" => "STANDARD_MPS"
-			]);
+		if(!$this->existsApiCredentialDB('fedex')) $this->generateFedexToken();
+
+		$apikey = $this->readApiCredentialDB('fedex');
+
+		if(!isset($apikey)){
+			$this->generateFedexToken();
+			$apikey = $this->readApiCredentialDB('fedex');
+		}
 		
-		if($response->getStatusCode() == 401) {
-			$_SESSION['FEDEX_API_KEY'] = null;
+		try {
+			$response = Http::withHeaders(["X-locale" => "pt_BR"])
+				->withToken($apikey->access_token)
+				->post('https://apis.fedex.com/track/v1/trackingnumbers', [
+					"trackingInfo" => [
+						[
+							"trackingNumberInfo" => [
+								"trackingNumber" => $trackingCode
+							]
+						]
+					],
+					"includeDetailedScans" => true
+				]);
+		}
+		catch(Exception $e) {
 			return $this->fetchFedex($trackingCode);
 		}
 
-		return [];
+		if($response->getStatusCode() == 401) {
+			$this->writeApiCredentialDB('fedex', null);
+			return $this->fetchFedex($trackingCode);
+		}
+
+		$scanEvents = $response['output']['completeTrackResults'][0]['trackResults'][0]['scanEvents'][0];
+		
+		$lastUpdateDate = $scanEvents['date'];
+
+		$exceptionDescription = $scanEvents['exceptionDescription'] ?? "";
+		$scanLocation = $scanEvents['scanLocation'];
+		$city = $scanLocation['city'] ?? "";
+		$stateOrProvinceCode = $scanLocation['stateOrProvinceCode'] ?? "";
+		$postalCode = $scanLocation['postalCode'] ?? "";
+		$countryName = $scanLocation['countryName'] ?? "";
+
+		return [
+			'status' => $scanEvents['eventDescription'], 
+			'last_update_date' => date('Y-m-d', strtotime($lastUpdateDate)), 
+			'details' => "$city $stateOrProvinceCode $postalCode $countryName $exceptionDescription", 
+		];
 	}
 
 	private function generateFedexToken()
 	{
-		$response = Http::withHeaders(["X-locale" => "pt_BR"])
-			->asForm()
-			->post('https://apis.fedex.com/oauth/token', [
-				"grant_type" => "client_credentials",
-				"client_id" => env('FEDEX_CLIENT_ID'),
-				"client_secret" => env('FEDEX_CLIENT_SECRET')
-			]);
+		try {
+			$response = Http::withHeaders(['X-locale' => 'pt_BR'])
+				->asForm()
+				->post('https://apis.fedex.com/oauth/token', [
+					'grant_type' => 'client_credentials',
+					'client_id' => env('FEDEX_CLIENT_ID'),
+					'client_secret' => env('FEDEX_CLIENT_SECRET')
+				]);
+		}
+		catch(Exception $e) {
+			$this->generateFedexToken();
+			return;
+		}
 
-			$this->writeApiCredentialDB('fedex', $response);
+		$this->writeApiCredentialDB('fedex', $response);
 	}
 
 	private function generateCorreiosToken()
@@ -264,29 +300,28 @@ class Tracking extends Model
 
 	private function readApiCredentialDB(string $id)
 	{
-		$credential = DB::table('api_credentials')
+		$json = DB::table('api_credentials')
 			->select('key')
 			->where('id', $id)
-			->first();
+			->first()
+			->key;
 
-		return $credential;
+		return json_decode($json);
 	}
 
-	private function writeApiCredentialDB(string $id, string $key)
+	private function writeApiCredentialDB(string $id, string | null $key)
 	{
 		DB::table('api_credentials')
 			->upsert([
-		  		'id' => $id,
-		  		'key' => $key
+				'id' => $id,
+				'key' => $key
 			], ['key']);
 	}
 	
 	private function existsApiCredentialDB(string $id)
 	{
-		$credential = DB::table('api_credentials')
+		return DB::table('api_credentials')
 			->where('id', $id)
-			->exists(); 
-
-		return $credential;
+			->exists();
 	}
 }
