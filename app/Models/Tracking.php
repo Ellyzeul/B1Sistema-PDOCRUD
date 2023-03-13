@@ -143,9 +143,12 @@ class Tracking extends Model
 
 	private function fetchJadlog(string $shipmentId)
 	{
+		$identifier = substr($shipmentId,0,2);
+		$identifier == "11" ? $type = "shipmentId" : $type = "cte";
+
 		$response = Http::withToken(env('JADLOG_API_KEY'))
 			->post('www.jadlog.com.br/embarcador/api/tracking/consultar', [
-				'consulta' => [['shipmentId' => $shipmentId]]
+				'consulta' => [[$type => $shipmentId]]
 			]);
 
 		if(!isset($response['consulta'][0]['tracking']['eventos'][0])) return [];
@@ -153,11 +156,13 @@ class Tracking extends Model
 		$deliveryExpectedDate = $response['consulta'][0]['previsaoEntrega'] ?? null;
 		$eventsList = $response['consulta'][0]['tracking']['eventos'];
 		$lastEvent = array_pop($eventsList);
+		$error = $response['consulta'][0]['erro']['descricao'] ?? "";
+		$errorDetails = $response['consulta'][0]['erro']['detalhe'] ?? "";
 
 		$toReturn = [
 			"status" => $lastEvent['status'],
 			"last_update_date" => date('Y-m-d', strtotime(str_replace('/', '-', $lastEvent['data']))),
-			"details" => $lastEvent['unidade'],
+			"details" => "{$lastEvent['unidade']} $error $errorDetails",
 		];
 		if(isset($deliveryExpectedDate)) $toReturn["delivery_expected_date"] = $deliveryExpectedDate;
 
