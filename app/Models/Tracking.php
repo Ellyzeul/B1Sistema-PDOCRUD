@@ -105,17 +105,15 @@ class Tracking extends Model
 		if(!$this->existsApiCredentialDB('correios')) $this->generateCorreiosToken();
 
 		$apikey = $this->readApiCredentialDB('correios');
-		$CORREIOS_API_KEY = $apikey->token;
 		$expires_in = explode("T", $apikey->expiraEm)[0];
 
 		if((!$CORREIOS_API_KEY) || Date::parse($expires_in)->diffAsCarbonInterval($today)->format("%d")!=1){
 			$this->generateCorreiosToken();
-			$apikey = json_decode($this->readApiCredentialDB('correios'));
-			$CORREIOS_API_KEY = $apikey->token;
+			$apikey = $this->readApiCredentialDB('correios');
 		} 
 
 		$response = Http::withHeaders(["X-locale" => "pt_BR"])
-			->withToken($CORREIOS_API_KEY)
+			->withToken($apikey->token)
 			->get("https://api.correios.com.br/srorastro/v1/objetos/$trackingCode");
 
 		if(!isset($response['objetos'][0]['eventos'][0])) return [];
