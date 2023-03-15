@@ -92,6 +92,7 @@ export const fields = {
     {label: "Preço do Livro (R$)", field_name: "price", updatable: true, required: true}, 
     {label: "Valor Total (R$)", field_name: "value", updatable: true, required: true}, 
     {label: "Data prevista", field_name: "expected_date", updatable: true, required: true}, 
+    {label: "Método de pagamento", field_name: "payment_method", updatable: true, required: true}, 
   ],
   "fsist-ingestion": [
     {label: "Emissão Data/Hora", field_name: "emission", updatable: true, required: true},

@@ -1,0 +1,14 @@
+.download-file-button {
+  border-radius: 4px;
+  margin-left: 2px;
+  padding: 4px 2px;
+  display: grid;
+  place-items: center;
+  background-color: white;
+  user-select: none;
+}
+.download-file-button:hover {
+  cursor: pointer;
+  filter: invert(1);
+  transition: 125ms;
+}
