@@ -1,5 +1,5 @@
 {
-    "/js/app.js": "/js/app.js?id=04e6add416c9b250aca1a6251be0745d",
+    "/js/app.js": "/js/app.js?id=7ff3ba70688f40789997365562495e16",
     "/b1_logo.png": "/b1_logo.png?id=c1b020382bb764bfe56174580e74cd34",
     "/b1_white_bg.png": "/b1_white_bg.png?id=109cae4a576a25a014bf6ac00cbfb14c",
     "/favicon.ico": "/favicon.ico?id=109cae4a576a25a014bf6ac00cbfb14c",
@@ -1169,5 +1169,6 @@
     "/robots.txt": "/robots.txt?id=61c27d2cd39a713f7829422c3d9edcc7",
     "/seline_white_bg.png": "/seline_white_bg.png?id=b9f5ad48dd4a904d471e42fa4adc3035",
     "/upload-file/template/Envio de endereços dos pedidos.xlsx": "/upload-file/template/Envio de endereços dos pedidos.xlsx?id=19a0af95a8b738c66b0596c109361071",
-    "/upload-file/template/Envio de pedidos Amazon.xlsx": "/upload-file/template/Envio de pedidos Amazon.xlsx?id=caca1725869a4365add1839eac537b1e"
+    "/upload-file/template/Envio de pedidos Amazon.xlsx": "/upload-file/template/Envio de pedidos Amazon.xlsx?id=caca1725869a4365add1839eac537b1e",
+    "/upload-file/template/Envio de pedidos da Estante Virtual.xlsx": "/upload-file/template/Envio de pedidos da Estante Virtual.xlsx?id=ece9b092559096a16ff4a682521a4b11"
 }
