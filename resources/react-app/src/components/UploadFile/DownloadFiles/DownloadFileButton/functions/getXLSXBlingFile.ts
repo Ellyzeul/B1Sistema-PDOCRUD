@@ -1,6 +1,8 @@
 import { Workbook } from "exceljs"
 import XLSXFileData from "./types"
 
+const FILENAME = 'Estante Virtual - Bling.xlsx'
+
 const getXLSXBlingFile = (xlsxData: XLSXFileData) => {
   const { files_headers, data } = xlsxData
   const fileHeaders = files_headers['Bling']
@@ -12,7 +14,10 @@ const getXLSXBlingFile = (xlsxData: XLSXFileData) => {
 
   return workbook.xlsx.writeBuffer()
     .then(buffer => new Blob([buffer], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}))
-    .then(blob => new File([blob], 'Estante Virtual - Bling.xlsx'))
+    .then(blob => ({
+      file: new File([blob], FILENAME), 
+      name: FILENAME
+    }))
 }
 
 const formatRegistry = (registry: {[key: string]: string}) => {
