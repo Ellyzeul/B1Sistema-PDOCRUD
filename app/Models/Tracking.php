@@ -107,7 +107,7 @@ class Tracking extends Model
 		$apikey = $this->readApiCredentialDB('correios');
 		$expires_in = explode("T", $apikey->expiraEm)[0];
 
-		if((!$CORREIOS_API_KEY) || Date::parse($expires_in)->diffAsCarbonInterval($today)->format("%d")!=1){
+		if((!$apikey->token) || Date::parse($expires_in)->diffAsCarbonInterval($today)->format("%d")!=1){
 			$this->generateCorreiosToken();
 			$apikey = $this->readApiCredentialDB('correios');
 		} 
