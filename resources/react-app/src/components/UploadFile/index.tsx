@@ -4,6 +4,7 @@ import { fields, uploadTypes } from "./constants"
 import "./style.css"
 import { FieldsSelection } from "./FieldsSelection"
 import DownloadFiles from "./DownloadFiles"
+import { DOWNLOAD_FILES } from "./DownloadFiles/constants"
 
 export const UploadFile = () => {
   const [selectOptions, setSelectOptions] = useState([] as JSX.Element[])
@@ -111,13 +112,13 @@ export const UploadFile = () => {
           </span>
         </div>
         {
-          update.length === 0 
-          ? null
-          : <DownloadFiles 
+          update.length > 0 && updloadType in DOWNLOAD_FILES 
+          ? <DownloadFiles 
             upload_type={updloadType} 
             fields={selectedFields && selectedFields.filter(field => field.label in update[0])} 
             update={update} 
           />
+          : null
         }
       </div>
       <div>
