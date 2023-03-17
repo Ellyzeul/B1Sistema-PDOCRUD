@@ -17,12 +17,12 @@ class SupplierDeliveryMethodsSeeder extends Seeder
     {
         DB::table('supplier_delivery_methods')
             ->insert([
-                ['name' => 'Correios'], 
-                ['name' => 'Correios Reverso'], 
-                ['name' => 'Jadlog'], 
-                ['name' => 'Loggi'], 
-                ['name' => 'DHL'],
-                ['name' => 'Outras']
+                ['id' => 1, 'name' => 'Correios'], 
+                ['id' => 2, 'name' => 'Correios Reverso'], 
+                ['id' => 3, 'name' => 'Jadlog'], 
+                ['id' => 4, 'name' => 'Loggi'], 
+                ['id' => 5, 'name' => 'DHL'], 
+                ['id' => 6, 'name' => 'Outras'], 
             ]);
     }
 }
