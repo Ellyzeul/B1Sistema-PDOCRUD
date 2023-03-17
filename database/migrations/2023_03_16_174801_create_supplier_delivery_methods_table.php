@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('supplier_delivery_methods', function (Blueprint $table) {
-            $table->tinyInteger('id')->primary()->autoIncrement();
+            $table->tinyInteger('id')->autoIncrement();
             $table->tinyText('name');
         });
     }
