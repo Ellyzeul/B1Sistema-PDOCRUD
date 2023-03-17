@@ -3,6 +3,8 @@ import Excel from "exceljs"
 import { fields, uploadTypes } from "./constants"
 import "./style.css"
 import { FieldsSelection } from "./FieldsSelection"
+import DownloadFiles from "./DownloadFiles"
+import { DOWNLOAD_FILES } from "./DownloadFiles/constants"
 
 export const UploadFile = () => {
   const [selectOptions, setSelectOptions] = useState([] as JSX.Element[])
@@ -91,22 +93,33 @@ export const UploadFile = () => {
   return (
     <div className="upload-container">
       <div>
-        <span>Tipo de arquivo: 
-          <select ref={selectRef} id="upload-type" onChange={onChangeSelect}>
-            {selectOptions}
-          </select>
-          {
-            updloadType.length > 0 && updloadType !== "select"
-            ? <>Modelo: <a 
-                id="excel-template" 
-                href={`/upload-file/template/${uploadTypes.find(elem => elem.value === updloadType)?.message}.xlsx`}
-                download
-              >
-              <i className="fa-solid fa-file-excel"></i>
-            </a></>
-            : null
-          }
-        </span>
+        <div className="upload-file-select">
+          <span>Tipo de arquivo: 
+            <select ref={selectRef} id="upload-type" onChange={onChangeSelect}>
+              {selectOptions}
+            </select>
+            {
+              updloadType.length > 0 && updloadType !== "select"
+              ? <>Modelo: <a 
+                  id="excel-template" 
+                  href={`/upload-file/template/${uploadTypes.find(elem => elem.value === updloadType)?.message}.xlsx`}
+                  download
+                >
+                <i className="fa-solid fa-file-excel"></i>
+              </a></>
+              : null
+            }
+          </span>
+        </div>
+        {
+          update.length > 0 && updloadType in DOWNLOAD_FILES 
+          ? <DownloadFiles 
+            upload_type={updloadType} 
+            fields={selectedFields && selectedFields.filter(field => field.label in update[0])} 
+            update={update} 
+          />
+          : null
+        }
       </div>
       <div>
         <div id="upload-box" onClick={onClick}>

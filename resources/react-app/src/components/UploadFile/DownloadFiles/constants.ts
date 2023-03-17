@@ -1,0 +1,48 @@
+export const DOWNLOAD_FILES = {
+  "order-estante-insert": {
+    "Bling": [
+      {header: "Nr Pedido", key: "Pedido"}, 
+      {header: "Nome Comprador", key: "Comprador"}, 
+      {header: "Data da Venda", key: "Data de pagamento"}, 
+      {header: "CPF/CNPJ Comprador", key: "CPF/CNPJ"},
+      {header: "Endereço Comprador", key: "Logradouro"}, 
+      {header: "Bairro Comprador", key: "Bairro"}, 
+      {header: "Número Comprador", key: "Número"}, 
+      {header: "Complemento Comprador", key: "Complemento"}, 
+      {header: "CEP Comprador", key: "CEP"}, 
+      {header: "Cidade Comprador", key: "Cidade"}, 
+      {header: "UF Comprador", key: "UF"}, 
+      {header: "Telefone Comprador", key: "landline"}, 
+      {header: "Celular Comprador", key: "cellphone"}, 
+      {header: "E-mail Comprador", key: "email"}, 
+      {header: "Produto", key: "Título"}, 
+      {header: "SKU", key: "ISBN"}, 
+      {header: "Un", key: "unity"}, 
+      {header: "Quantidade", key: "quantity"}, 
+      {header: "Valor Unitário", key: "Valor Unitário"}, 
+      {header: "Valor Total", key: "Preço do Livro (R$)"}, 
+      {header: "Total Pedido", key: "Valor Total (R$)"}, 
+      {header: "Valor Frete Pedido", key: "Valor do frete (R$)"}, 
+      {header: "Valor Desconto Pedido", key: "discount"}, 
+      {header: "Nome Entrega", key: "Destinatário"}, 
+      {header: "Endereço Entrega", key: "Logradouro Entrega"}, 
+      {header: "Número Entrega", key: "Número Entrega"},  
+      {header: "Complemento Entrega", key: "Complemento Entrega"}, 
+      {header: "Cidade Entrega", key: "Cidade Entrega"}, 
+      {header: "UF Entrega", key: "UF Entrega"}, 
+      {header: "CEP Entrega", key: "CEP Entrega"}, 
+      {header: "Bairro Entrega", key: "Bairro Entrega"}, 
+      {header: "Transportadora", key: "delivery"}, 
+      {header: "Serviço", key: "service"}, 
+      {header: "Tipo Frete", key: "freight_type"}, 
+      {header: "Observações", key: "CódigoEv"}, 
+      {header: "Método Pagamento", key: "Método de pagamento"}, 
+      {header: "Qtd Parcela", key: "parcel_quantity"}, 
+      {header: "Data Prevista", key: "Data prevista"}, 
+      {header: "Vendedor", key: "seller"}, 
+      {header: "Forma Pagamento", key: "Forma de pagamento"}, 
+    ]
+  }
+} as {[key: string]: {
+  [key: string]: {header: string, key: string}[]
+}}
