@@ -142,7 +142,7 @@ class Tracking extends Model
 	private function fetchJadlog(string $shipmentId)
 	{
 		$identifier = substr($shipmentId,0,2);
-		$identifier == "11" ? $type = "shipmentId" : $type = "cte";
+		$type = $identifier == "11" ? "shipmentId" : "cte";
 
 		$response = Http::withToken(env('JADLOG_API_KEY'))
 			->post('www.jadlog.com.br/embarcador/api/tracking/consultar', [
