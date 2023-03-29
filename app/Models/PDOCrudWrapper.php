@@ -27,6 +27,8 @@ class PDOCrudWrapper extends Model
         "purchase_date" => "Data da compra",
         "id_delivery_address" => "Endereço de entrega",
         "supplier_purchase_number" => "Nº Compra fornecedor",
+        "supplier_tracking_code" => "Código de rastreio fornecedor",
+        "id_supplier_delivery_method" => "Forma de entrega fornecedor",
         "id_delivery_method" => "Forma de envio",
         "tracking_code" => "Código de rastreio",
         "collection_code" => "Código de coleta",
@@ -51,6 +53,8 @@ class PDOCrudWrapper extends Model
         "purchase_date" => ["0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "3.1", "3.2"],
         "id_delivery_address" => ["2.3", "3.1", "3.2"],
         "supplier_purchase_number" => ["2.1", "2.3", "3.1", "3.2"],
+        "supplier_tracking_code" => ["2.1", "2.3", "3.1", "3.2"],
+        "id_supplier_delivery_method" => ["2.1", "2.3", "3.1", "3.2"],
         "id_delivery_method" => ["2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado"],
         "tracking_code" => ["2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado"],
         "collection_code" => ["2.4", "2.5", "2.6", "2.7", "2.8"],
@@ -91,29 +95,10 @@ class PDOCrudWrapper extends Model
         }
         $crud->crudTableCol($columns);
 
-        in_array("id", $columns) ? $crud->colRename("id", "Nº") : null;
-        in_array("address_verified", $columns) ? $crud->colRename("address_verified", "Endereço arrumado") : null;
-        in_array("id_company", $columns) ? $crud->colRename("id_company", "Empresa") : null;
-        in_array("id_sellercentral", $columns) ? $crud->colRename("id_sellercentral", "Canal de venda") : null;
-        in_array("id_phase", $columns) ? $crud->colRename("id_phase", "Fase do processo") : null;
-        in_array("invoice_number", $columns) ? $crud->colRename("invoice_number", "NF") : null;
-        in_array("online_order_number", $columns) ? $crud->colRename("online_order_number", "ORIGEM") : null;
-        in_array("bling_number", $columns) ? $crud->colRename("bling_number", "Nº Bling") : null;
-        in_array("order_date", $columns) ? $crud->colRename("order_date", "Data do pedido") : null;
-        in_array("expected_date", $columns) ? $crud->colRename("expected_date", "Data prevista") : null;
-        in_array("isbn", $columns) ? $crud->colRename("isbn", "ISBN") : null;
-        in_array("selling_price", $columns) ? $crud->colRename("selling_price", "Valor") : null;
-        in_array("supplier_name", $columns) ? $crud->colRename("supplier_name", "Fornecedor") : null;
-        in_array("purchase_date", $columns) ? $crud->colRename("purchase_date", "Data da compra") : null;
-        in_array("id_delivery_address", $columns) ? $crud->colRename("id_delivery_address", "Endereço de entrega") : null;
-        in_array("supplier_purchase_number", $columns) ? $crud->colRename("supplier_purchase_number", "Nº Compra fornecedor") : null;
-        in_array("id_delivery_method", $columns) ? $crud->colRename("id_delivery_method", "Forma de envio") : null;
-        in_array("tracking_code", $columns) ? $crud->colRename("tracking_code", "Código de rastreio") : null;
-        in_array("collection_code", $columns) ? $crud->colRename("collection_code", "Código de coleta") : null;
-        in_array("delivered_date", $columns) ? $crud->colRename("delivered_date", "Data de entrega") : null;
-        in_array("ask_rating", $columns) ? $crud->colRename("ask_rating", "Pedir avaliação") : null;
-        in_array("ready_to_6_2", $columns) ? $crud->colRename("ready_to_6_2", "Pronto para 6.2") : null;
-        
+        foreach($columns as $column) {
+            $crud->colRename($column, $this->columnsRename[$column]);
+        }
+
         return [$crud, $columns];
     }
 
@@ -126,6 +111,8 @@ class PDOCrudWrapper extends Model
         \in_array("purchase_date", $columns) ? $crud->fieldNotMandatory("purchase_date") : null;
         \in_array("id_delivery_address", $columns) ? $crud->fieldNotMandatory("id_delivery_address") : null;
         \in_array("supplier_purchase_number", $columns) ? $crud->fieldNotMandatory("supplier_purchase_number") : null;
+        \in_array("supplier_tracking_code", $columns) ? $crud->fieldNotMandatory("supplier_tracking_code") : null;
+        \in_array("id_supplier_delivery_method", $columns) ? $crud->fieldNotMandatory("id_supplier_delivery_method") : null;
         \in_array("id_delivery_method", $columns) ? $crud->fieldNotMandatory("id_delivery_method") : null;
         \in_array("tracking_code", $columns) ? $crud->fieldNotMandatory("tracking_code") : null;
         \in_array("collection_code", $columns) ? $crud->fieldNotMandatory("collection_code") : null;
@@ -168,6 +155,11 @@ class PDOCrudWrapper extends Model
             return "$pair[$key] - $pair[$val]";
         });
 
+        if(\in_array('id_supplier_delivery_method', $columns)) $supplierDeliveryMethods = $this->getBulkUpdateData($crud, 'supplier_delivery_methods', function($pair, $key, $val)
+        {
+            return "$pair[$key] - $pair[$val]";
+        });
+
         \in_array("address_verified", $columns) ? $crud->bulkCrudUpdate("address_verified", "number") : null;
         $crud->bulkCrudUpdate("id_phase", "select", ['phase_key' => 'phase_val'], $phases);
         \in_array("invoice_number", $columns) ? $crud->bulkCrudUpdate("invoice_number", "text") : null;
@@ -176,6 +168,8 @@ class PDOCrudWrapper extends Model
         \in_array("purchase_date", $columns) ? $crud->bulkCrudUpdate("purchase_date", "date") : null;
         \in_array("id_delivery_address", $columns) ? $crud->bulkCrudUpdate("id_delivery_address", "select", ['deliveryaddress_key' => 'deliveryaddress_val'], $deliveryAddresses) : null;
         \in_array("supplier_purchase_number", $columns) ? $crud->bulkCrudUpdate("supplier_purchase_number", "text") : null;
+        \in_array("supplier_tracking_code", $columns) ? $crud->bulkCrudUpdate("supplier_tracking_code", "text") : null;
+        \in_array("id_supplier_delivery_method", $columns) ? $crud->bulkCrudUpdate("id_supplier_delivery_method", "select", ['supplierdeliverymethod_key' => 'supplierdeliverymethod_val'], $supplierDeliveryMethods) : null;
         \in_array("id_delivery_method", $columns) ? $crud->bulkCrudUpdate("id_delivery_method", "select", ['deliverymethod_key' => 'deliverymethod_val'], $deliveryMethods) : null;
         \in_array("tracking_code", $columns) ? $crud->bulkCrudUpdate("tracking_code", "text") : null;
         \in_array("collection_code", $columns) ? $crud->bulkCrudUpdate("collection_code", "text") : null;
