@@ -12,9 +12,9 @@ class PDOCrudWrapper extends Model
     
     private array $columnsRename = [
         "id" => "Nº",
-        "address_verified" => "Endereço verificado",
+        "address_verified" => "Endereço arrumado",
         "id_company" => "Empresa",
-        "id_sellercentral" => "Canal de Venda",
+        "id_sellercentral" => "Canal de venda",
         "id_phase" => "Fase do processo",
         "invoice_number" => "NF",
         "online_order_number" => "ORIGEM",
