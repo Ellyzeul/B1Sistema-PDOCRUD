@@ -47,16 +47,149 @@ class FileUpload extends Model
 
 	public function orderAmazonInsert(array $data)
 	{
-		$responses = [];
+		$orderData = array_map(fn ($registry) => [
+			'id_company' => $registry['id_company'], 
+			'id_sellercentral' => $this->getAmazonIdSellercentral($registry['sellercentral']), 
+			'online_order_number' => $registry['online_order_number'], 
+			'order_date' => date('Y-m-d', strtotime($registry['order_date'])), 
+			'ship_date' => $this->treatAmazonDatetime($registry['ship_date']), 
+			'expected_date' => $this->treatExpectedDate($registry['expected_date']), 
+			'isbn' => explode("_", $registry['sku'])[1], 
+			'selling_price' => $registry['item_price'], 
+		], $data);
+		
+		$addressData = array_map(fn ($registry) => [
+			'online_order_number' => $registry['online_order_number'], 
+			'buyer_name' => $registry['buyer_name'], 
+			'buyer_email' => $registry['buyer_email'], 
+			'buyer_phone' => $registry['buyer_phone'], 
+			'recipient_name' => $registry['recipient_name'], 
+			'ship_phone' => $registry['ship_phone'], 
+			'address_1' => $registry['address_1'], 
+			'address_2' => $registry['address_2'], 
+			'address_3' => $registry['address_3'], 
+			'county' => $registry['county'], 
+			'city' => $registry['city'], 
+			'state' => $registry['state'], 
+			'postal_code' => $registry['postal_code'], 
+			'country' => $registry['country'], 
+			'price' => $registry['item_price'], 
+			'item_tax' => $registry['item_tax'], 
+			'freight' => $registry['freight_price'], 
+			'freight_tax' => $registry['freight_tax'], 
+		], $data);
 
-		foreach($data as $registry) {
-			array_push($responses, $this->insertAmazonRegistry($registry));
-		}
+		$this->orderDataInsert($orderData);
+		$this->orderAddressInsert($addressData);
 
-		return $responses;
+		return;
 	}
 
-	public function orderAddressInsert(array $data)
+	private function getAmazonIdSellercentral(string $sellercentral)
+	{
+		if($sellercentral === "Amazon.com.br") return 1;
+		if($sellercentral === "Amazon.ca") return 2;
+		if($sellercentral === "Amazon.co.uk") return 3;
+		if($sellercentral === "Amazon.com") return 4;
+
+		throw("Invalid sellercentral: " . $sellercentral);
+	}
+
+	private function treatAmazonDatetime(string $date)
+	{
+		$deliveryHour = intval(date("H", $date));
+		$subtractDay = ($deliveryHour > 0) && ($deliveryHour < 7);
+		$treated = $subtractDay
+			? date("Y-m-d", strtotime("-1 day", $date))
+			: date("Y-m-d", $date);
+		
+		return $treated;
+	}
+
+	public function orderNuvemshopInsert(array $data)
+	{
+		$orderData = array_map(fn ($registry) => [
+			'id_company' => 0, 
+			'id_sellercentral' => $this->getNuvemshopIdSellercentral($registry['currency']), 
+			'online_order_number' => $registry['online_order_number'], 
+			'order_date' => date('Y-m-d', strtotime($registry['order_date'])), 
+			'ship_date' => date('Y-m-d', strtotime($registry['ship_date'])), 
+			'expected_date' => date('Y-m-d', strtotime($registry['expected_date'])), 
+			'isbn' => explode("_", $registry['sku'])[1], 
+			'selling_price' => $registry['price'] - $registry['discount'], 
+		], $data);
+		
+		$addressData = array_map(fn ($registry) => [
+			'online_order_number' => $registry['online_order_number'], 
+			'buyer_name' => $registry['buyer_name'], 
+			'buyer_email' => $registry['buyer_email'], 
+			'buyer_phone' => $registry['buyer_phone'], 
+			'recipient_name' => $registry['recipient_name'], 
+			'ship_phone' => $registry['ship_phone'], 
+			'address_1' => $registry['address_1'], 
+			'address_2' => $registry['address_2'], 
+			'county' => $registry['county'], 
+			'city' => $registry['city'], 
+			'state' => $registry['state'], 
+			'postal_code' => $registry['postal_code'], 
+			'country' => $registry['country'], 
+			'price' => $registry['price'], 
+			'freight' => $registry['freight'], 
+		], $data);
+
+		$this->orderDataInsert($orderData);
+		$this->orderAddressInsert($addressData);
+	}
+
+	private function getNuvemshopIdSellercentral(string $currency)
+	{
+		if($currency === "BRL") return 5;
+
+		throw("Moeda inválida");
+	}
+
+	public function orderEstanteInsert(array $data)
+	{
+		$orderData = array_map(fn ($registry) => [
+			'id_company' => 0, 
+			'id_sellercentral' => 6, 
+			'online_order_number' => $registry['online_order_number'], 
+			'order_date' => date('Y-m-d', strtotime($registry['order_date'])), 
+			'expected_date' => date('Y-m-d', strtotime($registry['expected_date'])), 
+			'isbn' => $registry['isbn'], 
+			'selling_price' => $registry['price'], 
+		], $data);
+
+		$addressData = array_map(fn ($registry) => [
+			'online_order_number' => $registry['online_order_number'], 
+			'recipient_name' => $registry['recipient_name'], 
+			'address_1' => $registry['address_1'], 
+			'address_2' => $registry['address_2'], 
+			'address_3' => $registry['address_2'], 
+			'county' => $registry['county'], 
+			'city' => $registry['city'], 
+			'state' => $registry['state'], 
+			'postal_code' => $registry['postal_code'], 
+			'freight' => $registry['freight'], 
+			'item_tax' => $registry['item_tax'], 
+			'price' => $registry['price'], 
+		], $data);
+
+		$this->orderDataInsert($orderData);
+		$this->orderAddressInsert($addressData);
+
+		return [
+			'message' => 'Pedidos da Estante Virtual inseridos com sucesso!'
+		];
+	}
+
+	private function orderDataInsert(array $data)
+	{
+		DB::table("order_control")
+			->insert($data);
+	}
+
+	private function orderAddressInsert(array $data)
 	{
 		$treatedData = array_map(function($registry) {
 			if(isset($registry['expected_date'])) $registry = $this->treatExpectedDate($registry);
@@ -75,42 +208,6 @@ class FileUpload extends Model
 		
 		return [
 			'message' => 'Endereços inseridos com sucesso!'
-		];
-	}
-
-	public function orderEstanteInsert(array $data)
-	{
-		$orderData = array_map(fn ($registry) => [
-			'id_company' => 0, 
-			'id_sellercentral' => 6, 
-			'online_order_number' => $registry['online_order_number'], 
-			'order_date' => date('Y-m-d', strtotime($registry['order_date'])), 
-			'expected_date' => date('Y-m-d', strtotime($registry['expected_date'])), 
-			'isbn' => $registry['isbn'], 
-			'selling_price' => $registry['price'], 
-		], $data);
-
-		$orderAddress = array_map(fn ($registry) => [
-			'online_order_number' => $registry['online_order_number'], 
-			'recipient_name' => $registry['recipient_name'], 
-			'address_1' => $registry['address_1'], 
-			'address_2' => $registry['address_2'], 
-			'address_3' => $registry['address_2'], 
-			'county' => $registry['county'], 
-			'city' => $registry['city'], 
-			'state' => $registry['state'], 
-			'postal_code' => $registry['postal_code'], 
-			'freight' => $registry['freight'], 
-			'item_tax' => $registry['item_tax'], 
-			'price' => $registry['price'], 
-		], $data);
-
-		DB::table('order_control')
-			->insert($orderData);
-		$this->orderAddressInsert($orderAddress);
-
-		return [
-			'message' => 'Pedidos da Estante Virtual inseridos com sucesso!'
 		];
 	}
 
@@ -139,42 +236,5 @@ class FileUpload extends Model
 	private function getPlainDate(string $date)
 	{
 		return \explode("T", $date)[0];
-	}
-
-	private function insertAmazonRegistry(array $registry)
-	{
-		$onlineOrderNumber = $registry["online_order_number"];
-		$registry = $this->treatInsertAmazonDate($registry);
-		DB::table("order_control")
-			->insert($registry);
-		
-		return "Pedido $onlineOrderNumber inserido";
-	}
-
-	private function treatInsertAmazonDate(array $registry)
-	{
-		$registry = $this->treatOrderDate($registry);
-		$registry = $this->treatExpectedDate($registry);
-		
-		return $registry;
-	}
-
-	private function treatOrderDate(array $registry)
-	{
-		$registry["order_date"] = date("Y-m-d", strtotime($registry["order_date"]));
-
-		return $registry;
-	}
-
-	private function treatExpectedDate(array $registry)
-	{
-		$expectedDate = strtotime($registry["expected_date"]);
-		$deliveryHour = intval(date("H", $expectedDate));
-		$subtractDay = ($deliveryHour > 0) && ($deliveryHour < 7);
-		$registry["expected_date"] = $subtractDay
-			? date("Y-m-d", strtotime("-1 day", $expectedDate))
-			: date("Y-m-d", $expectedDate);
-		
-		return $registry;
 	}
 }
