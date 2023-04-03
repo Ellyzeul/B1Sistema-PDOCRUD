@@ -26,11 +26,11 @@ class FileUploadController extends Controller
         return $response;
     }
 
-    public function orderAddressInsert(Request $request)
+    public function orderNuvemshopInsert(Request $request)
     {
         $fileUpload = new FileUpload();
         $data = $request->input('upload_data');
-        $response = $fileUpload->orderAddressInsert($data);
+        $response = $fileUpload->orderNuvemshopInsert($data);
 
         return $response;
     }

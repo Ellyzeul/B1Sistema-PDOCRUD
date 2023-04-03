@@ -20,6 +20,7 @@ class PDOCrudWrapper extends Model
         "online_order_number" => "ORIGEM",
         "bling_number" => "Nº Bling",
         "order_date" => "Data do pedido",
+        "ship_date" => "Data para envio",
         "expected_date" => "Data prevista",
         "isbn" => "ISBN",
         "selling_price" => "Valor",
@@ -46,6 +47,7 @@ class PDOCrudWrapper extends Model
         "online_order_number" => ["0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado"],
         "bling_number" => ["2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "6.2", "6.21", "não-verificado"],
         "order_date" => ["2.1", "2.3", "3.1", "3.2", "não-verificado"],
+        "ship_date" => ["0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "não-verificado"],
         "expected_date" => ["0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado"],
         "isbn" => ["0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado"],
         "selling_price" => ["0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.1", "2.3", "3.1", "3.2"],
@@ -194,6 +196,7 @@ class PDOCrudWrapper extends Model
             $crud->tableColFormatting("id_sellercentral", "replace", [$sel["id"] => $sel["name"]]);
         }
         \in_array("order_date", $columns) ? $crud->tableColFormatting("order_date", "date", ["format" => "d/m/Y"]) : null;
+        \in_array("ship_date", $columns) ? $crud->tableColFormatting("ship_date", "date", ["format" => "d/m/Y"]) : null;
         \in_array("expected_date", $columns) ? $crud->tableColFormatting("expected_date", "date", ["format" => "d/m/Y"]) : null;
         \in_array("purchase_date", $columns) ? $crud->tableColFormatting("purchase_date", "date", ["format" => "d/m/Y"]) : null;
         \in_array("delivered_date", $columns) ? $crud->tableColFormatting("delivered_date", "date", ["format" => "d/m/Y"]) : null;
