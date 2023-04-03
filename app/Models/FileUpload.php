@@ -53,7 +53,7 @@ class FileUpload extends Model
 			'online_order_number' => $registry['online_order_number'], 
 			'order_date' => date('Y-m-d', strtotime($registry['order_date'])), 
 			'ship_date' => $this->treatAmazonDatetime($registry['ship_date']), 
-			'expected_date' => $this->treatExpectedDate($registry['expected_date']), 
+			'expected_date' => $this->treatAmazonDatetime($registry['expected_date']), 
 			'isbn' => explode("_", $registry['sku'])[1], 
 			'selling_price' => $registry['item_price'], 
 		], $data);
@@ -97,10 +97,10 @@ class FileUpload extends Model
 
 	private function treatAmazonDatetime(string $date)
 	{
-		$deliveryHour = intval(date("H", $date));
+		$deliveryHour = intval(date("H", strtotime($date)));
 		$subtractDay = ($deliveryHour > 0) && ($deliveryHour < 7);
 		$treated = $subtractDay
-			? date("Y-m-d", strtotime("-1 day", $date))
+			? date("Y-m-d", strtotime("-1 day", strtotime($date)))
 			: date("Y-m-d", $date);
 		
 		return $treated;
@@ -191,17 +191,13 @@ class FileUpload extends Model
 
 	private function orderAddressInsert(array $data)
 	{
-		$treatedData = array_map(function($registry) {
-			if(isset($registry['expected_date'])) $registry = $this->treatExpectedDate($registry);
-			return $registry;
-		}, $data);
-		$fields = count($treatedData) > 0
-			? array_keys($treatedData[0])
+		$fields = count($data) > 0
+			? array_keys($data[0])
 			: [];
 
 		DB::table('order_addresses')
 			->upsert(
-				$treatedData,
+				$data,
 				['online_order_number'],
 				$fields
 			);
@@ -236,5 +232,17 @@ class FileUpload extends Model
 	private function getPlainDate(string $date)
 	{
 		return \explode("T", $date)[0];
+	}
+
+	private function treatExpectedDate(array $registry)
+	{
+		$expectedDate = strtotime($registry["expected_date"]);
+		$deliveryHour = intval(date("H", $expectedDate));
+		$subtractDay = ($deliveryHour > 0) && ($deliveryHour < 7);
+		$registry["expected_date"] = $subtractDay
+			? date("Y-m-d", strtotime("-1 day", $expectedDate))
+			: date("Y-m-d", $expectedDate);
+		
+		return $registry;
 	}
 }
