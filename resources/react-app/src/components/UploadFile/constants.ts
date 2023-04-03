@@ -57,6 +57,7 @@ export const fields = {
     {label: "ship-state", field_name: "state", updatable: true, required: true},
     {label: "ship-postal-code", field_name: "postal_code", updatable: true, required: true},
     {label: "ship-country", field_name: "country", updatable: true, required: true},
+    {label: "is-business-order", field_name: "is_business_order", updatable: true, required: true},
   ],
   "order-nuvemshop-insert": [
     {label: "Número do Pedido", field_name: "online_order_number", updatable: true, required: true}, 
