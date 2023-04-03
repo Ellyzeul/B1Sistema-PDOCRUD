@@ -68,8 +68,16 @@ class Tracking extends Model
 		$response = null;
 		if($deliveryMethod == "Correios") $response = $this->fetchCorreios($trackingCode);
 		if($deliveryMethod == "Jadlog") $response = $this->fetchJadlog($trackingCode);
-		if($deliveryMethod == "DHL") $response = $this->fetchDHL($trackingCode);
 		if($deliveryMethod == "FedEx") $response = $this->fetchFedex($trackingCode);
+		
+		if($deliveryMethod == "DHL"){
+			$response = $this->fetchDHLMyAPI($trackingCode);
+
+			$response = 
+				$response === []
+					? $this->fetchDHLShipmentTrackingUnified($trackingCode) 
+					: $response;
+		} 
 
 		if(count($response) > 0) $response['api_calling_date'] = date("Y-m-d");
 
@@ -167,8 +175,48 @@ class Tracking extends Model
 		return $toReturn;
 	}
 
-	private function fetchDHL(string $trackingCode)
+	private function fetchDHLMyAPI(string $trackingCode)
 	{
+		// return [];
+
+		$response = Http::withHeaders(["Accept-Language" => "pt-BR"])
+			->withBasicAuth(env('DHL_API_CLIENT_ID'), env('DHL_API_CLIENT_SECRET'))
+			->get("https://express.api.dhl.com/mydhlapi/shipments/$trackingCode/tracking");
+
+		if(!isset($response) || !isset($response['shipments'])) return [];
+		
+		$events = $response['shipments'][0]['events'];
+		$last = sizeof($events)-1;
+
+		$lastUpdateDate = $response['shipments'][0]['events'][$last]['date'];
+		$lastUpdateDescription = "{$response['shipments'][0]['events'][$last]['description']}\n";
+
+		if($last>=1){
+			$penultimate = $last-1;
+			$penultimateUpdateDate = $response['shipments'][0]['events'][$penultimate]['date'] ?? "";
+			$penultimateUpdateDescription = "{$response['shipments'][0]['events'][$penultimate]['description']}\n" ?? "";
+
+			if($penultimate>=1){
+				$antepenultimate = $penultimate-1;
+				$antepenultimateUpdateDate = $response['shipments'][0]['events'][$antepenultimate]['date'] ?? "";
+				$antepenultimateUpdateDescription = "{$response['shipments'][0]['events'][$antepenultimate]['description']}\n" ?? "";
+			}
+		}
+
+		$toReturn = [
+			"status" => $response['shipments'][0]['status'],
+			"last_update_date" => date('Y-m-d', strtotime($lastUpdateDate)),
+			"details" => date('d/m/Y', strtotime($lastUpdateDate)) .' '. $lastUpdateDescription
+						.date('d/m/Y', strtotime($penultimateUpdateDate)) .' '. $penultimateUpdateDescription
+						.date('d/m/Y', strtotime($antepenultimateUpdateDate)) .' '. $antepenultimateUpdateDescription
+		];
+
+		return $toReturn;
+	}
+
+	private function fetchDHLShipmentTrackingUnified(string $trackingCode)
+	{
+		echo "entrou";
 		$response = Http::withHeaders(["DHL-API-Key" => env('DHL_API_KEY')])
 			->get("https://api-eu.dhl.com/track/shipments?trackingNumber=$trackingCode&language=pt");
 		

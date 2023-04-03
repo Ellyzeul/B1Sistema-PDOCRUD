@@ -1,6 +1,6 @@
 import { TrackingTableProp } from "./types"
 import { ToastContainer, toast } from "react-toastify"
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from "@mui/material"
 import TrackingTableRow from "./components/Row"
 import "./style.css"
 import TrackingTableHeadCell from "./components/HeadCell"
@@ -277,9 +277,22 @@ export const TrackingTable = (props: TrackingTableProp) => {
 // const TrackingTable = (props: TrackingTableProp) => {;
 //   const { data } = props
 
+//   const [page, setPage] = useState(0);
+//   const [rowsPerPage, setRowsPerPage] = useState(10);
+
+//   const handleChangePage = (event: unknown, newPage: number) => {
+//     setPage(newPage);
+//   };
+
+//   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+//     setRowsPerPage(+event.target.value);
+//     setPage(0);
+//   };
+
 //   return (
 //     <div id="tracking-table-container">
-//       <TableContainer>
+//       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+//       <TableContainer sx={{ maxHeight: 900 }}>
 //         <Table stickyHeader>
 //           <TableHead>
 //             <TableRow>
@@ -287,23 +300,36 @@ export const TrackingTable = (props: TrackingTableProp) => {
 //               <TrackingTableHeadCell>Rastreio</TrackingTableHeadCell>
 //               <TrackingTableHeadCell><i className="fa-solid fa-truck"></i></TrackingTableHeadCell>
 //               <TrackingTableHeadCell>ORIGEM</TrackingTableHeadCell>
-//               <TrackingTableHeadCell>Última ocorrência</TrackingTableHeadCell>
-//               <TrackingTableHeadCell>Data da ocorrência</TrackingTableHeadCell>
+//               <TrackingTableHeadCell>Última movimentação</TrackingTableHeadCell>
+//               <TrackingTableHeadCell>Data da movimentação</TrackingTableHeadCell>
 //               <TrackingTableHeadCell>Detalhes</TrackingTableHeadCell>
 //               <TrackingTableHeadCell>Prazo para o cliente</TrackingTableHeadCell>
 //               <TrackingTableHeadCell>Prazo da transportadora</TrackingTableHeadCell>
+//               <TrackingTableHeadCell>Prazo para retirada</TrackingTableHeadCell>
 //               <TrackingTableHeadCell>Última atualização</TrackingTableHeadCell>
 //               <TrackingTableHeadCell>Observação</TrackingTableHeadCell>
 //             </TableRow>
 //           </TableHead>
 //           <TableBody>
-//             {data.map(row => (
+//             {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => (
 //               <TrackingTableRow row={row} />
 //             ))}
 //           </TableBody>
 //         </Table>
 //       </TableContainer>
+
+//       <TablePagination
+//         rowsPerPageOptions={[10, 25, 100]}
+//         component="div"
+//         count={data.length}
+//         rowsPerPage={rowsPerPage}
+//         page={page}
+//         onPageChange={handleChangePage}
+//         onRowsPerPageChange={handleChangeRowsPerPage}
+//       />
+      
 //       <ToastContainer/>
+//       </Paper>    
 //     </div>
 //   )
 // }
