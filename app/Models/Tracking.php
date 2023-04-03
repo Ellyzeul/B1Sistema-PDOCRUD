@@ -177,7 +177,6 @@ class Tracking extends Model
 
 	private function fetchDHLMyAPI(string $trackingCode)
 	{
-		// return [];
 
 		$response = Http::withHeaders(["Accept-Language" => "pt-BR"])
 			->withBasicAuth(env('DHL_API_CLIENT_ID'), env('DHL_API_CLIENT_SECRET'))
@@ -216,7 +215,6 @@ class Tracking extends Model
 
 	private function fetchDHLShipmentTrackingUnified(string $trackingCode)
 	{
-		echo "entrou";
 		$response = Http::withHeaders(["DHL-API-Key" => env('DHL_API_KEY')])
 			->get("https://api-eu.dhl.com/track/shipments?trackingNumber=$trackingCode&language=pt");
 		
