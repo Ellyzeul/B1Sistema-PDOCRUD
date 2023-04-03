@@ -90,7 +90,7 @@ Route::controller(FileUploadController::class)
     ->group(function() {
         Route::post('/order-update', 'orderUpdate');
         Route::post('/order-amazon-insert', 'orderAmazonInsert');
-        Route::post('/order-address-insert', 'orderAddressInsert');
+        Route::post('/order-nuvemshop-insert', 'orderNuvemshopInsert');
         Route::post('/order-estante-insert', 'orderEstanteInsert');
     });
 
