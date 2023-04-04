@@ -64,6 +64,10 @@ const sellercentrals = {
   "Estante-BR": {
     sell_page: (onlineOrderNumber) => `https://livreiro.estantevirtual.com.br/v2/vendas/${onlineOrderNumber}`,
     product_page: (_) => `#`
+  },
+  "Alibris-US": {
+    sell_page: (onlineOrderNumber) => `https://sellers.alibris.com/ops/ordersearch.cfm?Order_Nbr=${onlineOrderNumber}`,
+    product_page: (isbn) => `https://www.alibris.com/booksearch?mtype=B&keyword=${isbn}&hs.x=0&hs.y=0`
   }
 } as {
   [key: string]: {
