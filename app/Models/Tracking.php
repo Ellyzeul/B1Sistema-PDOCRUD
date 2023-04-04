@@ -132,14 +132,14 @@ class Tracking extends Model
 		$number = $response['unidade']['endereco']['numero'] ?? "";
 		$district = $response['unidade']['endereco']['bairro'] ?? "";
 		$cep = $response['unidade']['endereco']['cep'] ?? "";
-		
+		$city = $response['unidade']['endereco']['cidade'] ?? "";
 		$info = $response['detalhe'] ?? null;
 
 		return [
 			"status" => $response['descricao'],
 			"last_update_date" => date('Y-m-d', strtotime(str_replace('/', '-', $response['dtHrCriado']))),
 			"details" => "{$response['unidade']['tipo']}" 
-						." - {$response['unidade']['endereco']['cidade']}" 
+						." - {$city}" 
 						." - {$response['unidade']['endereco']['uf']} "
 						."$street $complement $number $district $cep $info",
 
@@ -177,7 +177,6 @@ class Tracking extends Model
 
 	private function fetchDHLMyAPI(string $trackingCode)
 	{
-
 		$response = Http::withHeaders(["Accept-Language" => "pt-BR"])
 			->withBasicAuth(env('DHL_API_CLIENT_ID'), env('DHL_API_CLIENT_SECRET'))
 			->get("https://express.api.dhl.com/mydhlapi/shipments/$trackingCode/tracking");
@@ -189,6 +188,7 @@ class Tracking extends Model
 
 		$lastUpdateDate = $response['shipments'][0]['events'][$last]['date'];
 		$lastUpdateDescription = "{$response['shipments'][0]['events'][$last]['description']}\n";
+		$deliveryExpectedDate = $response['shipments'][0]['estimatedDeliveryDate'] ?? null;
 
 		if($last>=1){
 			$penultimate = $last-1;
@@ -203,13 +203,18 @@ class Tracking extends Model
 		}
 
 		$toReturn = [
-			"status" => $response['shipments'][0]['status'],
+			"status" => $lastUpdateDescription,
 			"last_update_date" => date('Y-m-d', strtotime($lastUpdateDate)),
 			"details" => date('d/m/Y', strtotime($lastUpdateDate)) .' '. $lastUpdateDescription
 						.date('d/m/Y', strtotime($penultimateUpdateDate)) .' '. $penultimateUpdateDescription
 						.date('d/m/Y', strtotime($antepenultimateUpdateDate)) .' '. $antepenultimateUpdateDescription
 		];
 
+		$toReturn['delivery_expected_date'] = 
+			isset($deliveryExpectedDate) 
+				? date('Y-m-d', strtotime($deliveryExpectedDate)) 
+				: null;
+		
 		return $toReturn;
 	}
 
@@ -281,10 +286,16 @@ class Tracking extends Model
 		$postalCode = $scanLocation['postalCode'] ?? "";
 		$countryName = $scanLocation['countryName'] ?? "";
 
+		if(!isset($response['output']['completeTrackResults'][0]['trackResults'][0]['serviceCommitMessage'])){
+			$msg = $response['output']['completeTrackResults'][0]['trackResults'][0]['serviceCommitMessage']['message'];
+			$deadline = $msg;
+		}
+
 		return [
 			'status' => $scanEvents['eventDescription'], 
 			'last_update_date' => date('Y-m-d', strtotime($lastUpdateDate)), 
 			'details' => "$city $stateOrProvinceCode $postalCode $countryName $exceptionDescription", 
+			"client_deadline" => $deadline ?? null,
 		];
 	}
 
