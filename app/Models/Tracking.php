@@ -286,11 +286,6 @@ class Tracking extends Model
 		$postalCode = $scanLocation['postalCode'] ?? "";
 		$countryName = $scanLocation['countryName'] ?? "";
 
-		if(!isset($response['output']['completeTrackResults'][0]['trackResults'][0]['serviceCommitMessage'])){
-			$msg = $response['output']['completeTrackResults'][0]['trackResults'][0]['serviceCommitMessage']['message'];
-			$deadline = $msg;
-		}
-
 		return [
 			'status' => $scanEvents['eventDescription'], 
 			'last_update_date' => date('Y-m-d', strtotime($lastUpdateDate)), 
