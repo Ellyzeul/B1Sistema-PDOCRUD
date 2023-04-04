@@ -160,6 +160,7 @@ class FileUpload extends Model
 			'online_order_number' => $registry['online_order_number'], 
 			'order_date' => date('Y-m-d', strtotime($registry['order_date'])), 
 			'expected_date' => date('Y-m-d', strtotime($registry['expected_date'])), 
+			'ship_date' => date('Y-m-d', strtotime($registry['ship_date'])), 
 			'isbn' => $registry['isbn'], 
 			'selling_price' => $registry['price'], 
 		], $data);

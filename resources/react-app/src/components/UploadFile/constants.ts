@@ -57,6 +57,7 @@ export const fields = {
     {label: "ship-state", field_name: "state", updatable: true, required: true},
     {label: "ship-postal-code", field_name: "postal_code", updatable: true, required: true},
     {label: "ship-country", field_name: "country", updatable: true, required: true},
+    {label: "delivery-Instructions", field_name: "delivery_instructions", updatable: true, required: true},
     {label: "is-business-order", field_name: "is_business_order", updatable: true, required: true},
   ],
   "order-nuvemshop-insert": [
@@ -114,6 +115,7 @@ export const fields = {
     {label: "Preço do Livro (R$)", field_name: "price", updatable: true, required: true}, 
     {label: "Valor Total (R$)", field_name: "value", updatable: true, required: true}, 
     {label: "Data prevista", field_name: "expected_date", updatable: true, required: true}, 
+    {label: "Data para envio", field_name: "ship_date", updatable: true, required: true}, 
     {label: "Método de pagamento", field_name: "payment_method", updatable: true, required: true}, 
   ],
   "fsist-ingestion": [
