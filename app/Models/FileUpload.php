@@ -77,6 +77,9 @@ class FileUpload extends Model
 			'item_tax' => $registry['item_tax'], 
 			'freight' => $registry['freight_price'], 
 			'freight_tax' => $registry['freight_tax'], 
+			'expected_date' => $this->treatAmazonDatetime($registry['expected_date']), 
+			'is_business_order' => $registry['is_business_order'] === "true" ? 1 : 0, 
+			'delivery_instructions' => $registry['delivery_instructions'], 
 		], $data);
 
 		$this->orderDataInsert($orderData);
@@ -135,6 +138,7 @@ class FileUpload extends Model
 			'country' => $registry['country'], 
 			'price' => $registry['price'], 
 			'freight' => $registry['freight'], 
+			'expected_date' => date('Y-m-d', strtotime($registry['expected_date'])), 
 		], $data);
 
 		$this->orderDataInsert($orderData);
@@ -156,6 +160,7 @@ class FileUpload extends Model
 			'online_order_number' => $registry['online_order_number'], 
 			'order_date' => date('Y-m-d', strtotime($registry['order_date'])), 
 			'expected_date' => date('Y-m-d', strtotime($registry['expected_date'])), 
+			'ship_date' => date('Y-m-d', strtotime($registry['ship_date'])), 
 			'isbn' => $registry['isbn'], 
 			'selling_price' => $registry['price'], 
 		], $data);
@@ -173,6 +178,7 @@ class FileUpload extends Model
 			'freight' => $registry['freight'], 
 			'item_tax' => $registry['item_tax'], 
 			'price' => $registry['price'], 
+			'expected_date' => date('Y-m-d', strtotime($registry['expected_date'])), 
 		], $data);
 
 		$this->orderDataInsert($orderData);

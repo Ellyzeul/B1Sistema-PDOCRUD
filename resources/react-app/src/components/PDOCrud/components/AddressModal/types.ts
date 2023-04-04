@@ -27,6 +27,7 @@ export type SellercentralAddress = {
   freight: number | null,
   item_tax: number | null,
   freight_tax: number | null,
+  delivery_instructions: string | null, 
   id_sellercentral: 1 | 2 | 3 | 4 | 5 | 6,
 }
 
