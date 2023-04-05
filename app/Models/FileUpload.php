@@ -189,37 +189,36 @@ class FileUpload extends Model
 		];
 	}
 
-	public function insertAlibrisOrder(array $data)
+	public function orderAlibrisInsert(array $data)
 	{
 		$orderData = array_map(fn ($registry) => [
 			'id_company' => 0, 
 			'id_sellercentral' => 7, 
 			'online_order_number' => $registry['online_order_number'], 
 			'order_date' => date('Y-m-d', strtotime($registry['order_date'])), 
-			'expected_date' => date('Y-m-d', strtotime("+2 day", strtotime($registry['expected_date']))), 
-			'ship_date' => date('Y-m-d H:i:s', strtotime("+1 month 2 day", strtotime($registry['ship_date']))), 
+			'ship_date' => date('Y-m-d 23:59:59', strtotime("+2 day", strtotime($registry['order_date']))), 
+			'expected_date' => date('Y-m-d', strtotime($registry['expected_date'])), 
 			'isbn' => $registry['isbn'], 
 			'selling_price' => $registry['price'], 
 		], $data);
 
 		$addressData = array_map(fn ($registry) => [
 			'online_order_number' => $registry['online_order_number'], 
+			'buyer_email' => $registry['buyer_email'], 
 			'recipient_name' => 'Alibris Distribution Center', 
 			'address_1' => '708 Spice Islands Dr.', 
 			'city' => 'Sparks', 
 			'state' => 'NV', 
-			'postal_code' => $registry['postal_code'], 
-			'freight' => $registry['freight'], 
-			'item_tax' => $registry['item_tax'], 
+			'postal_code' => '89431-7101', 
 			'price' => $registry['price'], 
-			'expected_date' => date('Y-m-d ', strtotime($registry['expected_date'])), 
+			'expected_date' => date('Y-m-d', strtotime($registry['expected_date'])), 
 		], $data);
 
 		$this->orderDataInsert($orderData);
 		$this->orderAddressInsert($addressData);
 
 		return [
-			'message' => 'Pedidos da Estante Virtual inseridos com sucesso!'
+			'message' => 'Pedidos da Alibris inseridos com sucesso!'
 		];
 	}
 

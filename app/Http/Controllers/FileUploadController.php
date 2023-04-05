@@ -43,4 +43,12 @@ class FileUploadController extends Controller
 
         return $response;
     }
+    public function orderAlibrisInsert(Request $request)
+    {
+        $fileUpload = new FileUpload();
+        $data = $request->input('upload_data');
+        $response = $fileUpload->orderAlibrisInsert($data);
+
+        return $response;
+    }
 }
