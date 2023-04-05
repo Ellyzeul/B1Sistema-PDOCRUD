@@ -56,6 +56,7 @@ class FileUpload extends Model
 			'expected_date' => $this->treatAmazonDatetime($registry['expected_date']), 
 			'isbn' => explode("_", $registry['sku'])[1], 
 			'selling_price' => $registry['item_price'], 
+			'is_business_order' => $registry['is_business_order'] === "true" ? 1 : 0, 
 		], $data);
 		
 		$addressData = array_map(fn ($registry) => [
@@ -78,7 +79,6 @@ class FileUpload extends Model
 			'freight' => $registry['freight_price'], 
 			'freight_tax' => $registry['freight_tax'], 
 			'expected_date' => $this->treatAmazonDatetime($registry['expected_date']), 
-			'is_business_order' => $registry['is_business_order'] === "true" ? 1 : 0, 
 			'delivery_instructions' => $registry['delivery_instructions'], 
 		], $data);
 
@@ -174,6 +174,40 @@ class FileUpload extends Model
 			'county' => $registry['county'], 
 			'city' => $registry['city'], 
 			'state' => $registry['state'], 
+			'postal_code' => $registry['postal_code'], 
+			'freight' => $registry['freight'], 
+			'item_tax' => $registry['item_tax'], 
+			'price' => $registry['price'], 
+			'expected_date' => date('Y-m-d ', strtotime($registry['expected_date'])), 
+		], $data);
+
+		$this->orderDataInsert($orderData);
+		$this->orderAddressInsert($addressData);
+
+		return [
+			'message' => 'Pedidos da Estante Virtual inseridos com sucesso!'
+		];
+	}
+
+	public function insertAlibrisOrder(array $data)
+	{
+		$orderData = array_map(fn ($registry) => [
+			'id_company' => 0, 
+			'id_sellercentral' => 7, 
+			'online_order_number' => $registry['online_order_number'], 
+			'order_date' => date('Y-m-d', strtotime($registry['order_date'])), 
+			'expected_date' => date('Y-m-d', strtotime("+2 day", strtotime($registry['expected_date']))), 
+			'ship_date' => date('Y-m-d H:i:s', strtotime("+1 month 2 day", strtotime($registry['ship_date']))), 
+			'isbn' => $registry['isbn'], 
+			'selling_price' => $registry['price'], 
+		], $data);
+
+		$addressData = array_map(fn ($registry) => [
+			'online_order_number' => $registry['online_order_number'], 
+			'recipient_name' => 'Alibris Distribution Center', 
+			'address_1' => '708 Spice Islands Dr.', 
+			'city' => 'Sparks', 
+			'state' => 'NV', 
 			'postal_code' => $registry['postal_code'], 
 			'freight' => $registry['freight'], 
 			'item_tax' => $registry['item_tax'], 
