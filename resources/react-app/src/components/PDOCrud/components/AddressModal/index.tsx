@@ -45,6 +45,12 @@ const CURRENCIES = {
     name: null,
     amazon_link: null,
   },
+  7: {
+    currency: 'USD',
+    prefix: 'US$',
+    name: 'Dólar americano',
+    amazon_link: 'Alibris.com',
+  }
 }
 
 const AddressModal = (props: AddressModalProp) => {

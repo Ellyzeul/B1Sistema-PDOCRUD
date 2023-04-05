@@ -20,7 +20,7 @@ const CotationMessage = (props: CotationMessageProp) => {
     return (
 `Nº Pedido Loja: ${online_order_number}
 BOOK // ${amazon_link} //
-Item 1 - ${prefix} ${price} = R$${truncateFormatted(Number(price) * cotation)}  // Frete - ${prefix} ${freight} = R$ ${truncateFormatted(Number(freight) * cotation)}
+Item 1 - ${prefix} ${price} = R$${truncateFormatted(Number(price) * cotation)}  // Frete - ${prefix} ${freight || 0} = R$ ${truncateFormatted(Number(freight) * cotation)}
 TAX = ${prefix} ${tax} = R$ ${truncateFormatted(tax * cotation)}
 Subtotal ${prefix}  ${subtotal} = R$ ${subtotalBRL}
 Data da Compra ${cotationDate.replaceAll('/', '.')} // ${currencyName} do Dia R$ ${String(cotation).replace('.', ',')}`

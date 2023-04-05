@@ -7,10 +7,10 @@ const setCurrencySymbols = () => {
 
 	if(valueIdx === -1 || sellercentralIdx === -1) return
 	const regex = [
-		{regex: /(Amazon-BR|Seline-BR)/, symbol: "R$"},
+		{regex: /(Amazon-BR|Seline-BR|Estante-BR)/, symbol: "R$"},
 		{regex: /Amazon-CA/, symbol: "CA$"},
 		{regex: /Amazon-UK/, symbol: "£"},
-		{regex: /Amazon-US/, symbol: "US$"},
+		{regex: /(Amazon-US|Alibris-US)/, symbol: "US$"},
 	]
 	const getCurrency = (country: string) => {
 		return regex
