@@ -97,6 +97,7 @@ class Order
     {
         $results = DB::table('order_control')
             ->select(
+                'id', 
                 'online_order_number', 
                 'bling_number', 
                 'id_company', 
@@ -106,6 +107,9 @@ class Order
             )
             ->where('id_phase', '6.2')
             ->orWhere('id_phase', '6.21')
+            ->orderBy('id_phase')
+            ->skip(0)
+            ->take(50)
             ->get();
         
         $handled = array_map(function($result) {
@@ -114,20 +118,25 @@ class Order
                 $result->bling_number
             );
             if(isset($blingResponse['error'])) return [
+                'id' => $result->id,
                 'online_order_number' => $result->online_order_number,
                 'company' => $result->company,
                 'sellercentral' => $result->sellercentral,
+                'id_phase' => $result->id_phase,
                 'error' => true,
             ];
-            [ $_, $clientEmail, $_, $bookName, $_ ] = $blingResponse;
+            [ $clientName, $clientEmail, $_, $bookName, $_ ] = $blingResponse;
 
             return [
+                'id' => $result->id,
                 'online_order_number' => $result->online_order_number,
                 'company' => $result->company,
                 'sellercentral' => $result->sellercentral,
                 'url' => 'https://www.amazon.com.br/hz/feedback/?_encoding=UTF8&orderID=' . $result->online_order_number,
                 'email' => $clientEmail,
+                'client_name' => $clientName,
                 'book_name' => $bookName,
+                'id_phase' => $result->id_phase,
                 'error' => false
             ];
         }, $results->toArray());
