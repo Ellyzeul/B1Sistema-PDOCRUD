@@ -97,6 +97,7 @@ export const fields = {
     {label: "Estante", field_name: "book_type", updatable: true, required: true}, 
     {label: "ISBN", field_name: "isbn", updatable: true, required: true}, 
     {label: "Comprador", field_name: "buyer_name", updatable: true, required: true}, 
+    {label: "E-mail do Comprador", field_name: "buyer_email", updatable: true, required: true}, 
     {label: "CPF/CNPJ", field_name: "cpf_cnpj", updatable: true, required: true}, 
     {label: "Destinatário", field_name: "recipient_name", updatable: true, required: true}, 
     {label: "Endereço", field_name: "full_address", updatable: true, required: true}, 
