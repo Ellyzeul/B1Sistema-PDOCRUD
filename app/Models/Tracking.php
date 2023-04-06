@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Date;
 
+use function PHPUnit\Framework\matches;
+
 class Tracking extends Model
 {
 	use HasFactory;
@@ -275,21 +277,34 @@ class Tracking extends Model
 			return $this->fetchFedex($trackingCode);
 		}
 
-		$scanEvents = $response['output']['completeTrackResults'][0]['trackResults'][0]['scanEvents'][0];
+		$scanEvents = $response['output']['completeTrackResults'][0]['trackResults'][0]['scanEvents'];
+
+		$count = 0;
+		$details = "";
+		while(sizeof($scanEvents)>=0 && $count<=2){
+			$lastUpdateDate = date('Y-m-d', strtotime($scanEvents[$count]['date']));
+			$exceptionDescription = $scanEvents[$count]['exceptionDescription'] ?? "";
+			$scanLocation = $scanEvents[$count]['scanLocation'];
+			$city = $scanLocation['city'] ?? "";
+			$stateOrProvinceCode = $scanLocation['stateOrProvinceCode'] ?? "";
+			$postalCode = $scanLocation['postalCode'] ?? "";
+			$countryName = $scanLocation['countryName'] ?? "";
+
+			$details = $details . "$lastUpdateDate $city $stateOrProvinceCode $postalCode $countryName $exceptionDescription\n";
+			$count++;
+		}
+
+		if(isset($response['output']['completeTrackResults'][0]['trackResults'][0]['serviceCommitMessage'])){
+			$msg = $response['output']['completeTrackResults'][0]['trackResults'][0]['serviceCommitMessage']['message'];
+			preg_match("/[0-9]{1,2}\sde\s([A-Za-zç]*)\sde\s[0-9]{4}/", $msg, $matches);
+			
+			if($matches) $deadline = date('Y-m-d', strtotime("+5 weekdays", strtotime($this->datePTBRToDate($matches[0]))));
+		}
 		
-		$lastUpdateDate = $scanEvents['date'];
-
-		$exceptionDescription = $scanEvents['exceptionDescription'] ?? "";
-		$scanLocation = $scanEvents['scanLocation'];
-		$city = $scanLocation['city'] ?? "";
-		$stateOrProvinceCode = $scanLocation['stateOrProvinceCode'] ?? "";
-		$postalCode = $scanLocation['postalCode'] ?? "";
-		$countryName = $scanLocation['countryName'] ?? "";
-
 		return [
-			'status' => $scanEvents['eventDescription'], 
-			'last_update_date' => date('Y-m-d', strtotime($lastUpdateDate)), 
-			'details' => "$city $stateOrProvinceCode $postalCode $countryName $exceptionDescription", 
+			'status' => $scanEvents[0]['eventDescription'], 
+			'last_update_date' => $lastUpdateDate, 
+			'details' => $details, 
 			"client_deadline" => $deadline ?? null,
 		];
 	}
@@ -378,5 +393,14 @@ class Tracking extends Model
 		return DB::table('api_credentials')
 			->where('id', $id)
 			->exists();
+	}
+
+	private function datePTBRToDate($dateString)
+	{
+	  return preg_replace(
+		['/\sde\s/', '/Janeiro/', '/Fevereiro/', '/Março/', '/Abril/', '/Maio/', '/Junho/', '/Julho/', '/Agosto/', '/Setembro/', '/Outubro/', '/Novembro/', '/Dezembro/'],
+		['-', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', ], 
+		$dateString
+	  );
 	}
 }
