@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('order_control', function (Blueprint $table) {
+        Schema::table('order_addresses', function (Blueprint $table) {
             $table->string('delivery_instructions')->nullable();
         });
     }

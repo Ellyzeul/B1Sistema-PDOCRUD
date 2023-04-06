@@ -4,6 +4,7 @@ export const uploadTypes = [
   {message: "Envio de pedidos Amazon", value: "order-amazon-insert"},
   {message: "Envio de pedidos Nuvemshop", value: "order-nuvemshop-insert"},
   {message: "Envio de pedidos Estante Virtual", value: "order-estante-insert"},
+  {message: "Envio de pedidos Alibris", value: "order-alibris-insert"},
   // {message: "Ingestão de notas do FSist", value: "fsist-ingestion"},
 ]
 
@@ -117,6 +118,14 @@ export const fields = {
     {label: "Data prevista", field_name: "expected_date", updatable: true, required: true}, 
     {label: "Data para envio", field_name: "ship_date", updatable: true, required: true}, 
     {label: "Método de pagamento", field_name: "payment_method", updatable: true, required: true}, 
+  ],
+  "order-alibris-insert": [
+    {label: "Nº do pedido", field_name: "online_order_number", updatable: true, required: true}, 
+    {label: "ISBN-13", field_name: "isbn", updatable: true, required: true}, 
+    {label: "Valor", field_name: "price", updatable: true, required: true}, 
+    {label: "Data de pagamento", field_name: "order_date", updatable: true, required: true}, 
+    {label: "Data prevista", field_name: "expected_date", updatable: true, required: true}, 
+    {label: "E-mail do cliente", field_name: "buyer_email", updatable: true, required: true}, 
   ],
   "fsist-ingestion": [
     {label: "Emissão Data/Hora", field_name: "emission", updatable: true, required: true},

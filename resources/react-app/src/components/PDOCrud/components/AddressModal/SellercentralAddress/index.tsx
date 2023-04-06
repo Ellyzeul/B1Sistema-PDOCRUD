@@ -20,7 +20,7 @@ const SellercentralAddress = (props: SellercentralAddressProp) => {
         {address.postal_code && `, ${address.postal_code}`}
         {address.country && `, ${address.country}`}
       </p>
-      {address.delivery_instructions && <p><strong>Celular do cliente: </strong>{address.delivery_instructions}</p>}
+      {address.delivery_instructions && <p><strong>Instruções de entrega: </strong>{address.delivery_instructions}</p>}
       {address.buyer_phone && <p><strong>Celular do cliente: </strong>{address.buyer_phone}</p>}
       {address.ship_phone && <p><strong>Celular do destinatário: </strong>{address.ship_phone}</p>}
       {address.buyer_email && <p><strong>E-mail: </strong>{address.buyer_email}</p>}
