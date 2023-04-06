@@ -93,4 +93,13 @@ class OrderController extends Controller
 
 		return $response;
 	}
+
+	public function getDataForAskRatingSpreadSheet()
+	{
+		$order = new Order();
+
+		$result = $order->getDataForAskRatingSpreadSheet();
+
+		return $result;
+	}
 }

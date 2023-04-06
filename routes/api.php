@@ -51,6 +51,7 @@ Route::controller(OrderController::class)
         Route::post('/address-verified/update', 'updateAddressVerified');
         Route::post('/ask-rating/mail/send', 'sendAskRatingEmail');
         Route::get('/ask-rating/whatsapp/get', 'getAskRatingWhatsapp');
+        Route::get('/ask-rating/spreadsheet-data', 'getDataForAskRatingSpreadSheet');
         Route::get('/address/get', 'getAddress');
         Route::patch('/traking-id/update', 'updateTrackingCode');
         Route::patch('/traking-service/update', 'updateDeliveryMethod');
