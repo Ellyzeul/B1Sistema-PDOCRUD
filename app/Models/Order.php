@@ -93,6 +93,48 @@ class Order
         return $results;
     }
 
+    public function getDataForAskRatingSpreadSheet()
+    {
+        $results = DB::table('order_control')
+            ->select(
+                'online_order_number', 
+                'bling_number', 
+                'id_company', 
+                DB::raw('(SELECT name FROM companies WHERE id = id_company) as company'), 
+                DB::raw('(SELECT name FROM sellercentrals WHERE id = id_sellercentral) as sellercentral'), 
+                'id_phase'
+            )
+            ->where('id_phase', '6.2')
+            ->orWhere('id_phase', '6.21')
+            ->get();
+        
+        $handled = array_map(function($result) {
+            $blingResponse = Order::getBlingMessagingInfo(
+                env($this->blingAPIKeys[$result->id_company]),
+                $result->bling_number
+            );
+            if(isset($blingResponse['error'])) return [
+                'online_order_number' => $result->online_order_number,
+                'company' => $result->company,
+                'sellercentral' => $result->sellercentral,
+                'error' => true,
+            ];
+            [ $_, $clientEmail, $_, $bookName, $_ ] = $blingResponse;
+
+            return [
+                'online_order_number' => $result->online_order_number,
+                'company' => $result->company,
+                'sellercentral' => $result->sellercentral,
+                'url' => 'https://www.amazon.com.br/hz/feedback/?_encoding=UTF8&orderID=' . $result->online_order_number,
+                'email' => $clientEmail,
+                'book_name' => $bookName,
+                'error' => false
+            ];
+        }, $results->toArray());
+
+        return $handled;
+    }
+
     public function sendAskRatingEmail(string $orderId)
     {
         [ $blingNumber, $apikey, $fromEmail, $companyName, $isNational ] = Order::getMailingInfo($orderId);
@@ -126,7 +168,7 @@ class Order
         $blingResponse = Order::getBlingMessagingInfo($apikey, $blingNumber);
         if(isset($blingResponse['error'])) return $blingResponse['error'];
 
-        [ $clientName, $clientEmail, $orderNumber, $bookName, $phone] = $blingResponse;
+        [ $clientName, $clientEmail, $orderNumber, $bookName, $phone ] = $blingResponse;
 
         return [[
             'formatted_message' => view('whatsapp/ask-rating/national', [
