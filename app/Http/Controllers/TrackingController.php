@@ -39,6 +39,15 @@ class TrackingController extends Controller
 		return response($response, $statusCode);
 	}
 
+	public function updateAll()
+	{
+		$tracking = new Tracking();
+
+		[$response, $statusCode] = $tracking->updateAll();
+
+		return response($response, $statusCode);
+	}
+
 	public function updateField(Request $request)
 	{
 		$tracking = new Tracking();

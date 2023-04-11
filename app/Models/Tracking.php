@@ -95,6 +95,38 @@ class Tracking extends Model
 			: ["Erro na atualização", 500];
 	}
 
+	/*
+	* @return [
+	* 	error_code: 0 - sucess, 1 - warning or 2 - error,
+	*	totalErrors: total number of errors
+	* ]
+	*/
+	public function updateAll(){
+		$rows = $this->read();
+		$totalErrors = 0; 
+		$errorCode = 0; 
+		
+		foreach($rows as $row) {
+			try {
+				$response = $this->updateOrInsertTracking(
+					$row->tracking_code, 
+					$row->delivery_method
+				);
+			}
+			catch(Exception $e) {
+				$totalErrors+=1;
+				continue;
+			}
+		}
+
+		if($totalErrors != 0) $errorCode = 1;
+		if($totalErrors == count($rows)) $errorCode = 2;
+
+		return isset($response)
+			? [["error_code" => $errorCode, "total_errors" => $totalErrors], 200]
+			: ["Erro na atualização", 500];
+	}
+	
 	public function updateField(string $trackingCode, string $field, string $value)
 	{
 		DB::table('trackings')
@@ -293,7 +325,7 @@ class Tracking extends Model
 			$details = $details . "$lastUpdateDate $city $stateOrProvinceCode $postalCode $countryName $exceptionDescription\n";
 			$count++;
 		}
-
+   
 		if(isset($response['output']['completeTrackResults'][0]['trackResults'][0]['serviceCommitMessage'])){
 			$msg = $response['output']['completeTrackResults'][0]['trackResults'][0]['serviceCommitMessage']['message'];
 			preg_match("/[0-9]{1,2}\sde\s([A-Za-zç]*)\sde\s[0-9]{4}/", $msg, $matches);
@@ -336,36 +368,6 @@ class Tracking extends Model
 			]);
 
 		$this->writeApiCredentialDB('correios', $response);
-	}
-
-	private function updateDB()
-	{
-		$results = DB::table('order_control')
-			->select(
-				'tracking_code', 
-				(DB::raw('(SELECT name FROM delivery_methods WHERE id = order_control.id_delivery_method) as delivery_method'))
-			)
-			->whereRaw("
-				tracking_code NOT IN (SELECT tracking_code FROM trackings)
-				AND (id_phase = '5.1' OR id_phase = '5.2')
-				AND LENGTH(tracking_code) > 0
-			")
-			->get();
-		$inserts = [];
-		
-		foreach($results as $result) {
-			$toPush = ['tracking_code' => $result->tracking_code];
-
-			try {
-				$this->updateOrInsertTracking(
-					$result->tracking_code, 
-					$result->delivery_method
-				);
-			}
-			catch(Exception $e) {
-				continue;
-			}
-		}
 	}
 
 	private function readApiCredentialDB(string $id)
