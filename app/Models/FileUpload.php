@@ -167,6 +167,8 @@ class FileUpload extends Model
 
 		$addressData = array_map(fn ($registry) => [
 			'online_order_number' => $registry['online_order_number'], 
+			'buyer_name' => $registry['buyer_name'], 
+			'buyer_email' => $registry['buyer_email'], 
 			'recipient_name' => $registry['recipient_name'], 
 			'address_1' => $registry['address_1'], 
 			'address_2' => $registry['address_2'], 

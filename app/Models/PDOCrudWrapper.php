@@ -196,7 +196,7 @@ class PDOCrudWrapper extends Model
             $crud->tableColFormatting("id_sellercentral", "replace", [$sel["id"] => $sel["name"]]);
         }
         \in_array("order_date", $columns) ? $crud->tableColFormatting("order_date", "date", ["format" => "d/m/Y"]) : null;
-        \in_array("ship_date", $columns) ? $crud->tableColFormatting("ship_date", "date", ["format" => "d/m/Y"]) : null;
+        \in_array("ship_date", $columns) ? $crud->tableColFormatting("ship_date", "date", ["format" => "d/m/Y H:i:s"]) : null;
         \in_array("expected_date", $columns) ? $crud->tableColFormatting("expected_date", "date", ["format" => "d/m/Y"]) : null;
         \in_array("purchase_date", $columns) ? $crud->tableColFormatting("purchase_date", "date", ["format" => "d/m/Y"]) : null;
         \in_array("delivered_date", $columns) ? $crud->tableColFormatting("delivered_date", "date", ["format" => "d/m/Y"]) : null;
