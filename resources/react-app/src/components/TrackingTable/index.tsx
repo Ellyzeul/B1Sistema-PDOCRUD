@@ -206,6 +206,18 @@ export const TrackingTable = (props: TrackingTableProp) => {
       })
   }
 
+  const updateAllTrackings = () => {
+    toast.info("Processando. Por favor, aguarde um momento...")
+    api.post('/api/tracking/update-all')
+      .then((response) => response.data)
+      .then(response => {
+        if(response.error_code === 0) toast.success("Todos os rastreamentos foram atualizados com sucesso...")
+        if(response.error_code === 1) toast.warning(`Erro ao atualizar ${response.total_errors} rastreamentos. Por favor, tente atualizar eles individualmente.`)
+        if(response.error_code === 2) toast.error("Nenhum dos rastreamentos foi atualizado. Tente novamente ou contate o TI em caso de muitos erros...")
+      })
+      .catch(_ => toast.error("Ocorreu algum erro no sistema... Entrar em contato com o setor de TI"))
+  }
+
   useEffect(() => {
     const optionsElements = [] as JSX.Element[]
     const selectElements = [] as JSX.Element[]
@@ -256,6 +268,7 @@ export const TrackingTable = (props: TrackingTableProp) => {
             <img src="/icons/excel-white.png" alt="Excel" />
           </div>
         </button>
+          <button onClick={updateAllTrackings} className="tracking-update-button tracking-updateall-button">Atualizar todos</button>
         <div>
           <span>Página </span>
           <select onChange={changePage}>{selectOptions}</select>

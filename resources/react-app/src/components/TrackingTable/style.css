@@ -137,3 +137,8 @@
   background-color: rgb(26, 90, 26);
   transition: 125ms;
 }
+
+.tracking-updateall-button {
+  height: 4vh;
+  width: 8vw;
+}
