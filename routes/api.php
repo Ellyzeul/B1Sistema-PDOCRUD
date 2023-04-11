@@ -94,6 +94,7 @@ Route::controller(FileUploadController::class)
         Route::post('/order-nuvemshop-insert', 'orderNuvemshopInsert');
         Route::post('/order-estante-insert', 'orderEstanteInsert');
         Route::post('/order-alibris-insert', 'orderAlibrisInsert');
+        Route::post('/order-fnac-insert', 'orderFNACInsert');
     });
 
 Route::get('/navbar-items/read', function (Request $request) {
