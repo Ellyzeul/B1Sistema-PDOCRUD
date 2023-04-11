@@ -113,5 +113,6 @@ Route::controller(TrackingController::class)
         Route::get('/read', 'read');
         Route::post('/read-for-excel', 'readForExcel');
         Route::post('/update', 'update');
+        Route::post('/update-all', 'updateAll');
         Route::post('/update-field', 'updateField');
     });
