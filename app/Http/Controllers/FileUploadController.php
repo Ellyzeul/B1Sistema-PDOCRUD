@@ -51,4 +51,13 @@ class FileUploadController extends Controller
 
         return $response;
     }
+
+    public function orderFNACInsert(Request $request)
+    {
+        $fileUpload = new FileUpload();
+        $data = $request->input('upload_data');
+        $response = $fileUpload->orderFNACInsert($data);
+
+        return $response;
+    }
 }
