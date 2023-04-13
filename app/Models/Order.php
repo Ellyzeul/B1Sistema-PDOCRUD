@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AskRating;
 use App\Models\PDOCrudWrapper;
-use PhpParser\Node\Expr\Cast\String_;
 
 class Order
 {
@@ -71,6 +70,19 @@ class Order
         ";
 
         DB::insert($updateQuery, $values);
+        return [
+            "message" => "Verificação de endereços atualizada com sucesso."
+        ];
+    }
+
+    public function updateReadForShip(array $toUpdate)
+    {
+        foreach($toUpdate as $registry) {
+            DB::table('order_control')
+                ->where('id', $registry['id'])
+                ->update(['ready_for_ship' => $registry['ready_for_ship']]);
+        }
+
         return [
             "message" => "Verificação de endereços atualizada com sucesso."
         ];
