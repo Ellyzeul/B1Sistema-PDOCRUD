@@ -30,6 +30,16 @@ class OrderController extends Controller
 		return $response;
 	}
 
+	public static function updateReadForShip(Request $request)
+	{
+		$toUpdate = $request->input("verifieds");
+		
+		$order = new Order();
+		$response = $order->updateReadForShip($toUpdate);
+
+		return $response;
+	}
+
 	public static function getTotalOrdersInPhase()
 	{
 		$order = new Order();

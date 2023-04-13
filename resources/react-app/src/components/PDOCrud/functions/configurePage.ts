@@ -16,6 +16,7 @@ import configureSellercentralColumn from "./configureSellercentralColumn";
 import setSendEmailColumn from "./setSendEmailColumn";
 import setTrackingCodeUpdateButton from "./setTrackingCodeUpdateButton";
 import setDeliveryMethodUpdateButton from "./setDeliveryMethodUpdateButton";
+import configureReadyForShipColumn from "./configureReadyForShipColumn";
 
 const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObject<null>, refModalId: MutableRefObject<null>, refOnlineOrderNumber: MutableRefObject<null>, refURLInput: MutableRefObject<null>) => {
 	if(!elemRef.current) return
@@ -37,6 +38,7 @@ const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObje
 	setSearchTrim()
 	configureDatepickers()
 	configureAddressVerifiedColumn()
+	configureReadyForShipColumn()
 	configureSellercentralColumn()
 	setConditionalStyling()
 	setCompaniesIcons()

@@ -48,11 +48,12 @@ Route::controller(OrderController::class)
     ->group(function () {
         Route::get('/read', 'read');
         Route::get('/get-total-orders-in-phase', 'getTotalOrdersInPhase');
-        Route::post('/address-verified/update', 'updateAddressVerified');
         Route::post('/ask-rating/mail/send', 'sendAskRatingEmail');
         Route::get('/ask-rating/whatsapp/get', 'getAskRatingWhatsapp');
         Route::get('/ask-rating/spreadsheet-data', 'getDataForAskRatingSpreadSheet');
         Route::get('/address/get', 'getAddress');
+        Route::post('/address-verified/update', 'updateAddressVerified');
+        Route::patch('/read-for-ship', 'updateReadForShip');
         Route::patch('/traking-id/update', 'updateTrackingCode');
         Route::patch('/traking-service/update', 'updateDeliveryMethod');
     });
