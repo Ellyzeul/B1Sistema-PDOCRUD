@@ -7,7 +7,8 @@ class Phase
     private static array $generalOptions = [
         "general" => "Ir para a geral", 
         "não-verificado" => "Endereços a arrumar", 
-        "não-enviado" => "Em prepraração para envio"
+        "não-enviado" => "Em prepraração para envio", 
+        "aceitar-fnac" => "Aceitar FNAC", 
     ];
     public static function read($email)
     {

@@ -230,13 +230,13 @@ class FileUpload extends Model
 			$treated = [
 				'id_company' => 0, 
 				'id_sellercentral' => 8, 
-				'id_phase' => $registry['status'] === 'validação pendente' ? 'Pré-0' : '0.0', 
-				'status' => $registry['status'], 
+				'accepted' => $registry['status'] === 'validação pendente' ? 0 : 1, 
 				'online_order_number' => $registry['online_order_number'], 
 				'order_date' => date('Y-m-d', strtotime($registry['order_date'])), 
 				'isbn' => $registry['isbn'], 
 				'selling_price' => $registry['price'], 
 			];
+			if($registry['status'] === 'validação pendente') $treated['id_phase'] = 'Pré-0';
 			if(isset($registry['ship_date'])) 
 				$treated['ship_date'] = date('Y-m-d 23:59:59', strtotime($registry['ship_date']));
 			if(isset($registry['expected_date'])) 
@@ -271,18 +271,12 @@ class FileUpload extends Model
 		$firstInserts = [];
 		$secondInserts = [];
 		foreach($orderData as $registry) {
-			if($registry['status'] === 'validação pendente') {
-				unset($registry['status']);
+			if($registry['accepted'] === 0) {
 				array_push($firstInserts, $registry);
 				continue;
 			}
-			if($registry['status'] === 'Expedição pendente') {
-				unset($registry['status']);
-				array_push($secondInserts, $registry);
-				continue;
-			}
-			
-			throw "Invalid order status: \"{$registry['status']}\"";
+
+			array_push($secondInserts, $registry);
 		}
 
 		$this->orderDataInsert($firstInserts);
