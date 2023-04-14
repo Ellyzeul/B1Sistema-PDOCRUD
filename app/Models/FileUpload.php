@@ -230,7 +230,7 @@ class FileUpload extends Model
 			$treated = [
 				'id_company' => 0, 
 				'id_sellercentral' => 8, 
-				'accepted' => $registry['status'] === 'validação pendente' ? 0 : 1, 
+				'accepted' => $registry['status'] === 'validação pendente' ? 2 : 3, 
 				'online_order_number' => $registry['online_order_number'], 
 				'order_date' => date('Y-m-d', strtotime($registry['order_date'])), 
 				'isbn' => $registry['isbn'], 
@@ -271,7 +271,7 @@ class FileUpload extends Model
 		$firstInserts = [];
 		$secondInserts = [];
 		foreach($orderData as $registry) {
-			if($registry['accepted'] === 0) {
+			if($registry['accepted'] === 2) {
 				array_push($firstInserts, $registry);
 				continue;
 			}
