@@ -32,6 +32,7 @@ export const fields = {
     {label: "Data de entrega", field_name: "delivered_date", updatable: true, required: false},
     {label: "Pedir avaliação", field_name: "ask_rating", updatable: true, required: false},
     {label: "Endereço verificado", field_name: "address_verified", updatable: true, required: false},
+    {label: "Pronto para envio", field_name: "ready_for_ship", updatable: true, required: false},
   ],
   "order-amazon-insert": [
     {label: "ID da Empresa", field_name: "id_company", updatable: true, required: true},

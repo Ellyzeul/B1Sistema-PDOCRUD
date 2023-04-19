@@ -14,6 +14,9 @@ yarn-error.log
 /.idea
 /.vscode
 PDOCRUD_LICENSE.txt
+public/pdocrud/downloads/*.csv
+public/pdocrud/downloads/*.xls
+public/pdocrud/downloads/*.xlsx
 public/photos/*.jpg
 public/photos/*.jpeg
 public/photos/*.png
