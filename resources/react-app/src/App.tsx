@@ -17,6 +17,7 @@ import UploadFilePage from './pages/Orders/UploadFile';
 import { PhotosSearchPage } from './pages/Photos/Search';
 import { PhotosUploadPage } from './pages/Photos/Upload';
 import TrackingPage from './pages/Tracking';
+import { RoutinePage } from './pages/Routine';
 
 function App() {
   const userDataRaw = window.localStorage.getItem("userData")
@@ -50,7 +51,8 @@ function App() {
           <Route path='/fotos/enviar' element={getElement(<PhotosUploadPage/>)} />
           <Route path='/fotos/pesquisar' element={getElement(<PhotosSearchPage/>)} />
           <Route path='/atendimento' element={getElement(<Attendance/>)} />
-          <Route path='/rastreamento' element={getElement(<TrackingPage/>)} />
+          <Route path='/atendimento/rotina' element={getElement(<RoutinePage/>)} />
+          <Route path='/atendimento/rastreamento' element={getElement(<TrackingPage/>)} />
           <Route path='/dashboard' element={getElement(<Dashboards/>)} />
           <Route path='/dashboard/pedidos' element={getElement(<DashboardOrders/>)} />
           <Route path='/empresas' element={getElement(<CompaniesPage/>)} />

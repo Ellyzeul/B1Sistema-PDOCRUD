@@ -1,0 +1,30 @@
+.info-rotine-container {
+    background-color: white;
+    height: 70vh;
+    border: 1px solid black;
+    overflow: auto;
+    max-height: 100vh;
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+}
+
+.tabContent > ul{
+    list-style: none;
+}
+
+.tabContent > ul > li > a {
+    text-decoration: none;
+    color: black;
+    font-size: larger;
+}
+
+.tabContent > ul > li > a:hover {
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+    padding: 0 4px;
+}
+
+.tabContent > ul > li > h3 {
+    font-size: medium;
+}
