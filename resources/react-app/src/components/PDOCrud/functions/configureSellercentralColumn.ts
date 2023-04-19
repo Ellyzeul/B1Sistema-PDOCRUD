@@ -68,6 +68,10 @@ const sellercentrals = {
   "Alibris-US": {
     sell_page: (onlineOrderNumber) => `https://sellers.alibris.com/ops/ordersearch.cfm?Order_Nbr=${onlineOrderNumber}`,
     product_page: (isbn) => `https://www.alibris.com/booksearch?mtype=B&keyword=${isbn}&hs.x=0&hs.y=0`
+  },
+  "FNAC-PT": {
+    sell_page: (onlineOrderNumber) => `https://seller.fnac.pt/compte/vendeur/commande/${onlineOrderNumber}`,
+    product_page: (_) => `#`
   }
 } as {
   [key: string]: {

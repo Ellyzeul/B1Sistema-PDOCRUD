@@ -82,8 +82,8 @@ class FileUpload extends Model
 			'delivery_instructions' => $registry['delivery_instructions'], 
 		], $data);
 
-		$this->orderDataInsert($orderData);
 		$this->orderAddressInsert($addressData);
+		$this->orderDataInsert($orderData);
 
 		return;
 	}
@@ -141,8 +141,8 @@ class FileUpload extends Model
 			'expected_date' => date('Y-m-d', strtotime($registry['expected_date'])), 
 		], $data);
 
-		$this->orderDataInsert($orderData);
 		$this->orderAddressInsert($addressData);
+		$this->orderDataInsert($orderData);
 	}
 
 	private function getNuvemshopIdSellercentral(string $currency)
@@ -183,8 +183,8 @@ class FileUpload extends Model
 			'expected_date' => date('Y-m-d ', strtotime($registry['expected_date'])), 
 		], $data);
 
-		$this->orderDataInsert($orderData);
 		$this->orderAddressInsert($addressData);
+		$this->orderDataInsert($orderData);
 
 		return [
 			'message' => 'Pedidos da Estante Virtual inseridos com sucesso!'
@@ -216,12 +216,101 @@ class FileUpload extends Model
 			'expected_date' => date('Y-m-d', strtotime($registry['expected_date'])), 
 		], $data);
 
-		$this->orderDataInsert($orderData);
 		$this->orderAddressInsert($addressData);
+		$this->orderDataInsert($orderData);
 
 		return [
 			'message' => 'Pedidos da Alibris inseridos com sucesso!'
 		];
+	}
+
+	public function orderFNACInsert(array $data)
+	{
+		$orderData = array_map(function($registry) {
+			$treated = [
+				'id_company' => 0, 
+				'id_sellercentral' => 8, 
+				'accepted' => $registry['status'] === 'validação pendente' ? 2 : 3, 
+				'online_order_number' => $registry['online_order_number'], 
+				'order_date' => date('Y-m-d', strtotime($registry['order_date'])), 
+				'isbn' => $registry['isbn'], 
+				'selling_price' => $registry['price'], 
+			];
+			if($registry['status'] === 'validação pendente') $treated['id_phase'] = 'Pré-0';
+			if(isset($registry['ship_date'])) 
+				$treated['ship_date'] = date('Y-m-d 23:59:59', strtotime($registry['ship_date']));
+			if(isset($registry['expected_date'])) 
+				$treated['expected_date'] = date('Y-m-d', strtotime($registry['expected_date']));
+			
+			return $treated;
+		}, $data);
+
+		$addressData = array_map(function($registry) {
+			$treated = [
+				'online_order_number' => $registry['online_order_number'], 
+				'buyer_name' => "{$registry['recipient_name']} {$registry['recipient_surname']}", 
+				'recipient_name' => "{$registry['recipient_name']} {$registry['recipient_surname']}", 
+				'ship_phone' => $registry['ship_phone'], 
+				'price' => $registry['price'], 
+				'freight' => $registry['freight'], 
+				'cpf_cnpj' => $registry['nif'], 
+			];
+			$treated = $this->setPropertyIfExists($registry, $treated, 'address_1');
+			$treated = $this->setPropertyIfExists($registry, $treated, 'address_2');
+			$treated = $this->setPropertyIfExists($registry, $treated, 'address_3');
+			$treated = $this->setPropertyIfExists($registry, $treated, 'city');
+			$treated = $this->setPropertyIfExists($registry, $treated, 'state');
+			$treated = $this->setPropertyIfExists($registry, $treated, 'postal_code');
+			$treated = $this->setPropertyIfExists($registry, $treated, 'country');
+
+			return $treated;
+		}, $data);
+
+		$this->orderAddressInsert($addressData);
+
+		$firstInserts = [];
+		$secondInserts = [];
+		foreach($orderData as $registry) {
+			if($registry['accepted'] === 2) {
+				array_push($firstInserts, $registry);
+				continue;
+			}
+
+			array_push($secondInserts, $registry);
+		}
+
+		$this->orderDataInsert($firstInserts);
+		$this->handleFNACSecondInserts($secondInserts);
+	}
+
+	private function setPropertyIfExists(array $registry, array $treated, string $key)
+	{
+		if(isset($registry[$key])) $treated[$key] = $registry[$key];
+
+		return $treated;
+	}
+
+	private function handleFNACSecondInserts(array $data)
+	{
+		if(count($data) === 0) return;
+
+		$toInsert = [];
+		foreach($data as $registry) {
+			$dbRegistry = DB::table('order_control')
+				->where('online_order_number', $registry['online_order_number'])
+				->where('isbn', $registry['isbn']);
+
+			$registryExists = $dbRegistry->exists();
+			
+			if(!$registryExists) {
+				array_push($toInsert, $registry);
+				continue;
+			}
+
+			$dbRegistry->update($registry);
+		}
+
+		$this->orderDataInsert($toInsert);
 	}
 
 	private function orderDataInsert(array $data)
