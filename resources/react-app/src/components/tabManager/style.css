@@ -1,0 +1,39 @@
+.tab-manager-container {
+    height: 5vh;
+}
+
+.tab-manager-container >  ul {
+    padding: 0;
+	margin: 0;
+    position: relative;
+    display: inline;
+    justify-content: space-between;
+    list-style: none;
+}
+
+.tab-manager-container > button{
+    display: inline-block;
+    padding: 4px;
+    color: white;
+    background-color: black;
+}
+
+.tab-manager-container > button:hover {
+    cursor: pointer;
+    background-color: white;
+    color: black;
+}
+
+.container {
+    margin: 0;
+    position: relative;
+    display: grid;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.selectedTab {
+    background-color: white !important;
+    color: black !important;
+}
