@@ -112,4 +112,26 @@ class OrderController extends Controller
 
 		return $result;
 	}
+
+	public static function updateInvoiceNumber(Request $request)
+	{
+		$orderId = $request->input('order_id');
+		$invoiceNumber = $request->input('invoice_number');
+
+		$order = new Order();
+		$response = $order->updateInvoiceNumber($orderId, $invoiceNumber);
+
+		return $response;
+	}
+
+	public static function getInvoiceLink(Request $request)
+	{
+		$companyId = $request->input('company_id');
+		$blingNumber = $request->input('bling_number');
+		
+		$order = new Order();
+		$response = $order->getInvoiceLink($companyId, $blingNumber);
+
+		return $response;		
+	}
 }

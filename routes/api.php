@@ -56,6 +56,8 @@ Route::controller(OrderController::class)
         Route::patch('/read-for-ship', 'updateReadForShip');
         Route::patch('/traking-id/update', 'updateTrackingCode');
         Route::patch('/traking-service/update', 'updateDeliveryMethod');
+        Route::post('/invoice-number/update','updateInvoiceNumber');
+        Route::get('/invoice-link/get', 'getInvoiceLink');
     });
 
 Route::get('/phases/read', function (Request $request) {

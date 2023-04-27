@@ -278,6 +278,81 @@ class Order
         ], 200];
     }
 
+    public function updateInvoiceNumber(string $orderId, string | null $invoiceNumber)
+    {
+        $databaseData = DB::table('order_control')
+                ->select('id_company', 'bling_number')
+                ->where('id', '=', $orderId)
+                ->first();
+                 
+        $companyId = $databaseData->id_company; 
+        $blingNumber = $databaseData->bling_number;
+
+        if(isset($invoiceNumber)) return null;
+
+        $data = $this->getInvoiceLink($companyId, $blingNumber);
+        $invoice_number = $data['invoice_number'];
+        $serie = $data['serie'];
+        $link = $data['link'];
+
+        DB::table('order_control')
+        ->where('id', $orderId)
+        ->update(['invoice_number' => $invoice_number]);
+
+        return [
+                "invoice_number" => $invoice_number,
+                "serie" => $serie,
+                "link" => $link
+        ];
+    }
+
+    
+    public function getInvoiceLink(string $companyId, string $blingNumber)
+    {
+        $data = $this->getInvoiceNumberAndSerie($companyId, $blingNumber);
+        $invoice_number = $data['invoice_number'];
+        $serie = $data['serie'];
+
+        $apikey = env($this->blingAPIKeys[$companyId]);
+        $response = $this->makeBlingInvoiceRequest($apikey, $invoice_number, $serie);
+        if(isset($response['error'])) return $response;
+
+        $link = $response['retorno']['notasfiscais'][0]['notafiscal']['linkDanfe'];
+
+        return [
+            "invoice_number" => $invoice_number,
+            "serie" => $serie,
+            "link" => $link
+        ];
+    }
+
+
+    private function getInvoiceNumberAndSerie(string $companyId, string $blingNumber)
+    {
+        $apikey = env($this->blingAPIKeys[$companyId]);
+        $response = $this->makeBlingOrderRequest($apikey, $blingNumber);
+        if(isset($response['error'])) return $response;
+
+        $order = $response['retorno']['pedidos'][0]['pedido'];
+
+        $invoice_number = $order['nota']['numero'] ?? null;
+        $serie = $order['nota']['serie'] ?? null;
+
+        return [
+            "invoice_number" => $invoice_number,
+            "serie" => $serie
+        ];
+    }
+
+    private function array_some(array $array, callable $fn)
+    {
+        foreach($array as $value) {
+            if($fn($value)) return true;
+        }
+
+        return false;
+    }
+
     private function getMailingInfo(string $orderId)
     {
         $result = DB::table('order_control')
@@ -307,7 +382,7 @@ class Order
 
     private function getBlingAddress(string $apikey, string $blingNumber)
     {
-        $response = $this->makeBlingRequest($apikey, $blingNumber);
+        $response = $this->makeBlingOrderRequest($apikey, $blingNumber);
         if(isset($response['error'])) return $response;
 
         $order = $response['retorno']['pedidos'][0]['pedido'];
@@ -338,7 +413,7 @@ class Order
 
     private function getBlingMessagingInfo(string $apikey, string $blingNumber)
     {
-        $response = $this->makeBlingRequest($apikey, $blingNumber);
+        $response = $this->makeBlingOrderRequest($apikey, $blingNumber);
         if(isset($response['error'])) return $response;
 
         $order = $response['retorno']['pedidos'][0]['pedido'];
@@ -354,7 +429,7 @@ class Order
 
     private function getBlingTrakingCodeRequest(string $apikey, string $blingNumber)
     {
-        $response = $this->makeBlingRequest($apikey, $blingNumber);
+        $response = $this->makeBlingOrderRequest($apikey, $blingNumber);
         if(isset($response['error'])) return $response;
 
         $order = $response['retorno']['pedidos'][0]['pedido'];
@@ -368,7 +443,7 @@ class Order
 
     private function getBlingDeliveryMethodRequest(string $apikey, string $blingNumber)
     {
-        $response = $this->makeBlingRequest($apikey, $blingNumber);
+        $response = $this->makeBlingOrderRequest($apikey, $blingNumber);
         if(isset($response['error'])) return $response;
 
         $order = $response['retorno']['pedidos'][0]['pedido'];
@@ -376,9 +451,20 @@ class Order
         return $order['transporte']['volumes'][0]['volume']['servico'];        
     }
 
-    private function makeBlingRequest(string $apikey, string $blingNumber)
+    private function makeBlingOrderRequest(string $apikey, string $blingNumber)
     {
         $response = Http::get("https://bling.com.br/Api/v2/pedido/$blingNumber/json?apikey=$apikey");
+        if(!$response->ok()) return ["error" => [
+            ["message" => "Erro na requisição de dados no Bling. Tente novamente mais tarde..."], 
+            500
+        ]];
+
+        return $response;
+    }
+
+    private function makeBlingInvoiceRequest(string $apikey, string $invoice_number, string $serie)
+    {
+        $response = Http::get("https://bling.com.br/Api/v2/notafiscal/$invoice_number/$serie/json/?apikey=$apikey");
         if(!$response->ok()) return ["error" => [
             ["message" => "Erro na requisição de dados no Bling. Tente novamente mais tarde..."], 
             500
