@@ -34,7 +34,7 @@ const setTrackingCodeUpdateButton = () => {
 		icon.style.paddingTop = "10px"
 		
 		icon.addEventListener("click", () =>{
-			api.patch('/api/orders/traking-id/update', {
+			api.patch('/api/orders/traking-id', {
 				company_id: companyId,
 				order_id: orderId,
 				bling_number: blingNumber

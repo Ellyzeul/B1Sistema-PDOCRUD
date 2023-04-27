@@ -18,6 +18,7 @@ import { PhotosSearchPage } from './pages/Photos/Search';
 import { PhotosUploadPage } from './pages/Photos/Upload';
 import TrackingPage from './pages/Tracking';
 import { RoutinePage } from './pages/Routine';
+import ShipmentLabelPage from './pages/Home/Shipment/ShipmentLabel';
 
 function App() {
   const userDataRaw = window.localStorage.getItem("userData")
@@ -48,14 +49,15 @@ function App() {
           <Route path='/pedidos' element={getElement(<OrdersPage/>)} />
           <Route path='/arquivo-upload' element={getElement(<UploadFilePage/>)} />
           <Route path='/expedicao' element={getElement(<ShipmentPage/>)} />
-          <Route path='/fotos/enviar' element={getElement(<PhotosUploadPage/>)} />
-          <Route path='/fotos/pesquisar' element={getElement(<PhotosSearchPage/>)} />
+          <Route path='/expedicao/fotos/enviar' element={getElement(<PhotosUploadPage/>)} />
+          <Route path='/expedicao/fotos/pesquisar' element={getElement(<PhotosSearchPage/>)} />
           <Route path='/atendimento' element={getElement(<Attendance/>)} />
-          <Route path='/atendimento/rotina' element={getElement(<RoutinePage/>)} />
           <Route path='/atendimento/rastreamento' element={getElement(<TrackingPage/>)} />
+          <Route path='/atendimento/rotina' element={getElement(<RoutinePage/>)} />
           <Route path='/dashboard' element={getElement(<Dashboards/>)} />
           <Route path='/dashboard/pedidos' element={getElement(<DashboardOrders/>)} />
           <Route path='/empresas' element={getElement(<CompaniesPage/>)} />
+          <Route path='/etiquetas/:order_id' element={getElement(<ShipmentLabelPage/>)}/>
         </Routes>
       </NavbarContext.Provider>
     </UserDataContext.Provider>

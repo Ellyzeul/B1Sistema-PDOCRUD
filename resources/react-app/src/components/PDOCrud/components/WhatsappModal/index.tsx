@@ -47,7 +47,7 @@ export const WhatsappModal = (props: WhatsappModalProp) => {
 	}
 
 	useEffect(() => {
-		api.get(`/api/orders/ask-rating/whatsapp/get?order_id=${orderId}`)
+		api.get(`/api/orders/ask-rating/whatsapp?order_id=${orderId}`)
 			.then(response => response.data)
 			.then(setMessageData)
 	}, [])
