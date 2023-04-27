@@ -41,7 +41,7 @@ const configureRows = (rows: HTMLTableRowElement[], colIdx: number) => {
       id: Number(checkbox.id),
       address_verified: Number(checkbox.checkbox.value)
     }))
-    api.post('/api/orders/address-verified/update', {
+    api.patch('/api/orders/address-verified', {
       verifieds: request
     })
   }

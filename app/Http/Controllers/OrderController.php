@@ -30,16 +30,6 @@ class OrderController extends Controller
 		return $response;
 	}
 
-	public function getInvoiceData(Request $request)
-	{
-		$orderId = $request->input('order_id');
-
-		$order = new Order();
-		$response = $order->getInvoiceData($orderId);
-
-		return $response;
-	}
-
 	public static function updateAddressVerified(Request $request)
 	{
 		$toUpdate = $request->input("verifieds");
@@ -131,5 +121,27 @@ class OrderController extends Controller
 		$result = $order->getDataForAskRatingSpreadSheet();
 
 		return $result;
+	}
+
+	public static function updateInvoiceNumber(Request $request)
+	{
+		$orderId = $request->input('order_id');
+		$invoiceNumber = $request->input('invoice_number');
+
+		$order = new Order();
+		$response = $order->updateInvoiceNumber($orderId, $invoiceNumber);
+
+		return $response;
+	}
+
+	public static function getInvoiceLink(Request $request)
+	{
+		$companyId = $request->input('company_id');
+		$blingNumber = $request->input('bling_number');
+		
+		$order = new Order();
+		$response = $order->getInvoiceLink($companyId, $blingNumber);
+
+		return $response;		
 	}
 }

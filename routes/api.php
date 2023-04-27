@@ -47,17 +47,18 @@ Route::controller(OrderController::class)
     ->prefix('orders')
     ->group(function () {
         Route::get('/read', 'read');
+        Route::get('/address', 'getAddress');
         Route::get('/shipment-label-data', 'getShipmentLabelData');
-        Route::get('/invoice-data', 'getInvoiceData');
+        Route::get('/invoice-link', 'getInvoiceLink');
         Route::get('/get-total-orders-in-phase', 'getTotalOrdersInPhase');
-        Route::post('/ask-rating/mail/send', 'sendAskRatingEmail');
-        Route::get('/ask-rating/whatsapp/get', 'getAskRatingWhatsapp');
+        Route::get('/ask-rating/whatsapp', 'getAskRatingWhatsapp');
         Route::get('/ask-rating/spreadsheet-data', 'getDataForAskRatingSpreadSheet');
-        Route::get('/address/get', 'getAddress');
-        Route::post('/address-verified/update', 'updateAddressVerified');
+        Route::post('/ask-rating/mail/send', 'sendAskRatingEmail');
+        Route::patch('/address-verified', 'updateAddressVerified');
         Route::patch('/read-for-ship', 'updateReadForShip');
-        Route::patch('/traking-id/update', 'updateTrackingCode');
-        Route::patch('/traking-service/update', 'updateDeliveryMethod');
+        Route::patch('/traking-id', 'updateTrackingCode');
+        Route::patch('/traking-service', 'updateDeliveryMethod');
+        Route::patch('/invoice-number', 'updateInvoiceNumber');
     });
 
 Route::get('/phases/read', function (Request $request) {

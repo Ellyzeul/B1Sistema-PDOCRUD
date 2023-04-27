@@ -1,0 +1,21 @@
+.pdf-button {
+    border: none;
+    background-color: inherit;
+}
+
+.invoice-number-button {
+    border: none;
+    background-color: inherit;
+    position: relative;
+    padding-top: 8px;
+}
+
+.pdf-button:hover {
+    color: black;
+    transition: 125ms;
+}
+
+.invoice-number-button:hover {
+    color: black;
+    transition: 125ms;    
+}
