@@ -183,6 +183,7 @@ Class PDOCrud {
     private static array $columnsRename = [
         "Id" => "Nº",
         "Address verified" => "Endereço verificado",
+        "Ready for ship" => "Pronto para envio",
         "Id company" => "Empresa",
         "Id sellercentral" => "Canal de Venda",
         "Id phase" => "Fase do processo",

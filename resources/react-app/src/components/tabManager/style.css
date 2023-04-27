@@ -16,6 +16,7 @@
     padding: 4px;
     color: white;
     background-color: black;
+    border: none;
 }
 
 .tab-manager-container > button:hover {
