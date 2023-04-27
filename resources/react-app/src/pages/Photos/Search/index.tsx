@@ -50,7 +50,7 @@ export const PhotosSearchPage = () => {
 
   return (
     <div className="photos-search-page">
-      <Navbar items={[{label: "Fotos", options: [{name:"Enviar", url: "/fotos/enviar"}]}]} />
+      <Navbar items={[{label: "Fotos", options: [{name:"Enviar", url: "/expedicao/fotos/enviar"}]}]} />
       <div className="photos-search-content">
         <div className="search-container">
           <input ref={inputRef} className="photo-search" type="text" onChange={onChange} />

@@ -37,7 +37,7 @@ const configureInvoiceField = () => {
         div.className = "photo-icon"
         div.onclick = () => {
           const anchor = document.createElement('a')
-          anchor.href = `/fotos/pesquisar?photo_number=${number}`
+          anchor.href = `/expedicao/fotos/pesquisar?photo_number=${number}`
           anchor.target = "blank"
           anchor.click()
         }

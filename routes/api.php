@@ -47,6 +47,8 @@ Route::controller(OrderController::class)
     ->prefix('orders')
     ->group(function () {
         Route::get('/read', 'read');
+        Route::get('/shipment-label-data', 'getShipmentLabelData');
+        Route::get('/invoice-data', 'getInvoiceData');
         Route::get('/get-total-orders-in-phase', 'getTotalOrdersInPhase');
         Route::post('/ask-rating/mail/send', 'sendAskRatingEmail');
         Route::get('/ask-rating/whatsapp/get', 'getAskRatingWhatsapp');

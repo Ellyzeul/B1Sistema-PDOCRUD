@@ -20,6 +20,26 @@ class OrderController extends Controller
 		return $response;
 	}
 
+	public function getShipmentLabelData(Request $request)
+	{
+		$orderId = $request->input('order_id');
+
+		$order = new Order();
+		$response = $order->getShipmentLabelData($orderId);
+
+		return $response;
+	}
+
+	public function getInvoiceData(Request $request)
+	{
+		$orderId = $request->input('order_id');
+
+		$order = new Order();
+		$response = $order->getInvoiceData($orderId);
+
+		return $response;
+	}
+
 	public static function updateAddressVerified(Request $request)
 	{
 		$toUpdate = $request->input("verifieds");

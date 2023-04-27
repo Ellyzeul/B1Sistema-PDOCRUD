@@ -55,6 +55,46 @@ class Order
         return $crud;
     }
 
+    public function getShipmentLabelData(string $orderId)
+    {
+        $order = DB::table('order_control')
+            ->select('id_company', 'bling_number', 'id_delivery_method')
+            ->where('id', $orderId)
+            ->first();
+        $company = DB::table('companies')
+            ->select('id', 'name', 'company_name', 'cnpj', 'state_registration', 'municipal_registration')
+            ->where('id', $order->id_company)
+            ->first();
+        $apikey = env(($this->blingAPIKeys[$order->id_company]));
+        $blingResponse = $this->makeBlingRequest($apikey, $order->bling_number);
+        if(isset($blingResponse['error'])) return $blingResponse;
+
+        $blingOrder = $blingResponse['retorno']['pedidos'][0]['pedido'];
+
+        return [
+            'company' => $company, 
+            'id_delivery_method' => $order->id_delivery_method, 
+            'bling_data' => $blingOrder
+        ];
+    }
+
+    public function getInvoiceData(string $orderId)
+    {
+        $order = DB::table('order_control')
+            ->select('id_company', 'bling_number')
+            ->where('id', $orderId)
+            ->first();
+        $apikey = env(($this->blingAPIKeys[$order->id_company]));
+        $blingResponse = $this->makeBlingRequest($apikey, $order->bling_number);
+        if(isset($blingResponse['error'])) return $blingResponse;
+
+        $invoiceNumber = intval($blingResponse['retorno']['pedidos'][0]['pedido']['nota']['numero']);
+        $series = $blingResponse['retorno']['pedidos'][0]['pedido']['nota']['serie'];
+        $invoiceResponse = $response = Http::get("https://bling.com.br/Api/v2/notafiscal/$invoiceNumber/$series/json?apikey=$apikey");
+
+        return $invoiceResponse['retorno']['notasfiscais'][0]['notafiscal'];
+    }
+
     public function updateAddressVerified(array $toUpdate)
     {
         $updateQuery = "INSERT IGNORE INTO order_control (id, address_verified) VALUES ";
