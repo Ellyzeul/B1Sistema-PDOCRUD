@@ -13,7 +13,13 @@ const JadlogLabel = (props: ShipmentLabelProp) => {
     transporte: tracking_data
   } = bling_data
 
+  console.log(bling_data)
   useEffect(() => {
+    const trackingList = tracking_data?.volumes
+    if(!trackingList) return
+    const pack = trackingList[0].volume?.remessa
+    if(!pack) return
+    const { numero: tracking_code } = pack
     const canvas = BwipJS.toCanvas(document.createElement('canvas'), {
       bcid: 'code128', 
       text: tracking_code as string, 
@@ -30,9 +36,9 @@ const JadlogLabel = (props: ShipmentLabelProp) => {
   const { volumes, enderecoEntrega: delivery_address } = tracking_data
   if(!volumes || !delivery_address) return <></>
   const { volume } = volumes[0]
-  if(!volume) return <></>
+  if(!volume) return <>Sem dados de rastreamento...</>
   const { remessa: pack } = volume
-  if(!pack) return <></>
+  if(!pack) return <>Sem dados de rastreamento...</>
   const { numero: tracking_code } = pack
   const { 
     nome: name, 

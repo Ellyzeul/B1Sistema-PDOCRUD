@@ -53,10 +53,12 @@ const CorreiosLabel = (props: ShipmentLabelProp) => {
   if(!trackingList || !invoiceNumber || !onlineOrderNumber || !client || !deliveryAddress) return <>Dados insuficientes do Bling...</>
   const trackingCode = trackingList[0].volume?.codigoRastreamento as string
   const trackingService = trackingList[0].volume?.codigoServico as string
+  const pack = trackingList[0].volume?.remessa as {numero: string, dataCriacao: string}
 
   const { fone, celular } = client
   const { nome, endereco, numero, complemento, cidade, bairro, cep, uf } = deliveryAddress
   const { name: deliveryName, icon: deliveryIcon } = correiosIcons[trackingService]
+  const { numero: plp } = pack
 
   return (
     <div id="correios-label">
@@ -93,6 +95,16 @@ const CorreiosLabel = (props: ShipmentLabelProp) => {
           </div>
           <div>
             Volume: 1/1
+            {
+              plp
+              ? <>
+                <br />
+                PLP: 
+                <br />
+                <strong>{plp}</strong>
+              </>
+              : null
+            }
           </div>
         </div>
         <div id="correios-label-header-tracking-code">
