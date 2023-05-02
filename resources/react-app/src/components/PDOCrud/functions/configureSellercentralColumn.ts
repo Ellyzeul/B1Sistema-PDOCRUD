@@ -72,6 +72,10 @@ const sellercentrals = {
   "FNAC-PT": {
     sell_page: (onlineOrderNumber) => `https://seller.fnac.pt/compte/vendeur/commande/${onlineOrderNumber}`,
     product_page: (_) => `#`
+  },
+  "MercadoLivre-BR": {
+    sell_page: (_) => `#`,
+    product_page: (_) => `#`
   }
 } as {
   [key: string]: {
