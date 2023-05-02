@@ -50,13 +50,13 @@ const CorreiosLabel = (props: ShipmentLabelProp) => {
   const onlineOrderNumber = bling_data.numeroPedidoLoja
   const client = bling_data.cliente
   const deliveryAddress = bling_data.transporte?.enderecoEntrega
-  if(!trackingList || !invoiceNumber || !onlineOrderNumber || !client || !deliveryAddress) return <>Dados insuficientes do Bling...</>
+  if(!trackingList || !invoiceNumber || !onlineOrderNumber || !client) return <>Dados insuficientes do Bling...</>
   const trackingCode = trackingList[0].volume?.codigoRastreamento as string
   const trackingService = trackingList[0].volume?.codigoServico as string
   const pack = trackingList[0].volume?.remessa as {numero: string, dataCriacao: string}
 
   const { fone, celular } = client
-  const { nome, endereco, numero, complemento, cidade, bairro, cep, uf } = deliveryAddress
+  const { nome, endereco, numero, complemento, cidade, bairro, cep, uf } = deliveryAddress || client
   const { name: deliveryName, icon: deliveryIcon } = correiosIcons[trackingService]
   const { numero: plp } = pack
 
