@@ -30,8 +30,8 @@ const SimplifiedInvoice = (props: SimplifiedInvoiceProp) => {
   if(!nota || !itens || !valorfrete || !observacoes) return <></>
   const { chaveAcesso: access_key, numero: invoice_number, serie: series, dataEmissao: emission_date } = nota
   const freight = Number(valorfrete)
-  const itemsList = itens.map(({item: {codigo, descricao, quantidade, valorunidade}}) => (
-    <div className="simplified-invoice-bought-item">
+  const itemsList = itens.map(({item: {codigo, descricao, quantidade, valorunidade}}, key) => (
+    <div className="simplified-invoice-bought-item" key={key}>
       <div>{codigo} - {descricao} - {quantidade} UN X {Number(valorunidade).toFixed(2)}</div>
       <div className="simplified-invoice-bought-item-cost">{(Number(valorunidade) * Number(quantidade)).toFixed(2)}</div>
     </div>

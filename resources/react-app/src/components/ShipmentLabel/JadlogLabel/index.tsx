@@ -5,7 +5,7 @@ import "./style.css"
 import SimplifiedInvoice from "../SimplifiedInvoice"
 
 const JadlogLabel = (props: ShipmentLabelProp) => {
-  const { order_id, company, bling_data } = props
+  const { company, bling_data } = props
   const [ code128URI, setCode128URI ] = useState('')
   const { 
     numeroPedidoLoja: online_order_number, 
@@ -14,7 +14,6 @@ const JadlogLabel = (props: ShipmentLabelProp) => {
     cliente: client, 
   } = bling_data
 
-  console.log(bling_data)
   useEffect(() => {
     const trackingList = tracking_data?.volumes
     if(!trackingList) return
