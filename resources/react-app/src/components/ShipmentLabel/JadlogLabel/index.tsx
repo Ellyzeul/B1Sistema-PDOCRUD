@@ -10,7 +10,8 @@ const JadlogLabel = (props: ShipmentLabelProp) => {
   const { 
     numeroPedidoLoja: online_order_number, 
     nota: invoice_data,
-    transporte: tracking_data
+    transporte: tracking_data, 
+    cliente: client, 
   } = bling_data
 
   console.log(bling_data)
@@ -34,7 +35,7 @@ const JadlogLabel = (props: ShipmentLabelProp) => {
   if(!tracking_data) return <>Sem código de rastreio...</>
   const { numero: invoice_number } = invoice_data
   const { volumes, enderecoEntrega: delivery_address } = tracking_data
-  if(!volumes || !delivery_address) return <></>
+  if(!volumes || !client) return <></>
   const { volume } = volumes[0]
   if(!volume) return <>Sem dados de rastreamento...</>
   const { remessa: pack } = volume
@@ -49,7 +50,7 @@ const JadlogLabel = (props: ShipmentLabelProp) => {
     bairro: county, 
     cep: postal_code, 
     uf
-  } = delivery_address
+  } = delivery_address || client
 
   return (
     <div id="jadlog-label">
