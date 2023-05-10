@@ -1,0 +1,71 @@
+#correios-label {
+  width: 9.2cm;
+  padding: 10px;
+  margin-left: 10px;
+  text-align: left;
+  font-family: Arial;
+  font-size: 0.33cm;
+  vertical-align: top;
+  print-color-adjust: exact;
+}
+
+#correios-label-header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.correios-label-header-inner-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.correios-label-header-inner-container > div {
+  font-size: 0.27cm;
+  word-break: break-word;
+}
+
+#correios-label-header-tracking-code {
+  width: 100%;
+  padding-top: 5px;
+  text-align: center;
+}
+
+.correios-signature-container {
+  width: 100%;
+  display: flex;
+  font-size: 8.5px;
+  white-space: nowrap;
+  text-align: left;
+}
+.correios-signature-container > span {
+  width: 100%;
+  display: inline-block;
+  border-bottom: 1px solid black;
+  border-top: none;
+}
+
+#correios-label-recipient {
+  width: 100%;
+  margin-top: 4px;
+  border-top: 1px solid black;
+}
+
+#correios-label-recipient-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+#correios-label-recipient-info {
+  width: 100%;
+  margin-left: 15px;
+  text-align: left;
+}
+
+#correios-label-sender-info {
+  width: 100%;
+  margin-top: 5px;
+  padding: 6px;
+  border-top: 1px solid black;
+}

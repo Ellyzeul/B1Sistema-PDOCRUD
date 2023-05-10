@@ -55,6 +55,29 @@ class Order
         return $crud;
     }
 
+    public function getShipmentLabelData(string $orderId)
+    {
+        $order = DB::table('order_control')
+            ->select('id_company', 'bling_number', 'id_delivery_method')
+            ->where('id', $orderId)
+            ->first();
+        $company = DB::table('companies')
+            ->select('id', 'name', 'company_name', 'cnpj', 'state_registration', 'municipal_registration')
+            ->where('id', $order->id_company)
+            ->first();
+        $apikey = env(($this->blingAPIKeys[$order->id_company]));
+        $blingResponse = $this->makeBlingOrderRequest($apikey, $order->bling_number);
+        if(isset($blingResponse['error'])) return $blingResponse;
+
+        $blingOrder = $blingResponse['retorno']['pedidos'][0]['pedido'];
+
+        return [
+            'company' => $company, 
+            'id_delivery_method' => $order->id_delivery_method, 
+            'bling_data' => $blingOrder
+        ];
+    }
+
     public function updateAddressVerified(array $toUpdate)
     {
         $updateQuery = "INSERT IGNORE INTO order_control (id, address_verified) VALUES ";
@@ -218,6 +241,7 @@ class Order
 
         $response['sellercentral'] = DB::table('order_addresses')
             ->where('online_order_number', $orderNumber)
+            ->orderBy('postal_code', 'desc')
             ->first();
         $response['sellercentral']->id_sellercentral = DB::table('order_control')
             ->select('id_sellercentral')
@@ -296,8 +320,8 @@ class Order
         $link = $data['link'];
 
         DB::table('order_control')
-        ->where('id', $orderId)
-        ->update(['invoice_number' => $invoice_number]);
+            ->where('id', $orderId)
+            ->update(['invoice_number' => $invoice_number]);
 
         return [
                 "invoice_number" => $invoice_number,
@@ -305,7 +329,6 @@ class Order
                 "link" => $link
         ];
     }
-
     
     public function getInvoiceLink(string $companyId, string $blingNumber)
     {
@@ -326,7 +349,6 @@ class Order
         ];
     }
 
-
     private function getInvoiceNumberAndSerie(string $companyId, string $blingNumber)
     {
         $apikey = env($this->blingAPIKeys[$companyId]);
@@ -338,8 +360,11 @@ class Order
         $invoice_number = $order['nota']['numero'] ?? null;
         $serie = $order['nota']['serie'] ?? null;
 
+        preg_match("/[0-9]{5}$/", $invoice_number, $treated_arr);
+        $treated_number = $treated_arr[0] ?? null;
+
         return [
-            "invoice_number" => $invoice_number,
+            "invoice_number" => $treated_number,
             "serie" => $serie
         ];
     }
@@ -433,7 +458,6 @@ class Order
         if(isset($response['error'])) return $response;
 
         $order = $response['retorno']['pedidos'][0]['pedido'];
-
         $trackingCode = $order['transporte']['volumes'][0]['volume']['codigoRastreamento'];
 
         if($trackingCode == "") $trackingCode = $order['transporte']['volumes'][0]['volume']['remessa']['numero'];

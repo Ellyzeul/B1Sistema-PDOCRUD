@@ -1,0 +1,65 @@
+#simplified-invoice {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, Helvetica;
+  font-size: 7pt;
+  word-break: break-word;
+}
+
+#simplified-invoice-title {
+  width: 100%;
+  margin-top: 2px;
+  border-top: 1px dotted black;
+  text-align: center;
+}
+
+#simplified-invoice-header {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 30% 70%;
+  place-items: center;
+  border-top: 1px dotted black;
+}
+
+#simplified-invoice-access-key {
+  width: 100%;
+  padding-top: 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-top: 1px dotted black;
+}
+
+#simplified-invoice-bought-item-list {
+  width: 100%;
+  padding-top: 2px;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px dotted black;
+}
+
+.simplified-invoice-bought-item {
+  width: 100%;
+  display: grid;
+  grid-template-columns: calc(100% - 50px) 50px;
+
+}
+.simplified-invoice-bought-item-cost {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+#simplified-invoice-observation-field {
+  width: 100%;
+  padding-top: 2px;
+  border-top: 1px dotted black;
+}
+
+#simplified-invoice-observation {
+  width: 100%;
+  font-family: Arial, Helvetica;
+  font-size: 7pt;
+  white-space: pre;
+}

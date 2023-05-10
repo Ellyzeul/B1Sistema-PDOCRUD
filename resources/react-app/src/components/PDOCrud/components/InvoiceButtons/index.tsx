@@ -14,7 +14,7 @@ export const InvoiceButtons  = (props: InvoiceButtonsProp) => {
 
 	const getInvoiceNumber: MouseEventHandler = event => {
 		event.preventDefault()
-		api.post("/api/orders/invoice-number/update", {
+		api.patch("/api/orders/invoice-number", {
 				"order_id": orderId,	
 				"invoice_number": invoiceNumber			
 		})
@@ -37,7 +37,7 @@ export const InvoiceButtons  = (props: InvoiceButtonsProp) => {
 			return
 		}
 
-		api.get("/api/orders/invoice-link/get", {
+		api.get("/api/orders/invoice-link", {
 			params: {
 				"company_id": companyId,
 				"bling_number": blingNumber

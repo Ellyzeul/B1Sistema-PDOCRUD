@@ -93,7 +93,7 @@ const AddressModal = (props: AddressModalProp) => {
 
   useEffect(() => {
     if(!isOpen || !!sellercentral) return
-    api.get(`/api/orders/address/get?order_number=${orderNumber}`)
+    api.get(`/api/orders/address?order_number=${orderNumber}`)
       .then(response => response.data as OrderAddress)
       .then(setOrderAddress)
   }, [isOpen])
