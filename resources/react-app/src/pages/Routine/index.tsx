@@ -1,5 +1,5 @@
 import { Navbar } from "../../components/Navbar"
-import { TabManager } from "../../components/TabManager"
+import { TabManager } from "../../components/tabManager"
 import { tabContentAlibrisSelineUSA, tabContentAmazonB1BR, tabContentAmazonB1USA, tabContentAmazonSelineBR, 
 tabContentAmazonSelineUSA, tabContentEmails, tabContentEstanteVirtual, tabContentFNACptSeline, tabContentGeneral } from "./tabContents"
 import "./style.css"

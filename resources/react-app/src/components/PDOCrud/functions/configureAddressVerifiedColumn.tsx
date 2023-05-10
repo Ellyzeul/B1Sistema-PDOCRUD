@@ -28,6 +28,7 @@ const configureRows = (rows: HTMLTableRowElement[], colIdx: number) => {
   const saveBtn = document.querySelector(".pdocrud-button-save") as HTMLAnchorElement
   const checkboxes = [] as {id: string, checkbox: HTMLInputElement}[]
   const orderNumberColIdx = getColumnFieldIndex('ORIGEM')
+  const orderIdColIdx = getColumnFieldIndex('Nº')
   const onKeyDown = (key: string) => {
     if(key !== "Enter") return
     saveBtn.click()
@@ -50,13 +51,14 @@ const configureRows = (rows: HTMLTableRowElement[], colIdx: number) => {
     const cell = row.cells[colIdx] as HTMLTableCellElement
     const input = cell.children[0] as HTMLInputElement
     const orderNumber = row.cells[orderNumberColIdx].textContent?.trim() as string
+    const orderId = row.cells[orderIdColIdx].textContent?.trim() as string
     const style = cell.style
 
     style.display = 'grid'
     style.placeItems = 'center'
 
     addCheckbox(input, checkboxes, onKeyDown)
-    addModal(cell, orderNumber)
+    addModal(cell, orderNumber, orderId)
   })
 
   saveBtn.addEventListener('click', onClick)
@@ -84,11 +86,11 @@ const addCheckbox = (
   })
 }
 
-const addModal = (cell: HTMLTableCellElement, orderNumber: string) => {
+const addModal = (cell: HTMLTableCellElement, orderNumber: string, orderId: string) => {
   const modalContainer = document.createElement('div')
   const modalRoot = createRoot(modalContainer)
 
-  modalRoot.render(<AddressModal orderNumber={orderNumber} />)
+  modalRoot.render(<AddressModal orderNumber={orderNumber} orderId={orderId}  />)
 
   cell.appendChild(modalContainer)
 }

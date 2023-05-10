@@ -7,6 +7,7 @@ import SellercentralAddress from "./SellercentralAddress"
 import BlingAddress from "./BlingAddress"
 import { toast } from "react-toastify"
 import CotationMessage from "./CotationMessage"
+import { ShipmentAndPrice } from "../../../ShipmentAndPrice"
 
 const CURRENCIES = {
   1: {
@@ -54,7 +55,7 @@ const CURRENCIES = {
 }
 
 const AddressModal = (props: AddressModalProp) => {
-  const { orderNumber } = props
+  const { orderNumber, orderId } = props
   const [isOpen, setIsOpen] = useState(false)
   const [{ sellercentral, bling }, setOrderAddress] = useState({} as OrderAddress)
   const cotationDateRef = useRef(null)
@@ -147,6 +148,7 @@ const AddressModal = (props: AddressModalProp) => {
                   : <p>Sem endereço Bling...</p>
               }
             </div>
+            <div className="shipment-and-price-container"><ShipmentAndPrice orderId={orderId}/></div>
           </div>
         </div>
       </Modal>
