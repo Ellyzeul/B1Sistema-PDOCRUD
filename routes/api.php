@@ -8,6 +8,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\NavbarItemController;
 use App\Http\Controllers\OrderController;
+use App\Models\Order;
 use App\Http\Controllers\PhaseController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\QuoteController;
@@ -54,6 +55,7 @@ Route::controller(OrderController::class)
         Route::get('/ask-rating/whatsapp', 'getAskRatingWhatsapp');
         Route::get('/ask-rating/spreadsheet-data', 'getDataForAskRatingSpreadSheet');
         Route::post('/ask-rating/mail/send', 'sendAskRatingEmail');
+        Route::patch('/bling/order', 'putBlingOrder');
         Route::patch('/address-verified', 'updateAddressVerified');
         Route::patch('/read-for-ship', 'updateReadForShip');
         Route::patch('/traking-id', 'updateTrackingCode');
@@ -120,4 +122,5 @@ Route::controller(TrackingController::class)
         Route::post('/update', 'update');
         Route::post('/update-all', 'updateAll');
         Route::post('/update-field', 'updateField');
+        Route::get('/consult-price-and-shipping', 'consultPriceAndShipping');
     });
