@@ -90,6 +90,17 @@ class OrderController extends Controller
 		return $response;
 	}
 
+	public function putBlingOrder(Request $request)
+	{
+		$order = new Order();
+
+		$blingData = $request->input('bling_data');
+		$companyId = $request->input('id_company');
+		$response = $order->putBlingOrder($blingData, $companyId);
+
+		return $response;
+	}
+
 	public static function updateTrackingCode(Request $request)
 	{
 		$order = new Order();

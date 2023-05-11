@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AskRating;
 use App\Models\PDOCrudWrapper;
+use App\Models\Services\Bling;
 
 class Order
 {
@@ -228,32 +229,162 @@ class Order
     public function getAddress(string $orderNumber)
     {
         $response = [];
-        $blingData = DB::table('order_control')
-            ->select('id_company', 'bling_number')
-            ->where('online_order_number', $orderNumber)
-            ->first();
-        $companyId = $blingData->id_company;
-        $blingNumber = $blingData->bling_number;
-        $apikey = env($this->blingAPIKeys[$companyId]);
-        $blingAddress = isset($blingNumber)
-            ? $this->getBlingAddress($apikey, $blingNumber)
-            : ['error' => 'Sem número do Bling'];
+        $response['bling'] = $this->getBlingEditData($orderNumber);
 
         $response['sellercentral'] = DB::table('order_addresses')
             ->where('online_order_number', $orderNumber)
             ->orderBy('postal_code', 'desc')
             ->first();
-        $response['sellercentral']->id_sellercentral = DB::table('order_control')
-            ->select('id_sellercentral')
-            ->where('online_order_number', $orderNumber)
-            ->first()
-            ->id_sellercentral;
-
-        $response['bling'] = isset($blingAddress['error'])
-            ? null
-            : array_merge($blingAddress, ['bling_number' => $blingNumber]);
+        if(isset($response['sellercentral'])) {
+            $order = DB::table('order_control')
+                ->select('id_sellercentral', 'id_company')
+                ->where('online_order_number', $orderNumber)
+                ->first();
+            $response['sellercentral']->id_sellercentral = $order->id_sellercentral;
+            $response['sellercentral']->id_company = $order->id_company;
+        }
         
         return $response;
+    }
+
+    private function getBlingEditData(string $orderNumber)
+    {
+        $order = DB::table('order_control')
+            ->select('id_company', 'bling_number')
+            ->where('online_order_number', $orderNumber)
+            ->first();
+        $bling = new Bling($order->id_company);
+
+        $blingOrder = $bling->getOrder($order->bling_number);
+        $blingOrderItems = $blingOrder->itens;
+        $blingContact = $bling->getContactFromOrder($order->bling_number);
+        $blingProducts = [];
+        foreach($blingOrderItems as $item) {
+            array_push($blingProducts, $bling->getProduct($item->produto->id));
+        }
+
+        return [
+            'update_data' => [
+                'order' => $blingOrder,
+                'contact' => $blingContact,
+                'products' => $blingProducts,
+            ],
+            'bling_number' => $orderNumber,
+            'buyer_name' => $blingContact->nome,
+            'recipient_name' => $blingOrder->transporte->etiqueta->nome ?? "",
+            'cpf_cnpj' => $blingContact->cpf_cnpj,
+            'ie' => $blingContact->ie,
+            'address' => $blingContact->endereco,
+            'number' => $blingContact->numero,
+            'complement' => $blingContact->complemento,
+            'city' => $blingContact->cidade,
+            'county' => $blingContact->bairro,
+            'email' => $blingContact->email,
+            'cellphone' => $blingContact->celular,
+            'landline_phone' => $blingContact->fone,
+            'postal_code' => $blingContact->cep,
+            'uf' => $blingContact->uf,
+            'total_items' => count($blingOrderItems),
+            'total_value' => $blingOrder->total,
+            'freight' => $blingOrder->transporte->frete ?? 0,
+            'other_expenses' => $blingOrder->outrasDespesas,
+            'discount' => floatval(str_replace(',', '.', $blingOrder->desconto)),
+            'expected_date' => $blingOrder->dataPrevista,
+            'observation' => $blingOrder->observacoes,
+            'items' => array_map(fn($item) => [
+                'id' => $item->id,
+                'sku' => $item->produto->codigo,
+                'title' => $item->produto->descricao,
+                'quantity' => $item->quantidade,
+                'value' => $item->valor,
+            ], $blingOrderItems),
+        ];
+    }
+
+    public function putBlingOrder(array $blingData, int $companyId)
+    {
+        $bling = new Bling($companyId);
+        $blingOrder = $blingData['update_data']['order'];
+        $blingOrderItems = $blingData['items'];
+        $blingContact = $blingData['update_data']['contact'];
+        $blingProducts = $blingData['update_data']['products'];
+        $totalRaw = array_reduce(
+            array_map(fn($item) => floatval($item['value']) * intval($item['quantity']), $blingData['items']), 
+            fn($acc, $cur) => $acc + $cur
+        );
+        $total = $totalRaw + floatval($blingData['other_expenses']) - floatval($blingData['discounts']);
+        $totalItems = array_reduce(
+            array_map(fn($item) => intval($item['quantity']), $blingData['items']), 
+            fn($acc, $cur) => $acc + $cur
+        );
+
+        $blingOrder['id'] = $blingOrder['id'];
+        $blingOrder['cnpj'] = $blingData['cpf_cnpj'];
+        $blingOrder['dataPrevista'] = $blingData['expected_date'];
+        $blingOrder['outrasDespesas'] = $blingData['other_expenses'];
+        $blingOrder['desconto'] = str_replace(".", ",", $blingData['discounts']);
+        $blingOrder['observacoes'] = $blingData['observation'];
+        $blingOrder['total'] = $total;
+        $blingOrder['totalProdutos'] = $totalItems;
+        $blingOrder['transporte']['frete'] = $blingData['freight'];
+        $blingOrder['transporte']['etiqueta']['nome'] = $blingData['recipient_name'];
+        $blingOrder['transporte']['etiqueta']['endereco'] = $blingData['address'];
+        $blingOrder['transporte']['etiqueta']['numero'] = $blingData['number'];
+        $blingOrder['transporte']['etiqueta']['complemento'] = $blingData['complement'];
+        $blingOrder['transporte']['etiqueta']['municipio'] = $blingData['city'];
+        $blingOrder['transporte']['etiqueta']['uf'] = $blingData['uf'];
+        $blingOrder['transporte']['etiqueta']['cep'] = $blingData['postal_code'];
+        $blingOrder['transporte']['etiqueta']['bairro'] = $blingData['county'];
+        $blingOrder['itens'] = array_map(function($item, $blingItem) {
+            $blingItem['quantidade'] = $item['quantity'];
+            $blingItem['valor'] = floatval($item['value']);
+
+            return $blingItem;
+        }, $blingData['items'], $blingOrder['itens']);
+        $blingOrder['parcelas'][0]['valor'] = $total;
+        
+        $blingContact['nome'] = $blingData['buyer_name'];
+        $blingContact['tipo'] = $this->getBlingPersonType($blingContact['tipo']);
+        $blingContact['endereco'] = $blingData['address'];
+        $blingContact['numero'] = $blingData['number'];
+        $blingContact['complemento'] = $blingData['complement'];
+        $blingContact['cidade'] = $blingData['city'];
+        $blingContact['uf'] = $blingData['uf'];
+        $blingContact['cep'] = $blingData['postal_code'];
+        $blingContact['bairro'] = $blingData['county'];
+        $blingContact['cpf_cnpj'] = $blingData['cpf_cnpj'];
+
+        $requestsBodyProducts = array_map(function($product, $item) {
+            $product['gtin'] = $item['isbn'];
+            $product['gtinEmbalagem'] = $item['isbn'];
+            $product['tributacao']['origem'] = 0;
+            $product['tributacao']['ncm'] = '4901.99.00';
+            $product['tributacao']['cest'] = '28.064.00';
+
+            return $product;
+        }, $blingProducts, $blingOrderItems);
+
+        $orderResponse = $bling->putOrder($blingOrder['id'], $blingOrder);
+        $contactResponse = $bling->putContact($blingContact['id'], $blingContact);
+        $productsResponse = [];
+        foreach($requestsBodyProducts as $blingProduct) {
+            array_push($productsResponse, $bling->putProduct($blingProduct['id'], $blingProduct));
+        }
+
+        return [
+            'order' => $orderResponse,
+            'contact' => $contactResponse,
+            'products' => $productsResponse,
+        ];
+    }
+
+    private function getBlingPersonType(string $personType)
+    {
+        if($personType === "Pessoa Física") return "F";
+        if($personType === "Pessoa Jurídica") return "J";
+        if($personType === "Estrangeiro") return "E";
+
+        throw new \Exception("Tipo de pessoa '$personType' não identificada como válida para o Bling...");
     }
 
     public static function getColumnsNames()
@@ -405,9 +536,9 @@ class Order
         ];
     }
 
-    private function getBlingAddress(string $apikey, string $blingNumber)
+    private function getBlingAddress(int $companyId, string $blingNumber)
     {
-        $response = $this->makeBlingOrderRequest($apikey, $blingNumber);
+        $response = $this->makeDevBlingOrderRequest($companyId, $blingNumber);
         if(isset($response['error'])) return $response;
 
         $order = $response['retorno']['pedidos'][0]['pedido'];
