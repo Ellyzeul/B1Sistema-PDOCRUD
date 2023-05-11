@@ -140,6 +140,210 @@ class Tracking extends Model
 		];
 	}
 
+	public function consultPriceAndShipping(string $originId, string $orderId, string | null $deliveryMethod, float | null $weight)
+	{
+		$supportedServices = [
+			"Correios" => true,
+			"Jadlog" => true
+		];
+
+		$originZipCode = DB::table('delivery_addresses')
+							->select('postal_code')
+							->where('id', $originId)
+							->first()
+							->postal_code;
+						
+		$destinyZipCode = DB::table('order_control')
+							->join('order_addresses', 'order_control.online_order_number', '=', 'order_addresses.online_order_number')
+							->where('order_control.id', '=', $orderId)
+							->value('order_addresses.postal_code');
+
+		if(!isset($supportedServices[$deliveryMethod])) return ["Serviço não suportado", 400];
+
+		$response = null;
+		if($deliveryMethod == "Correios") $response = $this->consultCorreiosPriceAndShipping($originZipCode, $destinyZipCode, $weight);
+		if($deliveryMethod == "Jadlog") $response = $this->fetchJadlogPrice($originZipCode, $destinyZipCode, $weight);
+
+		return $response;
+	}
+
+	private function consultCorreiosPriceAndShipping(string $originZipCode, string $destinyZipCode, string|null $weight)
+	{
+		$today = Date::today();
+
+		if(!$this->existsApiCredentialDB('correios')) $this->generateCorreiosToken();
+
+		$apikey = $this->readApiCredentialDB('correios');
+		$expires_in = explode("T", $apikey->expiraEm)[0];
+
+		if((!$apikey->token) || Date::parse($expires_in)->diffAsCarbonInterval($today)->format("%d")!=1){
+			$this->generateCorreiosToken();
+			$apikey = $this->readApiCredentialDB('correios');
+		} 
+
+		$shipping_response = $this->fetchCorreiosShipping($apikey->token, $originZipCode, $destinyZipCode);
+		$price_response = $this->fetchCorreiosPrice($apikey->token, $originZipCode, $destinyZipCode, $weight);
+
+		if(!isset($shipping_response) || !isset($price_response)) return [];
+		
+		$response = [];
+		for($i=0; $i<4; $i++){
+			$date =  isset($shipping_response[$i]['dataMaxima']) 
+						? date('d/m/Y', strtotime($shipping_response[$i]['dataMaxima'])) 
+						: $date = null;
+
+			$node = [
+				$shipping_response[$i]['coProduto'] => [
+					'delivery_expected_date' => $shipping_response[$i]['prazoEntrega'] ?? null, 
+					'max_date' => $date,
+					'shipping_error_msg' => $shipping_response[$i]['txErro'] ?? null,
+					'price' => $price_response[$i]['pcFinal'] ?? null,
+					'price_error_msg' => $price_response[$i]['txErro'] ?? null
+				]
+			];
+			array_push($response, $node);
+		}
+
+		return $response;
+	}
+
+	private function fetchCorreiosPrice(string $apiToken, string $originZipCode, string $destinyZipCode, string|null $weight)
+	{
+		$today = date('d-m-Y', strtotime(Date::today()));
+		$weight = ($weight ?? 1) * 1000;
+
+		$response = Http::withHeaders(["X-locale" => "pt_BR"])
+			->withToken($apiToken)
+			->post("https://api.correios.com.br/preco/v1/nacional/", [
+					'idLote' => 'string',
+					'parametrosProduto' => [
+						[
+							'coProduto' => '04227',
+							'nuRequisicao'=> '1',
+							'nuContrato' => '9912449300',
+							'nuDR' => 72,
+							'cepOrigem' => $originZipCode,
+							'psObjeto' => $weight,
+							'tpObjeto' => '2',
+							'comprimento' => '25',
+							'largura' => '35',
+							'altura' => '3',
+							'dtEvento' => $today,
+							'cepDestino' => $destinyZipCode,
+						],
+						[
+							'coProduto' => '03298',
+							'nuRequisicao'=> '2',
+							'nuContrato' => '9912449300',
+							'nuDR' => 72,
+							'cepOrigem' => $originZipCode,
+							'psObjeto' => $weight,
+							'tpObjeto' => '2',
+							'comprimento' => '25',
+							'largura' => '35',
+							'altura' => '3',
+							'dtEvento' => $today,
+							'cepDestino' => $destinyZipCode,
+						],
+						[
+							'coProduto' => '03220',
+							'nuRequisicao'=> '3',
+							'nuContrato' => '9912449300',
+							'nuDR' => 72,
+							'cepOrigem' => $originZipCode,
+							'psObjeto' => $weight,
+							'tpObjeto' => '2',
+							'comprimento' => '25',
+							'largura' => '35',
+							'altura' => '3',
+							'dtEvento' => $today,
+							'cepDestino' => $destinyZipCode,
+						],
+						[
+							'coProduto' => '03204',
+							'nuRequisicao'=> '4',
+							'nuContrato' => '9912449300',
+							'nuDR' => 72,
+							'cepOrigem' => $originZipCode,
+							'psObjeto' => $weight,
+							'tpObjeto' => '2',
+							'comprimento' => '25',
+							'largura' => '35',
+							'altura' => '3',
+							'dtEvento' => $today,
+							'cepDestino' => $destinyZipCode,
+						]
+					]
+			]);
+
+		return $response;
+	}
+
+	private function fetchCorreiosShipping(string $apiToken, string $originZipCode, string $destinyZipCode)
+	{
+		$today = date('d-m-Y', strtotime(Date::today()));
+
+		$response = Http::withHeaders(["X-locale" => "pt_BR"])
+			->withToken($apiToken)
+			->post("https://api.correios.com.br/prazo/v1/nacional/", [
+					'idLote' => '1',
+					'parametrosPrazo' => [
+						[
+							'coProduto' => '04227',
+							'cepOrigem' => $originZipCode,
+							'cepDestino' => $destinyZipCode,
+							'dataPostagem' => $today,
+							'nuRequisicao' => '1'
+						],
+						[
+							'coProduto' => '03298',
+							'cepOrigem' => $originZipCode,
+							'cepDestino' => $destinyZipCode,
+							'dataPostagem' => $today,
+							'nuRequisicao' => '2'
+						],
+						[
+							'coProduto' => '03220',
+							'cepOrigem' => $originZipCode,
+							'cepDestino' => $destinyZipCode,
+							'dataPostagem' => $today,
+							'nuRequisicao' => '3'
+						],
+						[
+							'coProduto' => '03204',
+							'cepOrigem' => $originZipCode,
+							'cepDestino' => $destinyZipCode,
+							'dataPostagem' => $today,
+							'nuRequisicao' => '4'
+						]
+					]
+			]);
+		
+		return $response;
+	}
+
+	private function fetchJadlogPrice(string $originZipCode, string $destinyZipCode, float|null $weight) 
+	{
+		$response = Http::withToken(env('JADLOG_API_KEY'))
+		->post('https://www.jadlog.com.br/embarcador/api/frete/valor', [
+			'frete' => [[
+				"cepori" => $originZipCode,
+				"cepdes" => $destinyZipCode,
+				"peso" =>  $weight ?? 1,
+				"modalidade" => 3,
+				"tpentrega" => "D",
+				"tpseguro" => "N",
+				"vldeclarado" => 100,
+			]]
+		]);
+
+		return [
+			'price' => $response['frete'][0]['vltotal'] ?? null,
+			'max_date' => $response['frete'][0]['prazo'] ?? null,
+			'error_msg' => $response['error']['descricao'] ?? null
+		];
+	}
+	
 	private function fetchCorreios(string $trackingCode)
 	{	
 		$today = Date::parse(date("Y-m-d H:i:s"));

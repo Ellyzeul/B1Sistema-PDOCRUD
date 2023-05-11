@@ -18,7 +18,7 @@ const AddressForm = (props: AddressFormProp) => {
       <div>{title}</div>
       <div>{sku}</div>
       <input type="text" name="item_quantity" defaultValue={quantity} data-id={id} />
-      <input type="text" name="item_value" defaultValue={value} data-id={id} />
+      <input type="text" name="item_value" defaultValue={(value || 0).toFixed(2)} data-id={id} />
       <input name="item_id" defaultValue={id} style={{display: 'none'}} />
       <input name="item_title" defaultValue={title} style={{display: 'none'}} />
       <input name="item_sku" defaultValue={sku} style={{display: 'none'}} />
@@ -77,7 +77,7 @@ const AddressForm = (props: AddressFormProp) => {
       })
       .catch(() => {
         toast.dismiss(loadingId)
-        toast.error('Algum erro ocorreu...')
+        toast.error('Algum erro ocorreu, consultar o TI...')
       })
   }
 
@@ -111,9 +111,9 @@ const AddressForm = (props: AddressFormProp) => {
         </div>
         <strong className="address-panel-section-header">Valores e datas</strong>
         <div className="address-panel-values-container">
-          <InputContainer name="freight" label="Frete" bling_data={bling.freight} />
-          <InputContainer name="other_expenses" label="Outras despesas" bling_data={bling.other_expenses} />
-          <InputContainer name="discounts" label="Descontos" bling_data={bling.discount} />
+          <InputContainer name="freight" label="Frete" bling_data={(bling.freight || 0).toFixed(2)} />
+          <InputContainer name="other_expenses" label="Outras despesas" bling_data={(bling.other_expenses || 0).toFixed(2)} />
+          <InputContainer name="discounts" label="Descontos" bling_data={(bling.discount || 0).toFixed(2)} />
           <InputContainer name="expected_date" label="Data prevista" bling_data={bling.expected_date} input_type="date" />
         </div>
         <strong className="address-panel-section-header">Itens</strong>

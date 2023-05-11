@@ -309,10 +309,13 @@ class Order
         $blingContact = $blingData['update_data']['contact'];
         $blingProducts = $blingData['update_data']['products'];
         $totalRaw = array_reduce(
-            array_map(fn($item) => floatval($item['value']) * intval($item['quantity']), $blingData['items']), 
+            array_map(fn($item) => floatval(str_replace(',', '.', $item['value'])) * intval($item['quantity']), $blingData['items']), 
             fn($acc, $cur) => $acc + $cur
         );
-        $total = $totalRaw + floatval($blingData['other_expenses']) - floatval($blingData['discounts']);
+        $total = $totalRaw 
+            + floatval(str_replace(',', '.', $blingData['freight'])) 
+            + floatval(str_replace(',', '.', $blingData['other_expenses'])) 
+            - floatval(str_replace(',', '.', $blingData['discounts']));
         $totalItems = array_reduce(
             array_map(fn($item) => intval($item['quantity']), $blingData['items']), 
             fn($acc, $cur) => $acc + $cur
@@ -321,12 +324,12 @@ class Order
         $blingOrder['id'] = $blingOrder['id'];
         $blingOrder['cnpj'] = $blingData['cpf_cnpj'];
         $blingOrder['dataPrevista'] = $blingData['expected_date'];
-        $blingOrder['outrasDespesas'] = $blingData['other_expenses'];
+        $blingOrder['outrasDespesas'] = str_replace(",", ".", $blingData['other_expenses']);
         $blingOrder['desconto'] = str_replace(".", ",", $blingData['discounts']);
         $blingOrder['observacoes'] = $blingData['observation'];
         $blingOrder['total'] = $total;
         $blingOrder['totalProdutos'] = $totalItems;
-        $blingOrder['transporte']['frete'] = $blingData['freight'];
+        $blingOrder['transporte']['frete'] = str_replace(',', '.', $blingData['freight']);
         $blingOrder['transporte']['etiqueta']['nome'] = $blingData['recipient_name'];
         $blingOrder['transporte']['etiqueta']['endereco'] = $blingData['address'];
         $blingOrder['transporte']['etiqueta']['numero'] = $blingData['number'];
@@ -337,7 +340,7 @@ class Order
         $blingOrder['transporte']['etiqueta']['bairro'] = $blingData['county'];
         $blingOrder['itens'] = array_map(function($item, $blingItem) {
             $blingItem['quantidade'] = $item['quantity'];
-            $blingItem['valor'] = floatval($item['value']);
+            $blingItem['valor'] = floatval(str_replace(',', '.', $item['value']));
 
             return $blingItem;
         }, $blingData['items'], $blingOrder['itens']);

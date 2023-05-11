@@ -60,4 +60,18 @@ class TrackingController extends Controller
 
 		return $response;
 	}
+
+	public function consultPriceAndShipping(Request $request)
+	{
+		$tracking = new Tracking();
+
+		$originId = $request->input('origin_id');
+		$orderId = $request->input('order_id');
+		$deliveryMethod = $request->input('delivery_method');
+		$weight = $request->input('weight') ?? null;
+
+		$response = $tracking->consultPriceAndShipping($originId, $orderId, $deliveryMethod, $weight);
+
+		return $response;
+	}
 }

@@ -3,16 +3,14 @@ import { MouseEventHandler, useEffect, useRef, useState } from "react"
 import { AddressModalProp, OrderAddress } from "./types"
 import "./style.css"
 import api from "../../../../services/axios"
-import { toast } from "react-toastify"
-import { CURRENCIES } from "./constants"
 import AddressForm from "./AddressForm"
+import { toast } from "react-toastify"
 
 const AddressModal = (props: AddressModalProp) => {
-  const { orderNumber } = props
+  const { orderNumber, orderId } = props
   const [isOpen, setIsOpen] = useState(false)
   const [{ sellercentral, bling }, setOrderAddress] = useState({} as OrderAddress)
-  const cotationDateRef = useRef(null)
-  const [cotation, setCotation] = useState(1)
+  const [hasAddress, setHasAddress] = useState(true)
 
   const handleOpen: MouseEventHandler = (event) => {
     const { detail } = event
@@ -26,9 +24,17 @@ const AddressModal = (props: AddressModalProp) => {
 
   useEffect(() => {
     if(!isOpen || !!sellercentral) return
+    const loadingId = toast.loading('Procurando endereço...')
     api.get(`/api/orders/address?order_number=${orderNumber}`)
       .then(response => response.data as OrderAddress)
-      .then(setOrderAddress)
+      .then(response => {
+        toast.dismiss(loadingId)
+        setOrderAddress(response)
+      })
+      .catch(() => {
+        toast.dismiss(loadingId)
+        setHasAddress(false)
+      })
   }, [isOpen])
 
   return (
@@ -51,7 +57,11 @@ const AddressModal = (props: AddressModalProp) => {
           {
             (sellercentral && bling)
             ? <AddressForm sellercentral={sellercentral} bling={bling} />
-            : <>Sem endereço...</>
+            : hasAddress
+              ? <></>
+              : <div style={{width: '100%', height: '100%', display: 'grid', placeItems: 'center'}}>
+                  <strong>Sem endereço</strong>
+              </div>
           }
         </div>
       </Modal>
