@@ -1,0 +1,45 @@
+.address-panel-input-container {
+  width: 100%;
+  padding: 0 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.address-panel-input-container > span {
+  font-weight: bold;
+}
+
+.address-panel-input-container > input {
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 4px;
+  outline: none;
+}
+
+.address-panel-input-container > div {
+  width: 100%;
+  padding: 2px 3px;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.address-panel-sellercentral-data {
+  font-size: small;
+  color: rgb(72, 72, 72);
+  font-style: italic;
+}
+
+.address-panel-sellercentral-assign {
+  padding: 4px;
+  color: black;
+  border-radius: 10px;
+}
+.address-panel-sellercentral-assign:hover {
+  cursor: pointer;
+  background-color: black;
+  color: white;
+  transition: 125ms;
+}

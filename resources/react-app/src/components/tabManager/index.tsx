@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react"
-import { tabManagerProp } from "./types"
+import { TabManagerProp } from "./types"
 import { TabContainer } from "./TabContainer"
 import "./style.css"
 
-export const TabManager = (props: tabManagerProp) => {
+export const TabManager = (props: TabManagerProp) => {
     const {contents, options} = props.props
     const [buttons, setButtons] = useState([] as JSX.Element[])
     const [tab, setTab] = useState(<p>Navegue pelas abas para identificar prioridades na rotina diária da saude da conta de cada canal de venda ativo!</p>)
