@@ -272,6 +272,7 @@ class Order
             'bling_number' => $orderNumber,
             'buyer_name' => $blingContact->nome,
             'recipient_name' => $blingOrder->transporte->etiqueta->nome ?? "",
+            'person_type' => $blingContact->tipo,
             'cpf_cnpj' => $blingContact->cpf_cnpj,
             'ie' => $blingContact->ie,
             'address' => $blingContact->endereco,
@@ -299,6 +300,15 @@ class Order
                 'value' => $item->valor,
             ], $blingOrderItems),
         ];
+    }
+
+    private function getPersonType(string $personType)
+    {
+        if($personType === 'Pessoa Física') return 'F';
+        if($personType === 'Pessoa Juridica') return 'J';
+        if($personType === 'Estrangeira') return 'E';
+
+        return '';
     }
 
     public function putBlingOrder(array $blingData, int $companyId)

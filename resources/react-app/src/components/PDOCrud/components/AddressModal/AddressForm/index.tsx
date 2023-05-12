@@ -104,10 +104,25 @@ const AddressForm = (props: AddressFormProp) => {
               <div>
                 <strong>UF</strong>
               </div>
-              <select name="uf" id="address-panel-uf-select" defaultValue={bling.uf as string}>{ufOptions}</select>
+              <select name="uf" className="address-panel-uf-select" defaultValue={bling.uf as string}>{ufOptions}</select>
             </div>
           </div>
           <InputContainer name="postal_code" label="CEP" bling_data={bling.postal_code} sellercentral_data={sellercentral.postal_code} />
+        </div>
+        <div className="address-panel-phone-container">
+          <div className="address-panel-person-type-container">
+            <div>
+              <strong>Pessoa</strong>
+              <select name="person_type" className="address-panel-person-type-select" defaultValue={bling.person_type as string}>
+                <option value="">Selecionar</option>
+                <option value="F">Física</option>
+                <option value="J">Juridica</option>
+                <option value="E">Estrangeira</option>
+              </select>
+            </div>
+          </div>
+          <InputContainer name="landline" label="Telefone" bling_data="" sellercentral_data={sellercentral.buyer_phone} />
+          <InputContainer name="cellphone" label="Celular" bling_data="" sellercentral_data={sellercentral.ship_phone} />
         </div>
         <strong className="address-panel-section-header">Valores e datas</strong>
         <div className="address-panel-values-container">

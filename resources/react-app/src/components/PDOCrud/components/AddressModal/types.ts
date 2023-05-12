@@ -39,6 +39,7 @@ export type BlingAddress = {
   bling_number: string,
   buyer_name: string,
   recipient_name: string,
+  person_type: 'F' | 'J' | 'E' | '',
   cpf_cnpj: string,
   ie: string,
   address: string,
