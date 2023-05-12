@@ -1,6 +1,6 @@
 import { TrackingTableProp } from "./types"
 import { ToastContainer, toast } from "react-toastify"
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from "@mui/material"
+import { Paper, responsiveFontSizes, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from "@mui/material"
 import TrackingTableRow from "./components/Row"
 import "./style.css"
 import TrackingTableHeadCell from "./components/HeadCell"
@@ -61,7 +61,10 @@ const updateRow = (trackingCode: string, deliveryMethod: string, row: any, field
     tracking_code: trackingCode,
     delivery_method: deliveryMethod
   })
-    .then(_ => toast.success("Rastreio atualizado!"))
+    .then((response) => {
+      if(response.data.length === 0) toast.error("Ocorreu algum erro... Entrar em contato com o setor de TI");
+      else toast.success("Rastreio atualizado!");
+    }) 
     .catch(_ => toast.error("Ocorreu algum erro... Entrar em contato com o setor de TI"))
 }
 
