@@ -1,4 +1,5 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
+import { createRoot } from "react-dom/client"
 import { toast } from "react-toastify"
 import api from "../../services/axios"
 import "./style.css"
@@ -10,8 +11,6 @@ export const ShipmentAndPrice = (props: ShipmentAndPricePros) => {
     const outputRef = useRef<HTMLDivElement | null>(null);
     const [JadlogData, setJadlogData] = useState<JadlogData | null>(null)
     const [correiosData, setCorreiosData] = useState<CorreiosData | null>(null)
-
-
 
     const getShipmentAndPrice = (originId: string, deliveryMethod: string, weight: string) => {
         api.get("/api/tracking/consult-price-and-shipping", {
@@ -40,67 +39,78 @@ export const ShipmentAndPrice = (props: ShipmentAndPricePros) => {
     }
 
     const CorreiosInfo = () => {
-        // if(!outputRef.current) return
-        // outputRef.current.innerHTML = '';
+        if(!outputRef.current) return
 
-        return (
-            <>
-                <strong><p>Mini Envios</p></strong>
-                    <p><strong>Prazo:</strong> {correiosData && correiosData[0]["04227"].delivery_expected_date 
-                            ? `${correiosData[0]["04227"].delivery_expected_date} dias úteis`: "-"}</p>
-                    <p><strong>Data máxima:</strong> {correiosData && correiosData[0]["04227"].max_date 
-                                ? correiosData[0]["04227"].max_date : "-"}</p>    
-                    <p><strong>Custo:</strong> {correiosData && correiosData[0]["04227"].price 
-                                ? `R$ ${correiosData[0]["04227"].price}` : "-"}</p>
-                    {correiosData && (correiosData[0]["04227"].shipping_error_msg || correiosData[0]["04227"].price_error_msg) 
-                        ? <p><strong>Erros:</strong> {correiosData[0]["04227"].shipping_error_msg} {correiosData[0]["04227"].price_error_msg}</p> : null}                                    
-                
-                <strong><p>PAC Contrato</p></strong>
-                    <p><strong>Prazo: </strong>{correiosData && correiosData[1]["03298"].delivery_expected_date 
-                            ? `${correiosData[1]["03298"].delivery_expected_date} dias úteis`: "-"}</p>
-                    <p><strong>Data máxima: </strong>{correiosData && correiosData[1]["03298"].max_date 
-                                ? correiosData[1]["03298"].max_date : "-"}</p>    
-                    <p><strong>Custo:</strong> {correiosData && correiosData[1]["03298"].price 
-                                ? `R$ ${correiosData[1]["03298"].price}` : "-"}</p>
-                    {correiosData && (correiosData[1]["03298"].shipping_error_msg || correiosData[1]["03298"].price_error_msg) 
-                        ? <p><strong>Erros:</strong> {correiosData[1]["03298"].shipping_error_msg} {correiosData[1]["03298"].price_error_msg}</p> : null}  
+        while (outputRef.current.firstChild) {
+            outputRef.current.removeChild(outputRef.current.firstChild)
+        }
 
-                <strong><p>Sedex Contrato</p></strong>
-                    <p><strong>Prazo:</strong> {correiosData && correiosData[2]["03220"].delivery_expected_date 
-                            ? `${correiosData[2]["03220"].delivery_expected_date} dias úteis`: "-"}</p>
-                    <p><strong>Data máxima:</strong> {correiosData && correiosData[2]["03220"].max_date 
-                                ? correiosData[2]["03220"].max_date : "-"}</p>    
-                    <p><strong>Custo:</strong> {correiosData && correiosData[2]["03220"].price 
-                                ? `R$ ${correiosData[2]["03220"].price}` : "-"}</p>
+        const content = (
+            <div className="Correios-content">
+                <div className={correiosData && (correiosData[0]["04227"].shipping_error_msg !== null || correiosData[0]["04227"].price_error_msg !== null) ? "unavailable" : ""}>
+                    <strong><p>Mini Envios</p></strong>
+                        <p><strong>Prazo:</strong> {correiosData && (correiosData[0]["04227"].delivery_expected_date && correiosData[0]["04227"].max_date)
+                                ? `${correiosData[0]["04227"].delivery_expected_date} dias úteis - ${correiosData[0]["04227"].max_date}`: "-"}</p>  
 
-                    {correiosData && (correiosData[2]["03220"].shipping_error_msg || correiosData[2]["03220"].price_error_msg) 
-                        ? <p><strong>Erros:</strong> {correiosData[2]["03220"].shipping_error_msg} {correiosData[2]["03220"].price_error_msg}</p> : null}  
+                        <p><strong>Custo:</strong> {correiosData && correiosData[0]["04227"].price 
+                                    ? `R$ ${correiosData[0]["04227"].price}` : "-"}</p>
+                </div>
 
-                <strong><p>SEDEX 10</p></strong>     
-                    <p><strong>Prazo:</strong> {correiosData && correiosData[3]["03204"].delivery_expected_date 
-                            ? `${correiosData[3]["03204"].delivery_expected_date} dias úteis`: "-"}</p>
-                    <p><strong>Data máxima:</strong> {correiosData && correiosData[3]["03204"].max_date 
-                                ? correiosData[3]["03204"].max_date : "-"}</p>    
-                    <p><strong>Custo:</strong> {correiosData && correiosData[3]["03204"].price 
-                                ? `R$ ${correiosData[3]["03204"].price}` : "-"}</p>
+                <div className={correiosData && (correiosData[1]["03298"].shipping_error_msg !== null || correiosData[1]["03298"].price_error_msg !== null) ? "unavailable" : ""}>
+                    <strong><p>PAC Contrato</p></strong>
+                        <p><strong>Prazo: </strong>{correiosData && (correiosData[1]["03298"].delivery_expected_date && correiosData[1]["03298"].max_date)
+                                ? `${correiosData[1]["03298"].delivery_expected_date} dias úteis - ${correiosData[1]["03298"].max_date}`: "-"}</p>
+    
+                        <p><strong>Custo:</strong> {correiosData && correiosData[1]["03298"].price 
+                                    ? `R$ ${correiosData[1]["03298"].price}` : "-"}</p>
+                </div>
 
-                    {correiosData && (correiosData[3]["03204"].shipping_error_msg || correiosData[3]["03204"].price_error_msg) 
-                        ? <p><strong>Erros:</strong> {correiosData[3]["03204"].shipping_error_msg} {correiosData[3]["03204"].price_error_msg}</p> : null}  
+                <div className={correiosData && (correiosData[2]["03220"].shipping_error_msg !== null || correiosData[2]["03220"].price_error_msg !== null) ? "unavailable" : ""}>
+                    <strong><p>Sedex Contrato</p></strong>
+                        <p><strong>Prazo:</strong> {correiosData && (correiosData[2]["03220"].delivery_expected_date && correiosData[2]["03220"].max_date)
+                                ? `${correiosData[2]["03220"].delivery_expected_date} dias úteis - ${correiosData[2]["03220"].max_date}`: "-"}</p>
 
-            </>
+                        <p><strong>Custo:</strong> {correiosData && correiosData[2]["03220"].price 
+                                    ? `R$ ${correiosData[2]["03220"].price}` : "-"}</p>
+                </div>
+
+                <div className={correiosData && (correiosData[3]["03204"].shipping_error_msg !== null || correiosData[3]["03204"].price_error_msg !== null) ? "unavailable" : ""}>
+                    <strong><p>SEDEX 10</p></strong>     
+                        <p><strong>Prazo:</strong> {correiosData && (correiosData[3]["03204"].delivery_expected_date && correiosData[3]["03204"].max_date)
+                                ? `${correiosData[3]["03204"].delivery_expected_date} dias úteis - ${correiosData[3]["03204"].max_date}`: "-"}</p>
+        
+                        <p><strong>Custo:</strong> {correiosData && correiosData[3]["03204"].price 
+                                    ? `R$ ${correiosData[3]["03204"].price}` : "-"}</p>
+                </div>                                
+            </div>
         )
+
+        const container = document.createElement('div')
+        const contentRoot = createRoot(container)
+
+        contentRoot.render(content)
+        outputRef.current.appendChild(container)
     }
 
     const JadlogInfo = () => {
         if(!outputRef.current) return
-        outputRef.current.innerHTML = '';
 
-        return (
-            <>
+        while (outputRef.current.firstChild) {
+            outputRef.current.removeChild(outputRef.current.firstChild);
+        }
+
+        const content = (
+            <div>
                 <p><strong>Custo:</strong> {JadlogData && JadlogData.price ? `R$ ${JadlogData.price.toFixed(2)}` : "-"}</p>
                 <p><strong>Prazo:</strong> {JadlogData && JadlogData.max_date ? `${JadlogData.max_date} dias úteis` : "-"}</p>            
-            </>
+            </div>
         )
+
+        const container = document.createElement('div')
+        const contentRoot = createRoot(container)
+
+        contentRoot.render(content)
+        outputRef.current.appendChild(container)
     }
 
     const handleClick = () => {
@@ -111,6 +121,14 @@ export const ShipmentAndPrice = (props: ShipmentAndPricePros) => {
         
         getShipmentAndPrice(originId, deliveryMethod, weight)
     }
+
+    useEffect(() => {
+        if(JadlogData) JadlogInfo()
+    }, [JadlogData])
+
+    useEffect(() => {
+        if(correiosData) CorreiosInfo()
+    }, [correiosData])
 
     return (
         <>
@@ -150,10 +168,8 @@ export const ShipmentAndPrice = (props: ShipmentAndPricePros) => {
                     <option value={5}>5 kg</option>
                     </select>
                 </div>
-                <button onClick={handleClick}>Calcular</button>
+                <button onClick={handleClick} id={"shipping-button"}>Consultar</button>
                 <div className="output-container" ref={outputRef}>
-                    {correiosData ? CorreiosInfo() : null}
-                    {JadlogData? JadlogInfo() : null}
                 </div>
             </div>
         </>

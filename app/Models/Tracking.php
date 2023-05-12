@@ -346,17 +346,17 @@ class Tracking extends Model
 	
 	private function fetchCorreios(string $trackingCode)
 	{	
-		$today = Date::today();
+		$today = Date::parse(date("Y-m-d H:i:s"));
 
 		if(!$this->existsApiCredentialDB('correios')) $this->generateCorreiosToken();
 
 		$apikey = $this->readApiCredentialDB('correios');
-		$expires_in = explode("T", $apikey->expiraEm)[0];
+		$expires_in = Date::parse($apikey->expiraEm);
 
-		if((!$apikey->token) || Date::parse($expires_in)->diffAsCarbonInterval($today)->format("%d")!=1){
+		if((!$apikey->token) || $expires_in->diffInSeconds($today, false) > 1){
 			$this->generateCorreiosToken();
 			$apikey = $this->readApiCredentialDB('correios');
-		} 
+		}
 
 		$response = Http::withHeaders(["X-locale" => "pt_BR"])
 			->withToken($apikey->token)

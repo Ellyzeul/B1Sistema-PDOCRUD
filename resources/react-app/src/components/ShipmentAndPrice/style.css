@@ -1,12 +1,17 @@
 .inputs-container {
-    width: 100%;
+    position: relative;
+    padding-top: 2%;
+    padding-left: 10%;
     height: 40vh;
-    background-color: rgb(158, 184, 184);
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: space-between;
     font-size: medium;
+    border-radius: 3px;
+    border: 1px solid;
+    border-color: black;
+    overflow-y: auto;
+    max-height: 100vh;
 }
 
 .origin-zipcode {
@@ -14,21 +19,51 @@
 }
 .output-container {
     position: relative;
-    background-color: rgb(241, 165, 165);
-    padding-left: 10%;
+    padding-left: 10px;
+    padding-top: 20px;
 }
 
-button {
-    color: black;
-    font-size: larger;
+#shipping-button {
+    padding: 2px 6px;
+    border-radius: 4px;
+    background-color: rgb(126, 126, 126);
+    color: white;
+    display: grid;
+    place-items: center;
+    user-select: none;
+    width: 50%;
+}
+
+#shipping-button:hover {
+    cursor: pointer;
+    background-color: rgb(82, 82, 82);
+    transition: 125ms;
 }
 
 .label-select-container {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 10px;    
 }
 
-.label-select-container label {
-    margin-right: 10px;
+.label-select-container > label {
+    margin-right: 10px;    
+}
+
+.label-select-container > select {
+    border: 1px solid rgb(123, 123, 123);
+    border-radius: 4px;
+}
+
+.inputs-container > p {
+    border-bottom: 1px solid rgb(0, 0, 0);
+    width: 145px;
+}
+
+.unavailable {
+    color: rgb(174, 174, 174);
+}
+
+.Correios-content > div{
+    padding-bottom: 20px;
 }
