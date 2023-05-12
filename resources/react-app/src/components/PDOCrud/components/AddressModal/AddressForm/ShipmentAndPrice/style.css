@@ -1,15 +1,12 @@
 .inputs-container {
     position: relative;
     padding-top: 2%;
-    padding-left: 10%;
     height: 40vh;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     font-size: medium;
-    border-radius: 3px;
-    border: 1px solid;
-    border-color: black;
     overflow-y: auto;
     max-height: 100vh;
 }
@@ -17,6 +14,7 @@
 .origin-zipcode {
     display: inline-block;
 }
+
 .output-container {
     position: relative;
     padding-left: 10px;
@@ -31,7 +29,8 @@
     display: grid;
     place-items: center;
     user-select: none;
-    width: 50%;
+    width: 60%;
+    border: none;
 }
 
 #shipping-button:hover {

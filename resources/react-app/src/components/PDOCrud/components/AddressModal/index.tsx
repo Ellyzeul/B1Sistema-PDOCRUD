@@ -5,6 +5,7 @@ import "./style.css"
 import api from "../../../../services/axios"
 import AddressForm from "./AddressForm"
 import { toast } from "react-toastify"
+import { ShipmentAndPrice } from "./AddressForm/ShipmentAndPrice"
 
 const AddressModal = (props: AddressModalProp) => {
   const { orderNumber, orderId } = props
@@ -56,7 +57,7 @@ const AddressModal = (props: AddressModalProp) => {
           </div>
           {
             (sellercentral && bling)
-            ? <AddressForm sellercentral={sellercentral} bling={bling} />
+            ? <AddressForm sellercentral={sellercentral} bling={bling} orderId={orderId}/>
             : hasAddress
               ? <></>
               : <div style={{width: '100%', height: '100%', display: 'grid', placeItems: 'center'}}>

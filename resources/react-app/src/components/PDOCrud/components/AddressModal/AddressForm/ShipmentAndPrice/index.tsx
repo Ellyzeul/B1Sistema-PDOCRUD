@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { createRoot } from "react-dom/client"
 import { toast } from "react-toastify"
-import api from "../../services/axios"
+import api from "../../../../../../services/axios"
 import "./style.css"
 import ShipmentAndPricePros, { CorreiosData, JadlogData } from "./types"
 
@@ -12,6 +12,14 @@ export const ShipmentAndPrice = (props: ShipmentAndPricePros) => {
     const [JadlogData, setJadlogData] = useState<JadlogData | null>(null)
     const [correiosData, setCorreiosData] = useState<CorreiosData | null>(null)
 
+    useEffect(() => {
+        if(JadlogData) JadlogInfo()
+    }, [JadlogData])
+
+    useEffect(() => {
+        if(correiosData) CorreiosInfo()
+    }, [correiosData])
+        
     const getShipmentAndPrice = (originId: string, deliveryMethod: string, weight: string) => {
         api.get("/api/tracking/consult-price-and-shipping", {
             params: {
@@ -24,13 +32,9 @@ export const ShipmentAndPrice = (props: ShipmentAndPricePros) => {
         .then(response => response.data)
         .then((response) => {
             if(response.error_msg) toast.error(response.error_msg)
-            else{
-                if(deliveryMethod === "Correios") setCorreiosData(response)
-                if(deliveryMethod === "Jadlog") setJadlogData(response)
 
-                toast.success("Cálculo de frete realizado com sucesso!")
-            }
-
+            if(deliveryMethod === "Correios") setCorreiosData(response)
+            if(deliveryMethod === "Jadlog") setJadlogData(response)
         })
         .catch((error) => {
             toast.error("Erro ao calcular o frete. Por favor, tente novamente.")
@@ -100,7 +104,7 @@ export const ShipmentAndPrice = (props: ShipmentAndPricePros) => {
         }
 
         const content = (
-            <div>
+            <div className={JadlogData && JadlogData.error_msg !== null ? "unavailable" : ""}>
                 <p><strong>Custo:</strong> {JadlogData && JadlogData.price ? `R$ ${JadlogData.price.toFixed(2)}` : "-"}</p>
                 <p><strong>Prazo:</strong> {JadlogData && JadlogData.max_date ? `${JadlogData.max_date} dias úteis` : "-"}</p>            
             </div>
@@ -121,14 +125,6 @@ export const ShipmentAndPrice = (props: ShipmentAndPricePros) => {
         
         getShipmentAndPrice(originId, deliveryMethod, weight)
     }
-
-    useEffect(() => {
-        if(JadlogData) JadlogInfo()
-    }, [JadlogData])
-
-    useEffect(() => {
-        if(correiosData) CorreiosInfo()
-    }, [correiosData])
 
     return (
         <>

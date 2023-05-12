@@ -5,9 +5,10 @@ import { AddressFormProp } from "./types"
 import CurrencyCotation from "./CurrencyCotation"
 import api from "../../../../../services/axios"
 import { toast } from "react-toastify"
+import { ShipmentAndPrice } from "./ShipmentAndPrice"
 
 const AddressForm = (props: AddressFormProp) => {
-  const { sellercentral, bling } = props
+  const { sellercentral, bling, orderId } = props
   const [cotation, setCotation] = useState(1)
   const addressFormRef = useRef(null)
   const observationRef = useRef(null)
@@ -137,6 +138,9 @@ const AddressForm = (props: AddressFormProp) => {
             address_form_ref={addressFormRef}
             id_sellercentral={sellercentral.id_sellercentral} 
           />
+        </div>
+        <div className="address-form-shipment-consultation">
+          <ShipmentAndPrice orderId={orderId}/>
         </div>
       </div>
     </div>
