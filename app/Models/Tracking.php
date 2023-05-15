@@ -141,7 +141,7 @@ class Tracking extends Model
 		];
 	}
 
-	public function consultPriceAndShipping(string $originId, string $orderId, string | null $deliveryMethod, float | null $weight)
+	public function consultPriceAndShipping(string $originId, string $orderId, string $clientPostalCode, string | null $deliveryMethod, float | null $weight)
 	{
 		$supportedServices = [
 			"Correios" => true,
@@ -153,17 +153,12 @@ class Tracking extends Model
 			->where('id', $originId)
 			->first()
 			->postal_code;
-						
-		$destinyZipCode = DB::table('order_control')
-			->join('order_addresses', 'order_control.online_order_number', '=', 'order_addresses.online_order_number')
-			->where('order_control.id', '=', $orderId)
-			->value('order_addresses.postal_code');
 
 		if(!isset($supportedServices[$deliveryMethod])) return ["Serviço não suportado", 400];
 
 		$response = null;
-		if($deliveryMethod == "Correios") $response = $this->consultCorreiosPriceAndShipping($originZipCode, $destinyZipCode, $weight);
-		if($deliveryMethod == "Jadlog") $response = $this->fetchJadlogPrice($originZipCode, $destinyZipCode, $weight);
+		if($deliveryMethod == "Correios") $response = $this->consultCorreiosPriceAndShipping($originZipCode, $clientPostalCode, $weight);
+		if($deliveryMethod == "Jadlog") $response = $this->fetchJadlogPrice($originZipCode, $clientPostalCode, $weight);
 
 		return $response;
 	}
@@ -243,7 +238,7 @@ class Tracking extends Model
 
 	private function fetchCorreiosShipping(string $apiToken, string $originZipCode, string $destinyZipCode)
 	{
-		$today = date('d-m-Y', strtotime(Date::today()));
+		$today = date('d-m-Y');
 
 		$response = Http::withHeaders(["X-locale" => "pt_BR"])
 			->withToken($apiToken)

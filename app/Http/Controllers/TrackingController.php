@@ -65,12 +65,13 @@ class TrackingController extends Controller
 	{
 		$tracking = new Tracking();
 
-		$originId = $request->input('origin_id');
 		$orderId = $request->input('order_id');
+		$originId = $request->input('origin_id');
+		$clientPostalCode = $request->input('client_postal_code');
 		$deliveryMethod = $request->input('delivery_method');
 		$weight = $request->input('weight') ?? null;
 
-		$response = $tracking->consultPriceAndShipping($originId, $orderId, $deliveryMethod, $weight);
+		$response = $tracking->consultPriceAndShipping($originId, $orderId, $clientPostalCode, $deliveryMethod, $weight);
 
 		return $response;
 	}
