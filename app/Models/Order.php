@@ -246,7 +246,7 @@ class Order
                 ->first();
             $response['sellercentral']->id_sellercentral = $order->id_sellercentral;
             $response['sellercentral']->id_company = $order->id_company;
-            $response['sellercentral']->delivery_method = $deliveryMethod->name;
+            $response['sellercentral']->delivery_method = $deliveryMethod->name ?? null;
             $response['sellercentral']->tracking_code = $order->tracking_code;
             $response['sellercentral']->expected_date = date('d/m/Y', strtotime($order->expected_date));
         }
