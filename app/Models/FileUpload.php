@@ -285,7 +285,7 @@ class FileUpload extends Model
 
 	private function setPropertyIfExists(array $registry, array $treated, string $key)
 	{
-		if(isset($registry[$key])) $treated[$key] = $registry[$key];
+		$treated[$key] = $registry[$key] ?? null;
 
 		return $treated;
 	}

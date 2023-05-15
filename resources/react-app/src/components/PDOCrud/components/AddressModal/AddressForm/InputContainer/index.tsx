@@ -10,7 +10,18 @@ const InputContainer = (props: InputContainerProp) => {
     const input = inputRef.current as HTMLInputElement | null
     if(!input || !sellercentral_data) return
 
-    input.value = sellercentral_data
+    input.value = getValue(sellercentral_data)
+  }
+
+  const getValue = (value: string) => {
+    if(!input_type) return value
+  
+    try {
+      return formatValues[input_type](value)
+    }
+    catch {
+      return value
+    }
   }
 
   return (
@@ -28,5 +39,9 @@ const InputContainer = (props: InputContainerProp) => {
     </div>
   )
 }
+
+const formatValues = {
+  'date': val => val.replace(/([0-9]{2})\/([0-9]{2})\/([0-9]{4})/, '$3-$2-$1')
+} as {[key: string]: (val: string) => string}
 
 export default InputContainer

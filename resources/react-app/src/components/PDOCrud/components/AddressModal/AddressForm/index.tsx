@@ -5,9 +5,10 @@ import { AddressFormProp } from "./types"
 import CurrencyCotation from "./CurrencyCotation"
 import api from "../../../../../services/axios"
 import { toast } from "react-toastify"
+import { ShipmentAndPrice } from "./ShipmentAndPrice"
 
 const AddressForm = (props: AddressFormProp) => {
-  const { sellercentral, bling } = props
+  const { sellercentral, bling, orderId } = props
   const [cotation, setCotation] = useState(1)
   const addressFormRef = useRef(null)
   const observationRef = useRef(null)
@@ -49,8 +50,9 @@ const AddressForm = (props: AddressFormProp) => {
       })
 
     const ufSelect = addressForm.querySelector('select[name="uf"]') as HTMLSelectElement
+    const personTypeSelect = addressForm.querySelector('select[name="person_type"]') as HTMLSelectElement
     const observationTextarea = observationDiv.querySelector('textarea[name="observation"]') as HTMLTextAreaElement
-    const order = [...Array.from(addressForm.querySelectorAll('input')), observationTextarea, ufSelect]
+    const order = [...Array.from(addressForm.querySelectorAll('input')), observationTextarea, ufSelect, personTypeSelect]
       .filter(input => !input.name.startsWith('item'))
       .map(({ name, value }) => ({ [name]: value }))
       .reduce((acc, cur) => ({ ...acc, ...cur }))
@@ -104,17 +106,32 @@ const AddressForm = (props: AddressFormProp) => {
               <div>
                 <strong>UF</strong>
               </div>
-              <select name="uf" id="address-panel-uf-select" defaultValue={bling.uf as string}>{ufOptions}</select>
+              <select name="uf" className="address-panel-uf-select" defaultValue={bling.uf as string}>{ufOptions}</select>
             </div>
           </div>
           <InputContainer name="postal_code" label="CEP" bling_data={bling.postal_code} sellercentral_data={sellercentral.postal_code} />
+        </div>
+        <div className="address-panel-phone-container">
+          <div className="address-panel-person-type-container">
+            <div>
+              <strong>Pessoa</strong>
+              <select name="person_type" className="address-panel-person-type-select" defaultValue={bling.person_type as string}>
+                <option value="">Selecionar</option>
+                <option value="F">Física</option>
+                <option value="J">Juridica</option>
+                <option value="E">Estrangeira</option>
+              </select>
+            </div>
+          </div>
+          <InputContainer name="cellphone" label="Celular" bling_data={bling.cellphone} sellercentral_data={sellercentral.ship_phone} />
+          <InputContainer name="landline" label="Telefone" bling_data={bling.landline} sellercentral_data={sellercentral.buyer_phone} />
         </div>
         <strong className="address-panel-section-header">Valores e datas</strong>
         <div className="address-panel-values-container">
           <InputContainer name="freight" label="Frete" bling_data={(bling.freight || 0).toFixed(2)} />
           <InputContainer name="other_expenses" label="Outras despesas" bling_data={(bling.other_expenses || 0).toFixed(2)} />
           <InputContainer name="discounts" label="Descontos" bling_data={(bling.discount || 0).toFixed(2)} />
-          <InputContainer name="expected_date" label="Data prevista" bling_data={bling.expected_date} input_type="date" />
+          <InputContainer name="expected_date" label="Data prevista" bling_data={bling.expected_date} sellercentral_data={sellercentral.expected_date} input_type="date" />
         </div>
         <strong className="address-panel-section-header">Itens</strong>
         <div className="address-panel-items-header">
@@ -137,6 +154,9 @@ const AddressForm = (props: AddressFormProp) => {
             address_form_ref={addressFormRef}
             id_sellercentral={sellercentral.id_sellercentral} 
           />
+        </div>
+        <div className="address-form-shipment-consultation">
+          <ShipmentAndPrice orderId={orderId}/>
         </div>
       </div>
     </div>

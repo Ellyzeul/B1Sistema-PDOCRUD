@@ -237,11 +237,12 @@ class Order
             ->first();
         if(isset($response['sellercentral'])) {
             $order = DB::table('order_control')
-                ->select('id_sellercentral', 'id_company')
+                ->select('id_sellercentral', 'id_company', 'expected_date')
                 ->where('online_order_number', $orderNumber)
                 ->first();
             $response['sellercentral']->id_sellercentral = $order->id_sellercentral;
             $response['sellercentral']->id_company = $order->id_company;
+            $response['sellercentral']->expected_date = date('d/m/Y', strtotime($order->expected_date));
         }
         
         return $response;
@@ -272,6 +273,7 @@ class Order
             'bling_number' => $orderNumber,
             'buyer_name' => $blingContact->nome,
             'recipient_name' => $blingOrder->transporte->etiqueta->nome ?? "",
+            'person_type' => $blingContact->tipo,
             'cpf_cnpj' => $blingContact->cpf_cnpj,
             'ie' => $blingContact->ie,
             'address' => $blingContact->endereco,
@@ -281,7 +283,7 @@ class Order
             'county' => $blingContact->bairro,
             'email' => $blingContact->email,
             'cellphone' => $blingContact->celular,
-            'landline_phone' => $blingContact->fone,
+            'landline' => $blingContact->fone,
             'postal_code' => $blingContact->cep,
             'uf' => $blingContact->uf,
             'total_items' => count($blingOrderItems),
@@ -299,6 +301,15 @@ class Order
                 'value' => $item->valor,
             ], $blingOrderItems),
         ];
+    }
+
+    private function getPersonType(string $personType)
+    {
+        if($personType === 'Pessoa Física') return 'F';
+        if($personType === 'Pessoa Juridica') return 'J';
+        if($personType === 'Estrangeira') return 'E';
+
+        return '';
     }
 
     public function putBlingOrder(array $blingData, int $companyId)
@@ -356,6 +367,8 @@ class Order
         $blingContact['cep'] = $blingData['postal_code'];
         $blingContact['bairro'] = $blingData['county'];
         $blingContact['cpf_cnpj'] = $blingData['cpf_cnpj'];
+        $blingContact['fone'] = $blingData['landline'];
+        $blingContact['celular'] = $blingData['cellphone'];
 
         $requestsBodyProducts = array_map(function($product, $item) {
             $product['gtin'] = $item['isbn'];
