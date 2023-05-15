@@ -237,11 +237,12 @@ class Order
             ->first();
         if(isset($response['sellercentral'])) {
             $order = DB::table('order_control')
-                ->select('id_sellercentral', 'id_company')
+                ->select('id_sellercentral', 'id_company', 'expected_date')
                 ->where('online_order_number', $orderNumber)
                 ->first();
             $response['sellercentral']->id_sellercentral = $order->id_sellercentral;
             $response['sellercentral']->id_company = $order->id_company;
+            $response['sellercentral']->expected_date = date('d/m/Y', strtotime($order->expected_date));
         }
         
         return $response;
@@ -282,7 +283,7 @@ class Order
             'county' => $blingContact->bairro,
             'email' => $blingContact->email,
             'cellphone' => $blingContact->celular,
-            'landline_phone' => $blingContact->fone,
+            'landline' => $blingContact->fone,
             'postal_code' => $blingContact->cep,
             'uf' => $blingContact->uf,
             'total_items' => count($blingOrderItems),
@@ -366,6 +367,8 @@ class Order
         $blingContact['cep'] = $blingData['postal_code'];
         $blingContact['bairro'] = $blingData['county'];
         $blingContact['cpf_cnpj'] = $blingData['cpf_cnpj'];
+        $blingContact['fone'] = $blingData['landline'];
+        $blingContact['celular'] = $blingData['cellphone'];
 
         $requestsBodyProducts = array_map(function($product, $item) {
             $product['gtin'] = $item['isbn'];

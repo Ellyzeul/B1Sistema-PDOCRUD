@@ -20,6 +20,7 @@ class Tracking extends Model
 		"DHL" => true,
 		"FedEx" => true,
 	];
+	private array $correiosServiceCodes = ['04227', '03298', '03220', '03204'];
 
 	public function read()
 	{
@@ -148,15 +149,15 @@ class Tracking extends Model
 		];
 
 		$originZipCode = DB::table('delivery_addresses')
-							->select('postal_code')
-							->where('id', $originId)
-							->first()
-							->postal_code;
+			->select('postal_code')
+			->where('id', $originId)
+			->first()
+			->postal_code;
 						
 		$destinyZipCode = DB::table('order_control')
-							->join('order_addresses', 'order_control.online_order_number', '=', 'order_addresses.online_order_number')
-							->where('order_control.id', '=', $orderId)
-							->value('order_addresses.postal_code');
+			->join('order_addresses', 'order_control.online_order_number', '=', 'order_addresses.online_order_number')
+			->where('order_control.id', '=', $orderId)
+			->value('order_addresses.postal_code');
 
 		if(!isset($supportedServices[$deliveryMethod])) return ["Serviço não suportado", 400];
 
@@ -169,111 +170,72 @@ class Tracking extends Model
 
 	private function consultCorreiosPriceAndShipping(string $originZipCode, string $destinyZipCode, string|null $weight)
 	{
-		$today = Date::today();
+		$today = Date::parse(date('Y-m-d H:i:s'));
 
 		if(!$this->existsApiCredentialDB('correios')) $this->generateCorreiosToken();
 
 		$apikey = $this->readApiCredentialDB('correios');
-		$expires_in = explode("T", $apikey->expiraEm)[0];
+		$expires_in = Date::parse($apikey->expiraEm);
 
-		if((!$apikey->token) || Date::parse($expires_in)->diffAsCarbonInterval($today)->format("%d")!=1){
+		if((!$apikey->token) || $expires_in->diffInSeconds($today) > 1) {
 			$this->generateCorreiosToken();
 			$apikey = $this->readApiCredentialDB('correios');
 		} 
 
+		$services = [
+			'04227' => 'Mini Envios', 
+			'03298' => 'PAC', 
+			'03220' => 'Sedex', 
+			'03204' => 'Sedex Hoje', 
+		];
 		$shipping_response = $this->fetchCorreiosShipping($apikey->token, $originZipCode, $destinyZipCode);
 		$price_response = $this->fetchCorreiosPrice($apikey->token, $originZipCode, $destinyZipCode, $weight);
 
 		if(!isset($shipping_response) || !isset($price_response)) return [];
 		
-		$response = [];
-		for($i=0; $i<4; $i++){
-			$date =  isset($shipping_response[$i]['dataMaxima']) 
-						? date('d/m/Y', strtotime($shipping_response[$i]['dataMaxima'])) 
-						: $date = null;
+		$responseMapped = array_map(fn($shipping, $price) => [
+			$shipping['coProduto'] => [
+				'service_name' => $services[$shipping['coProduto']], 
+				'delivery_expected_date' => $shipping['prazoEntrega'] ?? null, 
+				'max_date' => isset($shipping['dataMaxima']) 
+					? date('d/m/Y', strtotime($shipping['dataMaxima'])) 
+					: $date = null,
+				'shipping_error_msg' => $shipping['txErro'] ?? null,
+				'price' => $price['pcFinal'] ?? null,
+				'price_error_msg' => $price['txErro'] ?? null
+			]
+		], $shipping_response->json(), $price_response->json());
 
-			$node = [
-				$shipping_response[$i]['coProduto'] => [
-					'delivery_expected_date' => $shipping_response[$i]['prazoEntrega'] ?? null, 
-					'max_date' => $date,
-					'shipping_error_msg' => $shipping_response[$i]['txErro'] ?? null,
-					'price' => $price_response[$i]['pcFinal'] ?? null,
-					'price_error_msg' => $price_response[$i]['txErro'] ?? null
-				]
-			];
-			array_push($response, $node);
-		}
+		$response = array_reduce($responseMapped, function($acc, $cur) {
+			return array_merge($acc ?? [], $cur);
+		});
 
 		return $response;
 	}
 
 	private function fetchCorreiosPrice(string $apiToken, string $originZipCode, string $destinyZipCode, string|null $weight)
 	{
-		$today = date('d-m-Y', strtotime(Date::today()));
+		$today = date('d-m-Y');
 		$weight = ($weight ?? 1) * 1000;
 
 		$response = Http::withHeaders(["X-locale" => "pt_BR"])
 			->withToken($apiToken)
 			->post("https://api.correios.com.br/preco/v1/nacional/", [
-					'idLote' => 'string',
-					'parametrosProduto' => [
-						[
-							'coProduto' => '04227',
-							'nuRequisicao'=> '1',
-							'nuContrato' => '9912449300',
-							'nuDR' => 72,
-							'cepOrigem' => $originZipCode,
-							'psObjeto' => $weight,
-							'tpObjeto' => '2',
-							'comprimento' => '25',
-							'largura' => '35',
-							'altura' => '3',
-							'dtEvento' => $today,
-							'cepDestino' => $destinyZipCode,
-						],
-						[
-							'coProduto' => '03298',
-							'nuRequisicao'=> '2',
-							'nuContrato' => '9912449300',
-							'nuDR' => 72,
-							'cepOrigem' => $originZipCode,
-							'psObjeto' => $weight,
-							'tpObjeto' => '2',
-							'comprimento' => '25',
-							'largura' => '35',
-							'altura' => '3',
-							'dtEvento' => $today,
-							'cepDestino' => $destinyZipCode,
-						],
-						[
-							'coProduto' => '03220',
-							'nuRequisicao'=> '3',
-							'nuContrato' => '9912449300',
-							'nuDR' => 72,
-							'cepOrigem' => $originZipCode,
-							'psObjeto' => $weight,
-							'tpObjeto' => '2',
-							'comprimento' => '25',
-							'largura' => '35',
-							'altura' => '3',
-							'dtEvento' => $today,
-							'cepDestino' => $destinyZipCode,
-						],
-						[
-							'coProduto' => '03204',
-							'nuRequisicao'=> '4',
-							'nuContrato' => '9912449300',
-							'nuDR' => 72,
-							'cepOrigem' => $originZipCode,
-							'psObjeto' => $weight,
-							'tpObjeto' => '2',
-							'comprimento' => '25',
-							'largura' => '35',
-							'altura' => '3',
-							'dtEvento' => $today,
-							'cepDestino' => $destinyZipCode,
-						]
-					]
+				'idLote' => 'string',
+				'parametrosProduto' => array_map(fn($serviceCode) => [
+					'coProduto' => $serviceCode,
+					'nuRequisicao'=> '1',
+					'nuContrato' => '9912449300',
+					'nuDR' => 72,
+					'cepOrigem' => $originZipCode,
+					'psObjeto' => $weight,
+					'tpObjeto' => '2',
+					'comprimento' => '25',
+					'largura' => '35',
+					'altura' => '3',
+					'dtEvento' => $today,
+					'cepDestino' => $destinyZipCode,
+				], $this->correiosServiceCodes, array_keys($this->correiosServiceCodes))
 			]);
 
 		return $response;
@@ -286,37 +248,14 @@ class Tracking extends Model
 		$response = Http::withHeaders(["X-locale" => "pt_BR"])
 			->withToken($apiToken)
 			->post("https://api.correios.com.br/prazo/v1/nacional/", [
-					'idLote' => '1',
-					'parametrosPrazo' => [
-						[
-							'coProduto' => '04227',
-							'cepOrigem' => $originZipCode,
-							'cepDestino' => $destinyZipCode,
-							'dataPostagem' => $today,
-							'nuRequisicao' => '1'
-						],
-						[
-							'coProduto' => '03298',
-							'cepOrigem' => $originZipCode,
-							'cepDestino' => $destinyZipCode,
-							'dataPostagem' => $today,
-							'nuRequisicao' => '2'
-						],
-						[
-							'coProduto' => '03220',
-							'cepOrigem' => $originZipCode,
-							'cepDestino' => $destinyZipCode,
-							'dataPostagem' => $today,
-							'nuRequisicao' => '3'
-						],
-						[
-							'coProduto' => '03204',
-							'cepOrigem' => $originZipCode,
-							'cepDestino' => $destinyZipCode,
-							'dataPostagem' => $today,
-							'nuRequisicao' => '4'
-						]
-					]
+				'idLote' => '1',
+				'parametrosPrazo' => array_map(fn($serviceCode, $index) => [
+					'coProduto' => $serviceCode,
+					'cepOrigem' => $originZipCode,
+					'cepDestino' => $destinyZipCode,
+					'dataPostagem' => $today,
+					'nuRequisicao' => "$index"
+				], $this->correiosServiceCodes, array_keys($this->correiosServiceCodes))
 			]);
 		
 		return $response;

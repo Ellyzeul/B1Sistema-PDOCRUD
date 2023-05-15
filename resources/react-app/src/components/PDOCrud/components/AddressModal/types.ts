@@ -49,7 +49,7 @@ export type BlingAddress = {
   county: string,
   email: string,
   cellphone: string,
-  landline_phone: string,
+  landline: string,
   postal_code: string,
   uf: string,
   total_items: number,

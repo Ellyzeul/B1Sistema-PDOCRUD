@@ -50,8 +50,9 @@ const AddressForm = (props: AddressFormProp) => {
       })
 
     const ufSelect = addressForm.querySelector('select[name="uf"]') as HTMLSelectElement
+    const personTypeSelect = addressForm.querySelector('select[name="person_type"]') as HTMLSelectElement
     const observationTextarea = observationDiv.querySelector('textarea[name="observation"]') as HTMLTextAreaElement
-    const order = [...Array.from(addressForm.querySelectorAll('input')), observationTextarea, ufSelect]
+    const order = [...Array.from(addressForm.querySelectorAll('input')), observationTextarea, ufSelect, personTypeSelect]
       .filter(input => !input.name.startsWith('item'))
       .map(({ name, value }) => ({ [name]: value }))
       .reduce((acc, cur) => ({ ...acc, ...cur }))
@@ -122,15 +123,15 @@ const AddressForm = (props: AddressFormProp) => {
               </select>
             </div>
           </div>
-          <InputContainer name="landline" label="Telefone" bling_data="" sellercentral_data={sellercentral.buyer_phone} />
-          <InputContainer name="cellphone" label="Celular" bling_data="" sellercentral_data={sellercentral.ship_phone} />
+          <InputContainer name="cellphone" label="Celular" bling_data={bling.cellphone} sellercentral_data={sellercentral.ship_phone} />
+          <InputContainer name="landline" label="Telefone" bling_data={bling.landline} sellercentral_data={sellercentral.buyer_phone} />
         </div>
         <strong className="address-panel-section-header">Valores e datas</strong>
         <div className="address-panel-values-container">
           <InputContainer name="freight" label="Frete" bling_data={(bling.freight || 0).toFixed(2)} />
           <InputContainer name="other_expenses" label="Outras despesas" bling_data={(bling.other_expenses || 0).toFixed(2)} />
           <InputContainer name="discounts" label="Descontos" bling_data={(bling.discount || 0).toFixed(2)} />
-          <InputContainer name="expected_date" label="Data prevista" bling_data={bling.expected_date} input_type="date" />
+          <InputContainer name="expected_date" label="Data prevista" bling_data={bling.expected_date} sellercentral_data={sellercentral.expected_date} input_type="date" />
         </div>
         <strong className="address-panel-section-header">Itens</strong>
         <div className="address-panel-items-header">

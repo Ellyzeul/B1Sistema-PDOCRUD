@@ -12,6 +12,7 @@ const AddressModal = (props: AddressModalProp) => {
   const [isOpen, setIsOpen] = useState(false)
   const [{ sellercentral, bling }, setOrderAddress] = useState({} as OrderAddress)
   const [hasAddress, setHasAddress] = useState(true)
+  const [addressComponent, setAddressComponent] = useState(<></>)
 
   const handleOpen: MouseEventHandler = (event) => {
     const { detail } = event
@@ -20,11 +21,8 @@ const AddressModal = (props: AddressModalProp) => {
 
     setIsOpen(true)
   }
-
   const handleClose = () => setIsOpen(false)
-
-  useEffect(() => {
-    if(!isOpen || !!sellercentral) return
+  const fetchData = () => {
     const loadingId = toast.loading('Procurando endereço...')
     api.get(`/api/orders/address?order_number=${orderNumber}`)
       .then(response => response.data as OrderAddress)
@@ -36,7 +34,23 @@ const AddressModal = (props: AddressModalProp) => {
         toast.dismiss(loadingId)
         setHasAddress(false)
       })
+  }
+
+  useEffect(() => {
+    if(!isOpen || !!sellercentral) return
+    fetchData()
   }, [isOpen])
+
+  useEffect(() => {
+    if(!bling || !sellercentral) return
+
+    setAddressComponent(<></>)
+    setTimeout(() => setAddressComponent(<AddressForm 
+      sellercentral={sellercentral} 
+      bling={bling} 
+      orderId={orderId} 
+    />), 1)
+  }, [bling])
 
   return (
     <>
@@ -55,9 +69,12 @@ const AddressModal = (props: AddressModalProp) => {
           <div className="close-address-modal" onClick={handleClose}>
             <i className="fa-solid fa-xmark"></i>
           </div>
+          <div className="refetch-data-btn" onClick={fetchData}>
+            <i className="fa-solid fa-rotate-right" />
+          </div>
           {
             (sellercentral && bling)
-            ? <AddressForm sellercentral={sellercentral} bling={bling} orderId={orderId}/>
+            ? addressComponent
             : hasAddress
               ? <></>
               : <div style={{width: '100%', height: '100%', display: 'grid', placeItems: 'center'}}>
