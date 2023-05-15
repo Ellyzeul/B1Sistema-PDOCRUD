@@ -88,6 +88,7 @@ const AddressForm = (props: AddressFormProp) => {
       <div className="address-form-save-btn" onClick={handleClick}>Salvar</div>
       <div ref={addressFormRef} className="address-panel">
         <strong className="address-panel-section-header">Dados do Cliente</strong>
+        <span className="address-panel-order-number">ORIGEM: {sellercentral.online_order_number} - Nº Bling: {bling.bling_number}</span>
         <div className="address-panel-names-container">
           <InputContainer name="buyer_name" label="Cliente" bling_data={bling.buyer_name} sellercentral_data={sellercentral.buyer_name} />
           <InputContainer name="recipient_name" label="Destinatário" bling_data={bling.recipient_name} sellercentral_data={sellercentral.recipient_name} />
@@ -156,7 +157,12 @@ const AddressForm = (props: AddressFormProp) => {
           />
         </div>
         <div className="address-form-shipment-consultation">
-          <ShipmentAndPrice orderId={orderId}/>
+          <ShipmentAndPrice 
+            orderId={orderId} 
+            address_form_ref={addressFormRef} 
+            delivery_method={sellercentral.delivery_method} 
+            tracking_code={sellercentral.tracking_code} 
+          />
         </div>
       </div>
     </div>
