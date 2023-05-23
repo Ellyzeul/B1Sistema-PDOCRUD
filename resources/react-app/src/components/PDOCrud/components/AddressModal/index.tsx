@@ -5,7 +5,6 @@ import "./style.css"
 import api from "../../../../services/axios"
 import AddressForm from "./AddressForm"
 import { toast } from "react-toastify"
-import { ShipmentAndPrice } from "./AddressForm/ShipmentAndPrice"
 
 const AddressModal = (props: AddressModalProp) => {
   const { orderNumber, orderId } = props
@@ -30,7 +29,7 @@ const AddressModal = (props: AddressModalProp) => {
         toast.dismiss(loadingId)
         setOrderAddress(response)
       })
-      .catch(() => {
+      .catch((error) => {
         toast.dismiss(loadingId)
         setHasAddress(false)
       })

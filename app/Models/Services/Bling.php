@@ -99,6 +99,29 @@ class Bling
     }
 
     /**
+     * Busca produto pelo código
+     * 
+     * Endpoint GET /produtos?codigo
+     * 
+     * @param (string) code
+     */
+
+    public function getProductByCode(string $code)
+    {
+        return $this->version === 'v3'
+            ? $this->getProductByCodeV3($code)
+            : new \Exception('Unimplemented');
+    }
+
+    private function getProductByCodeV3(string $code)
+    {
+        $response = Http::bling($this->companyId, 'v3_new')->get("/produtos?codigo=$code");
+        if(!$response->ok()) return (object) ['error' => true];
+
+        return $response->object()->data[0];
+    }
+
+    /**
      * Atualiza um produto por completo
      * 
      * Endpoint PUT /produtos
@@ -122,6 +145,30 @@ class Bling
             ? $response->object()->data
             : $response->object();
     }
+
+    /**
+     * Grava o pedido.
+     * 
+     * Endpoint POST /produtos
+     * 
+     * @param (array) requestBody
+     */    
+    public function postProduct(array $requestBody)
+    {
+        return $this->version === 'v3'
+            ? $this->postProductV3($requestBody)
+            : new \Exception('Unimplemented');
+    }
+
+    private function postProductV3(array $requestBody)
+    {
+        $response = Http::bling($this->companyId, 'v3')->post("/produtos", $requestBody);
+        // if(!$response->ok()) return (object) ['error' => true];
+
+        return $response->ok()
+            ? $response->object()->data
+            : $response->object();
+    }    
 
     /**
      * Recupera dados do pedido.

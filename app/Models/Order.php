@@ -261,7 +261,38 @@ class Order
         $blingContact = $bling->getContactFromOrder($order->bling_number);
         $blingProducts = [];
         foreach($blingOrderItems as $item) {
-            array_push($blingProducts, $bling->getProduct($item->produto->id));
+            $productResponse = $bling->getProduct($item->produto->id);
+            if(!isset($productResponse->error)) {
+                array_push($blingProducts, $productResponse);
+                continue;
+            }
+            $productResponse = $bling->getProductByCode($item->produto->codigo);
+            if(!isset($productResponse->error)) {
+                $item->produto->id = $productResponse->id;
+                array_push($blingProducts, $productResponse);
+                continue;
+            }
+
+            $isbn = explode('_', $item->produto->codigo)[1];
+            $requestBody = [
+                "nome" => $item->produto->descricao,
+                "codigo"=> $item->produto->codigo,
+                "unidade" => "UN",
+                "tipo" => "P",
+                "situacao" => "A",
+                "preco" => $item->valor,
+                "formato" => "S",
+                "gtin" => $isbn,
+                "gtinEmbalagem" => $isbn,
+                "tributacao" => [
+                    "origem" => 0,
+                    "ncm" => "4901.99.00",
+                    "cest"=> "28.064.00"
+                ]
+            ];
+            $productResponse = $bling->postProduct($requestBody);
+            var_dump($productResponse);
+            array_push($blingProducts, array_merge($requestBody, ['id' => $productResponse->id]));
         }
 
         return [
@@ -549,37 +580,6 @@ class Order
             $result->from_email, 
             $result->company_name, 
             $result->is_national == 1, 
-        ];
-    }
-
-    private function getBlingAddress(int $companyId, string $blingNumber)
-    {
-        $response = $this->makeDevBlingOrderRequest($companyId, $blingNumber);
-        if(isset($response['error'])) return $response;
-
-        $order = $response['retorno']['pedidos'][0]['pedido'];
-        $client = $order['cliente'];
-        $totalItems = array_reduce(
-            array_map(fn ($item) => intval($item['item']['quantidade']), $order['itens']), 
-            fn ($acc, $qnt) => $acc + $qnt
-        );
-
-        return [
-            'buyer_name' => $client['nome'],
-            'cpf_cnpj' => $client['cnpj'],
-            'ie' => $client['ie'],
-            'address' => $client['endereco'],
-            'number' => $client['numero'],
-            'complement' =>$client['complemento'],
-            'city' => $client['cidade'],
-            'county' => $client['bairro'],
-            'email' => $client['email'],
-            'cellphone' => $client['celular'],
-            'landline_phone' => $client['fone'],
-            'postal_code' => $client['cep'],
-            'uf' => $client['uf'],
-            'total_items' => $totalItems,
-            'total_value' => $order['totalvenda'],
         ];
     }
 
