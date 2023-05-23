@@ -1,5 +1,5 @@
 import { Modal } from "@mui/material"
-import { MouseEventHandler, useEffect, useRef, useState } from "react"
+import { MouseEventHandler, useEffect, useState } from "react"
 import { AddressModalProp, OrderAddress } from "./types"
 import "./style.css"
 import api from "../../../../services/axios"

@@ -1,5 +1,8 @@
 export type ShipmentAndPriceProp = {
-	orderId: string
+	orderId: string,
+	address_form_ref: React.MutableRefObject<null>,
+	delivery_method: string | null,
+	tracking_code: string | null,
 } 
 
 export type CorreiosData = {

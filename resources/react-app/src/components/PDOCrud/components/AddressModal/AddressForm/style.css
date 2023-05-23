@@ -35,6 +35,10 @@
   border-bottom: 1px solid black;
 }
 
+.address-panel-order-number {
+  font-size: small;
+}
+
 .address-panel-names-container {
   width: 100%;
   display: grid;

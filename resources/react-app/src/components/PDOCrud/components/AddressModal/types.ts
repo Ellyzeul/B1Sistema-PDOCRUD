@@ -32,6 +32,8 @@ export type SellercentralAddress = {
   delivery_instructions: string, 
   id_sellercentral: number,
   id_company: number,
+  delivery_method: string | null,
+  tracking_code: string | null,
 }
 
 export type BlingAddress = {

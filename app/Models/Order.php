@@ -237,11 +237,17 @@ class Order
             ->first();
         if(isset($response['sellercentral'])) {
             $order = DB::table('order_control')
-                ->select('id_sellercentral', 'id_company', 'expected_date')
+                ->select('id_sellercentral', 'id_company', 'expected_date', 'tracking_code', 'id_delivery_method')
                 ->where('online_order_number', $orderNumber)
+                ->first();
+            $deliveryMethod = DB::table('delivery_methods')
+                ->select('name')
+                ->where('id', $order->id_delivery_method)
                 ->first();
             $response['sellercentral']->id_sellercentral = $order->id_sellercentral;
             $response['sellercentral']->id_company = $order->id_company;
+            $response['sellercentral']->delivery_method = $deliveryMethod->name ?? null;
+            $response['sellercentral']->tracking_code = $order->tracking_code;
             $response['sellercentral']->expected_date = date('d/m/Y', strtotime($order->expected_date));
         }
         
@@ -301,10 +307,10 @@ class Order
                 'contact' => $blingContact,
                 'products' => $blingProducts,
             ],
-            'bling_number' => $orderNumber,
+            'bling_number' => $order->bling_number,
             'buyer_name' => $blingContact->nome,
             'recipient_name' => $blingOrder->transporte->etiqueta->nome ?? "",
-            'person_type' => $blingContact->tipo,
+            'person_type' => $this->getBlingPersonType($blingContact->tipo),
             'cpf_cnpj' => $blingContact->cpf_cnpj,
             'ie' => $blingContact->ie,
             'address' => $blingContact->endereco,
@@ -389,7 +395,7 @@ class Order
         $blingOrder['parcelas'][0]['valor'] = $total;
         
         $blingContact['nome'] = $blingData['buyer_name'];
-        $blingContact['tipo'] = $this->getBlingPersonType($blingContact['tipo']);
+        $blingContact['tipo'] = $blingData['person_type'];
         $blingContact['endereco'] = $blingData['address'];
         $blingContact['numero'] = $blingData['number'];
         $blingContact['complemento'] = $blingData['complement'];

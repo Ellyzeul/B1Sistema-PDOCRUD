@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from "react"
-import { createRoot } from "react-dom/client"
 import { toast } from "react-toastify"
 import api from "../../../../../../services/axios"
 import "./style.css"
 import { ShipmentAndPriceProp, CorreiosData, JadlogData } from "./types"
 
 export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
-	const { orderId } = props
+	const { orderId, address_form_ref, delivery_method, tracking_code } = props
 	const inputsRef = useRef<HTMLDivElement | null>(null)
 	const [jadlogData, setJadlogData] = useState({} as JadlogData)
 	const [correiosData, setCorreiosData] = useState({} as CorreiosData)
@@ -20,11 +19,12 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 		if(correiosData) CorreiosInfo()
 	}, [correiosData])
 			
-	const getShipmentAndPrice = (originId: string, deliveryMethod: string, weight: string) => {
+	const getShipmentAndPrice = (originId: string, clientPostalCode: string, deliveryMethod: string, weight: string) => {
 		api.get("/api/tracking/consult-price-and-shipping", {
 			params: {
-				"origin_id": originId,
 				"order_id": orderId,
+				"origin_id": originId,
+				"client_postal_code": clientPostalCode,
 				"delivery_method": deliveryMethod,
 				"weight": weight
 			}
@@ -54,7 +54,7 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 						<strong>Prazo: </strong>
 						{
 							(delivery_expected_date && max_date)
-								? `${delivery_expected_date} dias úteis - ${max_date}`
+								? `${delivery_expected_date} ${delivery_expected_date === 1 ? 'dia útil' : 'dias úteis'} - ${max_date}`
 								: '--'
 						}
 					</div>
@@ -82,17 +82,20 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 	}
 
 	const handleClick = () => {
-		if(!inputsRef.current) return
+		const addressForm = address_form_ref.current as HTMLDivElement | null
+		if(!inputsRef.current || !addressForm) return
 		const originId = (inputsRef.current?.querySelector('select[name="origin-zipcode"]') as HTMLSelectElement).value
+		const clientPostalCode = (addressForm.querySelector('input[name="postal_code"]') as HTMLSelectElement).value
 		const deliveryMethod = (inputsRef.current?.querySelector('select[name="delivery-method"]') as HTMLSelectElement).value
 		const weight = (inputsRef.current?.querySelector('select[name="weight"]') as HTMLSelectElement).value
 		
-		getShipmentAndPrice(originId, deliveryMethod, weight)
+		getShipmentAndPrice(originId, clientPostalCode, deliveryMethod, weight)
 	}
 
 	return (
 		<div className="inputs-container" ref={inputsRef}>
-			<p><strong>Simulador de Frete</strong></p>
+			<strong>Simulador de Frete</strong>
+			{tracking_code && <p>Rastreio: {tracking_code} {delivery_method && <>- {delivery_method}</>}</p>}
 			<div className="label-select-container">
 				<label htmlFor="origin-zipcode">CEP de origem:</label>
 				<select name="origin-zipcode">
