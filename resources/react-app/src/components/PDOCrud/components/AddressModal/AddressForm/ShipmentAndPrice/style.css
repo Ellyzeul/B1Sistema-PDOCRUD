@@ -75,4 +75,5 @@
 
 .correios-content > div{
 	margin-top: 20px;
+	user-select: none;
 }

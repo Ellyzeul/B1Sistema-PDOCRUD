@@ -298,6 +298,7 @@ class Order
             'other_expenses' => $blingOrder->outrasDespesas,
             'discount' => floatval(str_replace(',', '.', $blingOrder->desconto)),
             'expected_date' => $blingOrder->dataPrevista,
+            'delivery_service' => $blingOrder->transporte->volumes[0]->servico ?? null,
             'observation' => $blingOrder->observacoes,
             'items' => array_map(fn($item) => [
                 'id' => $item->id,
@@ -305,6 +306,9 @@ class Order
                 'title' => $item->produto->descricao,
                 'quantity' => $item->quantidade,
                 'value' => $item->valor,
+                'origin' => $item->tributacao->origem ?? null,
+                'ncm' => $item->tributacao->ncm ?? null,
+                'cest' => $item->tributacao->cest ?? null,
             ], $blingOrderItems),
         ];
     }
@@ -366,15 +370,16 @@ class Order
         $blingContact['nome'] = $blingData['buyer_name'];
         $blingContact['tipo'] = $blingData['person_type'];
         $blingContact['endereco'] = $blingData['address'];
-        $blingContact['numero'] = $blingData['number'];
-        $blingContact['complemento'] = $blingData['complement'];
-        $blingContact['cidade'] = $blingData['city'];
-        $blingContact['uf'] = $blingData['uf'];
-        $blingContact['cep'] = $blingData['postal_code'];
-        $blingContact['bairro'] = $blingData['county'];
-        $blingContact['cpf_cnpj'] = $blingData['cpf_cnpj'];
-        $blingContact['fone'] = $blingData['landline'];
-        $blingContact['celular'] = $blingData['cellphone'];
+        $blingContact['numero'] = $blingData['number'] ?? '';
+        $blingContact['complemento'] = $blingData['complement'] ?? '';
+        $blingContact['cidade'] = $blingData['city'] ?? '';
+        $blingContact['uf'] = $blingData['uf'] ?? '';
+        $blingContact['cep'] = $blingData['postal_code'] ?? '';
+        $blingContact['bairro'] = $blingData['county'] ?? '';
+        $blingContact['cpf_cnpj'] = $blingData['cpf_cnpj'] ?? '';
+        $blingContact['fone'] = $blingData['landline'] ?? '';
+        $blingContact['celular'] = $blingData['cellphone'] ?? '';
+        $blingContact['nomePais'] = $blingData['country'] ?? '';
 
         $requestsBodyProducts = array_map(function($product, $item) {
             $product['gtin'] = $item['isbn'];
@@ -402,9 +407,10 @@ class Order
 
     private function getBlingPersonType(string $personType)
     {
-        if($personType === "Pessoa Física") return "F";
-        if($personType === "Pessoa Jurídica") return "J";
-        if($personType === "Estrangeiro") return "E";
+        if($personType === '') return "";
+        if(in_array($personType, ['Pessoa Física', 'F'])) return "F";
+        if(in_array($personType, ['Pessoa Jurídica', 'J'])) return "J";
+        if(in_array($personType, ['Estrangeiro', 'E'])) return "E";
 
         throw new \Exception("Tipo de pessoa '$personType' não identificada como válida para o Bling...");
     }

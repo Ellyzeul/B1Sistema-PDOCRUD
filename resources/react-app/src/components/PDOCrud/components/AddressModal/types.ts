@@ -60,6 +60,7 @@ export type BlingAddress = {
   other_expenses: number,
   discount: number,
   expected_date: string,
+  delivery_service: string | null,
   observation: string,
   items: {
     id: string,
@@ -67,5 +68,8 @@ export type BlingAddress = {
     title: string,
     quantity: number,
     value: number,
+    origin: string | null,
+    ncm: string | null,
+    cest: string | null,
   }[]
 }
