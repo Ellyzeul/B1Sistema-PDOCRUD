@@ -37,6 +37,10 @@ class AppServiceProvider extends ServiceProvider
             if($version === 'v3') return Http::withHeaders([
                 'x-api-key' => env($blingAPIKeys[$companyId])
             ])->baseUrl('https://bling.com.br/a/Api/v3');
+
+            if($version === 'v3_new') return Http::withHeaders([
+                'x-api-key' => env($blingAPIKeys[$companyId])
+            ])->baseUrl('https://bling.com.br/Api/v3');
         });
     }
 }
