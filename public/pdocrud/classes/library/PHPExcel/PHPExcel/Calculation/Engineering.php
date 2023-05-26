@@ -37,6 +37,8 @@ define('EULER', 2.71828182845904523536);
  * @license        http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt    LGPL
  * @version        ##VERSION##, ##DATE##
  */
+
+#[\AllowDynamicProperties]
 class PHPExcel_Calculation_Engineering
 {
     /**

@@ -49,7 +49,7 @@ PARTLY BASED ON:
  * @version    ##VERSION##, ##DATE##
  */
 
-
+#[\AllowDynamicProperties]
 class PHPExcel_Calculation_FormulaToken
 {
     /* Token types */

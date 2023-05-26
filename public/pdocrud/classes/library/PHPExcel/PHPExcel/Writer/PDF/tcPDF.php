@@ -34,6 +34,8 @@ if (file_exists($pdfRendererClassFile)) {
  *  @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt    LGPL
  *  @version     ##VERSION##, ##DATE##
  */
+
+#[\AllowDynamicProperties]
 class PHPExcel_Writer_PDF_tcPDF extends PHPExcel_Writer_PDF_Core implements PHPExcel_Writer_IWriter
 {
     /**

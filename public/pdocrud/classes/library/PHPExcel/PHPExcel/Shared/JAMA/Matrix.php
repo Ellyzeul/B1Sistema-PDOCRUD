@@ -24,6 +24,8 @@ if (!defined('PHPEXCEL_ROOT')) {
  *    @license PHP v3.0
  *    @see http://math.nist.gov/javanumerics/jama/
  */
+
+#[\AllowDynamicProperties]
 class PHPExcel_Shared_JAMA_Matrix
 {
     const POLYMORPHIC_ARGUMENT_EXCEPTION = "Invalid argument pattern for polymorphic function.";

@@ -33,6 +33,8 @@
  * @package        PHPExcel_Chart
  * @copyright    Copyright (c) 2006 - 2015 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
+
+#[\AllowDynamicProperties]
 class PHPExcel_Chart_DataSeries
 {
     const TYPE_BARCHART        = 'barChart';

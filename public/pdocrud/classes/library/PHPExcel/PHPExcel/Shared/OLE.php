@@ -35,6 +35,8 @@ $GLOBALS['_OLE_INSTANCES'] = array();
 * @category   PHPExcel
 * @package    PHPExcel_Shared_OLE
 */
+
+#[\AllowDynamicProperties]
 class PHPExcel_Shared_OLE
 {
     const OLE_PPS_TYPE_ROOT   =      5;

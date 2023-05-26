@@ -1,5 +1,6 @@
 <?php
 
+#[\AllowDynamicProperties]
 Class PDOCrudTableFormat extends PDOCrudHelper {
 
     public function __construct() {

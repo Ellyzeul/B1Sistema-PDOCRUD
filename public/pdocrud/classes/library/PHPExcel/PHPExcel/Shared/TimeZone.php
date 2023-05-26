@@ -34,6 +34,8 @@
  * @package    PHPExcel_Shared
  * @copyright  Copyright (c) 2006 - 2015 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
+
+#[\AllowDynamicProperties]
 class PHPExcel_Shared_TimeZone
 {
     /*

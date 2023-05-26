@@ -31,6 +31,8 @@ require_once PHPEXCEL_ROOT . 'PHPExcel/Shared/trend/polynomialBestFitClass.php';
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt    LGPL
  * @version    ##VERSION##, ##DATE##
  */
+
+#[\AllowDynamicProperties]
 class trendClass
 {
     const TREND_LINEAR            = 'Linear';

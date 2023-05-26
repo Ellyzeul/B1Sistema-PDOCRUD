@@ -25,6 +25,8 @@
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt    LGPL
  * @version    ##VERSION##, ##DATE##
  */
+
+#[\AllowDynamicProperties]
 class PHPExcel_Reader_Excel5_RC4
 {
     // Context

@@ -34,6 +34,8 @@ if (!defined('PHPEXCEL_ROOT')) {
  * @version    ##VERSION##, ##DATE##
  */
 /** PHPExcel root directory */
+
+#[\AllowDynamicProperties]
 class PHPExcel_Reader_HTML extends PHPExcel_Reader_Abstract implements PHPExcel_Reader_IReader
 {
 

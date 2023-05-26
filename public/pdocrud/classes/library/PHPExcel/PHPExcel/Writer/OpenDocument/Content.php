@@ -34,6 +34,8 @@
  * @copyright  Copyright (c) 2006 - 2015 PHPExcel (http://www.codeplex.com/PHPExcel)
  * @author     Alexander Pervakov <frost-nzcr4@jagmort.com>
  */
+
+#[\AllowDynamicProperties]
 class PHPExcel_Writer_OpenDocument_Content extends PHPExcel_Writer_OpenDocument_WriterPart
 {
     const NUMBER_COLS_REPEATED_MAX = 1024;

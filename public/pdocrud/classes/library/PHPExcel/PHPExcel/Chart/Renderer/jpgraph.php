@@ -27,6 +27,8 @@ require_once(PHPExcel_Settings::getChartRendererPath().'/jpgraph.php');
  * @license        http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt    LGPL
  * @version        ##VERSION##, ##DATE##
  */
+
+#[\AllowDynamicProperties]
 class PHPExcel_Chart_Renderer_jpgraph
 {
     private static $width    = 640;

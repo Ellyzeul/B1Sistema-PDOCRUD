@@ -15,6 +15,8 @@
  * Database operations. 
   ---------------------------------------------------------------------------------------------------------------
  */
+
+#[\AllowDynamicProperties]
 Class PDOModel {
 
     public $columns = "*";              //columns of table

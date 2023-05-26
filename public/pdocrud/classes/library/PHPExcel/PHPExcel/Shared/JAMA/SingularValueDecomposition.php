@@ -17,6 +17,8 @@
  *    @license PHP v3.0
  *    @version 1.1
  */
+
+#[\AllowDynamicProperties]
 class SingularValueDecomposition
 {
     /**

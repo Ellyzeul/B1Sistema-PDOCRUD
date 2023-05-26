@@ -14,6 +14,8 @@
  * @package SimpleImage
  *
  */
+
+#[\AllowDynamicProperties]
 class SimpleImage {
 
     /**

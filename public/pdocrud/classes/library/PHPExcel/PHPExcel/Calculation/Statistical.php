@@ -50,6 +50,8 @@ define('SQRT2PI', 2.5066282746310005024157652848110452530069867406099);
  * @license        http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt    LGPL
  * @version        ##VERSION##, ##DATE##
  */
+
+#[\AllowDynamicProperties]
 class PHPExcel_Calculation_Statistical
 {
     private static function checkTrendArrays(&$array1, &$array2)

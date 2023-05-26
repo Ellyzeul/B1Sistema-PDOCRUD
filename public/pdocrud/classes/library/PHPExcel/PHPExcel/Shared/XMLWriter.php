@@ -33,6 +33,8 @@ if (!defined('DEBUGMODE_ENABLED')) {
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt    LGPL
  * @version    ##VERSION##, ##DATE##
  */
+
+#[\AllowDynamicProperties]
 class PHPExcel_Shared_XMLWriter extends XMLWriter
 {
     /** Temporary storage method */
