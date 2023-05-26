@@ -1,5 +1,6 @@
 <?php
 
+#[\AllowDynamicProperties]
 class PHPExcel_Reader_Excel5_Color
 {
     /**

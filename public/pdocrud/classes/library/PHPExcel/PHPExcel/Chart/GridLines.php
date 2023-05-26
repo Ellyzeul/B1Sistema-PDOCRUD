@@ -7,6 +7,7 @@
  * Time: 2:36 PM
  */
 
+#[\AllowDynamicProperties]
 class PHPExcel_Chart_GridLines extends PHPExcel_Chart_Properties
 {
 

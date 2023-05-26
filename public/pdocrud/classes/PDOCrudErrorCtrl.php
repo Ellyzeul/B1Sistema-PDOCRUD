@@ -1,5 +1,6 @@
 <?php
 
+#[\AllowDynamicProperties]
 Class PDOCrudErrorCtrl {
 
     private $errors = array();

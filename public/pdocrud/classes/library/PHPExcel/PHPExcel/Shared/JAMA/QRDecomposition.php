@@ -16,6 +16,8 @@
  *    @license PHP v3.0
  *    @version 1.1
  */
+
+#[\AllowDynamicProperties]
 class PHPExcel_Shared_JAMA_QRDecomposition
 {
     const MATRIX_RANK_EXCEPTION  = "Can only perform operation on full-rank matrix.";

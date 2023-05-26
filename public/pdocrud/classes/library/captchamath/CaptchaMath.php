@@ -2,6 +2,7 @@
 
 @session_start();
 
+#[\AllowDynamicProperties]
 Class CaptchaMath {
     public $objId = "";
     private $imageWidth = 100;

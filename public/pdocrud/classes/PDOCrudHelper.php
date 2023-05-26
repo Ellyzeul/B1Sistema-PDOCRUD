@@ -1,5 +1,6 @@
 <?php
 
+#[\AllowDynamicProperties]
 Class PDOCrudHelper {
 
     private $logFile = "log.txt";

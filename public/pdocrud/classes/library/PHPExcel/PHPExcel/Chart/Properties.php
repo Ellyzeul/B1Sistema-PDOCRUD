@@ -6,6 +6,7 @@
  * Time: 5:45 PM
  */
 
+#[\AllowDynamicProperties]
 abstract class PHPExcel_Chart_Properties
 {
     const

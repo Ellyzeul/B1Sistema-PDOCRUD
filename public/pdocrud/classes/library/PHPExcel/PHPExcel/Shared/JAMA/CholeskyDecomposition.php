@@ -15,6 +15,8 @@
  *    @author Michael Bommarito
  *    @version 1.2
  */
+
+#[\AllowDynamicProperties]
 class CholeskyDecomposition
 {
     /**

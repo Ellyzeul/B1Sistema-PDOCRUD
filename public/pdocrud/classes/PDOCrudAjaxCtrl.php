@@ -2,6 +2,7 @@
 
 @session_start();
 
+#[\AllowDynamicProperties]
 Class PDOCrudAjaxCtrl {
 
     public function handleRequest() {

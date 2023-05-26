@@ -25,6 +25,8 @@
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt    LGPL
  * @version    ##VERSION##, ##DATE##
  */
+
+#[\AllowDynamicProperties]
 class PHPExcel_Worksheet_Drawing_Shadow implements PHPExcel_IComparable
 {
     /* Shadow alignment */

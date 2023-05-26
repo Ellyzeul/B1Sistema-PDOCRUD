@@ -32,6 +32,8 @@
  * @package        PHPExcel_Reader_Excel2007
  * @copyright    Copyright (c) 2006 - 2015 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
+
+#[\AllowDynamicProperties]
 class PHPExcel_Reader_Excel2007_Chart
 {
     private static function getAttribute($component, $name, $format)

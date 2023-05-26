@@ -187,6 +187,8 @@ define('PCLZIP_CB_POST_DELETE', 78008);
 //     extract() : Extract the content of the archive
 //     properties() : List the properties of the archive
 // --------------------------------------------------------------------------------
+
+#[\AllowDynamicProperties]
 class PclZip
 {
     // ----- Filename of the zip file

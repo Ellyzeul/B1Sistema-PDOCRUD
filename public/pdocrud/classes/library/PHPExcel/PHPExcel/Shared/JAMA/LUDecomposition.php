@@ -18,6 +18,8 @@
  *    @version 1.1
  *    @license PHP v3.0
  */
+
+#[\AllowDynamicProperties]
 class PHPExcel_Shared_JAMA_LUDecomposition
 {
     const MATRIX_SINGULAR_EXCEPTION    = "Can only perform operation on singular matrix.";

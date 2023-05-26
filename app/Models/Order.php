@@ -46,7 +46,7 @@ class Order
         1 => 'B1_BLING_API_TOKEN',
     ];
 
-    public function read(string|null $phase)
+    public function read(string | null $phase)
     {
         if($phase === "6.1") $this->updateReadyTo6_2();
 
@@ -272,7 +272,7 @@ class Order
                 array_push($blingProducts, $productResponse);
                 continue;
             }
-            $productResponse = $bling->getProductByCode($item->produto->codigo);
+            $productResponse = $bling->getProductByCode($item->codigo);
             if(!isset($productResponse->error)) {
                 $item->produto->id = $productResponse->id;
                 array_push($blingProducts, $productResponse);
@@ -371,6 +371,7 @@ class Order
             array_map(fn($item) => intval($item['quantity']), $blingData['items']), 
             fn($acc, $cur) => $acc + $cur
         );
+        $freight = floatval(str_replace(',', '.', $blingData['freight']));
 
         $blingOrder['id'] = $blingOrder['id'];
         $blingOrder['dataPrevista'] = $blingData['expected_date'];
@@ -381,8 +382,8 @@ class Order
         $blingOrder['observacoes'] = $blingData['observation'];
         $blingOrder['total'] = $total;
         $blingOrder['totalProdutos'] = $totalRaw;
-        $blingOrder['parcelas'][0]['valor'] = $totalRaw;
-        $blingOrder['transporte']['frete'] = floatval(str_replace(',', '.', $blingData['freight']));
+        $blingOrder['parcelas'][0]['valor'] = $totalRaw + $freight;
+        $blingOrder['transporte']['frete'] = $freight;
         $blingOrder['transporte']['etiqueta']['nome'] = $blingData['recipient_name'];
         $blingOrder['transporte']['etiqueta']['endereco'] = $blingData['address'];
         $blingOrder['transporte']['etiqueta']['numero'] = $blingData['number'];

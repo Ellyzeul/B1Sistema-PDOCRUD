@@ -1,5 +1,6 @@
 <?php
 
+#[\AllowDynamicProperties]
 class PHPExcel_Helper_HTML
 {
     protected static $colourMap = array(

@@ -25,6 +25,8 @@
  *  @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt    LGPL
  *  @version     ##VERSION##, ##DATE##
  */
+
+#[\AllowDynamicProperties]
 abstract class PHPExcel_Writer_PDF_Core extends PHPExcel_Writer_HTML
 {
     /**

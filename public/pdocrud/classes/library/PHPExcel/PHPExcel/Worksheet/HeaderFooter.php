@@ -85,6 +85,8 @@
  * </code>
  *
  */
+
+#[\AllowDynamicProperties]
 class PHPExcel_Worksheet_HeaderFooter
 {
     /* Header/footer image location */

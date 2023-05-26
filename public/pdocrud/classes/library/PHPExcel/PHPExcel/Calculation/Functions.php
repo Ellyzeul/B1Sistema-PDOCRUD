@@ -48,6 +48,8 @@ define('PRECISION', 8.88E-016);
  * @license        http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt    LGPL
  * @version        ##VERSION##, ##DATE##
  */
+
+#[\AllowDynamicProperties]
 class PHPExcel_Calculation_Functions
 {
 
