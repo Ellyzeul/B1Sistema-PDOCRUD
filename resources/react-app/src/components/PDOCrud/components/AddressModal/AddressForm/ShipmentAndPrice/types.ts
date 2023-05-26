@@ -2,6 +2,7 @@ export type ShipmentAndPriceProp = {
 	orderId: string,
 	address_form_ref: React.MutableRefObject<null>,
 	delivery_method: string | null,
+	delivery_service: string | null,
 	tracking_code: string | null,
 } 
 

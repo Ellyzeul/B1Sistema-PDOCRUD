@@ -14,7 +14,7 @@ const AddressForm = (props: AddressFormProp) => {
   const observationRef = useRef(null)
   const { update_data } = bling
   const { id_company } = sellercentral
-  const items = bling.items.map(({id, sku, title, value, quantity}, idx) => (
+  const items = bling.items.map(({id, sku, title, value, quantity, origin, ncm, cest}, idx) => (
     <div key={idx} className="address-panel-item-row">
       <div>{title}</div>
       <div>{sku}</div>
@@ -24,6 +24,14 @@ const AddressForm = (props: AddressFormProp) => {
       <input name="item_title" defaultValue={title} style={{display: 'none'}} />
       <input name="item_sku" defaultValue={sku} style={{display: 'none'}} />
       <div>{(value * quantity * cotation).toFixed(2)}</div>
+      {
+        (origin || ncm || cest)
+        && <div className="address-panel-item-row-tribute-info">
+          {origin && <div>Origem: {origin}</div>}
+          {ncm && <div>NCM: {ncm}</div>}
+          {cest && <div>CEST: {cest}</div>}
+        </div>
+      }
     </div>
   ))
 
@@ -50,9 +58,10 @@ const AddressForm = (props: AddressFormProp) => {
       })
 
     const ufSelect = addressForm.querySelector('select[name="uf"]') as HTMLSelectElement
+    const countrySelect = addressForm.querySelector('select[name="country"]') as HTMLSelectElement
     const personTypeSelect = addressForm.querySelector('select[name="person_type"]') as HTMLSelectElement
     const observationTextarea = observationDiv.querySelector('textarea[name="observation"]') as HTMLTextAreaElement
-    const order = [...Array.from(addressForm.querySelectorAll('input')), observationTextarea, ufSelect, personTypeSelect]
+    const order = [...Array.from(addressForm.querySelectorAll('input')), observationTextarea, ufSelect, countrySelect, personTypeSelect]
       .filter(input => !input.name.startsWith('item'))
       .map(({ name, value }) => ({ [name]: value }))
       .reduce((acc, cur) => ({ ...acc, ...cur }))
@@ -70,17 +79,37 @@ const AddressForm = (props: AddressFormProp) => {
       .then(response => response.data)
       .then(({order, contact, products}) => {
         toast.dismiss(loadingId)
-        if(order.error || contact || (products as {[key: string]: any}[]).some(product => product.error)) {
-          toast.error('Algum erro ocorreu, consultar o TI...')
+        if(order && order.error) {
+          displayUpdateError(order.error)
+          return
+        }
+        if((products as {[key: string]: any}[]).some(product => product.error)) {
+          console.log(products)
+          toast.error('Algum erro ocorreu ao salvar as alterações no(s) produto(s), consultar o TI...')
+          return
+        }
+        if(contact && ufSelect.value !== 'EX') {
+          displayUpdateError(contact.error)
           return
         }
 
         toast.success('Pedido atualizado!')
       })
-      .catch(() => {
+      .catch(err => {
+        console.log(err)
         toast.dismiss(loadingId)
         toast.error('Algum erro ocorreu, consultar o TI...')
       })
+  }
+
+  const displayUpdateError = (error: {description: string, fields: {msg: string}[]}) => {
+    const { description, fields } = error
+    toast.error(
+      <div>
+        {description}
+        {fields.map(field => <><br />{field.msg}</>).reduce((acc, cur) => <>{acc}{cur}</>)}
+      </div>
+    )
   }
 
   return (
@@ -113,6 +142,14 @@ const AddressForm = (props: AddressFormProp) => {
           <InputContainer name="postal_code" label="CEP" bling_data={bling.postal_code} sellercentral_data={sellercentral.postal_code} />
         </div>
         <div className="address-panel-phone-container">
+          <div className="address-panel-country-container">  
+            <div>
+              <div>
+                <strong>País</strong>
+              </div>
+              <select name="country" className="address-panel-country-select" defaultValue="">{countryOptions}</select>
+            </div>
+          </div>
           <div className="address-panel-person-type-container">
             <div>
               <strong>Pessoa</strong>
@@ -160,6 +197,7 @@ const AddressForm = (props: AddressFormProp) => {
           <ShipmentAndPrice 
             orderId={orderId} 
             address_form_ref={addressFormRef} 
+            delivery_service={bling.delivery_service} 
             delivery_method={sellercentral.delivery_method} 
             tracking_code={sellercentral.tracking_code} 
           />
@@ -200,6 +238,68 @@ const ufOptions = (
     <option value="SE">SE</option>
     <option value="SP">SP</option>
     <option value="TO">TO</option>
+  </>
+)
+
+const countryOptions = (
+  <>
+    <option value="">Brasil</option>
+    <option value="ESTADOS UNIDOS">Estados Unidos</option>
+    <option value="AUSTRALIA">Australia</option>
+    <option value="AUSTRIA">Austria</option>
+    <option value="BELGICA">Bélgica</option>
+    <option value="BULGARIA, REPUBLICA DA">Bulgaria</option>
+    <option value="CANADA">Canadá</option>
+    <option value="CHINA, REPUBLICA POPULAR">China</option>
+    <option value="CHRISTMAS,ILHA (NAVIDAD)">Ilha Christmas</option>
+    <option value="COCOS(KEELING),ILHAS">Ilhas Cocos (Keeling)</option>
+    <option value="CROACIA (REPUBLICA DA)">Croácia</option>
+    <option value="CHIPRE">Chipre</option>
+    <option value="CAZAQUISTAO, REPUBLICA DO">Cazaquistão</option>
+    <option value="TCHECA, REPUBLICA">República Tchéquia</option>
+    <option value="DINAMARCA">Dinamarca</option>
+    <option value="ESTONIA, REPUBLICA DA">Estônia</option>
+    <option value="FINLANDIA">Finlândia</option>
+    <option value="FRANCA">França</option>
+    <option value="GEORGIA, REPUBLICA DA">Georgia</option>
+    <option value="ALEMANHA">Alemanha</option>
+    <option value="GRECIA">Grécia</option>
+    <option value="HONG KONG">Hong Kong</option>
+    <option value="HUNGRIA, REPUBLICA DA">Húngria</option>
+    <option value="IRLANDA">Irlanda</option>
+    <option value="ISRAEL">Israel</option>
+    <option value="ITALIA">Itália</option>
+    <option value="JAPAO">Japão</option>
+    <option value="LETONIA, REPUBLICA DA">Letônia</option>
+    <option value="LITUANIA, REPUBLICA DA">Lituania</option>
+    <option value="LUXEMBURGO">Luxemburgo</option>
+    <option value="MACAU">Macau</option>
+    <option value="MACEDONIA DO NORTE">Macedônia</option>
+    <option value="MALTA">Malta</option>
+    <option value="MONACO">Mônaco</option>
+    <option value="MONGOLIA">Mongólia</option>
+    <option value="MONTENEGRO">Montenegro</option>
+    <option value="PAISES BAIXOS (HOLANDA)">Holanda</option>
+    <option value="NOVA ZELANDIA">Nova Zelândia</option>
+    <option value="NORFOLK,ILHA">Norfolk</option>
+    <option value="NORUEGA">Noruega</option>
+    <option value="FILIPINAS">Filipinas</option>
+    <option value="POLONIA, REPUBLICA DA">Polônia</option>
+    <option value="PORTUGAL">Portugal</option>
+    <option value="CATAR">Catar</option>
+    <option value="ROMENIA">Romênia</option>
+    <option value="CINGAPURA">Cingapura</option>
+    <option value="ESLOVACA, REPUBLICA">Eslováquia</option>
+    <option value="ESLOVENIA, REPUBLICA DA">Eslovênia</option>
+    <option value="AFRICA DO SUL">África do Sul</option>
+    <option value="COREIA, REPUBLICA DA">Coréia do Sul</option>
+    <option value="ESPANHA">Espanha</option>
+    <option value="SUECIA">Suécia</option>
+    <option value="SUICA">Suíça</option>
+    <option value="FORMOSA (TAIWAN)">Taiwan</option>
+    <option value="TAILANDIA">Tailândia</option>
+    <option value="REINO UNIDO">Reino Únido</option>
+    <option value="VATICANO, EST.DA CIDADE DO">Vaticano</option>
   </>
 )
 

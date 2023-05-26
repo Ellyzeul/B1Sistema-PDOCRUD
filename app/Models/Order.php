@@ -279,10 +279,10 @@ class Order
                 continue;
             }
 
-            $isbn = explode('_', $item->produto->codigo)[1];
+            $isbn = explode('_', $item->codigo)[1];
             $requestBody = [
-                "nome" => $item->produto->descricao,
-                "codigo"=> $item->produto->codigo,
+                "nome" => $item->descricao,
+                "codigo"=> $item->codigo,
                 "unidade" => "UN",
                 "tipo" => "P",
                 "situacao" => "A",
@@ -311,40 +311,43 @@ class Order
             'buyer_name' => $blingContact->nome,
             'recipient_name' => $blingOrder->transporte->etiqueta->nome ?? "",
             'person_type' => $this->getBlingPersonType($blingContact->tipo),
-            'cpf_cnpj' => $blingContact->cpf_cnpj,
             'ie' => $blingContact->ie,
-            'address' => $blingContact->endereco,
-            'number' => $blingContact->numero,
-            'complement' => $blingContact->complemento,
-            'city' => $blingContact->cidade,
-            'county' => $blingContact->bairro,
+            'address' => $blingContact->endereco->geral->endereco,
+            'number' => $blingContact->endereco->geral->numero,
+            'complement' => $blingContact->endereco->geral->complemento,
+            'city' => $blingContact->endereco->geral->municipio,
+            'county' => $blingContact->endereco->geral->bairro,
             'email' => $blingContact->email,
             'cellphone' => $blingContact->celular,
-            'landline' => $blingContact->fone,
-            'postal_code' => $blingContact->cep,
-            'uf' => $blingContact->uf,
-            'total_items' => count($blingOrderItems),
+            'landline' => $blingContact->telefone,
+            'postal_code' => $blingContact->endereco->geral->cep,
+            'uf' => $blingContact->endereco->geral->uf,
+            'total_items' => array_reduce(array_map(fn($item) => $item->quantidade, $blingOrderItems), fn($acc, $cur) => $acc + $cur, 0),
             'total_value' => $blingOrder->total,
             'freight' => $blingOrder->transporte->frete ?? 0,
             'other_expenses' => $blingOrder->outrasDespesas,
-            'discount' => floatval(str_replace(',', '.', $blingOrder->desconto)),
+            'discount' => $blingOrder->desconto->valor ?? 0,
             'expected_date' => $blingOrder->dataPrevista,
+            'delivery_service' => $blingOrder->transporte->volumes[0]->servico ?? null,
             'observation' => $blingOrder->observacoes,
             'items' => array_map(fn($item) => [
                 'id' => $item->id,
-                'sku' => $item->produto->codigo,
-                'title' => $item->produto->descricao,
+                'sku' => $item->codigo,
+                'title' => $item->descricao,
                 'quantity' => $item->quantidade,
                 'value' => $item->valor,
+                'origin' => $item->tributacao->origem ?? null,
+                'ncm' => $item->tributacao->ncm ?? null,
+                'cest' => $item->tributacao->cest ?? null,
             ], $blingOrderItems),
         ];
     }
 
     private function getPersonType(string $personType)
     {
-        if($personType === 'Pessoa Física') return 'F';
-        if($personType === 'Pessoa Juridica') return 'J';
-        if($personType === 'Estrangeira') return 'E';
+        if(\in_array($personType, ['Pessoa Física', 'F'])) return 'F';
+        if(\in_array($personType, ['Pessoa Juridica', 'J'])) return 'J';
+        if(\in_array($personType, ['Estrangeira', 'E'])) return 'E';
 
         return '';
     }
@@ -360,24 +363,26 @@ class Order
             array_map(fn($item) => floatval(str_replace(',', '.', $item['value'])) * intval($item['quantity']), $blingData['items']), 
             fn($acc, $cur) => $acc + $cur
         );
-        $total = $totalRaw 
+        $total = floatval(number_format($totalRaw 
             + floatval(str_replace(',', '.', $blingData['freight'])) 
             + floatval(str_replace(',', '.', $blingData['other_expenses'])) 
-            - floatval(str_replace(',', '.', $blingData['discounts']));
+            - floatval(str_replace(',', '.', $blingData['discounts'])), 2, '.', ''));
         $totalItems = array_reduce(
             array_map(fn($item) => intval($item['quantity']), $blingData['items']), 
             fn($acc, $cur) => $acc + $cur
         );
 
         $blingOrder['id'] = $blingOrder['id'];
-        $blingOrder['cnpj'] = $blingData['cpf_cnpj'];
         $blingOrder['dataPrevista'] = $blingData['expected_date'];
-        $blingOrder['outrasDespesas'] = str_replace(",", ".", $blingData['other_expenses']);
-        $blingOrder['desconto'] = str_replace(".", ",", $blingData['discounts']);
+        $blingOrder['contato']['tipoPessoa'] = $blingData['person_type'];
+        $blingOrder['contato']['numeroDocumento'] = $blingData['cpf_cnpj'];
+        $blingOrder['outrasDespesas'] = floatval(str_replace(",", ".", $blingData['other_expenses']));
+        $blingOrder['desconto']['valor'] = floatval(str_replace(",", ".", $blingData['discounts']));
         $blingOrder['observacoes'] = $blingData['observation'];
         $blingOrder['total'] = $total;
-        $blingOrder['totalProdutos'] = $totalItems;
-        $blingOrder['transporte']['frete'] = str_replace(',', '.', $blingData['freight']);
+        $blingOrder['totalProdutos'] = $totalRaw;
+        $blingOrder['parcelas'][0]['valor'] = $totalRaw;
+        $blingOrder['transporte']['frete'] = floatval(str_replace(',', '.', $blingData['freight']));
         $blingOrder['transporte']['etiqueta']['nome'] = $blingData['recipient_name'];
         $blingOrder['transporte']['etiqueta']['endereco'] = $blingData['address'];
         $blingOrder['transporte']['etiqueta']['numero'] = $blingData['number'];
@@ -386,26 +391,35 @@ class Order
         $blingOrder['transporte']['etiqueta']['uf'] = $blingData['uf'];
         $blingOrder['transporte']['etiqueta']['cep'] = $blingData['postal_code'];
         $blingOrder['transporte']['etiqueta']['bairro'] = $blingData['county'];
+        $blingOrder['transporte']['etiqueta']['nomePais'] = $blingData['country'];
         $blingOrder['itens'] = array_map(function($item, $blingItem) {
+            $value = floatval(str_replace(',', '.', $item['value']));
             $blingItem['quantidade'] = $item['quantity'];
-            $blingItem['valor'] = floatval(str_replace(',', '.', $item['value']));
+            $blingItem['valor'] = $value;
+            $blingItem['comissao']['base'] = $value;
 
             return $blingItem;
         }, $blingData['items'], $blingOrder['itens']);
-        $blingOrder['parcelas'][0]['valor'] = $total;
-        
+
         $blingContact['nome'] = $blingData['buyer_name'];
         $blingContact['tipo'] = $blingData['person_type'];
-        $blingContact['endereco'] = $blingData['address'];
-        $blingContact['numero'] = $blingData['number'];
-        $blingContact['complemento'] = $blingData['complement'];
-        $blingContact['cidade'] = $blingData['city'];
-        $blingContact['uf'] = $blingData['uf'];
-        $blingContact['cep'] = $blingData['postal_code'];
-        $blingContact['bairro'] = $blingData['county'];
-        $blingContact['cpf_cnpj'] = $blingData['cpf_cnpj'];
-        $blingContact['fone'] = $blingData['landline'];
-        $blingContact['celular'] = $blingData['cellphone'];
+        $blingContact['endereco']['geral']['endereco'] = $blingData['address'];
+        $blingContact['endereco']['cobranca']['endereco'] = $blingData['address'];
+        $blingContact['endereco']['geral']['numero'] = $blingData['number'] ?? '';
+        $blingContact['endereco']['cobranca']['numero'] = $blingData['number'] ?? '';
+        $blingContact['endereco']['geral']['complemento'] = $blingData['complement'] ?? '';
+        $blingContact['endereco']['cobranca']['complemento'] = $blingData['complement'] ?? '';
+        $blingContact['endereco']['geral']['municipio'] = $blingData['city'] ?? '';
+        $blingContact['endereco']['cobranca']['municipio'] = $blingData['city'] ?? '';
+        $blingContact['endereco']['geral']['uf'] = $blingData['uf'] ?? '';
+        $blingContact['endereco']['cobranca']['uf'] = $blingData['uf'] ?? '';
+        $blingContact['endereco']['geral']['cep'] = $blingData['postal_code'] ?? '';
+        $blingContact['endereco']['cobranca']['cep'] = $blingData['postal_code'] ?? '';
+        $blingContact['endereco']['geral']['bairro'] = $blingData['county'] ?? '';
+        $blingContact['endereco']['cobranca']['bairro'] = $blingData['county'] ?? '';
+        $blingContact['telefone'] = $blingData['landline'] ?? '';
+        $blingContact['celular'] = $blingData['cellphone'] ?? '';
+        $blingContact['pais']['nome'] = $blingData['country'] ?? '';
 
         $requestsBodyProducts = array_map(function($product, $item) {
             $product['gtin'] = $item['isbn'];
@@ -433,9 +447,10 @@ class Order
 
     private function getBlingPersonType(string $personType)
     {
-        if($personType === "Pessoa Física") return "F";
-        if($personType === "Pessoa Jurídica") return "J";
-        if($personType === "Estrangeiro") return "E";
+        if($personType === '') return "";
+        if(in_array($personType, ['Pessoa Física', 'F'])) return "F";
+        if(in_array($personType, ['Pessoa Jurídica', 'J'])) return "J";
+        if(in_array($personType, ['Estrangeiro', 'E'])) return "E";
 
         throw new \Exception("Tipo de pessoa '$personType' não identificada como válida para o Bling...");
     }

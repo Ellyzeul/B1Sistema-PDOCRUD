@@ -5,7 +5,7 @@ import "./style.css"
 import { ShipmentAndPriceProp, CorreiosData, JadlogData } from "./types"
 
 export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
-	const { orderId, address_form_ref, delivery_method, tracking_code } = props
+	const { orderId, address_form_ref, delivery_service, delivery_method, tracking_code } = props
 	const inputsRef = useRef<HTMLDivElement | null>(null)
 	const [jadlogData, setJadlogData] = useState({} as JadlogData)
 	const [correiosData, setCorreiosData] = useState({} as CorreiosData)
@@ -95,17 +95,17 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 	return (
 		<div className="inputs-container" ref={inputsRef}>
 			<strong>Simulador de Frete</strong>
-			{tracking_code && <p>Rastreio: {tracking_code} {delivery_method && <>- {delivery_method}</>}</p>}
+			{tracking_code && <p>Rastreio: {tracking_code} {delivery_method && <>/ {delivery_method}</>} {delivery_service && <>- {delivery_service}</>}</p>}
 			<div className="label-select-container">
 				<label htmlFor="origin-zipcode">CEP de origem:</label>
 				<select name="origin-zipcode">
-					<option value={"1"}>Coworking</option>
-					<option value={"2"}>Caixa Postal</option>
-					<option value={"3"}>Itaberaba</option>
-					<option value={"4"}>Praça</option>
-					<option value={"5"}>Expedição</option>
-					<option value={"6"}>Sorocaba</option>
-					<option value={"7"}>Parnamirim</option>
+					<option value="1">Coworking</option>
+					<option value="2">Caixa Postal</option>
+					<option value="3">Itaberaba</option>
+					<option value="4">Praça</option>
+					<option value="5">Expedição</option>
+					<option value="6">Sorocaba</option>
+					<option value="7">Parnamirim</option>
 				</select>
 			</div>
 			<div className="label-select-container">
@@ -117,7 +117,7 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 			</div>
 			<div className="label-select-container">
 				<label htmlFor="weight">Peso:</label>
-				<select name="weight">
+				<select name="weight" defaultValue={1}>
 					<option value={0.5}>0,5 kg</option>
 					<option value={1}>1 kg</option>
 					<option value={1.5}>1,5 kg</option>
