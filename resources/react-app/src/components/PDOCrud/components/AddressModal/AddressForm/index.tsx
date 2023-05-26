@@ -71,10 +71,6 @@ const AddressForm = (props: AddressFormProp) => {
       update_data: update_data, 
     }
 
-    console.log({
-      bling_data: blingData,
-      id_company: id_company,
-    })
     const loadingId = toast.loading('Atualizando...')
     api.patch('/api/orders/bling/order', {
       bling_data: blingData,
@@ -83,21 +79,17 @@ const AddressForm = (props: AddressFormProp) => {
       .then(response => response.data)
       .then(({order, contact, products}) => {
         toast.dismiss(loadingId)
-        if(order.error || (products as {[key: string]: any}[]).some(product => product.error)) {
-          console.log(order)
-          console.log(contact)
-          console.log(products)
-          toast.error('Algum erro ocorreu, consultar o TI...')
+        if(order && order.error) {
+          displayUpdateError(order.error)
           return
         }
-        if(contact) {
-          const { description, fields } = contact.error as {description: string, fields: {msg: string}[]}
-          toast.error(
-            <div>
-              {description}
-              {fields.map(field => <><br />{field.msg}</>).reduce((acc, cur) => <>{acc}{cur}</>)}
-            </div>
-          )
+        if((products as {[key: string]: any}[]).some(product => product.error)) {
+          console.log(products)
+          toast.error('Algum erro ocorreu ao salvar as alterações no(s) produto(s), consultar o TI...')
+          return
+        }
+        if(contact && ufSelect.value !== 'EX') {
+          displayUpdateError(contact.error)
           return
         }
 
@@ -108,6 +100,16 @@ const AddressForm = (props: AddressFormProp) => {
         toast.dismiss(loadingId)
         toast.error('Algum erro ocorreu, consultar o TI...')
       })
+  }
+
+  const displayUpdateError = (error: {description: string, fields: {msg: string}[]}) => {
+    const { description, fields } = error
+    toast.error(
+      <div>
+        {description}
+        {fields.map(field => <><br />{field.msg}</>).reduce((acc, cur) => <>{acc}{cur}</>)}
+      </div>
+    )
   }
 
   return (

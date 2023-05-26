@@ -68,7 +68,6 @@ class Bling
     private function putContactV3(string $contactId, array $requestBody)
     {
         $response = Http::bling($this->companyId, 'v3')->put("/contatos/$contactId", $requestBody);
-        // if(!$response->ok()) return (object) ['error' => true];
 
         return $response->ok()
             ? $response->object()->data
@@ -115,10 +114,10 @@ class Bling
 
     private function getProductByCodeV3(string $code)
     {
-        $response = Http::bling($this->companyId, 'v3_new')->get("/produtos?codigo=$code");
-        if(!$response->ok()) return (object) ['error' => true];
+        $response = Http::bling($this->companyId, 'v3')->get("/produtos?codigo=$code");
+        if(!$response->ok() || count($response->object()->data) == 0) return (object) ['error' => true];
 
-        return $response->object()->data[0];
+        return $this->getProductV3($response->object()->data[0]->id);
     }
 
     /**
@@ -139,7 +138,6 @@ class Bling
     private function putProductV3(string $productId, array $requestBody)
     {
         $response = Http::bling($this->companyId, 'v3')->put("/produtos/$productId", $requestBody);
-        // if(!$response->ok()) return (object) ['error' => true];
 
         return $response->ok()
             ? $response->object()->data
@@ -163,7 +161,6 @@ class Bling
     private function postProductV3(array $requestBody)
     {
         $response = Http::bling($this->companyId, 'v3')->post("/produtos", $requestBody);
-        // if(!$response->ok()) return (object) ['error' => true];
 
         return $response->ok()
             ? $response->object()->data
@@ -199,7 +196,7 @@ class Bling
     {
         if($this->setOrderId($blingNumber)->error) return (object) ['error' => true];
 
-        $response = Http::bling($this->companyId, 'v3')->get("/vendas/{$this->orderId}");
+        $response = Http::bling($this->companyId, 'v3')->get("/pedidos/vendas/{$this->orderId}");
         $data = $response->object()->data;
 
         $this->previousOrderNumber = $blingNumber;
@@ -225,7 +222,7 @@ class Bling
 
     public function putOrderV3(string $orderId, array $requestBody)
     {
-        $response = Http::bling($this->companyId, 'v3')->put("/vendas/{$orderId}", $requestBody);
+        $response = Http::bling($this->companyId, 'v3')->put("/pedidos/vendas/{$orderId}", $requestBody);
         
         return $response->ok()
             ? $response->object()->data
@@ -240,7 +237,7 @@ class Bling
     {
         if(isset($this->previousOrderNumber) && $blingNumber === $this->previousOrderNumber) return (object) ['error' => false];
 
-        $response = Http::bling($this->companyId, 'v3')->get("/vendas?numero=$blingNumber");
+        $response = Http::bling($this->companyId, 'v3')->get("/pedidos/vendas?numero=$blingNumber");
         if(!$response->ok()) return (object) ['error' => true];
 
         $this->orderId = $response->object()->data[0]->id;
