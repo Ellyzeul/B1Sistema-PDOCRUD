@@ -86,6 +86,11 @@
 }
 .address-panel-person-type-select:hover, 
 .address-panel-uf-select:hover, 
+.address-panel-country-container > span {
+  font-size: small;
+  color: rgb(72, 72, 72);
+  font-style: italic;
+}
 .address-panel-country-select:hover {
   cursor: pointer;
 }

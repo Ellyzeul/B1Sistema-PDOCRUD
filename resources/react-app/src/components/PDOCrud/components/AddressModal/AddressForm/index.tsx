@@ -112,6 +112,7 @@ const AddressForm = (props: AddressFormProp) => {
     )
   }
 
+  console.log(bling)
   return (
     <div className="address-form">
       <div className="address-form-save-btn" onClick={handleClick}>Salvar</div>
@@ -147,8 +148,9 @@ const AddressForm = (props: AddressFormProp) => {
               <div>
                 <strong>País</strong>
               </div>
-              <select name="country" className="address-panel-country-select" defaultValue="">{countryOptions}</select>
+              <select name="country" className="address-panel-country-select" defaultValue={bling.country}>{countryOptions}</select>
             </div>
+            <span>{sellercentral.country}</span>
           </div>
           <div className="address-panel-person-type-container">
             <div>
