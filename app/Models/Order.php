@@ -322,6 +322,7 @@ class Order
             'landline' => $blingContact->telefone,
             'postal_code' => $blingContact->endereco->geral->cep,
             'uf' => $blingContact->endereco->geral->uf,
+            'country' => $blingOrder->transporte->etiqueta->nomePais,
             'total_items' => array_reduce(array_map(fn($item) => $item->quantidade, $blingOrderItems), fn($acc, $cur) => $acc + $cur, 0),
             'total_value' => $blingOrder->total,
             'freight' => $blingOrder->transporte->frete ?? 0,

@@ -54,6 +54,7 @@ export type BlingAddress = {
   landline: string,
   postal_code: string,
   uf: string,
+  country: string,
   total_items: number,
   total_value: number,
   freight: number,
