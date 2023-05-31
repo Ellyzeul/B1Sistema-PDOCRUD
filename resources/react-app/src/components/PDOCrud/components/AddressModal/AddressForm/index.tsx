@@ -6,9 +6,10 @@ import CurrencyCotation from "./CurrencyCotation"
 import api from "../../../../../services/axios"
 import { toast } from "react-toastify"
 import { ShipmentAndPrice } from "./ShipmentAndPrice"
+import { generateProductPageUrl, generateSellerCentralUrl} from "./generateSellerCentralURL"
 
 const AddressForm = (props: AddressFormProp) => {
-  const { sellercentral, bling, orderId } = props
+  const { sellercentral, bling, orderId, salesChannel } = props
   const [cotation, setCotation] = useState(1)
   const addressFormRef = useRef(null)
   const observationRef = useRef(null)
@@ -23,7 +24,10 @@ const AddressForm = (props: AddressFormProp) => {
       <input name="item_id" defaultValue={id} style={{display: 'none'}} />
       <input name="item_title" defaultValue={title} style={{display: 'none'}} />
       <input name="item_sku" defaultValue={sku} style={{display: 'none'}} />
-      <div>{(value * quantity * cotation).toFixed(2)}</div>
+      <div>
+        <div>{(value * quantity * cotation).toFixed(2)}</div>
+        <a id="item_link" target="_blank" href={generateProductPageUrl(salesChannel, sku.split('_')[1])} rel="noreferrer" ><img src="/icons/url_16x16.png" alt="link" width="20" height="20"></img></a>
+      </div>
       {
         (origin || ncm || cest)
         && <div className="address-panel-item-row-tribute-info">
@@ -112,13 +116,12 @@ const AddressForm = (props: AddressFormProp) => {
     )
   }
 
-  console.log(bling)
   return (
     <div className="address-form">
       <div className="address-form-save-btn" onClick={handleClick}>Salvar</div>
       <div ref={addressFormRef} className="address-panel">
         <strong className="address-panel-section-header">Dados do Cliente</strong>
-        <span className="address-panel-order-number">ORIGEM: {sellercentral.online_order_number} - Nº Bling: {bling.bling_number}</span>
+        <span className="address-panel-order-number">ORIGEM: {sellercentral.online_order_number} - Nº Bling: {bling.bling_number} ({id_company ? <img src="seline_white_bg.png" width="20" height="20"/> : <img src="seline_white_bg.png" width="20" height="20"/>}) - Canal de Venda: {<a target="_blank" href={generateSellerCentralUrl(salesChannel, sellercentral.online_order_number)} rel="noreferrer">{salesChannel}</a>}</span>
         <div className="address-panel-names-container">
           <InputContainer name="buyer_name" label="Cliente" bling_data={bling.buyer_name} sellercentral_data={sellercentral.buyer_name} />
           <InputContainer name="recipient_name" label="Destinatário" bling_data={bling.recipient_name} sellercentral_data={sellercentral.recipient_name} />

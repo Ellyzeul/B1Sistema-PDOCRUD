@@ -9,23 +9,21 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 	const inputsRef = useRef<HTMLDivElement | null>(null)
 	const [jadlogData, setJadlogData] = useState({} as JadlogData)
 	const [correiosData, setCorreiosData] = useState({} as CorreiosData)
-	const [cotations, setCotations] = useState([] as JSX.Element[])
+	const [jadlogCotations, setjadlogCotations] = useState([] as JSX.Element[])
+	const [correiosCotations, setcorreiosCotations] = useState([] as JSX.Element[])
 
 	useEffect(() => {
 		if(jadlogData) JadlogInfo()
-	}, [jadlogData])
-
-	useEffect(() => {
 		if(correiosData) CorreiosInfo()
-	}, [correiosData])
+	}, [jadlogData, correiosData])
+
 			
-	const getShipmentAndPrice = (originId: string, clientPostalCode: string, deliveryMethod: string, weight: string) => {
+	const getShipmentAndPrice = (originId: string, clientPostalCode: string, weight: string) => {
 		api.get("/api/tracking/consult-price-and-shipping", {
 			params: {
 				"order_id": orderId,
 				"origin_id": originId,
 				"client_postal_code": clientPostalCode,
-				"delivery_method": deliveryMethod,
 				"weight": weight
 			}
 		})
@@ -33,8 +31,8 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 		.then((response) => {
 			if(response.error_msg) toast.error(response.error_msg)
 
-			if(deliveryMethod === "Correios") setCorreiosData(response)
-			if(deliveryMethod === "Jadlog") setJadlogData(response)
+			setCorreiosData(response["Correios"])
+			setJadlogData(response["Jadlog"])
 			console.log(response)
 		})
 		.catch((error) => {
@@ -46,6 +44,8 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 	const CorreiosInfo = () => {
 		const content = Object.keys(correiosData).map(service => {
 			const { shipping_error_msg, price_error_msg, service_name, delivery_expected_date, max_date, price } = correiosData[service]
+
+			if(correiosData && ((shipping_error_msg || price_error_msg) || !(delivery_expected_date && max_date))) return(<></>)
 
 			return (
 				<div className={correiosData && (shipping_error_msg || price_error_msg) ? "unavailable" : ""}>
@@ -65,20 +65,23 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 			)
 		})
 
-		setCotations(content)
+		setcorreiosCotations(content)
 	}
 
 	const JadlogInfo = () => {
 		const { error_msg, price, max_date } = jadlogData
 
+		if(!(price || max_date || error_msg)) return
+
 		const content = (
 			<div className={error_msg ? "unavailable" : ""}>
-				<p><strong>Custo: </strong>R$ {price ? price.toFixed(2) : '--'}</p>
-				<p><strong>Prazo: </strong> {max_date ? `${max_date} dias úteis` : '--'}</p>
+				<strong>Jadlog</strong>
+				<div><strong>Custo: </strong>R$ {price ? price.toFixed(2) : '--'}</div>
+				<div><strong>Prazo: </strong> {max_date ? `${max_date} dias úteis` : '--'}</div>
 			</div>
 		)
 
-		setCotations([content])
+		setjadlogCotations([content])
 	}
 
 	const handleClick = () => {
@@ -86,10 +89,9 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 		if(!inputsRef.current || !addressForm) return
 		const originId = (inputsRef.current?.querySelector('select[name="origin-zipcode"]') as HTMLSelectElement).value
 		const clientPostalCode = (addressForm.querySelector('input[name="postal_code"]') as HTMLSelectElement).value
-		const deliveryMethod = (inputsRef.current?.querySelector('select[name="delivery-method"]') as HTMLSelectElement).value
 		const weight = (inputsRef.current?.querySelector('select[name="weight"]') as HTMLSelectElement).value
 		
-		getShipmentAndPrice(originId, clientPostalCode, deliveryMethod, weight)
+		getShipmentAndPrice(originId, clientPostalCode, weight)
 	}
 
 	return (
@@ -109,13 +111,6 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 				</select>
 			</div>
 			<div className="label-select-container">
-				<label htmlFor="delivery-method">Método de envio:</label>
-				<select name="delivery-method">
-					<option value={"Correios"}>Correios</option>
-					<option value={"Jadlog"}>Jadlog</option>
-				</select>
-			</div>
-			<div className="label-select-container">
 				<label htmlFor="weight">Peso:</label>
 				<select name="weight" defaultValue={1}>
 					<option value={0.5}>0,5 kg</option>
@@ -132,7 +127,8 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 			</div>
 			<button onClick={handleClick} id={"shipping-button"}>Consultar</button>
 			<div className="correios-content">
-				{cotations}
+				{correiosCotations}
+				{jadlogCotations}
 			</div>
 		</div>
 	)

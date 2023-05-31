@@ -29,6 +29,8 @@ const configureRows = (rows: HTMLTableRowElement[], colIdx: number) => {
   const checkboxes = [] as {id: string, checkbox: HTMLInputElement}[]
   const orderNumberColIdx = getColumnFieldIndex('ORIGEM')
   const orderIdColIdx = getColumnFieldIndex('Nº')
+  const companyColIdx = getColumnFieldIndex('Empresa')
+  const salesChannelColIdx = getColumnFieldIndex('Canal de venda')
   const onKeyDown = (key: string) => {
     if(key !== "Enter") return
     saveBtn.click()
@@ -53,12 +55,13 @@ const configureRows = (rows: HTMLTableRowElement[], colIdx: number) => {
     const orderNumber = row.cells[orderNumberColIdx].textContent?.trim() as string
     const orderId = row.cells[orderIdColIdx].textContent?.trim() as string
     const style = cell.style
+    const salesChannel = row.cells[salesChannelColIdx].textContent?.trim() as string
 
     style.display = 'grid'
     style.placeItems = 'center'
 
     addCheckbox(input, checkboxes, onKeyDown)
-    addModal(cell, orderNumber, orderId)
+    addModal(cell, orderNumber, orderId, salesChannel)
   })
 
   saveBtn.addEventListener('click', onClick)
@@ -86,11 +89,11 @@ const addCheckbox = (
   })
 }
 
-const addModal = (cell: HTMLTableCellElement, orderNumber: string, orderId: string) => {
+const addModal = (cell: HTMLTableCellElement, orderNumber: string, orderId: string, salesChannel: string) => {
   const modalContainer = document.createElement('div')
   const modalRoot = createRoot(modalContainer)
 
-  modalRoot.render(<AddressModal orderNumber={orderNumber} orderId={orderId}  />)
+  modalRoot.render(<AddressModal orderNumber={orderNumber} orderId={orderId} salesChannel={salesChannel}/>)
 
   cell.appendChild(modalContainer)
 }
