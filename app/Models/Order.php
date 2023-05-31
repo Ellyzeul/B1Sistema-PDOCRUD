@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\AskRating;
 use App\Models\PDOCrudWrapper;
 use App\Models\Services\Bling;
+use App\Models\Services\MercadoLivre;
 
 class Order
 {
@@ -77,6 +78,74 @@ class Order
             'id_delivery_method' => $order->id_delivery_method, 
             'bling_data' => $blingOrder
         ];
+    }
+
+    public function importDailyOrdersViaAPI()
+    {
+        return $this->importDailyOrdersFromMercadoLivre();
+    }
+
+    private function importDailyOrdersFromMercadoLivre()
+    {
+        $mercadoLivre = new MercadoLivre();
+        $response = $mercadoLivre->getOrdersBySearch();
+        $orderMLIDs = array_map(fn($result) => $result->payments[0]->order_id, $response->results);
+
+        $registeredMLIDs = array_map(fn($result) => $result->online_order_number, DB::table('order_control')
+            ->select('online_order_number')
+            ->whereIn('online_order_number', $orderMLIDs)
+            ->get()
+            ->toArray()
+        );
+
+        $orderMLIDsToInsert = array_values(
+            array_filter($orderMLIDs, fn($id) => !\in_array($id, $registeredMLIDs))
+        );
+
+        $itemsToInsert = array_map(function($orderId) use($mercadoLivre) {
+            $order = $mercadoLivre->getOrderById($orderId);
+            $shipment = $mercadoLivre->getShipment($order->shipping->id);
+            $shipping_cost = $shipment->shipping_option->list_cost - $shipment->shipping_option->cost;
+            $receiver = $shipment->receiver_address;
+
+            return [
+                'address' => [
+                    'online_order_number' => $orderId, 
+                    'buyer_name' => $order->buyer->first_name . ' ' . $order->buyer->last_name, 
+                    'recipient_name' => $receiver->receiver_name, 
+                    'address_1' => $receiver->street_name . ', ' . $receiver->street_number, 
+                    'address_2' => $receiver->comment, 
+                    'county' => $receiver->neighborhood->name, 
+                    'city' => $receiver->city->name, 
+                    'country' => $receiver->country->id, 
+                    'state' => $receiver->state->name, 
+                    'ship_phone' => $receiver->receiver_phone, 
+                ], 
+                'items' => array_map(fn($item) => [
+                    'id_company' => 0, 
+                    'id_sellercentral' => 9, 
+                    'online_order_number' => $orderId, 
+                    'order_date' => date('Y-m-d', strtotime($order->date_closed)), 
+                    'isbn' => explode('_', $item->item->seller_sku)[1], 
+                    'selling_price' => round($item->full_unit_price - $item->sale_fee - $shipping_cost, 2), 
+                    'ship_date' => date('Y-m-d H:i:s', strtotime($order->manufacturing_ending_date)),
+                ], $order->order_items)
+            ];
+        }, $orderMLIDsToInsert);
+
+        $ordersToInsert = [];
+        $addressesToInsert = [];
+        foreach($itemsToInsert as $order) {
+            array_push($addressesToInsert, $order['address']);
+            foreach($order['items'] as $item) {
+                array_push($ordersToInsert, $item);
+            }
+        }
+
+        DB::table('order_control')->insert($ordersToInsert);
+        DB::table('order_addresses')->insert($addressesToInsert);
+
+        return $ordersToInsert;
     }
 
     public function updateAddressVerified(array $toUpdate)

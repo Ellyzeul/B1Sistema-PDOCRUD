@@ -1,6 +1,7 @@
 export type AddressModalProp = {
   orderNumber: string,
-  orderId: string
+  orderId: string,
+  salesChannel: string,
 }
 
 export type OrderAddress = {

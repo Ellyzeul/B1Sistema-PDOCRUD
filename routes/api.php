@@ -54,6 +54,7 @@ Route::controller(OrderController::class)
         Route::get('/get-total-orders-in-phase', 'getTotalOrdersInPhase');
         Route::get('/ask-rating/whatsapp', 'getAskRatingWhatsapp');
         Route::get('/ask-rating/spreadsheet-data', 'getDataForAskRatingSpreadSheet');
+        Route::post('/import-via-api', 'importDailyOrdersViaAPI');
         Route::post('/ask-rating/mail/send', 'sendAskRatingEmail');
         Route::patch('/bling/order', 'putBlingOrder');
         Route::patch('/address-verified', 'updateAddressVerified');

@@ -171,3 +171,16 @@
   flex-direction: column;
   align-items: flex-start;
 }
+
+.address-panel-order-number > a {
+  color: black;
+}
+
+.address-panel-order-number > a:hover {
+  color: black;
+}
+
+#item_link {
+  position: relative;
+  padding-left: 10px;
+}

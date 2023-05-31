@@ -38,5 +38,18 @@ class AppServiceProvider extends ServiceProvider
                 'x-api-key' => env($blingAPIKeys[$companyId])
             ])->baseUrl('https://bling.com.br/Api/v3');
         });
+
+        Http::macro('mercadoLivre', function(
+            bool $authless = false, 
+            string | null $accessToken = null, 
+            array | null $authForm = null
+        ) 
+        {
+            $baseUrl = 'https://api.mercadolibre.com';
+
+            if($authless) return Http::baseUrl($baseUrl);
+            if(isset($accessToken)) return Http::withToken($accessToken)->baseUrl($baseUrl);
+            if(isset($authForm)) return Http::asForm()->post("$baseUrl/oauth/token", $authForm)->json();
+        });
     }
 }

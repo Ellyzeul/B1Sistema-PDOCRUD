@@ -30,6 +30,15 @@ class OrderController extends Controller
 		return $response;
 	}
 
+	public static function importDailyOrdersViaAPI(Request $request)
+	{
+		$order = new Order();
+
+		$response = $order->importDailyOrdersViaAPI();
+
+		return $response;
+	}
+
 	public static function updateAddressVerified(Request $request)
 	{
 		$toUpdate = $request->input("verifieds");
