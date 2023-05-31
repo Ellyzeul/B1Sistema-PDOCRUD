@@ -31,8 +31,8 @@ export const RoutinePage = () => {
 
     return (
       <div id="routine-page-container">
-          <Navbar items={[]} />
-          <TabManager props={{contents, options}}/>
-        </div>
-      )
+        <Navbar items={[]} />
+        <TabManager props={{contents, options}}/>
+      </div>
+    )
 }
