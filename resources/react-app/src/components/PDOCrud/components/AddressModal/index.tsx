@@ -7,7 +7,7 @@ import AddressForm from "./AddressForm"
 import { toast } from "react-toastify"
 
 const AddressModal = (props: AddressModalProp) => {
-  const { orderNumber, orderId } = props
+  const { orderNumber, orderId, salesChannel} = props
   const [isOpen, setIsOpen] = useState(false)
   const [{ sellercentral, bling }, setOrderAddress] = useState({} as OrderAddress)
   const [hasAddress, setHasAddress] = useState(true)
@@ -48,6 +48,7 @@ const AddressModal = (props: AddressModalProp) => {
       sellercentral={sellercentral} 
       bling={bling} 
       orderId={orderId} 
+      salesChannel={salesChannel}
     />), 1)
   }, [bling])
 

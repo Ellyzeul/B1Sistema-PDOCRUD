@@ -141,26 +141,22 @@ class Tracking extends Model
 		];
 	}
 
-	public function consultPriceAndShipping(string $originId, string $orderId, string $clientPostalCode, string | null $deliveryMethod, float | null $weight)
+	public function consultPriceAndShipping(string $originId, string $orderId, string $clientPostalCode, float | null $weight)
 	{
-		$supportedServices = [
-			"Correios" => true,
-			"Jadlog" => true
-		];
 
 		$originZipCode = DB::table('delivery_addresses')
 			->select('postal_code')
 			->where('id', $originId)
 			->first()
 			->postal_code;
+		
+		$responseCorreios = $this->consultCorreiosPriceAndShipping($originZipCode, $clientPostalCode, $weight);
+		$responseJadlog = $this->fetchJadlogPrice($originZipCode, $clientPostalCode, $weight);
 
-		if(!isset($supportedServices[$deliveryMethod])) return ["Serviço não suportado", 400];
-
-		$response = null;
-		if($deliveryMethod == "Correios") $response = $this->consultCorreiosPriceAndShipping($originZipCode, $clientPostalCode, $weight);
-		if($deliveryMethod == "Jadlog") $response = $this->fetchJadlogPrice($originZipCode, $clientPostalCode, $weight);
-
-		return $response;
+		return [
+			"Correios" => $responseCorreios,
+			"Jadlog" => $responseJadlog
+		];
 	}
 
 	private function consultCorreiosPriceAndShipping(string $originZipCode, string $destinyZipCode, string|null $weight)
