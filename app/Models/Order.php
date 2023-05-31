@@ -106,28 +106,46 @@ class Order
             $order = $mercadoLivre->getOrderById($orderId);
             $shipment = $mercadoLivre->getShipment($order->shipping->id);
             $shipping_cost = $shipment->shipping_option->list_cost - $shipment->shipping_option->cost;
+            $receiver = $shipment->receiver_address;
 
-            return array_map(fn($item) => [
-                'id_company' => 0, 
-                'id_sellercentral' => 9, 
-                'online_order_number' => $orderId, 
-                'order_date' => date('Y-m-d', strtotime($order->date_closed)), 
-                'isbn' => explode('_', $item->item->seller_sku)[1], 
-                'selling_price' => round($item->full_unit_price - $item->sale_fee - $shipping_cost, 2), 
-                'ship_date' => date('Y-m-d H:i:s', strtotime($order->manufacturing_ending_date)),
-            ], $order->order_items);
+            return [
+                'address' => [
+                    'online_order_number' => $orderId, 
+                    'buyer_name' => $order->buyer->first_name . ' ' . $order->buyer->last_name, 
+                    'recipient_name' => $receiver->receiver_name, 
+                    'address_1' => $receiver->street_name . ', ' . $receiver->street_number, 
+                    'address_2' => $receiver->comment, 
+                    'county' => $receiver->neighborhood->name, 
+                    'city' => $receiver->city->name, 
+                    'country' => $receiver->country->id, 
+                    'state' => $receiver->state->name, 
+                    'ship_phone' => $receiver->receiver_phone, 
+                ], 
+                'items' => array_map(fn($item) => [
+                    'id_company' => 0, 
+                    'id_sellercentral' => 9, 
+                    'online_order_number' => $orderId, 
+                    'order_date' => date('Y-m-d', strtotime($order->date_closed)), 
+                    'isbn' => explode('_', $item->item->seller_sku)[1], 
+                    'selling_price' => round($item->full_unit_price - $item->sale_fee - $shipping_cost, 2), 
+                    'ship_date' => date('Y-m-d H:i:s', strtotime($order->manufacturing_ending_date)),
+                ], $order->order_items)
+            ];
         }, $orderMLIDsToInsert);
 
-        $toInsert = [];
-        foreach($itemsToInsert as $orderItems) {
-            foreach($orderItems as $item) {
-                array_push($toInsert, $item);
+        $ordersToInsert = [];
+        $addressesToInsert = [];
+        foreach($itemsToInsert as $order) {
+            array_push($addressesToInsert, $order['address']);
+            foreach($order['items'] as $item) {
+                array_push($ordersToInsert, $item);
             }
         }
 
-        DB::table('order_control')->insert($toInsert);
+        DB::table('order_control')->insert($ordersToInsert);
+        DB::table('order_addresses')->insert($addressesToInsert);
 
-        return $toInsert;
+        return $ordersToInsert;
     }
 
     public function updateAddressVerified(array $toUpdate)
