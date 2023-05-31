@@ -121,7 +121,7 @@ const AddressForm = (props: AddressFormProp) => {
       <div className="address-form-save-btn" onClick={handleClick}>Salvar</div>
       <div ref={addressFormRef} className="address-panel">
         <strong className="address-panel-section-header">Dados do Cliente</strong>
-        <span className="address-panel-order-number">ORIGEM: {sellercentral.online_order_number} - Nº Bling: {bling.bling_number} ({id_company ? <img src="seline_white_bg.png" width="20" height="20"/> : <img src="seline_white_bg.png" width="20" height="20"/>}) - Canal de Venda: {<a target="_blank" href={generateSellerCentralUrl(salesChannel, sellercentral.online_order_number)} rel="noreferrer">{salesChannel}</a>}</span>
+        <span className="address-panel-order-number">ORIGEM: {sellercentral.online_order_number} - Nº Bling: {bling.bling_number} ({id_company === 0 ? <img src="seline_white_bg.png" width="20" height="20"/> : <img src="b1_white_bg.png" width="20" height="20"/>}) - Canal de Venda: {<a target="_blank" href={generateSellerCentralUrl(salesChannel, sellercentral.online_order_number)} rel="noreferrer">{salesChannel}</a>}</span>
         <div className="address-panel-names-container">
           <InputContainer name="buyer_name" label="Cliente" bling_data={bling.buyer_name} sellercentral_data={sellercentral.buyer_name} />
           <InputContainer name="recipient_name" label="Destinatário" bling_data={bling.recipient_name} sellercentral_data={sellercentral.recipient_name} />

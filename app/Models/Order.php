@@ -126,6 +126,7 @@ class Order
                     'id_sellercentral' => 9, 
                     'online_order_number' => $orderId, 
                     'order_date' => date('Y-m-d', strtotime($order->date_closed)), 
+                    'expected_date' => date('Y-m-d', strtotime($shipping->shipping_option->estimated_delivery_extended)), 
                     'isbn' => explode('_', $item->item->seller_sku)[1], 
                     'selling_price' => round($item->full_unit_price - $item->sale_fee - $shipping_cost, 2), 
                     'ship_date' => date('Y-m-d H:i:s', strtotime($order->manufacturing_ending_date)),
@@ -400,6 +401,7 @@ class Order
             'expected_date' => $blingOrder->dataPrevista,
             'delivery_service' => $blingOrder->transporte->volumes[0]->servico ?? null,
             'observation' => $blingOrder->observacoes,
+            'cpf_cnpj' => $blingContact->numeroDocumento,
             'items' => array_map(fn($item) => [
                 'id' => $item->id,
                 'sku' => $item->codigo,
@@ -474,6 +476,7 @@ class Order
 
         $blingContact['nome'] = $blingData['buyer_name'];
         $blingContact['tipo'] = $blingData['person_type'];
+        $blingContact['numeroDocumento'] = $blingData['cpf_cnpj'];
         $blingContact['endereco']['geral']['endereco'] = $blingData['address'];
         $blingContact['endereco']['cobranca']['endereco'] = $blingData['address'];
         $blingContact['endereco']['geral']['numero'] = $blingData['number'] ?? '';
