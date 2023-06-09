@@ -1,0 +1,15 @@
+.fa-rotate {
+  background-color: green;
+  color: white;
+  padding: 5px;
+  border-radius: 3px;
+}
+.fa-rotate:hover {
+  cursor: pointer;
+  background-color: lightgreen;
+}
+
+#tracking-table-container {
+  width: 100%;
+  height: 100%;
+}

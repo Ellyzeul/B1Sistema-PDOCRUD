@@ -41,3 +41,14 @@
   margin-bottom: 10px;
   white-space: pre;
 }
+
+#datepicker-container{
+  display: flex;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+#date-input{
+  position: relative;
+  padding-left: 1px;
+}

@@ -17,6 +17,15 @@ class TrackingController extends Controller
 		return $response;
 	}
 
+	public function readPurchases()
+	{
+		$tracking = new Tracking();
+
+		$response = $tracking->readPurchases();
+
+		return $response;
+	}
+
 	public function readForExcel(Request $request)
 	{
 		$tracking = new Tracking();
@@ -39,11 +48,23 @@ class TrackingController extends Controller
 		return response($response, $statusCode);
 	}
 
-	public function updateAll()
+	public function updatePurchase(Request $request)
 	{
 		$tracking = new Tracking();
+		$trackingCode = $request->input('tracking_code');
+		$idDeliveryMethod = $request->input('delivery_method');
 
-		[$response, $statusCode] = $tracking->updateAll();
+		[$response, $statusCode] = $tracking->updateOrInsertPurchaseTracking($trackingCode, $idDeliveryMethod);
+
+		return response($response, $statusCode);
+	}
+
+	public function updateAll(Request $request)
+	{
+		$tracking = new Tracking();
+		$isPurchases = $request->input('is_purchases');
+
+		[$response, $statusCode] = $tracking->updateAll($isPurchases);
 
 		return response($response, $statusCode);
 	}

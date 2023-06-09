@@ -20,6 +20,7 @@ import TrackingPage from './pages/Tracking';
 import { RoutinePage } from './pages/Routine';
 import ShipmentLabelPage from './pages/Home/Shipment/ShipmentLabel';
 import APIOrderImportPage from './pages/APIOrderImport';
+import PurchaseTrackingPage from './pages/PurchaseTracking';
 
 function App() {
   const userDataRaw = window.localStorage.getItem("userData")
@@ -52,6 +53,7 @@ function App() {
           <Route path='/expedicao' element={getElement(<ShipmentPage/>)} />
           <Route path='/expedicao/fotos/enviar' element={getElement(<PhotosUploadPage/>)} />
           <Route path='/expedicao/fotos/pesquisar' element={getElement(<PhotosSearchPage/>)} />
+          <Route path='/expedicao/compras/rastreamento' element={getElement(<PurchaseTrackingPage/>)} />
           <Route path='/atendimento' element={getElement(<Attendance/>)} />
           <Route path='/atendimento/rastreamento' element={getElement(<TrackingPage/>)} />
           <Route path='/atendimento/rotina' element={getElement(<RoutinePage/>)} />

@@ -119,8 +119,10 @@ Route::controller(TrackingController::class)
     ->prefix('tracking')
     ->group(function() {
         Route::get('/read', 'read');
+        Route::get('/read-purchases', 'readPurchases');
         Route::post('/read-for-excel', 'readForExcel');
         Route::post('/update', 'update');
+        Route::post('/update-purchase', 'updatePurchase');
         Route::post('/update-all', 'updateAll');
         Route::post('/update-field', 'updateField');
         Route::get('/consult-price-and-shipping', 'consultPriceAndShipping');
