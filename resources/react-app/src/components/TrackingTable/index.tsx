@@ -211,7 +211,9 @@ export const TrackingTable = (props: TrackingTableProp) => {
 
   const updateAllTrackings = () => {
     toast.info("Processando. Por favor, aguarde um momento...")
-    api.post('/api/tracking/update-all')
+    api.post('/api/tracking/update-all', {
+      'is_purchases': '0'
+    })
       .then((response) => response.data)
       .then(response => {
         if(response.error_code === 0) toast.success("Todos os rastreamentos foram atualizados com sucesso...")

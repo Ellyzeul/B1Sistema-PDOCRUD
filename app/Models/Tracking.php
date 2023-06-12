@@ -21,6 +21,12 @@ class Tracking extends Model
 		"FedEx" => true,
 	];
 	private array $correiosServiceCodes = ['04227', '03298', '03220', '03204'];
+	private array $supplierSupportedServices = [
+		"Correios" => true,
+		"Correios Reverso" => true,
+		"Jadlog" => true,
+		"DHL" => true,
+	];
 
 	public function read()
 	{
@@ -64,6 +70,29 @@ class Tracking extends Model
 		];
 	}
 
+	public function readPurchases()
+	{
+		$results = DB::table('purchase_trackings')
+			->join('order_control', 'purchase_trackings.tracking_code', '=', 'order_control.supplier_tracking_code')
+			->select(
+				'purchase_trackings.tracking_code',
+				(DB::raw('(SELECT name FROM supplier_delivery_methods WHERE id = order_control.id_supplier_delivery_method) as delivery_method')),
+				'order_control.online_order_number',
+				'purchase_trackings.status',
+				'purchase_trackings.last_update_date',
+				'purchase_trackings.details',
+				'order_control.expected_date',
+				'purchase_trackings.delivery_expected_date',
+				'purchase_trackings.deadline',
+				'purchase_trackings.api_calling_date',
+				'purchase_trackings.observation',
+			)
+			->where('order_control.id_phase', '=', '3.1')
+			->get();
+		
+		return $results;
+	}
+
 	public function updateOrInsertTracking(string $trackingCode, string | null $deliveryMethod)
 	{
 		if(!isset($this->supportedServices[$deliveryMethod])) return ["Serviço não suportado", 400];
@@ -96,27 +125,80 @@ class Tracking extends Model
 			: ["Erro na atualização", 500];
 	}
 
+	public function updateOrInsertPurchaseTracking(string $trackingCode, string | null $deliveryMethod)
+	{
+		if(!isset($this->supplierSupportedServices[$deliveryMethod])) return ["Serviço não suportado", 400];
+
+		$response = null;
+		if($deliveryMethod == "Correios" || $deliveryMethod == "Correios Reverso") $response = $this->fetchCorreios($trackingCode);
+		if($deliveryMethod == "Jadlog") $response = $this->fetchJadlog($trackingCode);
+		
+		if($deliveryMethod == "DHL"){
+			$response = $this->fetchDHLMyAPI($trackingCode);
+
+			$response = 
+				$response === []
+					? $this->fetchDHLShipmentTrackingUnified($trackingCode) 
+					: $response;
+		} 
+
+		if (!isset($response['client_deadline'])) {
+			$response['deadline'] = $response['client_deadline'] ?? null;
+			unset($response['client_deadline']);
+		}
+
+		if(count($response) > 0) $response['api_calling_date'] = date("Y-m-d");
+		
+		DB::table('purchase_trackings')->updateOrInsert(
+			['tracking_code' => $trackingCode],
+			isset($response)
+			? $response
+			: []
+		);
+		
+		return isset($response)
+			? [$response, 200]
+			: ["Erro na atualização", 500];
+	}
+
 	/*
 	* @return [
 	* 	error_code: 0 - sucess, 1 - warning or 2 - error,
 	*	totalErrors: total number of errors
 	* ]
 	*/
-	public function updateAll(){
-		$rows = $this->read();
-		$totalErrors = 0; 
-		$errorCode = 0; 
-		
-		foreach($rows as $row) {
-			try {
-				$response = $this->updateOrInsertTracking(
-					$row->tracking_code, 
-					$row->delivery_method
-				);
+	public function updateAll(string $isPurchases){		
+		if($isPurchases==='1'){
+			$rows = $this->readPurchases();
+			$totalErrors = 0; 
+			$errorCode = 0; 
+			foreach($rows as $row) {
+				try {
+					$response = $this->updateOrInsertPurchaseTracking(
+						$row->tracking_code, 
+						$row->delivery_method
+					);
+				}
+				catch(Exception $e) {
+					$totalErrors+=1;
+					continue;
+				}
 			}
-			catch(Exception $e) {
-				$totalErrors+=1;
-				continue;
+		}else {
+			$rows = $this->read();
+			$totalErrors = 0; 
+			$errorCode = 0; 
+			foreach($rows as $row) {
+				try {
+					$response = $this->updateOrInsertTracking(
+						$row->tracking_code, 
+						$row->delivery_method
+					);
+				}
+				catch(Exception $e) {
+					$totalErrors+=1;
+					continue;
+				}
 			}
 		}
 
@@ -448,15 +530,17 @@ class Tracking extends Model
 		$count = 0;
 		$details = "";
 		while(sizeof($scanEvents)>=0 && $count<=2){
-			$lastUpdateDate = date('Y-m-d', strtotime($scanEvents[$count]['date']));
-			$exceptionDescription = $scanEvents[$count]['exceptionDescription'] ?? "";
-			$scanLocation = $scanEvents[$count]['scanLocation'];
-			$city = $scanLocation['city'] ?? "";
-			$stateOrProvinceCode = $scanLocation['stateOrProvinceCode'] ?? "";
-			$postalCode = $scanLocation['postalCode'] ?? "";
-			$countryName = $scanLocation['countryName'] ?? "";
+			if (isset($scanEvents[$count])) {
+				$lastUpdateDate = date('Y-m-d', strtotime($scanEvents[$count]['date']));
+				$exceptionDescription = $scanEvents[$count]['exceptionDescription'] ?? "";
+				$scanLocation = $scanEvents[$count]['scanLocation'];
+				$city = $scanLocation['city'] ?? "";
+				$stateOrProvinceCode = $scanLocation['stateOrProvinceCode'] ?? "";
+				$postalCode = $scanLocation['postalCode'] ?? "";
+				$countryName = $scanLocation['countryName'] ?? "";
 
-			$details = $details . "$lastUpdateDate $city $stateOrProvinceCode $postalCode $countryName $exceptionDescription\n";
+				$details = $details . "$lastUpdateDate $city $stateOrProvinceCode $postalCode $countryName $exceptionDescription\n";
+			}
 			$count++;
 		}
    

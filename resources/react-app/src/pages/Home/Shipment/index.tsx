@@ -4,7 +4,8 @@ export const ShipmentPage = () => {
   return (
     <Home 
       sections={[
-        {icon: "/icons/fotos.png", label: "Fotos dos pedidos", url: "/expedicao/fotos/enviar"}, 
+        {icon: "/icons/fotos.png", label: "Fotos dos Pedidos", url: "/expedicao/fotos/enviar"}, 
+        {icon: "/icons/rastreamento.png", label: "Monitoramento de Compras", url: "/expedicao/compras/rastreamento"}, 
       ]} 
     />
   )
