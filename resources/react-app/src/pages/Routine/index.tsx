@@ -2,7 +2,7 @@ import { Navbar } from "../../components/Navbar"
 import { tabContentAlibrisSelineUSA, tabContentAmazonB1BR, tabContentAmazonB1USA, tabContentAmazonSelineBR, 
 tabContentAmazonSelineUSA, tabContentEmails, tabContentEstanteVirtual, tabContentFNACptSeline, tabContentGeneral } from "./tabContents"
 import "./style.css"
-import { TabManager } from "../../components/TabManager"
+import { TabManager } from "../../components/tabManager"
 
 export const RoutinePage = () => {
   const contents = {
