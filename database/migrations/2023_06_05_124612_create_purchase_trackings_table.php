@@ -15,7 +15,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('purchase_trackings', function (Blueprint $table) {
-            $table->string('tracking_code', 45);
+            $table->string('tracking_code', 45)->primary();
             $table->tinyText('status')->nullable();
             $table->date('last_update_date')->nullable();
             $table->text('details')->nullable();
