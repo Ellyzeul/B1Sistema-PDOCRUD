@@ -36,6 +36,7 @@ const APIOrderImportPage = () => {
     <div id="api-order-import-page-container">
       <Navbar items={[]} />
       <div id="api-order-import-page">
+        <div id="api-order-import-action-button" onClick={handleClick}>Importar pedidos</div>
         <div id="imported-orders">
           {
             imported.length === 0
