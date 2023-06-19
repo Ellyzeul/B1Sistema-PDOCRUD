@@ -9,11 +9,39 @@ use Illuminate\Support\Facades\Http;
 class MercadoLivre
 {
     private array | null $credential;
+    private string $clientId;
+    private string $clientSecret;
+    private string $refreshToken;
+    private string $sellerId;
+    private string $credentialName;
     private int $maxAttempts = 3;
+    private array $authData = [
+        0 => [
+            'client_id' => 'MERCADO_LIVRE_SELINE_CLIENT_ID', 
+            'client_secret' => 'MERCADO_LIVRE_SELINE_CLIENT_SECRET', 
+            'refresh_token' => 'MERCADO_LIVRE_SELINE_REFRESH_TOKEN', 
+            'seller_id' => 'MERCADO_LIVRE_SELINE_SELLER_ID', 
+            'credential_name' => 'mercado-livre-seline', 
+        ], 
+        1 => [
+            'client_id' => 'MERCADO_LIVRE_B1_CLIENT_ID', 
+            'client_secret' => 'MERCADO_LIVRE_B1_CLIENT_SECRET', 
+            'refresh_token' => 'MERCADO_LIVRE_B1_REFRESH_TOKEN', 
+            'seller_id' => 'MERCADO_LIVRE_B1_SELLER_ID', 
+            'credential_name' => 'mercado-livre-b1', 
+        ], 
+    ];
 
-    function __construct()
+    function __construct(int $idCompany)
     {
+        $auth = $this->authData[$idCompany];
+
         $this->credential = null;
+        $this->clientId = env($auth['client_id']);
+        $this->clientSecret = env($auth['client_secret']);
+        $this->refreshToken = env($auth['refresh_token']);
+        $this->sellerId = env($auth['seller_id']);
+        $this->credentialName = $auth['credential_name'];
     }
 
     /**
@@ -57,7 +85,7 @@ class MercadoLivre
         
         $response = Http::mercadoLivre(accessToken: $this->credential['access_token'])
             ->get('/orders/search', [
-                'seller' => env('MERCADO_LIVRE_SELLER_ID'), 
+                'seller' => $this->sellerId, 
                 'order.date_created.from' => $dateCreatedFrom . '.000-00:00', 
                 'order.date_created.to' => $dateCreatedTo . '.000-00:00', 
             ]);
@@ -106,7 +134,7 @@ class MercadoLivre
             return $this->handleAuthCallback($callback);
         }
 
-        $dbReference = DB::table('api_credentials')->where('id', 'mercado-livre');
+        $dbReference = DB::table('api_credentials')->where('id', $this->credentialName);
 
         $credential = $dbReference->exists()
             ? json_decode($dbReference->first()->key, true)
@@ -148,9 +176,9 @@ class MercadoLivre
         $now = date('Y-m-d H:i:s');
         $fetched = Http::mercadoLivre(authForm: [
             'grant_type' => 'refresh_token', 
-            'client_id' => env('MERCADO_LIVRE_CLIENT_ID'), 
-            'client_secret' => env('MERCADO_LIVRE_CLIENT_SECRET'), 
-            'refresh_token' => env('MERCADO_LIVRE_REFRESH_TOKEN'), 
+            'client_id' => $this->clientId, 
+            'client_secret' => $this->clientSecret, 
+            'refresh_token' => $this->refreshToken, 
         ]);
         $credential = array_merge($currentCredential, $fetched, [
             'fetch_date' => $now, 
@@ -160,7 +188,7 @@ class MercadoLivre
         }
 
         DB::table('api_credentials')->upsert([
-            'id' => 'mercado-livre', 
+            'id' => $this->credentialName, 
             'key' => json_encode($credential), 
         ], ['key']);
 
@@ -172,7 +200,7 @@ class MercadoLivre
     private function updateCredential(array $credential)
     {
         DB::table('api_credentials')->upsert([
-            'id' => 'mercado-livre', 
+            'id' => $this->credentialName, 
             'key' => json_encode($credential), 
         ], ['key']);
 

@@ -82,12 +82,16 @@ class Order
 
     public function importDailyOrdersViaAPI()
     {
-        return $this->importDailyOrdersFromMercadoLivre();
+        $response = [];
+        $response = array_merge($response, $this->importDailyOrdersFromMercadoLivre(0));
+        $response = array_merge($response, $this->importDailyOrdersFromMercadoLivre(1));
+
+        return $response;
     }
 
-    private function importDailyOrdersFromMercadoLivre()
+    private function importDailyOrdersFromMercadoLivre(int $idCompany)
     {
-        $mercadoLivre = new MercadoLivre();
+        $mercadoLivre = new MercadoLivre($idCompany);
         $response = $mercadoLivre->getOrdersBySearch();
         $orderMLIDs = array_map(fn($result) => $result->payments[0]->order_id, $response->results);
 
@@ -125,8 +129,8 @@ class Order
                     'id_company' => 0, 
                     'id_sellercentral' => 9, 
                     'online_order_number' => $orderId, 
-                    'order_date' => date('Y-m-d', strtotime($order->date_closed)), 
-                    'expected_date' => date('Y-m-d', strtotime($shipment->shipping_option->estimated_delivery_extended->date)), 
+                    'order_date' => date('Y-m-d', strtotime($order->date_closed . '-3 hours')), 
+                    'expected_date' => date('Y-m-d', strtotime($shipment->shipping_option->estimated_schedule_limit->date . '-3 hours')), 
                     'isbn' => explode('_', $item->item->seller_sku)[1], 
                     'selling_price' => round($item->full_unit_price - $item->sale_fee - $shipping_cost, 2), 
                     'ship_date' => date('Y-m-d H:i:s', strtotime($order->manufacturing_ending_date)),
