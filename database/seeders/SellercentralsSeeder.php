@@ -26,7 +26,7 @@ class SellercentralsSeeder extends Seeder
                 ['id' => 7, 'name' => 'Alibris-US', 'currency' => 'US$', 'sku_prefix' => 'SEL'], 
                 ['id' => 8, 'name' => 'FNAC-PT', 'currency' => '€', 'sku_prefix' => 'SEL'], 
                 ['id' => 9, 'name' => 'MercadoLivre-BR', 'currency' => 'R$', 'sku_prefix' => 'SEL'], 
-                ['id' => 10, 'name' => 'M.LuizaBR', 'currency' => 'R$', 'sku_prefix' =>'SEL'], 
+                ['id' => 10, 'name' => 'MagazineLuiza-BR', 'currency' => 'R$', 'sku_prefix' =>'SEL'], 
             ]);
     }
 }
