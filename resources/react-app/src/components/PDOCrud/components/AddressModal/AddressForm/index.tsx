@@ -7,6 +7,7 @@ import api from "../../../../../services/axios"
 import { toast } from "react-toastify"
 import { ShipmentAndPrice } from "./ShipmentAndPrice"
 import { generateProductPageUrl, generateSellerCentralUrl} from "./generateSellerCentralURL"
+import { ZipCodeConsultation } from "./ZipCodeConsultation"
 
 const AddressForm = (props: AddressFormProp) => {
   const { sellercentral, bling, orderId, salesChannel } = props
@@ -169,6 +170,7 @@ const AddressForm = (props: AddressFormProp) => {
           <InputContainer name="cellphone" label="Celular" bling_data={bling.cellphone} sellercentral_data={sellercentral.ship_phone} />
           <InputContainer name="landline" label="Telefone" bling_data={bling.landline} sellercentral_data={sellercentral.buyer_phone} />
         </div>
+        <ZipCodeConsultation bling_postal_code={bling.postal_code} country={sellercentral.country}/>
         <strong className="address-panel-section-header">Valores e datas</strong>
         <div className="address-panel-values-container">
           <InputContainer name="freight" label="Frete" bling_data={(bling.freight || 0).toFixed(2)} />

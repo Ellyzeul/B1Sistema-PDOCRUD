@@ -241,6 +241,33 @@ class Tracking extends Model
 		];
 	}
 
+	public function consultZipCode(string $zipCode)
+	{
+		$today = Date::parse(date('Y-m-d H:i:s'));
+
+		if(!$this->existsApiCredentialDB('correios')) $this->generateCorreiosToken();
+
+		$apikey = $this->readApiCredentialDB('correios');
+		$expires_in = Date::parse($apikey->expiraEm);
+
+		if((!$apikey->token) || $expires_in->diffInSeconds($today) > 1) {
+			$this->generateCorreiosToken();
+			$apikey = $this->readApiCredentialDB('correios');
+		} 
+
+		$response = Http::withHeaders(["X-locale" => "pt_BR"])
+			->withToken($apikey->token)
+			->get("https://api.correios.com.br/cep/v2/enderecos/$zipCode");
+
+		return [
+			"cep" => $response["cep"]?? null,
+			"logradouro" => $response["logradouro"] ?? null,
+			"bairro" => $response["bairro"]?? null,
+			"localidade" => $response["localidade"] ?? null,
+			"uf"=> $response["uf"] ?? null,
+		];
+	}
+
 	private function consultCorreiosPriceAndShipping(string $originZipCode, string $destinyZipCode, string|null $weight)
 	{
 		$today = Date::parse(date('Y-m-d H:i:s'));

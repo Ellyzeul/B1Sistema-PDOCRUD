@@ -95,4 +95,14 @@ class TrackingController extends Controller
 
 		return $response;
 	}
+
+	public function consultZipCode(Request $request)
+	{
+		$tracking = new Tracking();
+		$zipCode = $request->input('zip_code');
+
+		$response = $tracking->consultZipCode($zipCode);
+
+		return $response;
+	}
 }
