@@ -260,10 +260,10 @@ class Tracking extends Model
 			->get("https://api.correios.com.br/cep/v2/enderecos/$zipCode");
 
 		return [
-			"cep" => $response["cep"]?? null,
-			"logradouro" => $response["logradouro"] ?? null,
-			"bairro" => $response["bairro"]?? null,
-			"localidade" => $response["localidade"] ?? null,
+			"postal_code" => $response["cep"]?? null,
+			"adress" => $response["logradouro"] ?? null,
+			"county" => $response["bairro"]?? null,
+			"city" => $response["localidade"] ?? null,
 			"uf"=> $response["uf"] ?? null,
 		];
 	}

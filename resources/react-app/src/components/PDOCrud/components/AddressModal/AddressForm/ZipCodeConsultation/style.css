@@ -1,4 +1,5 @@
 .zipcode-external-container {
+    padding: 2px 4px;
     display: flex;
     align-items: center;
 }
@@ -25,6 +26,7 @@
 
 #fetch-adress-button {
     position: relative;
+    margin-left: 10px;
     height: 30px;
     width: 100px;
     color: white;
@@ -37,4 +39,4 @@
 	cursor: pointer;
 	background-color: rgb(82, 82, 82);
 	transition: 125ms;
-}
+} 

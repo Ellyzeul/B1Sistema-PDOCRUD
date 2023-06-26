@@ -28,19 +28,19 @@ export const ZipCodeConsultation = (props: ZipCodeConsultationProp) => {
             <div className="zipcode-info-container">
                 <div className="info">
                     <strong>CEP</strong>
-                    <p>{addressData.cep}</p>
+                    <p>{addressData.postal_code}</p>
                 </div>
                 <div className="info">
                     <strong>Logradouro/Nome</strong>
-                    <p>{addressData.logradouro}</p>
+                    <p>{addressData.adress}</p>
                 </div>
                 <div className="info">
                     <strong>Bairro/Distrito</strong>
-                    <p>{addressData.bairro}</p>
+                    <p>{addressData.county}</p>
                 </div>
                 <div className="info">
                     <strong>Localidade/UF</strong>
-                    <p>{addressData.bairro} {addressData.uf}</p>
+                    <p>{addressData.city} {addressData.uf}</p>
                 </div>
             </div>
         </div>

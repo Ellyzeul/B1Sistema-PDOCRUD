@@ -4,9 +4,9 @@ export type ZipCodeConsultationProp = {
 }
 
 export type AdressData = {
-  cep: string,
-  logradouro: string,
-  bairro: string,
-  localidade: string,
+  postal_code: string,
+  adress: string,
+  county: string,
+  city: string,
   uf: string,
 }
