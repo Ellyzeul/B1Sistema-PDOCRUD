@@ -127,4 +127,5 @@ Route::controller(TrackingController::class)
         Route::post('/update-all', 'updateAll');
         Route::post('/update-field', 'updateField');
         Route::get('/consult-price-and-shipping', 'consultPriceAndShipping');
+        Route::get('/consult-zipcode', 'consultZipCode');
     });
