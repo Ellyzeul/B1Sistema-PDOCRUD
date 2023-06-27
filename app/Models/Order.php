@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\AskRating;
 use App\Models\PDOCrudWrapper;
 use App\Models\Services\Bling;
+use App\Models\Services\FNAC;
 use App\Models\Services\MercadoLivre;
 
 class Order
@@ -80,19 +81,20 @@ class Order
         ];
     }
 
-    public function importDailyOrdersViaAPI()
+    public function importDailyOrdersViaAPI(string $fromDate)
     {
         $response = [];
-        $response = array_merge($response, $this->importDailyOrdersFromMercadoLivre(0));
-        $response = array_merge($response, $this->importDailyOrdersFromMercadoLivre(1));
+        $response = array_merge($response, $this->importDailyOrdersFromMercadoLivre(0, $fromDate));
+        $response = array_merge($response, $this->importDailyOrdersFromMercadoLivre(1, $fromDate));
+        $response = array_merge($response, $this->importDailyOrdersFromFNAC($fromDate));
 
         return $response;
     }
 
-    private function importDailyOrdersFromMercadoLivre(int $idCompany)
+    private function importDailyOrdersFromMercadoLivre(int $idCompany, string $fromDate)
     {
         $mercadoLivre = new MercadoLivre($idCompany);
-        $response = $mercadoLivre->getOrdersBySearch();
+        $response = $mercadoLivre->getOrdersBySearch(dateCreatedFrom: $fromDate . "T00:00:00");
         $orderMLIDs = array_map(fn($result) => $result->payments[0]->order_id, $response->results);
 
         $registeredMLIDs = array_map(fn($result) => $result->online_order_number, DB::table('order_control')
@@ -106,7 +108,7 @@ class Order
             array_filter($orderMLIDs, fn($id) => !\in_array($id, $registeredMLIDs))
         );
 
-        $itemsToInsert = array_map(function($orderId) use($mercadoLivre) {
+        $itemsToInsert = array_map(function($orderId) use($mercadoLivre, $idCompany) {
             $order = $mercadoLivre->getOrderById($orderId);
             $shipment = $mercadoLivre->getShipment($order->shipping->id);
             $shipping_cost = $shipment->shipping_option->list_cost - $shipment->shipping_option->cost;
@@ -126,7 +128,7 @@ class Order
                     'ship_phone' => $receiver->receiver_phone, 
                 ], 
                 'items' => array_map(fn($item) => [
-                    'id_company' => 0, 
+                    'id_company' => $idCompany, 
                     'id_sellercentral' => 9, 
                     'online_order_number' => $orderId, 
                     'order_date' => date('Y-m-d', strtotime($order->date_closed . '-3 hours')), 
@@ -151,6 +153,97 @@ class Order
         DB::table('order_addresses')->insert($addressesToInsert);
 
         return $ordersToInsert;
+    }
+
+    private function importDailyOrdersFromFNAC(string $fromDate)
+    {
+        $fnac = new FNAC();
+
+        $orders = $fnac->ordersQuery(
+            fromDate: $fromDate, 
+            dateType: 'CreatedAt', 
+            states: ['Created']
+        );
+
+        $orderIDs = array_map(fn($order) => $order->order_id, $orders);
+        $regiteredIDs = array_map(fn($registry) => $registry->online_order_number, DB::table('order_control')
+            ->select('online_order_number')
+            ->whereIn('online_order_number', $orderIDs)
+            ->get()
+            ->toArray()
+        );
+
+        $ordersToInsert = array_filter($orders, fn($order) => !\in_array($order->order_id, $regiteredIDs));
+        $formatted = array_map(function($order) {
+            $shippingAddress = $order->shipping_address;
+            $freight = $this->getFNACOrderFreight($order);
+
+            return [
+                'address' => [
+                    'online_order_number' => "$order->order_id", 
+                    'buyer_name' => "$order->client_firstname $order->client_lastname ($order->platform_vat_number)", 
+                    'buyer_email' => "$order->client_email", 
+                    'recipient_name' => "$shippingAddress->firstname $shippingAddress->lastname", 
+                    'address_1' => "$shippingAddress->address1", 
+                    'address_2' => "$shippingAddress->address2", 
+                    'address_3' => "$shippingAddress->address3", 
+                    'postal_code' => "$shippingAddress->zipcode", 
+                    'city' => "$shippingAddress->city", 
+                    'country' => "$shippingAddress->country", 
+                    'buyer_phone' => "$shippingAddress->phone", 
+                    'ship_phone' => "$shippingAddress->mobile", 
+                    'freight' => $freight
+                ], 
+                'items' => $this->getFNACOrderItems($order), 
+            ];
+        }, $ordersToInsert);
+
+        $orderData = array_reduce(array_map(fn($registry) => $registry['items'], $formatted), 
+            fn($acc, $cur) => array_merge($acc, $cur), 
+            []
+        );
+        $addressData = array_map(fn($registry) => $registry['address'], $formatted);
+
+        DB::table('order_control')->insert($orderData);
+        DB::table('order_addresses')->insert($addressData);
+
+        return $orderData;
+    }
+
+    private function getFNACOrderFreight(object $order)
+    {
+        $freights = [];
+        foreach($order->order_detail as $item) {
+            array_push($freights, $item->shipping_price);
+        }
+
+        return array_reduce($freights, fn($acc, $cur) => $acc + $cur, 0);
+    }
+
+    private function getFNACOrderItems(object $order)
+    {
+        $items = [];
+        $orderDate = explode('T', $order->created_at)[0];
+        foreach($order->order_detail as $item) {
+            array_push($items, [
+				'id_company' => 0, 
+				'id_sellercentral' => 8, 
+				'accepted' => (string) $item->state === 'ToAccept' ? 2 : 3, 
+				'online_order_number' => "$order->order_id", 
+				'order_date' => $orderDate, 
+				'isbn' => explode('_', $item->offer_seller_id)[1], 
+				'selling_price' => "$item->price", 
+				'ship_date' => "$order->max_expedition_date", 
+				'expected_date' => "$order->max_delivery_date", 
+            ]);
+        }
+
+        return $items;
+    }
+
+    public function acceptFNACOrder(string $orderNumber)
+    {
+        return [];
     }
 
     public function updateAddressVerified(array $toUpdate)
