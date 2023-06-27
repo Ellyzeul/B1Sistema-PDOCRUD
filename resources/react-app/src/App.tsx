@@ -21,6 +21,7 @@ import { RoutinePage } from './pages/Routine';
 import ShipmentLabelPage from './pages/Home/Shipment/ShipmentLabel';
 import APIOrderImportPage from './pages/APIOrderImport';
 import PurchaseTrackingPage from './pages/PurchaseTracking';
+import AcceptFNACPage from './pages/APIOrderImport/AcceptFNAC';
 
 function App() {
   const userDataRaw = window.localStorage.getItem("userData")
@@ -58,6 +59,7 @@ function App() {
           <Route path='/atendimento/rastreamento' element={getElement(<TrackingPage/>)} />
           <Route path='/atendimento/rotina' element={getElement(<RoutinePage/>)} />
           <Route path='/atendimento/importacao-api' element={getElement(<APIOrderImportPage/>)} />
+          <Route path='/atendimento/importacao-api/aceitar-fnac' element={getElement(<AcceptFNACPage/>)} />
           <Route path='/dashboard' element={getElement(<Dashboards/>)} />
           <Route path='/dashboard/pedidos' element={getElement(<DashboardOrders/>)} />
           <Route path='/empresas' element={getElement(<CompaniesPage/>)} />

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { Navbar } from "../../components/Navbar"
 import "./style.css"
 import api from "../../services/axios"
@@ -14,10 +14,17 @@ const APIOrderImportPage = () => {
 		selling_price: number, 
 		ship_date: string, 
   }[])
+  const dateRef = useRef(null)
 
   const handleClick = () => {
+    if(!dateRef.current) return
+
+    const dateInput = dateRef.current as HTMLInputElement
+    const fromDate = dateInput.value
     const loadingId = toast.loading('Importando pedidos..')
-    api.post('/api/orders/import-via-api')
+    api.post('/api/orders/import-via-api', {
+      from: fromDate
+    })
       .then(response => response.data)
       .then(response => {
         toast.dismiss(loadingId)
@@ -34,9 +41,17 @@ const APIOrderImportPage = () => {
 
   return (
     <div id="api-order-import-page-container">
-      <Navbar items={[]} />
+      {/* <Navbar items={[{
+        label: 'Aceitar pedidos', 
+        options: [{name: 'FNAC', url: '/atendimento/importacao-api/aceitar-fnac'}]
+      }]} /> */}
+      <Navbar items={[]}/>
       <div id="api-order-import-page">
-        <div id="api-order-import-action-button" onClick={handleClick}>Importar pedidos</div>
+        <div id="import-options">
+          <label htmlFor="from_date">Puxar a partir da data: </label>
+          <input type="date" name="from_date" ref={dateRef}/>
+          <div id="api-order-import-action-button" onClick={handleClick}>Importar pedidos</div>
+        </div>
         <div id="imported-orders">
           {
             imported.length === 0
