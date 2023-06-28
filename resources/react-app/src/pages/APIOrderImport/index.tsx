@@ -41,11 +41,10 @@ const APIOrderImportPage = () => {
 
   return (
     <div id="api-order-import-page-container">
-      {/* <Navbar items={[{
+      <Navbar items={[{
         label: 'Aceitar pedidos', 
         options: [{name: 'FNAC', url: '/atendimento/importacao-api/aceitar-fnac'}]
-      }]} /> */}
-      <Navbar items={[]}/>
+      }]} />
       <div id="api-order-import-page">
         <div id="import-options">
           <label htmlFor="from_date">Puxar a partir da data: </label>

@@ -119,9 +119,35 @@ class FNAC
     return "<$constraint $taggedAttr>$parsed</$constraint>";
   }
 
-  public static function acceptOrder(string $orderNumber)
+  public function acceptOrder(string $orderNumber)
   {
-    // Não implementado
+    $this->authenticate();
+
+    $partnerId = $this->partnerId;
+    $shopId = $this->shopId;
+    $token = $this->token;
+
+    $response = $this->postXML('/orders_update', <<<XML
+    <?xml version="1.0" encoding="utf-8"?>
+    <orders_update 
+      xmlns="http://www.fnac.com/schemas/mp-dialog.xsd" 
+      shop_id="$shopId" 
+      partner_id="$partnerId" 
+      token="$token"
+    >
+      <order order_id="$orderNumber" action="accept_all_orders">
+        <order_detail>
+          <action>Accepted</action>
+        </order_detail>
+      </order>
+    </orders_update>
+    XML);
+
+    $order = $response->order;
+    return [
+      'success' => "$order->status", 
+      'current_status' => "$order->state", 
+    ];
   }
 
   // Métodos privados
