@@ -243,7 +243,11 @@ class Order
 
     public function acceptFNACOrder(string $orderNumber)
     {
-        return [];
+        $fnac = new FNAC();
+
+        $response = $fnac->acceptOrder($orderNumber);
+
+        return $response;
     }
 
     public function updateAddressVerified(array $toUpdate)
