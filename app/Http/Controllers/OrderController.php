@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Services\OrderService;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -32,13 +33,7 @@ class OrderController extends Controller
 
 	public static function importDailyOrdersViaAPI(Request $request)
 	{
-		$fromDate = $request->input('from');
-
-		$order = new Order();
-
-		$response = $order->importDailyOrdersViaAPI($fromDate);
-
-		return $response;
+		return (new OrderService())->importOrdersFromDate($request);
 	}
 
 	public static function acceptFNACOrder(Request $request)
