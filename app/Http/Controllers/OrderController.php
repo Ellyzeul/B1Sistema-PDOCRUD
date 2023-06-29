@@ -31,7 +31,7 @@ class OrderController extends Controller
 		return $response;
 	}
 
-	public static function importDailyOrdersViaAPI(Request $request)
+	public static function importOrdersFromDate(Request $request)
 	{
 		return (new OrderService())->importOrdersFromDate($request);
 	}
