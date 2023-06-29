@@ -22,7 +22,7 @@ const APIOrderImportPage = () => {
     const dateInput = dateRef.current as HTMLInputElement
     const fromDate = dateInput.value
     const loadingId = toast.loading('Importando pedidos..')
-    api.post('/api/orders/import-via-api', {
+    api.post('/api/orders/import-from-date', {
       from: fromDate
     })
       .then(response => response.data)
