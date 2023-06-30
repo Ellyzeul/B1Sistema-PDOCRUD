@@ -5,12 +5,14 @@ import setNewColumn from "./setNewColumn";
 const setDeadlineColumn = (phase: number) => {
 	setNewColumn.columns = {}
 	const generateData = (row: HTMLTableRowElement) => {
-		const expectedDateIdx = getColumnFieldIndex("Data prevista")
+		const sellercentralIdx = getColumnFieldIndex("Canal de venda")
+		const sellercentral = (row.children[sellercentralIdx] as HTMLTableCellElement).innerText
+		const dateIdx = getColumnFieldIndex(getDateColumnName(sellercentral))
 		const div = document.createElement('div')
 
-		if(expectedDateIdx === -1) return div
-		const date = (row.children[expectedDateIdx] as HTMLTableCellElement)
-			.outerText.split('/')
+		if(dateIdx === -1) return div
+		const date = (row.children[dateIdx] as HTMLTableCellElement)
+			.outerText.split(' ')[0].split('/')
 			.map(part => Number(part))
 		const start = new Date()
 		const end = new Date(date[2], date[1]-1, date[0])
@@ -32,5 +34,21 @@ const setDeadlineColumn = (phase: number) => {
 	}
 	setNewColumn("Dias para entrega", generateData)
 }
+
+const getDateColumnName = (sellercentral: string) => {
+	try {
+		return sellercentralToDateColumn[sellercentral] || 'Data prevista'
+	}
+	catch(err) {
+		return 'Data prevista'
+	}
+}
+
+const sellercentralToDateColumn = {
+	'MercadoLivre-BR': 'Data para envio', 
+	'FNAC-PT': 'Data para envio', 
+	'MagazineLuiza-BR': 'Data para envio', 
+	'Seline-BR': 'Data para envio', 
+} as {[key: string]: string}
 
 export default setDeadlineColumn
