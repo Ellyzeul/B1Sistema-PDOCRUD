@@ -2,23 +2,14 @@
 
 use App\Models\Order;
 use App\Services\OrderService;
+use App\Services\PDOCrudService;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-	public static function read(Request $request)
+	public static function getPDOCrudTable(Request $request)
 	{
-		$phase = $request->input('phase') 
-			? strval($request->input('phase')) 
-			: null;
-
-		$order = new Order();
-		$processed = $order->read($phase);
-		$response = [
-			"html" => $processed
-		];
-
-		return $response;
+		return (new PDOCrudService())->getHTML($request);
 	}
 
 	public function getShipmentLabelData(Request $request)
@@ -38,22 +29,12 @@ class OrderController extends Controller
 
 	public static function acceptFNACOrder(Request $request)
 	{
-		$orderNumber = $request->input('order_number');
-		$order = new Order();
-
-		$response = $order->acceptFNACOrder($orderNumber);
-
-		return $response;
+		return (new OrderService())->acceptFNACOrder($request);
 	}
 
 	public static function updateAddressVerified(Request $request)
 	{
-		$toUpdate = $request->input("verifieds");
-		
-		$order = new Order();
-		$response = $order->updateAddressVerified($toUpdate);
-
-		return $response;
+		return (new OrderService())->updateAddressVerified($request);
 	}
 
 	public static function updateReadForShip(Request $request)
