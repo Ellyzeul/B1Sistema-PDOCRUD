@@ -31,6 +31,7 @@ const formatRegistry = (registry: {[key: string]: string}) => {
   registry["Bairro Entrega"] = registry["Bairro"]
   registry["UF Entrega"] = registry["UF"]
   registry["Forma de pagamento"] = registry["Método de pagamento"]
+  registry["ISBN"] = `SEL_${registry["ISBN"]}`
   registry["unity"] = "UN"
   registry["quantity"] = "1"
   registry["discount"] = "0"
