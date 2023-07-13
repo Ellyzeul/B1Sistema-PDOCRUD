@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\AskRating;
 use App\Models\PDOCrudWrapper;
 use App\Models\Services\Bling;
-use App\Models\Services\FNAC;
 use App\Models\Services\MercadoLivre;
 
 class Order extends Model
@@ -17,6 +16,7 @@ class Order extends Model
 
     protected $table = 'order_control';
     protected $primaryKey = 'id';
+    public $timestamps = false;
 
     private array $deliveryMethods = [
         "PAC CONTRATO AG" => 2,
@@ -55,16 +55,6 @@ class Order extends Model
         1 => 'B1_BLING_API_TOKEN',
     ];
 
-    public function read(string | null $phase)
-    {
-        if($phase === "6.1") $this->updateReadyTo6_2();
-
-        $pdocrud = new PDOCrudWrapper();
-        $crud = $pdocrud->getHTML($phase);
-
-        return $crud;
-    }
-
     public function getShipmentLabelData(string $orderId)
     {
         $order = DB::table('order_control')
@@ -85,35 +75,6 @@ class Order extends Model
             'company' => $company, 
             'id_delivery_method' => $order->id_delivery_method, 
             'bling_data' => $blingOrder
-        ];
-    }
-
-    public function acceptFNACOrder(string $orderNumber)
-    {
-        $fnac = new FNAC();
-
-        $response = $fnac->acceptOrder($orderNumber);
-
-        return $response;
-    }
-
-    public function updateAddressVerified(array $toUpdate)
-    {
-        $updateQuery = "INSERT IGNORE INTO order_control (id, address_verified) VALUES ";
-        $values = [];
-        foreach($toUpdate as $pair) {
-            $updateQuery .= "(?, ?),";
-            array_push($values, $pair['id'], $pair['address_verified']);
-        }
-        $updateQuery = substr_replace($updateQuery, " ", -1);
-        $updateQuery .= "
-            ON DUPLICATE KEY UPDATE
-                address_verified = VALUES(address_verified)
-        ";
-
-        DB::insert($updateQuery, $values);
-        return [
-            "message" => "Verificação de endereços atualizada com sucesso."
         ];
     }
 
@@ -685,12 +646,5 @@ class Order extends Model
         ]];
 
         return $response;
-    }
-
-    private function updateReadyTo6_2()
-    {
-        DB::table('order_control')
-            ->where('id_phase', '6.1')
-            ->update(['ready_to_6_2' => DB::raw('IF(DATEDIFF(NOW(), delivered_date) < 5, "Não", "Sim")')]);
     }
 }

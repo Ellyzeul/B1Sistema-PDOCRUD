@@ -47,7 +47,7 @@ Route::post('/supplier_url/update', function (Request $request) {
 Route::controller(OrderController::class)
     ->prefix('orders')
     ->group(function () {
-        Route::get('/read', 'read');
+        Route::get('/pdocrud-table', 'getPDOCrudTable');
         Route::get('/address', 'getAddress');
         Route::get('/shipment-label-data', 'getShipmentLabelData');
         Route::get('/invoice-link', 'getInvoiceLink');

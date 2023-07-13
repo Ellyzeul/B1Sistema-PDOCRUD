@@ -11,7 +11,7 @@ export const PDOCrud = (props: PDOCrudProp) => {
 
 	useEffect(() => {
 		const params = window.location.search
-		api.get(`/api/orders/read${params}`)
+		api.get(`/api/orders/pdocrud-table${params}`)
 			.then(response => response.data)
 			.then(response => setRawHTML(response.html))
 	}, [setRawHTML])
