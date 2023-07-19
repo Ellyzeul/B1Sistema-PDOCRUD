@@ -13,10 +13,9 @@ class ImportFromFNACAction
     $fnac = new FNAC();
 
     $unregisteredOrders = $this->getUnregisteredOrders($fnac->ordersQuery(
-      // fromDate: $fromDate, 
-      // dateType: 'CreatedAt', 
-      // states: ['Created'], 
-      ordersId: ['00AZ3H1ZN367K']
+      fromDate: $fromDate, 
+      dateType: 'CreatedAt', 
+      states: ['Created'], 
     ), 'order_id');
 
     $blingNumbers = $this->handleBlingOrderCreate($unregisteredOrders);
