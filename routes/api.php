@@ -54,7 +54,10 @@ Route::controller(OrderController::class)
         Route::get('/get-total-orders-in-phase', 'getTotalOrdersInPhase');
         Route::get('/ask-rating/whatsapp', 'getAskRatingWhatsapp');
         Route::get('/ask-rating/spreadsheet-data', 'getDataForAskRatingSpreadSheet');
+        Route::get('/get-order-control', 'readOrderControlByOrderNumber');
+        Route::get('/get-order-addresses', 'readOrderAddressesByOrderNumber');
         Route::post('/import-from-date', 'importOrdersFromDate');
+        Route::post('/send-bling-order', 'sendOrderToBling');
         Route::post('/ask-rating/mail/send', 'sendAskRatingEmail');
         Route::patch('/accept-fnac', 'acceptFNACOrder');
         Route::patch('/bling/order', 'putBlingOrder');
