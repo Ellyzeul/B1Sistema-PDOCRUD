@@ -62,7 +62,8 @@ class ImportFromFNACAction
     $items = [];
     $orderDate = explode('T', $order->created_at)[0];
     foreach($order->order_detail as $item) {
-      array_push($items, [
+      $quantity = intval("$item->quantity");
+      for($i = 0; $i < $quantity; $i++) array_push($items, [
         'id_company' => 0, 
         'id_sellercentral' => 8, 
         'accepted' => (string) $item->state === 'ToAccept' ? 2 : 3, 
@@ -82,8 +83,8 @@ class ImportFromFNACAction
   private function handleBlingOrderCreate($orders)
   {
     $requestBody = [];
-    $items = [];
     foreach($orders as $order){
+      $items = [];
       foreach($order->order_detail as $item){
         array_push($items, [
           "title" => "$item->product_name",

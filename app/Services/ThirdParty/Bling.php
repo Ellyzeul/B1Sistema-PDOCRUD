@@ -119,7 +119,7 @@ class Bling
     {
         $response = Http::bling($this->companyId, 'v3')->post("/contatos", $requestBody);
 
-        return $response->created()
+        return $response->getStatusCode() === 201
             ? $response->object()->data
             : $response->object();
     } 

@@ -12,7 +12,11 @@ class OrderService
 {
   public function importOrdersFromDate(Request $request)
   {
-    return (new ImportOrdersFromDateAction())->handle($request);
+    \ini_set('max_execution_time', 600);
+    $response = (new ImportOrdersFromDateAction())->handle($request);
+    \ini_set('max_execution_time', 60);
+    
+    return $response;
   }
 
   public function acceptFNACOrder(Request $request)
