@@ -27,6 +27,21 @@ class OrderController extends Controller
 		return (new OrderService())->importOrdersFromDate($request);
 	}
 
+	public static function readOrderControlByOrderNumber(Request $request)
+	{
+		return (new OrderService())->ReadOrderControlByOrderNumber($request);
+	}
+
+	public static function readOrderAddressesByOrderNumber(Request $request)
+	{
+		return (new OrderService())->ReadOrderAddressesByOrderNumber($request);
+	}
+
+	public static function sendOrderToBling(Request $request)
+	{
+		return (new OrderService())->sendOrderToBling($request);
+	}
+
 	public static function acceptFNACOrder(Request $request)
 	{
 		return (new OrderService())->acceptFNACOrder($request);

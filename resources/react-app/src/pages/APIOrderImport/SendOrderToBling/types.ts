@@ -1,0 +1,30 @@
+export type YourResponseType = {
+  id: number;
+  id_company: number;
+  sellercentral_name: string;
+  id_phase: string;
+  invoice_number: string;
+  online_order_number: string;
+  bling_number: string;
+  order_date: string;
+  expected_date: string;
+  isbn: string;
+  selling_price: string;
+  supplier_name: string;
+  purchase_date: string;
+  id_delivery_address: number | null;
+  supplier_purchase_number: string | null;
+  id_delivery_method: number;
+  tracking_code: string;
+  collection_code: string;
+  delivered_date: string | null;
+  ask_rating: string | null;
+  address_verified: number;
+  ready_to_6_2: string | null;
+  supplier_tracking_code: string;
+  id_supplier_delivery_method: number;
+  ship_date: string;
+  is_business_order: number;
+  ready_for_ship: number;
+  accepted: number;
+}

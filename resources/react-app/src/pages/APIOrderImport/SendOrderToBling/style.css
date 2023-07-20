@@ -1,0 +1,47 @@
+#send-order-to-bling-container {
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 60px calc(100vh - 60px);
+}
+
+#send-order-to-bling-container {
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 60px calc(100vh - 60px);
+  }
+  
+#send-order-to-bling-page {
+    margin: 0 auto;
+    width: 100vw;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f2f4f5;
+}
+  
+#send-order-to-bling-page > div {
+    display: flex;
+}
+  
+#send-order-to-bling-page > div > button {
+    background-color: rgb(34, 142, 34);
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+}
+  
+#send-order-to-bling-page > div > button:hover {
+    background-color: rgb(16, 109, 16);
+    cursor: pointer;
+    transition: 125ms;
+}
+
+#table {
+    position: relative;
+    padding-top: 20px;
+    width: 60%;
+}
