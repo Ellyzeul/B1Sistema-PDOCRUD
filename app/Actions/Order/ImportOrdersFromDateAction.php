@@ -7,8 +7,8 @@ use App\Actions\Order\ImportOrdersFromDate\ImportFromMercadoLivreAction as Merca
 class ImportOrdersFromDateAction
 {
   private array $sellercentrals = [
-    // ['id_company' => 0, 'channel' => 'mercado-livre'], 
-    // ['id_company' => 1, 'channel' => 'mercado-livre'], 
+    ['id_company' => 0, 'channel' => 'mercado-livre'], 
+    ['id_company' => 1, 'channel' => 'mercado-livre'], 
     ['id_company' => 0, 'channel' => 'fnac'], 
   ];
 
