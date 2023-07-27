@@ -56,6 +56,8 @@ Route::controller(OrderController::class)
         Route::get('/ask-rating/spreadsheet-data', 'getDataForAskRatingSpreadSheet');
         Route::get('/get-order-control', 'readOrderControlByOrderNumber');
         Route::get('/get-order-addresses', 'readOrderAddressesByOrderNumber');
+        Route::get('/order-messages', 'getOrderMessages');
+        Route::post('/order-message', 'postOrderMessage');
         Route::post('/import-from-date', 'importOrdersFromDate');
         Route::post('/send-bling-order', 'sendOrderToBling');
         Route::post('/ask-rating/mail/send', 'sendAskRatingEmail');
