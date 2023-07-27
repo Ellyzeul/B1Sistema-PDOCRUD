@@ -19,6 +19,75 @@ class FNAC
   }
 
   /**
+   * Busca mensagens do pedido
+   */
+
+  public function messagesQuery(string $orderId)
+  {
+    $this->authenticate();
+
+    $partnerId = $this->partnerId;
+    $shopId = $this->shopId;
+    $token = $this->token;
+
+    $xml = <<<XML
+    <?xml version="1.0" encoding="utf-8"?>
+    <messages_query 
+      xmlns="http://www.fnac.com/schemas/mp-dialog.xsd" 
+      shop_id="$shopId" 
+      partner_id="$partnerId" 
+      token="$token"
+    >
+      <order_fnac_id>$orderId</order_fnac_id>
+      <message_from_types>
+        <from_type>SELLER</from_type>
+        <from_type>CLIENT</from_type>
+        <from_type>CALLCENTER</from_type>
+        <from_type>CLIENT</from_type>
+      </message_from_types>
+    </messages_query>
+    XML;
+
+    $messagesQuery = $this->postXML('/messages_query', $xml);
+    $response = [];
+    foreach($messagesQuery->message as $message) array_push($response, $message);
+
+    return $response;
+  }
+
+  /**
+   * Posta mensagens no pedido
+   */
+
+  public function messagesUpdate(string $messageId, string $text)
+  {
+    $this->authenticate();
+
+    $partnerId = $this->partnerId;
+    $shopId = $this->shopId;
+    $token = $this->token;
+
+    $xml = <<<XML
+    <?xml version="1.0" encoding="utf-8"?>
+    <messages_update 
+      xmlns="http://www.fnac.com/schemas/mp-dialog.xsd" 
+      shop_id="$shopId" 
+      partner_id="$partnerId" 
+      token="$token"
+    >
+      <message action="mark_as_read" id="$messageId" />
+      <message action="reply" id="$messageId">$text</message>
+    </messages_update>
+    XML;
+
+    $messagesUpdate = $this->postXML('/messages_update', $xml);
+
+    return [
+      'success' => $messagesUpdate->attributes()->status === 'OK'
+    ];
+  }
+
+  /**
    * Busca pedidos através da data
    */
 
