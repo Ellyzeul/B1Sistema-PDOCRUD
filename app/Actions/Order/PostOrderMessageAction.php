@@ -8,10 +8,10 @@ class PostOrderMessageAction
 {
   public function handle(Request $request)
   {
-    $sellercentral = $request->sellercentral;
-    $company = $request->company;
-    $text = $request->text;
-    $toAnswer = $request->to_answer;
+    $sellercentral = $request->input('sellercentral');
+    $company = $request->input('company');
+    $text = $request->input('text');
+    $toAnswer = $request->input('to_answer');
 
     if($sellercentral === 'fnac') return (new PostFNACMessageAction())->handle($text, $toAnswer);
     if($sellercentral === 'mercado-livre') return (new PostMercadoLivreMessageAction())->handle($text, $company, $toAnswer);

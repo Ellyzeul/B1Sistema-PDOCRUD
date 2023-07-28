@@ -25,4 +25,9 @@ class GetOrderMessagesAction
 
     return $messages;
   }
+
+  private function mapMessages(array $messages)
+  {
+    
+  }
 }

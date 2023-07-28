@@ -2,9 +2,11 @@ import { SxProps, TableCell, TableRow } from "@mui/material"
 import { RowProp } from "./types"
 import MessageModal from "../MessageModal"
 import { useState } from "react"
+import getSellercentralIcon from "../common/getSellercentralIcon"
+import getCompanyIcon from "../common/getCompanyIcon"
 
 const Row = (props: RowProp) => {
-  const { online_order_number, messages, sellercentral, company } = props
+  const { online_order_number, messages, sellercentral, company, to_answer } = props
   const [ isModalOpen, setIsModalOpen ] = useState(false)
   const latestMessage = messages.reduce((acc, cur) => acc.date > cur.date ? acc : cur)
   const isAnswered = latestMessage.from === 'seller'
@@ -21,11 +23,19 @@ const Row = (props: RowProp) => {
           {(new Date(latestMessage.date)).toLocaleString()}
         </TableCell>
         <TableCell align="center">
-          <img src={sellercentralIcons[sellercentral]} alt={sellercentral} style={{ width: '24px' }} />
-          <img src={companiesIcons[company]} alt={company} style={{ width: '24px' }} />
+          <img src={getSellercentralIcon(sellercentral)} alt={sellercentral} style={{ width: '24px' }} />
+          <img src={getCompanyIcon(company)} alt={company} style={{ width: '24px' }} />
         </TableCell>
       </TableRow>
-      <MessageModal isOpen={isModalOpen} handleClose={() => setIsModalOpen(false)} messages={messages} />
+      <MessageModal 
+        isOpen={isModalOpen} 
+        messages={messages} 
+        online_order_number={online_order_number} 
+        sellercentral={sellercentral} 
+        company={company} 
+        to_answer={to_answer} 
+        handleClose={() => setIsModalOpen(false)} 
+      />
     </>
   )
 }
@@ -42,13 +52,3 @@ const getRowStyle = (isAnswered: boolean): SxProps => ({
     backgroundColor: 'rgba(0, 0, 0, 0.1)'
   }
 })
-
-const sellercentralIcons = {
-  'mercado-livre': '/icons/sellercentrals/mercado-livre.png', 
-  'fnac': '/icons/sellercentrals/fnac.png', 
-} as { [key: string]: string }
-
-const companiesIcons = {
-  'seline': '/seline_white_bg.png', 
-  'b1': '/b1_logo.png'
-} as { [key: string]: string }
