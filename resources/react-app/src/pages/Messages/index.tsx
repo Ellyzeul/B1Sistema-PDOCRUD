@@ -37,7 +37,8 @@ const MessagesPage = () => {
               <TableRow>
                 <TableCell sx={{ textAlign: 'center', width: '15%' }}>Nº Pedido</TableCell>
                 <TableCell sx={{ textAlign: 'center', width: '5%' }}>Situação</TableCell>
-                <TableCell sx={{ textAlign: 'center', width: '55%' }}>Última mensagem</TableCell>
+                <TableCell sx={{ textAlign: 'center', width: '5%' }}>Tipo</TableCell>
+                <TableCell sx={{ textAlign: 'center', width: '50%' }}>Última mensagem</TableCell>
                 <TableCell sx={{ textAlign: 'center', width: '15%' }}>Data</TableCell>
                 <TableCell sx={{ textAlign: 'center', width: '10%' }}>Canal de venda</TableCell>
               </TableRow>

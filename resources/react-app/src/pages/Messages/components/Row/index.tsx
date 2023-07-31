@@ -6,9 +6,10 @@ import getSellercentralIcon from "../common/getSellercentralIcon"
 import getCompanyIcon from "../common/getCompanyIcon"
 
 const Row = (props: RowProp) => {
-  const { online_order_number, messages, sellercentral, company, to_answer } = props
+  const { online_order_number, messages, type, sellercentral, company, to_answer } = props
   const [ isModalOpen, setIsModalOpen ] = useState(false)
   const latestMessage = messages.reduce((acc, cur) => acc.date > cur.date ? acc : cur)
+  const messageType = type === 'offer' ? 'Anúncio' : 'Pedido'
   const isAnswered = latestMessage.from === 'seller'
 
   return (
@@ -16,6 +17,7 @@ const Row = (props: RowProp) => {
       <TableRow sx={getRowStyle(isAnswered)} onClick={() => setIsModalOpen(true)}>
         <TableCell>{online_order_number}</TableCell>
         <TableCell>{isAnswered ? 'Respondida' : 'Pendente'}</TableCell>
+        <TableCell>{messageType}</TableCell>
         <TableCell>
           <div className="message-text">{latestMessage.text}</div>
         </TableCell>
