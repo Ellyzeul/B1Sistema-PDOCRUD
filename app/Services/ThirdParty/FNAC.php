@@ -22,13 +22,16 @@ class FNAC
    * Busca mensagens do pedido
    */
 
-  public function messagesQuery(string $orderId)
+  public function messagesQuery(?string $orderId = null, ?string $messageType = null)
   {
     $this->authenticate();
 
     $partnerId = $this->partnerId;
     $shopId = $this->shopId;
     $token = $this->token;
+
+    $orderIdFilter = isset($orderId) ? "<order_fnac_id>$orderId</order_fnac_id>" : '';
+    $messageTypeFilter = isset($messageType) ? "<message_type>$messageType</message_type>" : '';
 
     $xml = <<<XML
     <?xml version="1.0" encoding="utf-8"?>
@@ -38,7 +41,8 @@ class FNAC
       partner_id="$partnerId" 
       token="$token"
     >
-      <order_fnac_id>$orderId</order_fnac_id>
+      $orderIdFilter
+      $messageTypeFilter
       <message_from_types>
         <from_type>SELLER</from_type>
         <from_type>CLIENT</from_type>
@@ -49,10 +53,10 @@ class FNAC
     XML;
 
     $messagesQuery = $this->postXML('/messages_query', $xml);
-    $response = [];
-    foreach($messagesQuery->message as $message) array_push($response, $message);
+    $messages = [];
+    foreach($messagesQuery->message as $message) array_push($messages, $message);
 
-    return $response;
+    return $messages;
   }
 
   /**

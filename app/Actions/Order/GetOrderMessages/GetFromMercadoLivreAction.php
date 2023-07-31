@@ -51,6 +51,7 @@ class GetFromMercadoLivreAction
       $messages[$orderNumber] = [
         'sellercentral' => 'mercado-livre', 
         'company' => self::COMPANIES[$idCompany]['name'], 
+        'type' => 'order', 
         'to_answer' => [
           'id' => "/packs/$orderNumber/sellers/$sellerId", 
           'client_id' => $this->getClientId($response, $sellerId)

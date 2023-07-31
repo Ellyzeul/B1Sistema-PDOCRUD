@@ -35,27 +35,41 @@ class GetFromFNACAction
     $messages = [];
 
     foreach($orderNumbers as $orderNumber) {
-      $response = $fnac->messagesQuery($orderNumber);
+      $response = $fnac->messagesQuery(orderId: $orderNumber);
       if(count($response) === 0) continue;
+      $messages[$orderNumber] = $this->formatResponse($response, 'order');
+    }
+    $offerMessages = $fnac->messagesQuery(messageType: 'OFFER');
 
-      $messages[$orderNumber] = [
-        'sellercentral' => 'fnac', 
-        'company' => 'seline', 
-        'to_answer' => [
-          'id' => $this->getLatestClientMessageID($response)
-        ], 
-        'messages' => $this->formatResponse($response)
-      ];
+    foreach($offerMessages as $message) {
+      $formatted = $this->formatResponse([ $message ], 'offer');
+      $messageId = explode('-', $formatted['to_answer']['id'])[0];
+      $messages[$messageId] = $formatted;
     }
 
     return $messages;
   }
 
-  private function formatResponse(array $response)
+  private function formatResponse(array $response, string $type): array
+  {
+    $latestMessage = $this->getLatestMessage($response);
+
+    return [
+      'sellercentral' => 'fnac', 
+      'company' => 'seline', 
+      'type' => $type,
+      'to_answer' => [
+        'id' => "$latestMessage->message_id"
+      ], 
+      'messages' => $this->formatMessages($response)
+    ];
+  }
+
+  private function formatMessages(array $messages): array
   {
     $formatted = [];
 
-    foreach($response as $message) {
+    foreach($messages as $message) {
       array_push($formatted, [
         'text' => "$message->message_description", 
         'date' => "$message->created_at", 
@@ -68,7 +82,7 @@ class GetFromFNACAction
     return $formatted;
   }
 
-  private function getLatestClientMessageID(array $messages)
+  private function getLatestMessage(array $messages)
   {
     $latestMessage = array_reduce(
       $messages, 
@@ -78,6 +92,6 @@ class GetFromFNACAction
       }
     );
 
-    return "$latestMessage->message_id";
+    return $latestMessage;
   }
 }
