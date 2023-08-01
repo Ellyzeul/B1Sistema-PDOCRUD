@@ -28,7 +28,7 @@ class GetFromMercadoLivreAction
     $orderNumbers = [];
     $results = Order::select('online_order_number')
       ->where('id_sellercentral', $idSellercentral)
-      ->where('id_phase', '<', 7)
+      ->whereRaw('order_date BETWEEN CURDATE() - INTERVAL 60 DAY AND CURDATE()')
       ->get();
 
     foreach($results as $result) {

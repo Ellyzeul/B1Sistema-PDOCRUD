@@ -2,7 +2,6 @@
 
 use App\Models\Order;
 use App\Services\ThirdParty\FNAC;
-use SimpleXMLElement;
 
 class GetFromFNACAction
 {
@@ -19,7 +18,7 @@ class GetFromFNACAction
     $orderNumbers = [];
     $results = Order::select('online_order_number')
       ->where('id_sellercentral', $idSellercentral)
-      ->where('id_phase', '<', 7)
+      ->whereRaw('order_date BETWEEN CURDATE() - INTERVAL 60 DAY AND CURDATE()')
       ->get();
 
     foreach($results as $result) {
@@ -42,12 +41,32 @@ class GetFromFNACAction
     $offerMessages = $fnac->messagesQuery(messageType: 'OFFER');
 
     foreach($offerMessages as $message) {
-      $formatted = $this->formatResponse([ $message ], 'offer');
+      $formatted = $this->formatResponse(
+        $this->handleOfferMessage($message), 
+        'offer', 
+      );
       $messageId = explode('-', $formatted['to_answer']['id'])[0];
       $messages[$messageId] = $formatted;
     }
 
     return $messages;
+  }
+
+  private function handleOfferMessage(\SimpleXMLElement $offerMessage): array
+  {
+    if(!isset($offerMessage->answer)) return [ $offerMessage ];
+    $id = "$offerMessage->message_id";
+    $description = "$offerMessage->answer";
+    $createdAt = "$offerMessage->answer_at";
+
+    return [ $offerMessage, simplexml_load_string(<<<XML
+      <message>
+        <message_id>$id</message_id>
+        <message_description>$description</message_description>
+        <message_from type="SELLER" />
+        <created_at>$createdAt</created_at>
+      </message>
+    XML, \SimpleXMLElement::class, LIBXML_NOCDATA) ];
   }
 
   private function formatResponse(array $response, string $type): array
