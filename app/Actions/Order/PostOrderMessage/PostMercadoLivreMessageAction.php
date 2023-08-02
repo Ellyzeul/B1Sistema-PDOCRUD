@@ -13,8 +13,11 @@ class PostMercadoLivreMessageAction
   {
     $resourceId = $toAnswer['id'];
     $clientId = $toAnswer['client_id'];
+    $messageType = $toAnswer['message_type'];
     $idCompany = self::COMPANIES[$company];
 
-    return (new MercadoLivre($idCompany))->postMessage($resourceId, $clientId, $text);
+    return $messageType === 'order' 
+      ? (new MercadoLivre($idCompany))->postMessage($resourceId, $clientId, $text)
+      : (new MercadoLivre($idCompany))->postAnswer($resourceId, $text);
   }
 }

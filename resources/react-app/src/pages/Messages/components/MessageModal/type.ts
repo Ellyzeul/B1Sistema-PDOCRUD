@@ -7,5 +7,6 @@ export type MessageModalProp = {
   sellercentral: string, 
   company: string, 
   to_answer: {}, 
+  type: 'order' | 'offer', 
   handleClose: () => void, 
 }

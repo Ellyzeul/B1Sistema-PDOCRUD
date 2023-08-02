@@ -59,6 +59,10 @@ class GetFromMercadoLivreAction
         'messages' => $this->formatResponse($response, $sellerId)
       ];
     }
+    
+    foreach($this->getOfferMessagesInfo($mercadoLivre, $idCompany) as [ $offerId, $messageInfo ]) {
+      $messages[$offerId] = $messageInfo;
+    }
 
     return $messages;
   }
@@ -86,5 +90,40 @@ class GetFromMercadoLivreAction
     }
 
     return '';
+  }
+
+  private function getOfferMessagesInfo(MercadoLivre $mercadoLivre, int $idCompany)
+  {
+    $offerMessages = [];
+
+    foreach($mercadoLivre->getQuestions() as $offerMessageInfo) {
+      array_push($offerMessages, [$offerMessageInfo->id, [
+        'sellercentral' => 'mercado-livre', 
+        'company' => self::COMPANIES[$idCompany]['name'], 
+        'type' => 'offer', 
+        'to_answer' => [ 'id' => $offerMessageInfo->id ], 
+        'messages' => $this->getOfferMessages($offerMessageInfo), 
+      ]]);
+    }
+
+    return $offerMessages;
+  }
+
+  private function getOfferMessages(object $offerMessageInfo)
+  {
+    $clientQuestion = [
+      'text' => $offerMessageInfo->text, 
+      'date' => $offerMessageInfo->date_created, 
+      'from' => 'client', 
+    ];
+
+    if(!isset($offerMessageInfo->answer)) return [ $clientQuestion ];
+    $answer = $offerMessageInfo->answer;
+
+    return [ $clientQuestion, [
+      'text' => $answer->text, 
+      'date' => $answer->date_created, 
+      'from' => 'seller', 
+    ] ];
   }
 }

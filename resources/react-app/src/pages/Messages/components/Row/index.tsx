@@ -35,6 +35,7 @@ const Row = (props: RowProp) => {
         online_order_number={online_order_number} 
         sellercentral={sellercentral} 
         company={company} 
+        type={type} 
         to_answer={to_answer} 
         handleClose={() => setIsModalOpen(false)} 
       />
