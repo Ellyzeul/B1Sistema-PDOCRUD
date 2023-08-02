@@ -152,6 +152,59 @@ class MercadoLivre
         ];
     }
 
+    /**
+     * Recupera perguntas de anúncios
+     */
+
+    public function getQuestions(int $attempt=0)
+    {
+        if($attempt >= $this->maxAttempts) $this->throwMaxAttemptsError(__FUNCTION__);
+        $this->authenticate();
+        $keepFetching = true;
+        $offset = 0;
+        $questions = [];
+
+        while($keepFetching) {
+            $response = $this->handleGetQuestionsIteration($offset);
+            $questions = array_merge($questions, $response['questions']);
+
+            $offset += 200;
+            if($offset >= $response['total']) $keepFetching = false;
+        }
+
+        return $questions;
+    }
+
+    private function handleGetQuestionsIteration(int $offset)
+    {
+        $response = Http::mercadoLivre(accessToken: $this->credential['access_token'])
+                ->get("/questions/search?seller_id={$this->sellerId}&api_version=4&limit=200&offset=$offset");
+            
+        if(!$response->ok()) return [ "questions" => [], "total" => 0 ];
+        $data = $response->object();
+
+        return [ "questions" => $data->questions, "total" => $data->total ];
+    }
+
+    /**
+     * Responder mensagens de anúncios
+     */
+
+    public function postAnswer(string $questionId, string $text, int $attempt=0)
+    {
+        if($attempt >= $this->maxAttempts) $this->throwMaxAttemptsError(__FUNCTION__);
+        $this->authenticate();
+
+        $response = Http::mercadoLivre(accessToken: $this->credential['access_token'])->post('/answers', [
+            'question_id' => $questionId, 
+            'text' => $text, 
+        ]);
+
+        return [
+            'success' => $response->getStatusCode() === 200
+        ];
+    }
+
     // Métodos privados
 
     private function authenticate(bool $refetch = false, callable | null $callback = null)

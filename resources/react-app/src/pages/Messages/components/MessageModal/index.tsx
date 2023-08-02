@@ -9,7 +9,7 @@ import getSellercentralIcon from "../common/getSellercentralIcon"
 import getCompanyIcon from "../common/getCompanyIcon"
 
 const MessageModal = (props: MessageModalProp) => {
-  const { isOpen, messages, online_order_number, sellercentral, company, to_answer, handleClose } = props
+  const { isOpen, messages, online_order_number, sellercentral, company, to_answer, type, handleClose } = props
   const [ messagesElements, setMessagesElements ] = useState(messages.map(mapMessageToElement))
   const textareaRef = useRef(null as HTMLTextAreaElement | null)
 
@@ -31,12 +31,12 @@ const MessageModal = (props: MessageModalProp) => {
       company: company, 
       text: textarea.value, 
       to_answer: to_answer, 
+      message_type: type,
     }
     const mappedElement = mapMessageToElement(message)
 
     setMessagesElements([ mappedElement, ...messagesElements ])
 
-    console.log(requestBody)
     api.post('/api/orders/order-message', requestBody)
       .then(response => response.data)
       .then(response => {
