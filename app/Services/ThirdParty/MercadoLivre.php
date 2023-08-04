@@ -42,6 +42,11 @@ class MercadoLivre
         $this->credentialName = $auth['credential_name'];
     }
 
+    public function getSellerID(): string
+    {
+        return $this->sellerId;
+    }
+
     /**
      * Recupera pedido por ID
      */
@@ -115,6 +120,89 @@ class MercadoLivre
         ));
 
         return $response->object();
+    }
+
+    public function getMessage(string $orderNumber, int $attempt=0)
+    {
+        if($attempt >= $this->maxAttempts) $this->throwMaxAttemptsError(__FUNCTION__);
+        $this->authenticate();
+
+        $response = Http::mercadoLivre(accessToken: $this->credential['access_token'])->get(
+            "/messages/packs/$orderNumber/sellers/$this->sellerId?tag=post_sale"
+        );
+
+        return $response->ok()
+            ? $response->object()->messages
+            : [];
+    }
+
+    public function postMessage(string $resourceId, string $clientId, string $text, int $attempt=0)
+    {
+        if($attempt >= $this->maxAttempts) $this->throwMaxAttemptsError(__FUNCTION__);
+        $this->authenticate();
+
+        $response = Http::mercadoLivre(accessToken: $this->credential['access_token'])->post("/messages$resourceId?tag=post_sale", [
+            'from' => [ 'user_id' => $this->sellerId ], 
+            'to' => [ 'user_id' => $clientId ], 
+            'text' => $text
+        ]);
+
+        return [
+            'success' => $response->getStatusCode() === 201
+        ];
+    }
+
+    /**
+     * Recupera perguntas de anúncios
+     */
+
+    public function getQuestions(int $attempt=0)
+    {
+        if($attempt >= $this->maxAttempts) $this->throwMaxAttemptsError(__FUNCTION__);
+        $this->authenticate();
+        $keepFetching = true;
+        $offset = 0;
+        $questions = [];
+
+        while($keepFetching) {
+            $response = $this->handleGetQuestionsIteration($offset);
+            $questions = array_merge($questions, $response['questions']);
+
+            $offset += 200;
+            if($offset >= $response['total']) $keepFetching = false;
+        }
+
+        return $questions;
+    }
+
+    private function handleGetQuestionsIteration(int $offset)
+    {
+        $response = Http::mercadoLivre(accessToken: $this->credential['access_token'])
+                ->get("/questions/search?seller_id={$this->sellerId}&api_version=4&limit=200&offset=$offset");
+            
+        if(!$response->ok()) return [ "questions" => [], "total" => 0 ];
+        $data = $response->object();
+
+        return [ "questions" => $data->questions, "total" => $data->total ];
+    }
+
+    /**
+     * Responder mensagens de anúncios
+     */
+
+    public function postAnswer(string $questionId, string $text, int $attempt=0)
+    {
+        if($attempt >= $this->maxAttempts) $this->throwMaxAttemptsError(__FUNCTION__);
+        $this->authenticate();
+
+        $response = Http::mercadoLivre(accessToken: $this->credential['access_token'])->post('/answers', [
+            'question_id' => $questionId, 
+            'text' => $text, 
+        ]);
+
+        return [
+            'success' => $response->getStatusCode() === 200
+        ];
     }
 
     // Métodos privados

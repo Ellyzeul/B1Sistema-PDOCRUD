@@ -44,42 +44,7 @@ export const BlacklistTable = (props: BlacklistTableProps) => {
         item.observation
         )
     )
-      
-    // const handleClickArrowRight = () => {
-    //   setDirection(true);
-    //   const lastElementId = data.data[data.data.length - 1]?.id;
-    //   const newStart = lastElementId + 1;
-    //   if (newStart >= 0) {
-    //     setStart(newStart);
-    //     getBlacklistIntervalData(blacklist_type, newStart, true);
-    //   }
-    // }
-      
-    // const handleClickArrowLeft = () => {
-    //   setDirection(false);
-    //   const firstElementId = data.data[0]?.id;
-    //   const newStart = firstElementId - 1;
-    //   if (newStart >= 0) {
-    //     setStart(newStart);
-    //     getBlacklistIntervalData(blacklist_type, newStart, false);
-    //   }
-    // }
-      
-    // const handleClickLastPage = () => {
-    //   setStart(data.totalElements);
-    //   setDirection(false);
-    //   console.log(start, direction);
-    //   // const totalPages = Math.ceil(data.totalElements / data.data.length);
-    //   // const lastPageStart = Math.max(0, (totalPages - 1) * data.data.length);
-      
-    //   console.log(start, direction);
-    //   // getBlacklistIntervalData(blacklist_type, start, false);
-    // }
-      
-    // const handleClickFirstPage = () => {
-    //   setDirection(true);
-    //   setStart(0);
-    // }
+    
       
     const searchData = () => {
       if (!filterInputRef.current) return;

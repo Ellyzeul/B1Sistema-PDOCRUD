@@ -69,6 +69,7 @@ class PDOCrudService
 	public function getHTML(Request $request)
 	{
 		$phase = $request->input('phase') ?? null;
+		$orderNumber = $request->input('order_number') ?? null;
 
 		if($phase === '6.1') $this->updateReadyTo6_2();
 
@@ -77,7 +78,7 @@ class PDOCrudService
 		$crud = $this->fieldsNotMandatory($crud, $columns);
 		$crud = $this->fieldBulkUpdate($crud, $columns, $phase);
 		$crud = $this->fieldsFormatting($crud, $columns);
-		$crud = $this->fieldsFiltering($crud, $phase);
+		$crud = $this->fieldsFiltering($crud, $phase, $orderNumber);
 		$crud = $this->crudSettings($crud, $phase);
 
 		$crud->dbOrderBy("id desc");
@@ -225,7 +226,7 @@ class PDOCrudService
 		return $crud;
 	}
 
-	private function fieldsFiltering(PDOCrud $crud, ?string $phase)
+	private function fieldsFiltering(PDOCrud $crud, ?string $phase, ?string $orderNumber)
 	{
 		if($phase == "não-verificado") {
 			$crud->where('address_verified', 0);
@@ -241,6 +242,8 @@ class PDOCrudService
 			return $crud;
 		}
 		if(is_numeric($phase)) $crud->where('id_phase', $phase);
+
+		if(isset($orderNumber)) $crud->where('online_order_number', $orderNumber);
 
 		return $crud;
 	}

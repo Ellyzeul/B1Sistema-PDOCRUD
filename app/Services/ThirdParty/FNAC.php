@@ -19,6 +19,83 @@ class FNAC
   }
 
   /**
+   * Busca mensagens do pedido
+   */
+
+  public function messagesQuery(?string $orderId = null, ?string $messageType = null)
+  {
+    $this->authenticate();
+
+    $partnerId = $this->partnerId;
+    $shopId = $this->shopId;
+    $token = $this->token;
+
+    $orderIdFilter = isset($orderId) ? "<order_fnac_id>$orderId</order_fnac_id>" : '';
+    $messageTypeFilter = isset($messageType) ? "<message_type>$messageType</message_type>" : '';
+
+    $xml = <<<XML
+    <?xml version="1.0" encoding="utf-8"?>
+    <messages_query 
+      xmlns="http://www.fnac.com/schemas/mp-dialog.xsd" 
+      shop_id="$shopId" 
+      partner_id="$partnerId" 
+      token="$token"
+    >
+      $orderIdFilter
+      $messageTypeFilter
+      <message_from_types>
+        <from_type>SELLER</from_type>
+        <from_type>CLIENT</from_type>
+        <from_type>CALLCENTER</from_type>
+        <from_type>CLIENT</from_type>
+      </message_from_types>
+    </messages_query>
+    XML;
+
+    $messagesQuery = $this->postXML('/messages_query', $xml);
+    $messages = [];
+    foreach($messagesQuery->message as $message) array_push($messages, $message);
+
+    return $messages;
+  }
+
+  /**
+   * Posta mensagens no pedido
+   */
+
+  public function messagesUpdate(string $messageId, string $text)
+  {
+    $this->authenticate();
+
+    $partnerId = $this->partnerId;
+    $shopId = $this->shopId;
+    $token = $this->token;
+
+    $xml = <<<XML
+    <?xml version="1.0" encoding="utf-8"?>
+    <messages_update 
+      xmlns="http://www.fnac.com/schemas/mp-dialog.xsd" 
+      shop_id="$shopId" 
+      partner_id="$partnerId" 
+      token="$token"
+    >
+      <message action="mark_as_read" id="$messageId" />
+      <message action="reply" id="$messageId">
+        <message_description>$text</message_description>
+        <message_to>CLIENT</message_to>
+      </message>
+    </messages_update>
+    XML;
+
+    $messagesUpdate = $this->postXML('/messages_update', $xml);
+
+    return [
+      'success' => "{$messagesUpdate->attributes()->status}" === 'OK', 
+      'message' => $messagesUpdate
+    ];
+  }
+
+  /**
    * Busca pedidos através da data
    */
 

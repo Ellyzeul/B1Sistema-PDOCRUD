@@ -1,0 +1,99 @@
+.message-modal {
+  display: grid;
+  place-items: center;
+}
+
+.messages-modal-container {
+  width: 80vw;
+  height: 90vh;
+  position: relative;
+  background-color: white;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  outline: none;
+}
+
+.messages-modal-chat {
+  width: 90%;
+  height: 70%;
+  background-color: rgb(220, 220, 220);
+  border: 1px rgb(220, 220, 220) solid;
+  border-radius: 4px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  white-space: pre;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.message-from-client, .message-from-seller {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+.message-from-seller {
+  flex-direction: row-reverse;
+}
+
+.message {
+  max-width: 60%;
+  margin: 8px 10px;
+  padding: 6px 4px;
+  background-color: white;
+  border-radius: 4px;
+}
+.message > p {
+  margin: 4px 5px;
+  white-space: pre-wrap;
+}
+
+.messages-modal-input-container {
+  width: 90%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.messages-modal-input {
+  margin-top: 30px;
+  width: calc(100% - 100px);
+  resize: none;
+  border: 1px solid rgb(67, 67, 67);
+  border-right: none;
+  border-radius: 4px 0 0 4px;
+  outline: none;
+}
+
+.messages-modal-send-message {
+  width: 100px;
+  height: calc(100% - 30px);
+  background-color: rgb(13, 124, 56);
+  opacity: 0.9;
+  color: white;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  transition: 125ms;
+}
+.messages-modal-send-message:hover {
+  opacity: 1;
+}
+
+.messages-modal-close {
+  position: absolute;
+  padding: 4px 6px;
+  top: 20px;
+  right: 30px;
+  font-size: large;
+  color: black;
+  background-color: white;
+  border-radius: 50%;
+  transition: 125ms;
+  cursor: pointer;
+}
+.messages-modal-close:hover {
+  filter: invert(1);
+}

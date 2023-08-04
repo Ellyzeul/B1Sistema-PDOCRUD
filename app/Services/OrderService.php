@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use App\Actions\Order\ImportOrdersFromDateAction;
 use App\Actions\Order\AcceptFNACOrderAction;
+use App\Actions\Order\GetOrderMessagesAction;
+use App\Actions\Order\PostOrderMessageAction;
 use App\Actions\Order\UpdateAddressVerifiedActionAction;
 use App\Actions\Order\ReadOrderControlByOrderNumberAction;
 use App\Actions\Order\ReadOrderAddressesByOrderNumberAction;
@@ -12,7 +14,11 @@ class OrderService
 {
   public function importOrdersFromDate(Request $request)
   {
-    return (new ImportOrdersFromDateAction())->handle($request);
+    \ini_set('max_execution_time', 600);
+    $response = (new ImportOrdersFromDateAction())->handle($request);
+    \ini_set('max_execution_time', 60);
+    
+    return $response;
   }
 
   public function acceptFNACOrder(Request $request)
@@ -41,5 +47,17 @@ class OrderService
     $idCompany = $request->input('id_company');
 
     return (new SendOrderToBlingAction())->handle($order, $client, $items, $idCompany);
+  }
+
+  public function getOrderMessages()
+  {
+    \ini_set('max_execution_time', 600);
+    return (new GetOrderMessagesAction())->handle();
+    \ini_set('max_execution_time', 60);
+  }
+
+  public function postOrderMessage(Request $request)
+  {
+    return (new PostOrderMessageAction())->handle($request);
   }
 }

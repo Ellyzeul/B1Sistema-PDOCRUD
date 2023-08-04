@@ -52,6 +52,16 @@ class OrderController extends Controller
 		return (new OrderService())->updateAddressVerified($request);
 	}
 
+	public static function getOrderMessages()
+	{
+		return (new OrderService())->getOrderMessages();
+	}
+
+	public static function postOrderMessage(Request $request)
+	{
+		return (new OrderService)->postOrderMessage($request);
+	}
+
 	public static function updateReadForShip(Request $request)
 	{
 		$toUpdate = $request->input("verifieds");

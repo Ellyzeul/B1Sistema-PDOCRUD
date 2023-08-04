@@ -27,6 +27,7 @@ import { PurchasePage } from './pages/Purchases';
 import { BlacklistISBNPage } from './pages/Purchases/BlacklistISBN';
 import { BlacklistSupplierPage } from './pages/Purchases/BlacklistSupplier';
 import { BlacklistPublisherPage } from './pages/Purchases/BlacklistPublisher';
+import MessagesPage from './pages/Messages';
 
 function App() {
   const userDataRaw = window.localStorage.getItem("userData")
@@ -70,6 +71,7 @@ function App() {
           <Route path='/compras/isbn' element={getElement(<BlacklistISBNPage/>)} />
           <Route path='/compras/fornecedor' element={getElement(<BlacklistSupplierPage/>)} />
           <Route path='/compras/editora' element={getElement(<BlacklistPublisherPage/>)} />
+          <Route path='/atendimento/mensagens' element={getElement(<MessagesPage/>)} />
           <Route path='/dashboard' element={getElement(<Dashboards/>)} />
           <Route path='/dashboard/pedidos' element={getElement(<DashboardOrders/>)} />
           <Route path='/empresas' element={getElement(<CompaniesPage/>)} />
