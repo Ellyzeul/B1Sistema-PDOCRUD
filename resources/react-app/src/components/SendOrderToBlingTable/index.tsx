@@ -11,7 +11,6 @@ import { SendOrderToBlingModal } from '../SendOrderToBlingModal';
 export const SendOrderToBlingTable = (props: SendOrderToBlingTableProp) => {
   const { data } = props
 
-
   const createData = (
     orderId: number,
     company: number,

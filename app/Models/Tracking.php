@@ -248,6 +248,9 @@ class Tracking extends Model
 		if(!$this->existsApiCredentialDB('correios')) $this->generateCorreiosToken();
 
 		$apikey = $this->readApiCredentialDB('correios');
+		if(isset($apikey->token)) $this->generateCorreiosToken();
+
+		$apikey = $this->readApiCredentialDB('correios');
 		$expires_in = Date::parse($apikey->expiraEm);
 
 		if((!$apikey->token) || $expires_in->diffInSeconds($today) > 1) {
@@ -273,6 +276,9 @@ class Tracking extends Model
 		$today = Date::parse(date('Y-m-d H:i:s'));
 
 		if(!$this->existsApiCredentialDB('correios')) $this->generateCorreiosToken();
+
+		$apikey = $this->readApiCredentialDB('correios');
+		if(isset($apikey->token)) $this->generateCorreiosToken();
 
 		$apikey = $this->readApiCredentialDB('correios');
 		$expires_in = Date::parse($apikey->expiraEm);
@@ -389,6 +395,9 @@ class Tracking extends Model
 
 		if(!$this->existsApiCredentialDB('correios')) $this->generateCorreiosToken();
 
+		$apikey = $this->readApiCredentialDB('correios');
+		if(isset($apikey->token)) $this->generateCorreiosToken();
+		
 		$apikey = $this->readApiCredentialDB('correios');
 		$expires_in = Date::parse($apikey->expiraEm);
 

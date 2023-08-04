@@ -25,3 +25,7 @@
   cursor: pointer;
   transition: 125ms;
 }
+
+.blacklist-icon {
+  color: #000000;
+}

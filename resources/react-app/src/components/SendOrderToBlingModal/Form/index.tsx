@@ -5,6 +5,8 @@ import { FormProps } from "./types"
 
 export const Form = (props: FormProps) => {
     const { orderNumber } = props
+    let id_company = 0
+     
     useEffect(() => {
         api.get(`/api/orders/get-order-addresses?order_number=${orderNumber}`)
             .then(response => response)
@@ -23,17 +25,18 @@ export const Form = (props: FormProps) => {
             <div className="send-button" onClick={handleClick}>Enviar</div>
             <div className="contact-panel">
                 <strong className="panel-section-header">Dados do Cliente</strong>
+                <span className="address-panel-order-number">ORIGEM: {} ({id_company === 0 ? <img src="/seline_white_bg.png" width="20" height="20"/> : <img src="/b1_white_bg.png" width="20" height="20"/>}) - Canal de Venda: {<a target="_blank" href={""} rel="noreferrer">{"salesChannel"}</a>}</span>
                 <span>Nome</span>
                 <input name={"Nome"} type={"text"} defaultValue={""} />
                 <span>CPF/CNPJ</span>
                 <input name={"cpf_cnpj"} type={"text"} defaultValue={""} />
 
                 <div>
-                    <span><label htmlFor="cars">Tipo de Pessoa:</label></span>
-                    <select name="cars" id="cars">
+                    <span><label htmlFor="person_type">Tipo de Pessoa:</label></span>
+                    <select name="person_type" id="person_type">
                     <option value="F">F</option>
                     <option value="J">J</option>
-                    <option value="EX">EX</option>
+                    <option value="E">EX</option>
                     </select>
                 </div>
                 <span>Celular</span>

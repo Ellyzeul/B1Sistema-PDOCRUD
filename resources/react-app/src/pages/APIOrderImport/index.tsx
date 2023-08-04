@@ -43,7 +43,7 @@ const APIOrderImportPage = () => {
     <div id="api-order-import-page-container">
       <Navbar items={[
         {label: 'Aceitar pedidos', options: [{name: 'FNAC', url: '/atendimento/importacao-api/aceitar-fnac'}]}, 
-        // {label: 'Cadastrar pedidos', options: [{name: 'Bling', url: '/atendimento/enviar-pedidos'}]}
+        {label: 'Cadastrar pedidos', options: [{name: 'Bling', url: '/atendimento/enviar-pedidos'}]}
       ]}/>
       <div id="api-order-import-page">
         <div id="import-options">
