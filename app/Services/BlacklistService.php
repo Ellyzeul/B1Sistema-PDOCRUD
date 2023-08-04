@@ -10,17 +10,17 @@ use App\Actions\Blacklist\VerifyListBlacklistAction;
 
 class BlacklistService
 {
-    public function ReadBlacklistFromInterval(Request $request)
+    public function readBlacklistFromInterval(Request $request)
     {
         return (new ReadBlacklistFromIntervalAction())->handle($request);  
     }
 
-    public function InsertOrUpdateBlacklist(Request $request)
+    public function insertOrUpdateBlacklist(Request $request)
     {
         return (new InsertOrUpdateBlacklistAction())->handle($request);
     }
 
-    public function DeleteFromBlacklist(Request $request)
+    public function deleteFromBlacklist(Request $request)
     {
         return (new DeleteFromBlacklistAction())->handle($request);
     }
