@@ -81,8 +81,8 @@ class FNAC
     >
       <message action="mark_as_read" id="$messageId" />
       <message action="reply" id="$messageId">
-        <message_description>$text</message_description>
         <message_to>CLIENT</message_to>
+        <message_description>$text</message_description>
       </message>
     </messages_update>
     XML;
