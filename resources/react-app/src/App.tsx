@@ -23,6 +23,10 @@ import APIOrderImportPage from './pages/APIOrderImport';
 import PurchaseTrackingPage from './pages/PurchaseTracking';
 import AcceptFNACPage from './pages/APIOrderImport/AcceptFNAC';
 import { SendOrderToBlingPage } from './pages/APIOrderImport/SendOrderToBling';
+import { PurchasePage } from './pages/Purchases';
+import { BlacklistISBNPage } from './pages/Purchases/BlacklistISBN';
+import { BlacklistSupplierPage } from './pages/Purchases/BlacklistSupplier';
+import { BlacklistPublisherPage } from './pages/Purchases/BlacklistPublisher';
 import MessagesPage from './pages/Messages';
 
 function App() {
@@ -63,6 +67,10 @@ function App() {
           <Route path='/atendimento/importacao-api' element={getElement(<APIOrderImportPage/>)} />
           <Route path='/atendimento/importacao-api/aceitar-fnac' element={getElement(<AcceptFNACPage/>)} />
           <Route path='/atendimento/enviar-pedidos' element={getElement(<SendOrderToBlingPage/>)} />
+          <Route path='/compras' element={getElement(<PurchasePage/>)} />
+          <Route path='/compras/isbn' element={getElement(<BlacklistISBNPage/>)} />
+          <Route path='/compras/fornecedor' element={getElement(<BlacklistSupplierPage/>)} />
+          <Route path='/compras/editora' element={getElement(<BlacklistPublisherPage/>)} />
           <Route path='/atendimento/mensagens' element={getElement(<MessagesPage/>)} />
           <Route path='/dashboard' element={getElement(<Dashboards/>)} />
           <Route path='/dashboard/pedidos' element={getElement(<DashboardOrders/>)} />
