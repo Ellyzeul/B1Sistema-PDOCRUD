@@ -11,13 +11,26 @@ class PostMercadoLivreMessageAction
 
   public function handle(string $text, string $company, array $toAnswer)
   {
-    $resourceId = $toAnswer['id'];
-    $clientId = $toAnswer['client_id'];
     $messageType = $toAnswer['message_type'];
     $idCompany = self::COMPANIES[$company];
 
     return $messageType === 'order' 
-      ? (new MercadoLivre($idCompany))->postMessage($resourceId, $clientId, $text)
-      : (new MercadoLivre($idCompany))->postAnswer($resourceId, $text);
+      ? $this->handleOrderMessage($text, $idCompany, $toAnswer)
+      : $this->handleOfferMessage($text, $idCompany, $toAnswer);
+  }
+
+  private function handleOrderMessage(string $text, int $idCompany, array $toAnswer)
+  {
+    $resourceId = $toAnswer['id'];
+    $clientId = $toAnswer['client_id'];
+
+    return (new MercadoLivre($idCompany))->postMessage($resourceId, $clientId, $text);
+  }
+
+  private function handleOfferMessage(string $text, int $idCompany, array $toAnswer)
+  {
+    $questionId = $toAnswer['id'];
+
+    return (new MercadoLivre($idCompany))->postAnswer($questionId, $text);
   }
 }

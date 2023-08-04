@@ -15,6 +15,7 @@ use App\Http\Controllers\QuoteController;
 use App\Http\Controllers\SupplierURLController;
 use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BlacklistController;
 
 /*
 |--------------------------------------------------------------------------
@@ -134,3 +135,13 @@ Route::controller(TrackingController::class)
         Route::get('/consult-price-and-shipping', 'consultPriceAndShipping');
         Route::get('/consult-zipcode', 'consultZipCode');
     });
+
+    Route::controller(BlacklistController::class)
+    ->prefix('blacklist')
+    ->group(function () {
+        Route::get('/read-from-interval', 'ReadBlacklistFromInterval');
+        Route::get('/search', 'SearchBlacklist');
+        Route::post('/insert-or-update', 'InsertOrUpdateBlacklist');
+        Route::post('/verify-list', 'verifyListBlacklist');
+        Route::delete('/delete', 'DeleteFromBlacklist');
+    });     
