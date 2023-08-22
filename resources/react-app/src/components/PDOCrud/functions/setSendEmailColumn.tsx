@@ -68,4 +68,14 @@ const createWhatsappButton = (row: HTMLTableRowElement, companyIdx: number, orde
   return modalContainer
 }
 
+// const createEstanteVirtualButton = (row: HTMLTableRowElement, companyIdx: number, orderId: number) => {
+//   const companyId = Number((row.cells[companyIdx].textContent as string).trim())
+//   const modalContainer = document.createElement('div')
+//   const modalRoot = createRoot(modalContainer)
+
+//   modalRoot.render(<WhatsappModal companyId={companyId} orderId={orderId}/>)
+
+//   return modalContainer
+// }
+
 export default setSendEmailColumn
