@@ -210,9 +210,11 @@ class Tracking extends Model
 			: ["Erro na atualização", 500];
 	}
 	
-	public function updateField(string $trackingCode, string $field, string $value)
+	public function updateField(string $trackingCode, string $field, string $value, bool $isPurchases)
 	{
-		DB::table('trackings')
+		$table = $isPurchases === true ? 'purchase_trackings' : 'trackings';
+
+		DB::table($table)
 			->where('tracking_code', '=', $trackingCode)
 			->update([
 				$field => $value
