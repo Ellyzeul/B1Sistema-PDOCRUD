@@ -159,51 +159,6 @@ class Order extends Model
         return $handled;
     }
 
-    public function sendAskRatingEmail(string $orderId)
-    {
-        [ $blingNumber, $apikey, $fromEmail, $companyName, $isNational ] = Order::getMailingInfo($orderId);
-
-        $blingResponse = Order::getBlingMessagingInfo($apikey, $blingNumber);
-        if(isset($blingResponse['error'])) return $blingResponse['error'];
-
-        [ $clientName, $clientEmail, $orderNumber, $bookName ] = $blingResponse;
-
-        Mail::to($clientEmail)
-            ->send(new AskRating(
-                $fromEmail, 
-                $isNational,
-                $clientName, 
-                $orderNumber, 
-                $bookName, 
-                $companyName, 
-            ));
-        
-        DB::table('order_control')
-            ->where('id', $orderId)
-            ->increment('ask_rating');
-
-        return [["message" => "E-mail enviado com sucesso!"], 200];
-    }
-   
-    public function getAskRatingWhatsapp(string $orderId)
-    {
-        [ $blingNumber, $apikey, $fromEmail, $companyName, $isNational ] = Order::getMailingInfo($orderId);
-
-        $blingResponse = Order::getBlingMessagingInfo($apikey, $blingNumber);
-        if(isset($blingResponse['error'])) return $blingResponse['error'];
-
-        [ $clientName, $clientEmail, $orderNumber, $bookName, $phone ] = $blingResponse;
-
-        return [[
-            'formatted_message' => view('whatsapp/ask-rating/national', [
-                'orderNumber' => $orderNumber,
-                'clientName' => $clientName,
-                'bookName' => $bookName,
-                'companyName' => $companyName,
-            ])->render(),
-            'cellphone' => $phone
-        ], 200];
-    }    
 
     public function getAddress(string $orderNumber)
     {
@@ -560,32 +515,32 @@ class Order extends Model
         return false;
     }
 
-    private function getMailingInfo(string $orderId)
-    {
-        $result = DB::table('order_control')
-            ->join('mailer_info', 'order_control.id_company', '=', 'mailer_info.id_company')
-            ->select(
-                'order_control.bling_number', 
-                'mailer_info.token_name', 
-                'mailer_info.from_email', 
-                'mailer_info.company_name', 
-                DB::raw('(
-                    SELECT IF(POSITION("BR" IN name) > 0, 1, 0) 
-                    FROM sellercentrals
-                    WHERE id = order_control.id_sellercentral
-                ) AS is_national')
-            )
-            ->where('order_control.id', $orderId)
-            ->first();
+    // private function getMailingInfo(string $orderId)
+    // {
+    //     $result = DB::table('order_control')
+    //         ->join('mailer_info', 'order_control.id_company', '=', 'mailer_info.id_company')
+    //         ->select(
+    //             'order_control.bling_number', 
+    //             'mailer_info.token_name', 
+    //             'mailer_info.from_email', 
+    //             'mailer_info.company_name', 
+    //             DB::raw('(
+    //                 SELECT IF(POSITION("BR" IN name) > 0, 1, 0) 
+    //                 FROM sellercentrals
+    //                 WHERE id = order_control.id_sellercentral
+    //             ) AS is_national')
+    //         )
+    //         ->where('order_control.id', $orderId)
+    //         ->first();
         
-        return [
-            $result->bling_number, 
-            env($result->token_name), 
-            $result->from_email, 
-            $result->company_name, 
-            $result->is_national == 1, 
-        ];
-    }
+    //     return [
+    //         $result->bling_number, 
+    //         env($result->token_name), 
+    //         $result->from_email, 
+    //         $result->company_name, 
+    //         $result->is_national == 1, 
+    //     ];
+    // }
 
     private function getBlingMessagingInfo(string $apikey, string $blingNumber)
     {

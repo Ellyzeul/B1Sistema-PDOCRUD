@@ -29,3 +29,7 @@
 .blacklist-icon {
   color: #000000;
 }
+
+.hover-invert:hover > img {
+  filter: invert(100%);
+}

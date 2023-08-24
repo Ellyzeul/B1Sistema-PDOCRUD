@@ -3,6 +3,7 @@
 use App\Models\Order;
 use App\Services\OrderService;
 use App\Services\PDOCrudService;
+use App\Services\OrderMessageService;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -81,26 +82,25 @@ class OrderController extends Controller
 		return $response;
 	}
 
-	public static function sendAskRatingEmail(Request $request)
+	public static function sendAskRatingAmazon(Request $request)
 	{
-		$order = new Order();
+		return (new OrderMessageService())->sendAskRatingAmazon($request);
+	}
 
-		$orderId = $request->input('order_id');
-		[$response, $statusCode] = $order->sendAskRatingEmail($orderId);
-
-        return response($response, $statusCode);
-    }
+	public static function sendAskRatingEstante(Request $request)
+	{
+		return (new OrderMessageService())->sendAskRatingEstante($request);
+	}
 
 	public static function getAskRatingWhatsapp(Request $request)
 	{
-		$order = new Order();
-		
-		$orderId = $request->input('order_id');
-		
-		[$response, $statusCode] = $order->getAskRatingWhatsapp($orderId);
+		return (new OrderMessageService())->getAskRatingWhatsapp($request);
+	}
 
-		return response($response, $statusCode);
-	}    
+	public static function sendAskRating(Request $request)
+	{
+		return (new OrderMessageService())->sendAskRating($request);
+	}	 
 
 	public static function getAddress(Request $request)
 	{
