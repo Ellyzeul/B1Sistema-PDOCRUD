@@ -136,7 +136,7 @@ Route::controller(TrackingController::class)
         Route::get('/consult-zipcode', 'consultZipCode');
     });
 
-    Route::controller(BlacklistController::class)
+Route::controller(BlacklistController::class)
     ->prefix('blacklist')
     ->group(function () {
         Route::get('/read-from-interval', 'ReadBlacklistFromInterval');

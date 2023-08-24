@@ -28,7 +28,8 @@ const updateField = (trackingCode: string, input: HTMLInputElement, field: strin
   api.post('/api/tracking/update-field', {
     tracking_code: trackingCode,
     field: field,
-    value: value
+    value: value,
+    is_purchases: false
   })
     .then(_ => toast.success('Observação atualizada!'))
     .catch(_ => toast.error('Erro ao salvar a observação...'))

@@ -210,9 +210,11 @@ class Tracking extends Model
 			: ["Erro na atualização", 500];
 	}
 	
-	public function updateField(string $trackingCode, string $field, string $value)
+	public function updateField(string $trackingCode, string $field, string $value, bool $isPurchases)
 	{
-		DB::table('trackings')
+		$table = $isPurchases === true ? 'purchase_trackings' : 'trackings';
+
+		DB::table($table)
 			->where('tracking_code', '=', $trackingCode)
 			->update([
 				$field => $value
@@ -248,7 +250,7 @@ class Tracking extends Model
 		if(!$this->existsApiCredentialDB('correios')) $this->generateCorreiosToken();
 
 		$apikey = $this->readApiCredentialDB('correios');
-		if(isset($apikey->token)) $this->generateCorreiosToken();
+		if(!isset($apikey->token)) $this->generateCorreiosToken();
 
 		$apikey = $this->readApiCredentialDB('correios');
 		$expires_in = Date::parse($apikey->expiraEm);
@@ -278,7 +280,7 @@ class Tracking extends Model
 		if(!$this->existsApiCredentialDB('correios')) $this->generateCorreiosToken();
 
 		$apikey = $this->readApiCredentialDB('correios');
-		if(isset($apikey->token)) $this->generateCorreiosToken();
+		if(!isset($apikey->token)) $this->generateCorreiosToken();
 
 		$apikey = $this->readApiCredentialDB('correios');
 		$expires_in = Date::parse($apikey->expiraEm);
@@ -396,7 +398,7 @@ class Tracking extends Model
 		if(!$this->existsApiCredentialDB('correios')) $this->generateCorreiosToken();
 
 		$apikey = $this->readApiCredentialDB('correios');
-		if(isset($apikey->token)) $this->generateCorreiosToken();
+		if(!isset($apikey->token)) $this->generateCorreiosToken();
 		
 		$apikey = $this->readApiCredentialDB('correios');
 		$expires_in = Date::parse($apikey->expiraEm);

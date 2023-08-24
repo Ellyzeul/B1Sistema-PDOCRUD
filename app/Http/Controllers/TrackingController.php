@@ -76,8 +76,9 @@ class TrackingController extends Controller
 		$trackingCode = $request->input('tracking_code');
 		$field = $request->input('field');
 		$value = $request->input('value') ?? "";
+		$isPurchases = $request->input('is_purchases');
 
-		$response = $tracking->updateField($trackingCode, $field, $value);
+		$response = $tracking->updateField($trackingCode, $field, $value, $isPurchases);
 
 		return $response;
 	}
