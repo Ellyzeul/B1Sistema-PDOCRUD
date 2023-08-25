@@ -24,7 +24,7 @@ class GetAskRatingWhatsappAction
         [ $clientName, $clientEmail, $orderNumber, $bookName, $phone ] = $blingResponse;
 
         return [[
-            'formatted_message' => view('whatsapp/ask-rating/national', [
+            'formatted_message' => view('/ask-rating/whatsapp/national', [
                 'orderNumber' => $orderNumber,
                 'clientName' => $clientName,
                 'bookName' => $bookName,

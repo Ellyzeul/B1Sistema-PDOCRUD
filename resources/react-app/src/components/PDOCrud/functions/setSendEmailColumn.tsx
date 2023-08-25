@@ -52,6 +52,9 @@ const setSendEmailColumn = (phase: number) => {
     div.appendChild(estante_button)
   }
 
+  const mercado_button = createMercadoLivreButton(row, companyId, parseInt(orderId), seller_central, div)
+  div.appendChild(mercado_button)
+
 		return div
 	}
 	setNewColumn("Enviar avaliação", generateData)
@@ -102,6 +105,41 @@ const createEstanteVirtualButton = (row: HTMLTableRowElement, companyId: number,
   estante_button.className = 'order-control-ask-rating-button'
 
   icon.src = "/icons/sellercentrals/estante.png"; 
+  icon.style.height = "20px";
+
+  estante_button.appendChild(icon)
+  estante_button.classList.add('hover-invert')
+
+  estante_button.addEventListener('click', () => {
+    api.post('/api/orders/ask-rating', {
+      order_id: orderId,
+      company_id:companyId,
+      seller_central: sellerCentral
+    })
+      .then(response => response.data)
+      .then(response => {
+        toast.success(response.message)
+        const select = (row.children[askRatingIdx] as HTMLTableCellElement).children[0] as HTMLSelectElement
+        select.selectedIndex = select.selectedIndex === 3 ? 4 : 3
+      })
+      .catch(err => {
+        toast.error(err.response.data.message)
+        div.appendChild(estante_button)
+      })
+
+      div.removeChild(estante_button)
+  })  
+
+  return estante_button
+}
+
+const createMercadoLivreButton =  (row: HTMLTableRowElement, companyId: number, orderId: number, sellerCentral: string, div: HTMLDivElement) => {
+  const askRatingIdx = getColumnFieldIndex("Pedir avaliação")
+  const estante_button = document.createElement('button')
+  const icon = document.createElement('img')
+  estante_button.className = 'order-control-ask-rating-button'
+
+  icon.src = "/icons/sellercentrals/mercado-livre-bk.png"; 
   icon.style.height = "20px";
 
   estante_button.appendChild(icon)

@@ -5,6 +5,7 @@ use App\Actions\OrderMessage\AskRatingMessage\SendAskRatingAmazonAction;
 use App\Actions\OrderMessage\AskRatingMessage\SendAskRatingEstanteAction;
 use App\Actions\OrderMessage\AskRatingMessage\GetAskRatingWhatsappAction;
 use App\Actions\OrderMessage\AskRatingMessage\SendAskRatingFNACAction;
+use App\Actions\OrderMessage\AskRatingMessage\SendAskRatingMercadoLivreAction;
 
 class OrderMessageService
 {
@@ -22,6 +23,8 @@ class OrderMessageService
 			'FNAC-ES-0' => new SendAskRatingFNACAction('es', 0), 
 			'FNAC-PT-1' => new SendAskRatingFNACAction('pt', 1), 
 			'Estante-BR-0' => new SendAskRatingEstanteAction(), 
+            'MercadoLivre-BR-0' => new SendAskRatingMercadoLivreAction(0),
+            'MercadoLivre-BR-1' => new SendAskRatingMercadoLivreAction(1),
 		];
 	}
 
