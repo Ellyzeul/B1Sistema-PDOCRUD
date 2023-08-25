@@ -4,6 +4,11 @@ use Illuminate\Support\Facades\Http;
 
 class FNAC
 {
+  const CREDENTIALS = [
+    'pt-0' => [ 'partner_id' => 'FNAC_PT_SELINE_PARTNER_ID', 'shop_id' => 'FNAC_PT_SELINE_SHOP_ID', 'key' => 'FNAC_PT_SELINE_KEY' ], 
+    'es-0' => [ 'partner_id' => 'FNAC_ES_SELINE_PARTNER_ID', 'shop_id' => 'FNAC_ES_SELINE_SHOP_ID', 'key' => 'FNAC_ES_SELINE_KEY' ], 
+  ];
+
   private string $baseUrl = 'https://vendeur.fnac.com/api.php';
   private int $resultsCount = 200;
   private string $partnerId;
@@ -11,11 +16,20 @@ class FNAC
   private string $key;
   private string $token;
 
-  public function __construct()
+  public function __construct(string $country, int $idCompany)
   {
-    $this->partnerId = env('FNAC_PARTNER_ID');
-    $this->shopId = env('FNAC_SHOP_ID');
-    $this->key = env('FNAC_KEY');
+    $key = "$country-$idCompany";
+
+    try {
+      $credential = FNAC::CREDENTIALS[$key];
+    }
+    catch(\Exception $_) {
+      throw new \Exception("Country $country and company id $idCompany doesn't exists on FNAC");
+    }
+
+    $this->partnerId = env($credential['partner_id']);
+    $this->shopId = env($credential['shop_id']);
+    $this->key = env($credential['key']);
   }
 
   /**
@@ -63,7 +77,7 @@ class FNAC
    * Posta mensagens no pedido
    */
 
-  public function messagesUpdate(string $messageId, string $text)
+  public function messagesUpdate(string $messageId, string $text, ?string $action = 'reply')
   {
     $this->authenticate();
 
@@ -80,7 +94,7 @@ class FNAC
       token="$token"
     >
       <message action="mark_as_read" id="$messageId" />
-      <message action="reply" id="$messageId">
+      <message action="$action" id="$messageId">
         <message_to>CLIENT</message_to>
         <message_description>$text</message_description>
       </message>

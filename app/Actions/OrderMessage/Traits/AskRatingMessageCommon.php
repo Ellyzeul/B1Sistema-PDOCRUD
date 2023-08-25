@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 
 trait AskRatingMessageCommon
 {
@@ -58,4 +59,10 @@ trait AskRatingMessageCommon
 
         return $response;
     }    
+
+    private function sendEmail(string $email, $content)
+    {
+        Mail::to($email)
+            ->send($content);
+    }
 }

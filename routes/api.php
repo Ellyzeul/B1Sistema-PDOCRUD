@@ -53,7 +53,7 @@ Route::controller(OrderController::class)
         Route::get('/shipment-label-data', 'getShipmentLabelData');
         Route::get('/invoice-link', 'getInvoiceLink');
         Route::get('/get-total-orders-in-phase', 'getTotalOrdersInPhase');
-        Route::get('/ask-rating/whatsapp', 'getAskRatingWhatsapp');
+        // Route::get('/ask-rating/whatsapp', 'getAskRatingWhatsapp');
         Route::get('/ask-rating/spreadsheet-data', 'getDataForAskRatingSpreadSheet');
         Route::get('/get-order-control', 'readOrderControlByOrderNumber');
         Route::get('/get-order-addresses', 'readOrderAddressesByOrderNumber');
@@ -61,7 +61,9 @@ Route::controller(OrderController::class)
         Route::post('/order-message', 'postOrderMessage');
         Route::post('/import-from-date', 'importOrdersFromDate');
         Route::post('/send-bling-order', 'sendOrderToBling');
-        Route::post('/ask-rating/mail/send', 'sendAskRatingEmail');
+        // Route::post('/ask-rating/amazon', 'sendAskRatingAmazon');
+        // Route::post('/ask-rating/estante', 'sendAskRatingEstante');
+        Route::post('/ask-rating', 'sendAskRating');
         Route::patch('/accept-fnac', 'acceptFNACOrder');
         Route::patch('/bling/order', 'putBlingOrder');
         Route::patch('/address-verified', 'updateAddressVerified');
