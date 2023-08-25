@@ -23,8 +23,8 @@ class OrderMessageService
 			'FNAC-ES-0' => new SendAskRatingFNACAction('es', 0), 
 			'FNAC-PT-1' => new SendAskRatingFNACAction('pt', 1), 
 			'Estante-BR-0' => new SendAskRatingEstanteAction(), 
-            'MercadoLivre-BR-0' => new SendAskRatingMercadoLivreAction(0),
-            'MercadoLivre-BR-1' => new SendAskRatingMercadoLivreAction(1),
+			'MercadoLivre-BR-0' => new SendAskRatingMercadoLivreAction(0),
+			'MercadoLivre-BR-1' => new SendAskRatingMercadoLivreAction(1),
 		];
 	}
 

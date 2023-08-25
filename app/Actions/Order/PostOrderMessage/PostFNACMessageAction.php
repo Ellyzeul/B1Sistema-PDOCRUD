@@ -8,6 +8,6 @@ class PostFNACMessageAction
   {
     $messageId = $toAnswer['id'];
 
-    return (new FNAC(0))->messagesUpdate($messageId, $text);
+    return (new FNAC('pt', 0))->messagesUpdate($messageId, $text);
   }
 }

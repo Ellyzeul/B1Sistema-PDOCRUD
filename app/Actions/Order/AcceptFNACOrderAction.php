@@ -8,7 +8,7 @@ class AcceptFNACOrderAction
   public function handle(Request $request)
   {
     $orderNumber = $request->input('order_number');
-    $fnac = new FNAC(0);
+    $fnac = new FNAC('pt', 0);
 
     $response = $fnac->acceptOrder($orderNumber);
 

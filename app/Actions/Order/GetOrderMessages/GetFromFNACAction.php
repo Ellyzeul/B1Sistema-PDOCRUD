@@ -30,7 +30,7 @@ class GetFromFNACAction
 
   private function getMessages(array $orderNumbers)
   {
-    $fnac = new FNAC(0);
+    $fnac = new FNAC('pt', 0);
     $messages = [];
 
     foreach($orderNumbers as $orderNumber) {
