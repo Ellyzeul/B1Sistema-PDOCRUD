@@ -99,7 +99,11 @@ class OrderController extends Controller
 
 	public static function sendAskRating(Request $request)
 	{
-		return (new OrderMessageService())->sendAskRating($request);
+		$response = (new OrderMessageService())->sendAskRating($request);
+
+		return $response['success']
+			? $response['content']
+			: response($response['content'], 400);
 	}	 
 
 	public static function getAddress(Request $request)

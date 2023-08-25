@@ -4,6 +4,11 @@ use Illuminate\Support\Facades\Http;
 
 class FNAC
 {
+  const CREDENTIALS = [
+    0 => [ 'partner_id' => 'FNAC_SELINE_PARTNER_ID', 'shop_id' => 'FNAC_SELINE_SHOP_ID', 'key' => 'FNAC_SELINE_KEY' ], 
+    1 => [ 'partner_id' => 'FNAC_B1_PARTNER_ID', 'shop_id' => 'FNAC_B1_SHOP_ID', 'key' => 'FNAC_B1_KEY' ], 
+  ];
+
   private string $baseUrl = 'https://vendeur.fnac.com/api.php';
   private int $resultsCount = 200;
   private string $partnerId;
@@ -11,11 +16,13 @@ class FNAC
   private string $key;
   private string $token;
 
-  public function __construct()
+  public function __construct(int $idCompany)
   {
-    $this->partnerId = env('FNAC_PARTNER_ID');
-    $this->shopId = env('FNAC_SHOP_ID');
-    $this->key = env('FNAC_KEY');
+    $credential = FNAC::CREDENTIALS[$idCompany];
+
+    $this->partnerId = env($credential['partner_id']);
+    $this->shopId = env($credential['shop_id']);
+    $this->key = env($credential['key']);
   }
 
   /**
