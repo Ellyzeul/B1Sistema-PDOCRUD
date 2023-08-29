@@ -33,7 +33,8 @@ const setSendEmailColumn = (phase: number) => {
     div.style.display = 'flex'
     div.style.justifyContent = 'center'
       
-    console.log(seller_central, seller_central in createButtonOfSellercentral)
+    div.appendChild(createWhatsappButton(row, companyIdx, orderId))
+
     if(seller_central in createButtonOfSellercentral) {
       const button = createButtonOfSellercentral[seller_central](
         row, 
@@ -52,6 +53,8 @@ const setSendEmailColumn = (phase: number) => {
 	setNewColumn("Enviar avaliação", generateData)
 }
 
+export default setSendEmailColumn
+
 const createWhatsappButton = (row: HTMLTableRowElement, companyIdx: number, orderId: number) => {
   const companyId = Number((row.cells[companyIdx].textContent as string).trim())
   const modalContainer = document.createElement('div')
@@ -63,125 +66,43 @@ const createWhatsappButton = (row: HTMLTableRowElement, companyIdx: number, orde
 }
 
 const createAmazonButton = (row: HTMLTableRowElement, companyId: number, orderId: number, sellerCentral: string, div: HTMLDivElement) => {
-  const button = document.createElement('button')
-  const askRatingIdx = getColumnFieldIndex("Pedir avaliação")
+  const icon = document.createElement('i')
+  icon.className = 'fa-brands fa-amazon'
+  icon.style.width = "16px"
 
-  button.className = 'order-control-ask-rating-button fa-brands fa-amazon'
-  button.addEventListener('click', () => {
-    api.post('/api/orders/ask-rating', {
-      order_id: orderId,
-      company_id:companyId,
-      seller_central: sellerCentral
-    })
-      .then(response => response.data)
-      .then(response => {
-        toast.success(response.message)
-        const select = (row.children[askRatingIdx] as HTMLTableCellElement).children[0] as HTMLSelectElement
-        select.selectedIndex = select.selectedIndex === 3 ? 4 : 3
-      })
-      .catch(err => {
-        toast.error(err.response.data.message)
-        div.appendChild(button)
-      })
-
-      div.removeChild(button)
-  })
-
-  return button
+  return createButton(row, companyId, orderId, sellerCentral, div, icon)
 }
 
 const createEstanteVirtualButton = (row: HTMLTableRowElement, companyId: number, orderId: number, sellerCentral: string, div: HTMLDivElement) => {
-  const askRatingIdx = getColumnFieldIndex("Pedir avaliação")
-  const button = document.createElement('button')
   const icon = document.createElement('img')
-  button.className = 'order-control-ask-rating-button'
+  icon.src = "/icons/sellercentrals/estante.png"
+  icon.style.height = "20px"
 
-  icon.src = "/icons/sellercentrals/estante.png"; 
-  icon.style.height = "20px";
-
-  button.appendChild(icon)
-  button.classList.add('hover-invert')
-
-  button.addEventListener('click', () => {
-    api.post('/api/orders/ask-rating', {
-      order_id: orderId,
-      company_id:companyId,
-      seller_central: sellerCentral
-    })
-      .then(response => response.data)
-      .then(response => {
-        toast.success(response.message)
-        const select = (row.children[askRatingIdx] as HTMLTableCellElement).children[0] as HTMLSelectElement
-        select.selectedIndex = select.selectedIndex === 3 ? 4 : 3
-      })
-      .catch(err => {
-        toast.error(err.response.data.message)
-        div.appendChild(button)
-      })
-
-      div.removeChild(button)
-  })  
-
-  return button
+  return createButton(row, companyId, orderId, sellerCentral, div, icon)
 }
 
 const createMercadoLivreButton = (row: HTMLTableRowElement, companyId: number, orderId: number, sellerCentral: string, div: HTMLDivElement) => {
-  const askRatingIdx = getColumnFieldIndex("Pedir avaliação")
-  const button = document.createElement('button')
   const icon = document.createElement('img')
-  button.className = 'order-control-ask-rating-button'
+  icon.src = "/icons/sellercentrals/mercado-livre-bk.png"
+  icon.style.height = "20px"
 
-  icon.src = "/icons/sellercentrals/mercado-livre-bk.png"; 
-  icon.style.height = "20px";
-
-  button.appendChild(icon)
-  button.classList.add('hover-invert')
-
-  button.addEventListener('click', getClickHandler(
-    row, 
-    companyId, 
-    orderId, 
-    sellerCentral, 
-    div, 
-    askRatingIdx, 
-    button
-  ))  
-
-  return button
+  return createButton(row, companyId, orderId, sellerCentral, div, icon, false)
 }
 
 const createFNACButton = (row: HTMLTableRowElement, companyId: number, orderId: number, sellerCentral: string, div: HTMLDivElement) => {
-  const askRatingIdx = getColumnFieldIndex("Pedir avaliação")
-  const button = document.createElement('button')
   const icon = document.createElement('img')
-  button.className = 'order-control-ask-rating-button'
+  icon.src = "/icons/sellercentrals/fnac_black.png"
+  icon.style.height = "20px"
 
-  icon.src = "/icons/sellercentrals/fnac_black.png"; 
-  icon.style.height = "20px";
-
-  button.appendChild(icon)
-  button.classList.add('hover-invert')
-
-  button.addEventListener('click', getClickHandler(
-    row, 
-    companyId, 
-    orderId, 
-    sellerCentral, 
-    div, 
-    askRatingIdx, 
-    button
-  ))  
-
-  return button
+  return createButton(row, companyId, orderId, sellerCentral, div, icon)
 }
-
-export default setSendEmailColumn
 
 const createButtonOfSellercentral = {
   'Amazon-BR': createAmazonButton, 
   'Amazon-CA': createAmazonButton, 
   'Amazon-UK': createAmazonButton, 
   'Amazon-US': createAmazonButton, 
+  'Estante-BR': createEstanteVirtualButton, 
   'MercadoLivre-BR': createMercadoLivreButton, 
   'FNAC-PT': createFNACButton, 
   'FNAC-ES': createFNACButton, 
@@ -211,4 +132,25 @@ const getClickHandler = (row: HTMLTableRowElement, companyId: number, orderId: n
     })
 
     div.removeChild(button)
+}
+
+const createButton = (row: HTMLTableRowElement, companyId: number, orderId: number, sellerCentral: string, div: HTMLDivElement, icon: HTMLElement, hoverInvert: boolean = true) => {
+  const askRatingIdx = getColumnFieldIndex("Pedir avaliação")
+  const button = document.createElement('button')
+  button.className = 'order-control-ask-rating-button'
+
+  button.appendChild(icon)
+  if(hoverInvert) button.classList.add('hover-invert')
+
+  button.addEventListener('click', getClickHandler(
+    row, 
+    companyId, 
+    orderId, 
+    sellerCentral, 
+    div, 
+    askRatingIdx, 
+    button
+  ))  
+
+  return button
 }
