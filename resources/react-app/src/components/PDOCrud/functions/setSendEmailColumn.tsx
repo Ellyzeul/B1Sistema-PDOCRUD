@@ -33,8 +33,6 @@ const setSendEmailColumn = (phase: number) => {
     div.style.display = 'flex'
     div.style.justifyContent = 'center'
       
-    div.appendChild(createWhatsappButton(row, companyIdx, orderId))
-
     if(seller_central in createButtonOfSellercentral) {
       const button = createButtonOfSellercentral[seller_central](
         row, 

@@ -15,16 +15,14 @@ class AskRatingEstante extends Mailable
     private string $isNational;
     public string $clientName;
     public string $orderNumber;
-    public string $bookName;
     public string $companyName;
 
-    public function __construct(string $sender, bool $isNational, string $clientName, string $orderNumber, string $bookName, string $companyName)
+    public function __construct(string $sender, bool $isNational, string $clientName, string $orderNumber, string $companyName)
     {
         $this->sender = $sender;
         $this->isNational = $isNational;
         $this->clientName = $clientName;
         $this->orderNumber = $orderNumber;
-        $this->bookName = $bookName;
         $this->companyName = $companyName;
     }
 
