@@ -48,6 +48,20 @@ class MercadoLivre
     }
 
     /**
+     * Recupera item por ID
+     */
+
+    public function getItemById(string $id, int $attempt = 0)
+    {
+        if($attempt >= $this->maxAttempts) $this->throwMaxAttemptsError(__FUNCTION__);
+        $this->authenticate();
+
+        $response = Http::mercadoLivre(authless: true)->get("/items/$id");
+
+        return $response->object();
+    }
+
+    /**
      * Recupera pedido por ID
      */
 

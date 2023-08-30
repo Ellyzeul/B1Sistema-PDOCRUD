@@ -17,26 +17,41 @@ class SendAskRatingEstanteAction
     {
         [ $blingNumber, $apikey, $fromEmail, $companyName, $isNational ] = $this->getMailingInfo($orderId);
 
-        $blingResponse = $this->getBlingMessagingInfo($apikey, $blingNumber);
-        if(isset($blingResponse['error'])) return $blingResponse['error'];
-
-        [ $clientName, $clientEmail, $orderNumber, $bookName ] = $blingResponse;
+        $orderData = $this->getOrderData($orderId);
 
         $content = new AskRatingEstante(
             $fromEmail, 
             $isNational,
-            $clientName, 
-            $orderNumber, 
-            $bookName, 
-            $companyName, 
+            $orderData["clientName"], 
+            $orderData["orderNumber"], 
+            $companyName
         );
 
-        $this->sendEmail($clientEmail, $content);
-                
+        $this->sendEmail($orderData["clientEmail"], $content);
+
         DB::table('order_control')
             ->where('id', $orderId)
             ->increment('ask_rating');
 
         return [["message" => "E-mail enviado com sucesso!"], 200];
+    }
+
+    private function getOrderData(string $orderId)
+    {
+        $orderNumber = DB::table('order_control')
+                    ->select('online_order_number')
+                    ->where('id', '=', $orderId)
+                    ->first()->online_order_number;
+        
+        $clientData = DB::table('order_addresses')
+            ->select('buyer_name', 'buyer_email')
+            ->where('online_order_number', '=', $orderNumber)
+            ->first();
+
+        return [
+            'orderNumber' => $orderNumber,
+            'clientName' => $clientData->buyer_name,
+            'clientEmail' => $clientData->buyer_email
+        ];
     }
 }
