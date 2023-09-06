@@ -45,7 +45,8 @@ class ImportFromMercadoLivreAction
             $shipment, 
             $idCompany, 
             $orderId, 
-            $shipping_cost
+            $shipping_cost, 
+            $mercadoLivre
           )
         ];
     });
@@ -53,12 +54,16 @@ class ImportFromMercadoLivreAction
     return $this->insertOrder($toInsert);
   }
 
-  private function handleOrderItems(array $items, object $order, object $shipment, int $idCompany, string $orderId, float $shipping_cost): array
+  private function handleOrderItems(array $items, object $order, object $shipment, int $idCompany, string $orderId, float $shipping_cost, MercadoLivre $mercadoLivre): array
   {
     $mapped = [];
 
     foreach($items as $item) {
       $quantity = $item->quantity;
+      $isbn = isset($item->item->seller_sku)
+        ? explode('_', $item->item->seller_sku)[1]
+        : $this->getItemISBN($item->item->id, $mercadoLivre);
+
       for($i = 0; $i < $quantity; $i++) {
         array_push($mapped, [
           'id_company' => $idCompany, 
@@ -66,7 +71,7 @@ class ImportFromMercadoLivreAction
           'online_order_number' => $orderId, 
           'order_date' => date('Y-m-d', strtotime($order->date_closed . '-3 hours')), 
           'expected_date' => date('Y-m-d', strtotime($shipment->shipping_option->estimated_schedule_limit->date . '-3 hours')), 
-          'isbn' => explode('_', $item->item->seller_sku)[1], 
+          'isbn' => $isbn, 
           'selling_price' => round($item->full_unit_price - $item->sale_fee - $shipping_cost, 2), 
           'ship_date' => date('Y-m-d H:i:s', strtotime($order->manufacturing_ending_date)),
         ]);
@@ -74,5 +79,14 @@ class ImportFromMercadoLivreAction
     }
 
     return $mapped;
+  }
+
+  private function getItemISBN(string $id, MercadoLivre $mercadoLivre)
+  {
+    $item = $mercadoLivre->getItemById($id);
+    $filtered = array_filter($item->attributes, fn($attr) => $attr->id === 'GTIN');
+    $isbnAttr = array_pop($filtered);
+
+    return $isbnAttr->value_name;
   }
 }
