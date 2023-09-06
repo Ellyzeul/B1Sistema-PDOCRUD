@@ -16,6 +16,7 @@ use App\Http\Controllers\SupplierURLController;
 use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BlacklistController;
+use App\Http\Controllers\InventoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,8 +62,6 @@ Route::controller(OrderController::class)
         Route::post('/order-message', 'postOrderMessage');
         Route::post('/import-from-date', 'importOrdersFromDate');
         Route::post('/send-bling-order', 'sendOrderToBling');
-        // Route::post('/ask-rating/amazon', 'sendAskRatingAmazon');
-        // Route::post('/ask-rating/estante', 'sendAskRatingEstante');
         Route::post('/ask-rating', 'sendAskRating');
         Route::patch('/accept-fnac', 'acceptFNACOrder');
         Route::patch('/bling/order', 'putBlingOrder');
@@ -141,9 +140,19 @@ Route::controller(TrackingController::class)
 Route::controller(BlacklistController::class)
     ->prefix('blacklist')
     ->group(function () {
-        Route::get('/read-from-interval', 'ReadBlacklistFromInterval');
-        Route::get('/search', 'SearchBlacklist');
-        Route::post('/insert-or-update', 'InsertOrUpdateBlacklist');
+        Route::get('/read-from-interval', 'readBlacklistFromInterval');
+        Route::get('/search', 'searchBlacklist');
+        Route::post('/insert-or-update', 'insertOrUpdateBlacklist');
         Route::post('/verify-list', 'verifyListBlacklist');
-        Route::delete('/delete', 'DeleteFromBlacklist');
-    });     
+        Route::delete('/delete', 'deleteFromBlacklist');
+    });   
+
+Route::controller(InventoryController::class)
+    ->prefix('inventory')
+    ->group(function () {
+        Route::get('/search', 'searchInventory');
+        Route::post('/insert-or-update', 'insertOrUpdateInventory');
+        Route::post('/verify-list', 'verifyListInventory');
+        Route::patch('/avaliable-quantity', 'updateAvaliableQuantityInventory');
+        Route::delete('/delete', 'deleteFromInventory');
+    });       

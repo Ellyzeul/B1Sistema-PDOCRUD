@@ -1,0 +1,44 @@
+.add-row-button {
+    background-color: #000000;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+.add-row-button:hover {
+    cursor: pointer;
+    transition: 125ms;
+    background-color: #4f4e4e;
+    color: #FFFFFF;   
+}
+
+.inventory-filter > input {
+    border: none;
+    border-bottom: 1px solid black;
+    border-radius: 3px 0 0 3px;
+    outline: none;
+    height: 7px;
+    padding: 10px;
+}
+
+.inventory-filter > button {
+    border: none;
+    height: 27px;
+    border-bottom: 1px solid black;
+    border-radius: 0 3px 3px 0;
+    cursor: pointer;
+}
+.inventory-filter > button:hover {
+    background-color: black;
+    color: white;
+}
+
+.inventory-table-container {
+    width: 80%;
+    margin: 0 auto;
+    padding-top: 5vh;
+}
+
+.options-container {
+    padding-bottom: 5%;
+    display: inline-block;
+}
