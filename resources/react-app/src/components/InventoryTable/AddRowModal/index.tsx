@@ -68,17 +68,27 @@ export const AddRowModal = () => {
                   className="add-row-modal-input" 
                   name="inputQuantity" 
                   required></input>
-              <label>Condição</label>
-                <select name="selectCondition">
-                  <option value="1">Novo</option>
-                  <option value="2">Usado</option>
-                </select>
-              <label>Localização</label>
-                <select name="selectLocation">
-                  <option value="1">São Paulo</option>
-                  <option value="2">Sorocaba</option>
-                  <option value="3">Natal</option>
-                </select>                        
+              <div >
+
+                <div className="selects-container">
+                  <label>Condição:</label>
+                  <select name="selectCondition">
+                    <option value="1">Novo</option>
+                    <option value="2">Usado</option>
+                  </select>
+                </div>
+
+                  <div className="selects-container">
+                    <label>Localização:</label>
+                    <select name="selectLocation">
+                      <option value="1">São Paulo</option>
+                      <option value="2">Sorocaba</option>
+                      <option value="3">Natal</option>
+                    </select>                        
+                  </div>
+
+              </div>
+
               <label>Prateleira</label>	
                 <input 
                   type="text" 

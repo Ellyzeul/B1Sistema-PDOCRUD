@@ -1,5 +1,6 @@
 .inventory-icon {
     border: none;
+    background-color: transparent;
 }
 
 .inventory-modal {
@@ -8,7 +9,7 @@
 }
 
 .inventory-modal-container {
-    height: 20vh;
+    height: 25vh;
     width: 20vw;
     position: relative;
     background-color: white;
@@ -76,4 +77,10 @@
 
 .confirm-btn:hover {
     background-color: green;
+}
+
+.book-info {
+    position: relative;
+    padding-top: 10px;
+    padding-left: 10px;
 }
