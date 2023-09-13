@@ -56,3 +56,7 @@
     background-color: #4f4e4e;
     color: #FFFFFF;
 }   
+
+.selects-container > label{
+    padding-right: 5px;
+}
