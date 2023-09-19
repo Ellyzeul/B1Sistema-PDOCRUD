@@ -8,7 +8,6 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\NavbarItemController;
 use App\Http\Controllers\OrderController;
-use App\Models\Order;
 use App\Http\Controllers\PhaseController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\QuoteController;
@@ -88,9 +87,9 @@ Route::controller(UserController::class)
 Route::controller(PhotoController::class)
     ->prefix('photo')
     ->group(function() {
-        Route::post('/create', 'create');
         Route::get('/read', 'read');
         Route::get('/verify-list', 'verifyFromList');
+        Route::post('/create', 'create');
         Route::delete('/exclude', 'exclude');
     });
 
@@ -128,13 +127,14 @@ Route::controller(TrackingController::class)
     ->group(function() {
         Route::get('/read', 'read');
         Route::get('/read-purchases', 'readPurchases');
+        Route::get('/consult-zipcode', 'consultZipCode');
+        Route::get('/consult-price-and-shipping', 'consultPriceAndShipping');
         Route::post('/read-for-excel', 'readForExcel');
         Route::post('/update', 'update');
         Route::post('/update-purchase', 'updatePurchase');
         Route::post('/update-all', 'updateAll');
         Route::post('/update-field', 'updateField');
-        Route::get('/consult-price-and-shipping', 'consultPriceAndShipping');
-        Route::get('/consult-zipcode', 'consultZipCode');
+        Route::post('/update-phase', 'updateOrderPhaseAction');
     });
 
 Route::controller(BlacklistController::class)

@@ -1,9 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Services\TrackingService;
 use Illuminate\Http\Request;
-
 use App\Models\Tracking;
 
 class TrackingController extends Controller
@@ -106,4 +105,9 @@ class TrackingController extends Controller
 
 		return $response;
 	}
+
+    public static function updateOrderPhaseAction(Request $request)
+    {
+        return (new TrackingService())->updateOrderPhaseAction($request);
+    }	
 }

@@ -1,9 +1,6 @@
 import { TrackingTableProp } from "./types"
 import { ToastContainer, toast } from "react-toastify"
-import { Paper, responsiveFontSizes, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from "@mui/material"
-import TrackingTableRow from "./components/Row"
 import "./style.css"
-import TrackingTableHeadCell from "./components/HeadCell"
 import api from "../../services/axios"
 import { FormEventHandler, KeyboardEventHandler, useEffect, useRef, useState } from "react"
 import { Workbook } from "exceljs"
@@ -69,6 +66,19 @@ const updateRow = (trackingCode: string, deliveryMethod: string, row: any, field
     .catch(_ => toast.error("Ocorreu algum erro... Entrar em contato com o setor de TI"))
 }
 
+const updatePhase = (orderNumber: string, lastUpdateDate: string) => {
+  if(!orderNumber || !lastUpdateDate) return toast.error("Dados incompletos. Atualize o pedido e tente novamente")
+  api.post('/api/tracking/update-phase', {
+    order_number: orderNumber,
+    delivered_date: lastUpdateDate
+  })
+  .then((response) => {
+    if(response.data[1] === 200) return toast.success(response.data[0])
+    return toast.error(response.data[0]) 
+  })
+  .catch(_ => toast.error("Ocorreu algum erro... Entrar em contato com o setor de TI"))
+}
+
 const getRows = (data: {[key: string]: string}[], fieldsKeys: string[], actualPage: number) => {
   const rowsElements = [] as JSX.Element[]
   const offset = actualPage * ROWS_PER_PAGE
@@ -78,6 +88,10 @@ const getRows = (data: {[key: string]: string}[], fieldsKeys: string[], actualPa
       className="tracking-update-button" 
       onClick={() => updateRow(row.tracking_code, row.delivery_method, rowElement.props, fields)}
     >Atualizar</td>
+    const btnUpdate6dot1 = <td 
+      className="tracking-update-button" 
+      onClick={() => updatePhase(row.online_order_number, row.last_update_date)}
+    >Atualizar para 6.1</td>    
     const rowElement = <tr key={idx}>{[
       btnCell, 
       ...fieldsKeys.map((key, idx) => {
@@ -86,7 +100,7 @@ const getRows = (data: {[key: string]: string}[], fieldsKeys: string[], actualPa
         ? <Textarea defaultValue={row[key]} tracking_code={row.tracking_code} field_name={key}/>
         : fields[key].isDate ? row[key] ? (new Date(`${row[key]} 00:00`)).toLocaleDateString("pt-BR") : "" : row[key]
         }</td>
-    })]}</tr>
+    }), btnUpdate6dot1]}</tr>
     rowsElements.push(rowElement)
   })
 
@@ -249,7 +263,7 @@ export const TrackingTable = (props: TrackingTableProp) => {
 
     setFilterFields(optionsElements)
     setSelectOptions(selectElements)
-    setHeaders(<tr>{[<th></th>, ...headerElements]}</tr>)
+    setHeaders(<tr>{[<th></th>, ...headerElements, <th></th>]}</tr>)
     setRows(rowsElements)
   }, [filteredData, actualPage])
 
@@ -292,65 +306,5 @@ export const TrackingTable = (props: TrackingTableProp) => {
     </div>
   )
 }
-
-// const TrackingTable = (props: TrackingTableProp) => {;
-//   const { data } = props
-
-//   const [page, setPage] = useState(0);
-//   const [rowsPerPage, setRowsPerPage] = useState(10);
-
-//   const handleChangePage = (event: unknown, newPage: number) => {
-//     setPage(newPage);
-//   };
-
-//   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-//     setRowsPerPage(+event.target.value);
-//     setPage(0);
-//   };
-
-//   return (
-//     <div id="tracking-table-container">
-//       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-//       <TableContainer sx={{ maxHeight: 900 }}>
-//         <Table stickyHeader>
-//           <TableHead>
-//             <TableRow>
-//               <TrackingTableHeadCell></TrackingTableHeadCell>
-//               <TrackingTableHeadCell>Rastreio</TrackingTableHeadCell>
-//               <TrackingTableHeadCell><i className="fa-solid fa-truck"></i></TrackingTableHeadCell>
-//               <TrackingTableHeadCell>ORIGEM</TrackingTableHeadCell>
-//               <TrackingTableHeadCell>Última movimentação</TrackingTableHeadCell>
-//               <TrackingTableHeadCell>Data da movimentação</TrackingTableHeadCell>
-//               <TrackingTableHeadCell>Detalhes</TrackingTableHeadCell>
-//               <TrackingTableHeadCell>Prazo para o cliente</TrackingTableHeadCell>
-//               <TrackingTableHeadCell>Prazo da transportadora</TrackingTableHeadCell>
-//               <TrackingTableHeadCell>Prazo para retirada</TrackingTableHeadCell>
-//               <TrackingTableHeadCell>Última atualização</TrackingTableHeadCell>
-//               <TrackingTableHeadCell>Observação</TrackingTableHeadCell>
-//             </TableRow>
-//           </TableHead>
-//           <TableBody>
-//             {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => (
-//               <TrackingTableRow row={row} />
-//             ))}
-//           </TableBody>
-//         </Table>
-//       </TableContainer>
-
-//       <TablePagination
-//         rowsPerPageOptions={[10, 25, 100]}
-//         component="div"
-//         count={data.length}
-//         rowsPerPage={rowsPerPage}
-//         page={page}
-//         onPageChange={handleChangePage}
-//         onRowsPerPageChange={handleChangeRowsPerPage}
-//       />
-      
-//       <ToastContainer/>
-//       </Paper>    
-//     </div>
-//   )
-// }
 
 export default TrackingTable
