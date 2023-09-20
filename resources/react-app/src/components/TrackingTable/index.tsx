@@ -91,16 +91,17 @@ const getRows = (data: {[key: string]: string}[], fieldsKeys: string[], actualPa
     const btnUpdate6dot1 = <td 
       className="tracking-update-button" 
       onClick={() => updatePhase(row.online_order_number, row.last_update_date)}
-    >Atualizar para 6.1</td>    
+    >Sim</td>    
     const rowElement = <tr key={idx}>{[
       btnCell, 
       ...fieldsKeys.map((key, idx) => {
+        if(key === "last_update_date") return [<td key={idx}></td>,btnUpdate6dot1]
         return <td key={idx}>{
         fields[key].editable
         ? <Textarea defaultValue={row[key]} tracking_code={row.tracking_code} field_name={key}/>
         : fields[key].isDate ? row[key] ? (new Date(`${row[key]} 00:00`)).toLocaleDateString("pt-BR") : "" : row[key]
         }</td>
-    }), btnUpdate6dot1]}</tr>
+    })]}</tr>
     rowsElements.push(rowElement)
   })
 
@@ -246,6 +247,12 @@ export const TrackingTable = (props: TrackingTableProp) => {
     const totalPages = Math.ceil(filteredData.length / ROWS_PER_PAGE)
 
     fieldsKeys.forEach((key, idx) => {
+      if(key === "last_update_date") {
+        headerElements.push(<th key={idx} onClick={() => headerSort(key)}>{fields[key].label}</th>)
+        headerElements.push(<th>Atualizar para 6.1</th>)
+        return 
+      }
+
       headerElements.push(
         <th key={idx} onClick={() => headerSort(key)}>{fields[key].label}</th>
       )
@@ -263,7 +270,7 @@ export const TrackingTable = (props: TrackingTableProp) => {
 
     setFilterFields(optionsElements)
     setSelectOptions(selectElements)
-    setHeaders(<tr>{[<th></th>, ...headerElements, <th></th>]}</tr>)
+    setHeaders(<tr>{[<th></th>, ...headerElements]}</tr>)
     setRows(rowsElements)
   }, [filteredData, actualPage])
 
