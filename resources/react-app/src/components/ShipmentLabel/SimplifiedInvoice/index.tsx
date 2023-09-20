@@ -64,7 +64,7 @@ const SimplifiedInvoice = (props: SimplifiedInvoiceProp) => {
       </div>
       <div id="simplified-invoice-access-key">
         <img src={accessKeyURI} style={{
-          width: '277px', 
+          width: '100%', 
           height: '40px', 
         }} alt="" />
         <span>{access_key}</span>
