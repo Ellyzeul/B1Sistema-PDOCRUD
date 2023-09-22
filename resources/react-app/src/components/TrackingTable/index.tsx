@@ -95,7 +95,7 @@ const getRows = (data: {[key: string]: string}[], fieldsKeys: string[], actualPa
     const rowElement = <tr key={idx}>{[
       btnCell, 
       ...fieldsKeys.map((key, idx) => {
-        if(key === "last_update_date") return [<td key={idx}></td>,btnUpdate6dot1]
+        if(key === "last_update_date") return [<td key={idx}>{fields[key].isDate ? row[key] ? (new Date(`${row[key]} 00:00`)).toLocaleDateString("pt-BR") : "" : row[key]}</td>, btnUpdate6dot1]
         return <td key={idx}>{
         fields[key].editable
         ? <Textarea defaultValue={row[key]} tracking_code={row.tracking_code} field_name={key}/>
