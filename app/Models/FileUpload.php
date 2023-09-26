@@ -104,7 +104,7 @@ class FileUpload extends Model
 		$subtractDay = ($deliveryHour > 0) && ($deliveryHour < 7);
 		$treated = $subtractDay
 			? date("Y-m-d", strtotime("-1 day", strtotime($date)))
-			: date("Y-m-d", $date);
+			: date("Y-m-d", strtotime($date));
 		
 		return $treated;
 	}

@@ -27,6 +27,7 @@ class SellercentralsSeeder extends Seeder
                 ['id' => 8, 'name' => 'FNAC-PT', 'currency' => '€', 'sku_prefix' => 'SEL'], 
                 ['id' => 9, 'name' => 'MercadoLivre-BR', 'currency' => 'R$', 'sku_prefix' => 'SEL'], 
                 ['id' => 10, 'name' => 'MagazineLuiza-BR', 'currency' => 'R$', 'sku_prefix' =>'SEL'], 
+                ['id' => 11, 'name' => 'FNAC-ES', 'currency' => '€', 'sku_prefix' =>'SEL'], 
             ]);
     }
 }
