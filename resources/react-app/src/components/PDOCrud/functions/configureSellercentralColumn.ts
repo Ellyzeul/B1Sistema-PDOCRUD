@@ -73,6 +73,10 @@ const sellercentrals = {
     sell_page: (onlineOrderNumber) => `https://seller.fnac.pt/compte/vendeur/commande/${onlineOrderNumber}`,
     product_page: (isbn) => `https://www.fnac.pt/SearchResult/ResultList.aspx?Search=${isbn}&sft=1&sa=0`
   },
+  "FNAC-ES": {
+    sell_page: (onlineOrderNumber) => `https://seller.fnac.es/compte/vendeur/commande/${onlineOrderNumber}`,
+    product_page: (isbn) => `https://www.fnac.es/SearchResult/ResultList.aspx?Search=${isbn}&sft=1&sa=0`
+  },
   "MercadoLivre-BR": {
     sell_page: (onlineOrderNumber) => `https://www.mercadolivre.com.br/vendas/${onlineOrderNumber}/detalhe?callbackUrl=https%3A%2F%2Fwww.mercadolivre.com.br%2Fvendas%2Fomni%2Flista%3Fplatform.id%3DML%26channel%3Dmarketplace%26filters%3D%26sort%3DDATE_CLOSED_DESC%26page%3D1%26search%3D%26startPeriod%3DWITH_DATE_CLOSED_6M_OLD%26toCurrent%3D%26fromCurrent%3D`,
     product_page: (_) => `#`
