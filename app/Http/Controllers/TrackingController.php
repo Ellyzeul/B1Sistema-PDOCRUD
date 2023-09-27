@@ -7,34 +7,20 @@ use App\Models\Tracking;
 
 class TrackingController extends Controller
 {
-	public function read()
-	{
-		$tracking = new Tracking();
+    public static function readOrders()
+    {
+        return (new TrackingService())->readOrders();
+    }		
 
-		$response = $tracking->read();
+	public static function readPurchases()
+    {
+        return (new TrackingService())->readPurchases();
+    }		
 
-		return $response;
-	}
-
-	public function readPurchases()
-	{
-		$tracking = new Tracking();
-
-		$response = $tracking->readPurchases();
-
-		return $response;
-	}
-
-	public function readForExcel(Request $request)
-	{
-		$tracking = new Tracking();
-
-		$orderNumbers = $request->input('order_numbers');
-
-		$response = $tracking->readForExcel($orderNumbers);
-
-		return $response;
-	}
+	public static function readForExcel(Request $request)
+    {
+        return (new TrackingService())->readForExcel($request);
+    }	
 	
 	public function update(Request $request)
 	{
@@ -108,6 +94,6 @@ class TrackingController extends Controller
 
     public static function updateOrderPhaseAction(Request $request)
     {
-        return (new TrackingService())->updateOrderPhaseAction($request);
+        return (new TrackingService())->updateOrderPhase($request);
     }	
 }
