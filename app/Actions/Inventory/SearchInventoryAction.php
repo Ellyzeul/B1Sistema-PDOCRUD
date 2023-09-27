@@ -23,8 +23,8 @@ class SearchInventoryAction
                 'inventory.bookshelf', 
                 'inventory.observation'
             )
-            ->join('inventory_condition', 'inventory.condition', '=', 'inventory_condition.id')
-            ->join('inventory_location', 'inventory.location', '=', 'inventory_location.id')
+            ->join('inventory_condition', 'inventory.id_condition', '=', 'inventory_condition.id')
+            ->join('inventory_location', 'inventory.id_location', '=', 'inventory_location.id')
             ->where('inventory.isbn', '=', $isbn)
             ->where('inventory.quantity', '>', 0)
             ->get();

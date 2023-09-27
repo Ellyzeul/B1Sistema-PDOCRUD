@@ -22,7 +22,7 @@ class DeleteFromInventoryAction
         $response = DB::table('inventory')
             ->select('*')
             ->where('isbn', '=', $isbn)
-            ->where('location', '=', $locationId)
+            ->where('id_location', '=', $locationId)
             ->delete();
 
         return $response === 1 
