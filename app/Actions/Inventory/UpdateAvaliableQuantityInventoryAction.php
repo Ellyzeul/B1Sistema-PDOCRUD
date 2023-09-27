@@ -22,7 +22,7 @@ class UpdateAvaliableQuantityInventoryAction
         if(count($quantity) > 0){
             $response = DB::table('inventory')
                 ->where('isbn', '=', $isbn)
-                ->where('id_location', '=', $quantity[0]->location) 
+                ->where('id_location', '=', $quantity[0]->id_location) 
                 ->decrement('quantity', 1);
         }
 
