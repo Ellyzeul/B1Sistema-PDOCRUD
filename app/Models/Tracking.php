@@ -28,71 +28,6 @@ class Tracking extends Model
 		"DHL" => true,
 	];
 
-	public function read()
-	{
-		$results = DB::table('trackings')
-			->join('order_control', 'trackings.tracking_code', '=', 'order_control.tracking_code')
-			->select(
-				'trackings.tracking_code',
-				(DB::raw('(SELECT name FROM delivery_methods WHERE id = order_control.id_delivery_method) as delivery_method')),
-				'order_control.online_order_number',
-				'trackings.status',
-				'trackings.last_update_date',
-				'trackings.details',
-				'order_control.expected_date',
-				'trackings.delivery_expected_date',
-				'trackings.client_deadline',
-				'trackings.api_calling_date',
-				'trackings.observation',
-			)
-			->where('order_control.id_phase', '=', '5.1')
-			->orWhere('order_control.id_phase', '=', '5.2')
-			->get();
-		
-		return $results;
-	}
-
-	public function readForExcel(array $orderNumbers)
-	{
-		$results = DB::table('order_control')
-			->whereIn('online_order_number', $orderNumbers)
-			->select(
-				'id',
-				'online_order_number',
-				'tracking_code',
-				'delivered_date',
-			)
-			->get();
-		
-		return [
-			"columns" => Order::getColumnsNames(),
-			"data" => $results
-		];
-	}
-
-	public function readPurchases()
-	{
-		$results = DB::table('purchase_trackings')
-			->join('order_control', 'purchase_trackings.tracking_code', '=', 'order_control.supplier_tracking_code')
-			->select(
-				'purchase_trackings.tracking_code',
-				(DB::raw('(SELECT name FROM supplier_delivery_methods WHERE id = order_control.id_supplier_delivery_method) as delivery_method')),
-				'order_control.online_order_number',
-				'purchase_trackings.status',
-				'purchase_trackings.last_update_date',
-				'purchase_trackings.details',
-				'order_control.expected_date',
-				'purchase_trackings.delivery_expected_date',
-				'purchase_trackings.deadline',
-				'purchase_trackings.api_calling_date',
-				'purchase_trackings.observation',
-			)
-			->where('order_control.id_phase', '=', '3.1')
-			->get();
-		
-		return $results;
-	}
-
 	public function updateOrInsertTracking(string $trackingCode, string | null $deliveryMethod)
 	{
 		if(!isset($this->supportedServices[$deliveryMethod])) return ["Serviço não suportado", 400];
@@ -101,7 +36,7 @@ class Tracking extends Model
 		if($deliveryMethod == "Correios") $response = $this->fetchCorreios($trackingCode);
 		if($deliveryMethod == "Jadlog") $response = $this->fetchJadlog($trackingCode);
 		if($deliveryMethod == "FedEx") $response = $this->fetchFedex($trackingCode);
-		
+		// if($deliveryMethod == "Mercado Livre") $response = "Mercado";
 		if($deliveryMethod == "DHL"){
 			$response = $this->fetchDHLMyAPI($trackingCode);
 

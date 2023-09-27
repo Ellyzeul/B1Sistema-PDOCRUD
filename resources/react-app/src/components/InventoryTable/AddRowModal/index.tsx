@@ -30,8 +30,8 @@ export const AddRowModal = () => {
     api.post('/api/inventory/insert-or-update', {
       isbn: isbn,
       quantity: quantity,
-      condition: condition,
-      location: location,
+      id_condition: condition,
+      id_location: location,
       bookshelf: bookshelf,
       observation: observation           
     })

@@ -125,7 +125,7 @@ Route::get('/quotes/read', function (Request $request) {
 Route::controller(TrackingController::class)
     ->prefix('tracking')
     ->group(function() {
-        Route::get('/read', 'read');
+        Route::get('/read', 'readOrders');
         Route::get('/read-purchases', 'readPurchases');
         Route::get('/consult-zipcode', 'consultZipCode');
         Route::get('/consult-price-and-shipping', 'consultPriceAndShipping');
