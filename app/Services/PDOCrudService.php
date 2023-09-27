@@ -8,62 +8,86 @@ use \PDOCrud;
 class PDOCrudService
 {
 	private array $columnsRename = [
-			"id" => "Nº",
-			"address_verified" => "Endereço arrumado",
-			"ready_for_ship" => "Pronto p/ envio",
-			"id_company" => "Empresa",
-			"id_sellercentral" => "Canal de venda",
-			"id_phase" => "Fase do processo",
-			"invoice_number" => "NF",
-			"online_order_number" => "ORIGEM",
-			"bling_number" => "Nº Bling",
-			"order_date" => "Data do pedido",
-			"ship_date" => "Data para envio",
-			"expected_date" => "Data prevista",
-			"isbn" => "ISBN",
-			"selling_price" => "Valor",
-			"supplier_name" => "Fornecedor",
-			"purchase_date" => "Data da compra",
-			"id_delivery_address" => "Endereço de entrega",
-			"supplier_purchase_number" => "Nº Compra fornecedor",
-			"supplier_tracking_code" => "Código de rastreio fornecedor",
-			"id_supplier_delivery_method" => "Forma de entrega fornecedor",
-			"id_delivery_method" => "Forma de envio",
-			"tracking_code" => "Código de rastreio",
-			"collection_code" => "Código de coleta",
-			"delivered_date" => "Data de entrega",
-			"ask_rating" => "Pedir avaliação",
-			"ready_to_6_2" => "Pronto para 6.2",
-			"accepted" => "Aceito",
+		"id" => "Nº",
+		"address_verified" => "Endereço arrumado",
+		"ready_for_ship" => "Pronto p/ envio",
+		"id_company" => "Empresa",
+		"id_sellercentral" => "Canal de venda",
+		"id_phase" => "Fase do processo",
+		"invoice_number" => "NF",
+		"online_order_number" => "ORIGEM",
+		"bling_number" => "Nº Bling",
+		"order_date" => "Data do pedido",
+		"ship_date" => "Data para envio",
+		"expected_date" => "Data prevista",
+		"isbn" => "ISBN",
+		"selling_price" => "Valor",
+		"supplier_name" => "Fornecedor",
+		"purchase_date" => "Data da compra",
+		"id_delivery_address" => "Endereço de entrega",
+		"supplier_purchase_number" => "Nº Compra fornecedor",
+		"supplier_tracking_code" => "Código de rastreio fornecedor",
+		"id_supplier_delivery_method" => "Forma de entrega fornecedor",
+		"id_delivery_method" => "Forma de envio",
+		"tracking_code" => "Código de rastreio",
+		"collection_code" => "Código de coleta",
+		"delivered_date" => "Data de entrega",
+		"ask_rating" => "Pedir avaliação",
+		"ready_to_6_2" => "Pronto para 6.2",
+		"accepted" => "Aceito",
+		"shipping_box_number" => "Nº da caixa",
+		"status_on_shipping_box" => "Status na caixa",
+
+		"delivery_hub" => "Transportadora HUB", 
+		"url" => "Monitoramento", 
+		"courier_delivered_date" => "Chegada Courier", 
+		"items" => "Itens na caixa", 
+		"weight" => "Peso", 
+		"total_cost" => "Valor da caixa", 
+		"delivered_on_envia_com" => "Entregue na Envia.com", 
+		"hub_ship_date" => "Data de saída do HUB", 
+		"status" => "Status", 
 	];
 	private array $columnsPerPhase = [
-			"id" => ["Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "aceitar-fnac"],
-			"address_verified" => ["0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado"],
-			"ready_for_ship" => ["não-enviado"],
-			"id_company" => ["Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "aceitar-fnac"],
-			"id_sellercentral" => ["Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "aceitar-fnac"],
-			"id_phase" => ["0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado"],
-			"invoice_number" => ["2.4", "2.5", "2.6", "2.7", "2.8", "2.9"],
-			"online_order_number" => ["Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "aceitar-fnac"],
-			"bling_number" => ["2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "6.2", "6.21", "não-verificado", "não-enviado"],
-			"order_date" => ["Pré-0", "2.1", "2.3", "3.1", "3.2", "não-verificado", "não-enviado"],
-			"ship_date" => ["0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "não-verificado", "não-enviado", "aceitar-fnac"],
-			"expected_date" => ["Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "aceitar-fnac"],
-			"isbn" => ["Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "aceitar-fnac"],
-			"selling_price" => ["Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.1", "2.3", "3.1", "3.2", "não-enviado", "aceitar-fnac"],
-			"supplier_name" => ["0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2"],
-			"purchase_date" => ["0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "3.1", "3.2"],
-			"id_delivery_address" => ["2.3", "3.1", "3.2"],
-			"supplier_purchase_number" => ["2.1", "2.3", "3.1", "3.2"],
-			"supplier_tracking_code" => ["2.1", "2.3", "3.1", "3.2"],
-			"id_supplier_delivery_method" => ["2.1", "2.3", "3.1", "3.2"],
-			"id_delivery_method" => ["2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado"],
-			"tracking_code" => ["2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado"],
-			"collection_code" => ["2.4", "2.5", "2.6", "2.7", "2.8"],
-			"delivered_date" => ["2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6"],
-			"ask_rating" => ["0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6"],
-			"ready_to_6_2" => ["6.1"],
-			"accepted" => ["aceitar-fnac"],
+		"id" => ["general", "Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "4.1", "4.11", "4.2", "4.21", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "aceitar-fnac"],
+		"address_verified" => ["general", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado"],
+		"ready_for_ship" => ["general", "não-enviado"],
+		"id_company" => ["general", "Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "aceitar-fnac"],
+		"id_sellercentral" => ["general", "Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "aceitar-fnac"],
+		"id_phase" => ["general", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado"],
+		"invoice_number" => ["general", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9"],
+		"online_order_number" => ["general", "Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "aceitar-fnac"],
+		"bling_number" => ["general", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "6.2", "6.21", "não-verificado", "não-enviado"],
+		"order_date" => ["general", "Pré-0", "2.1", "2.3", "3.1", "3.2", "4.1", "4.2", "não-verificado", "não-enviado"],
+		"ship_date" => ["general", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "4.1", "4.2", "não-verificado", "não-enviado", "aceitar-fnac"],
+		"expected_date" => ["general", "Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "4.1", "4.11", "4.2", "4.21", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "aceitar-fnac"],
+		"isbn" => ["general", "Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "aceitar-fnac"],
+		"selling_price" => ["general", "Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.1", "2.3", "3.1", "3.2", "4.1", "4.2", "não-enviado", "aceitar-fnac"],
+		"supplier_name" => ["general", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2"],
+		"purchase_date" => ["general", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "3.1", "3.2"],
+		"id_delivery_address" => ["general", "2.3", "3.1", "3.2"],
+		"supplier_purchase_number" => ["general", "2.1", "2.3", "3.1", "3.2"],
+		"supplier_tracking_code" => ["general", "2.1", "2.3", "3.1", "3.2"],
+		"id_supplier_delivery_method" => ["general", "2.1", "2.3", "3.1", "3.2"],
+		"id_delivery_method" => ["general", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado"],
+		"tracking_code" => ["general", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "4.1", "4.11", "4.2", "4.21", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado"],
+		"collection_code" => ["general", "2.4", "2.5", "2.6", "2.7", "2.8", "4.1", "4.2"],
+		"delivered_date" => ["general", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6"],
+		"ask_rating" => ["general", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6"],
+		"ready_to_6_2" => ["general", "6.1"],
+		"accepted" => ["general", "aceitar-fnac"],
+		"shipping_box_number" => ["general", "4.1", "4.2"],
+		"status_on_shipping_box" => ["general", "4.1", "4.2"],
+
+		"delivery_hub" => ["4.11", "4.21"], 
+		"url" => ["4.11", "4.21"], 
+		"courier_delivered_date" => ["4.11", "4.21"], 
+		"items" => ["4.11", "4.21"], 
+		"weight" => ["4.11", "4.21"], 
+		"total_cost" => ["4.11", "4.21"], 
+		"delivered_on_envia_com" => ["4.11", "4.21"], 
+		"hub_ship_date" => ["4.11", "4.21"], 
+		"status" => ["4.11", "4.21"], 
 	];
 
 	public function getHTML(Request $request)
@@ -84,7 +108,7 @@ class PDOCrudService
 		$crud->dbOrderBy("id desc");
 
 		$response = [
-			'html' => $crud->dbTable("order_control")->render()
+			'html' => $crud->dbTable(!\in_array($phase, ['4.11', '4.21']) ? "order_control" : "shipping_box")->render()
 		];
 
 		return $response;
@@ -106,7 +130,7 @@ class PDOCrudService
 	{
 		$columns = [];
 		foreach($this->columnsPerPhase as $column => $validPhases) {
-			if($phase != null ? \in_array($phase, $validPhases) : true) {
+			if($phase != null ? \in_array($phase, $validPhases) : \in_array('general', $validPhases)) {
 				array_push($columns, $column);
 			}
 		}
@@ -139,13 +163,15 @@ class PDOCrudService
 		return $crud;
 	}
 
-	private function getBulkUpdateData(PDOCrud $crud, string $table, \Closure $nameMaker, string $key='id', string $val='name')
+	private function getBulkUpdateData(PDOCrud $crud, string $table, \Closure $nameMaker, string $key='id', string $val='name', array $idsToExclude = [])
 	{
 		$db = $crud->getPDOModelObj();
 		$results = $db->select($table);
 
 		$data = [];
 		foreach($results as $pair) {
+			if(in_array($pair[$key], $idsToExclude)) continue;
+
 			array_push($data, [
 				$pair[$key],
 				$nameMaker($pair, $key, $val)
@@ -160,7 +186,7 @@ class PDOCrudService
 		$phases = $this->getBulkUpdateData($crud, 'phases', function($pair, $key, $val)
 		{
 			return $pair[$key];
-		});
+		}, idsToExclude: ['4.11', '4.21']);
 
 		if(\in_array('id_delivery_address', $columns)) $deliveryAddresses = $this->getBulkUpdateData($crud, 'delivery_addresses', function($pair, $key, $val)
 		{
@@ -179,7 +205,7 @@ class PDOCrudService
 
 		\in_array("address_verified", $columns) ? $crud->bulkCrudUpdate("address_verified", "number") : null;
 		\in_array("ready_for_ship", $columns) ? $crud->bulkCrudUpdate("ready_for_ship", "number") : null;
-		if($phase !== "aceitar-fnac") $crud->bulkCrudUpdate("id_phase", "select", ['phase_key' => 'phase_val'], $phases);
+		if(!\in_array($phase, ["aceitar-fnac", "4.11", "4.21"])) $crud->bulkCrudUpdate("id_phase", "select", ['phase_key' => 'phase_val'], $phases);
 		\in_array("invoice_number", $columns) ? $crud->bulkCrudUpdate("invoice_number", "text") : null;
 		\in_array("bling_number", $columns) ? $crud->bulkCrudUpdate("bling_number", "text") : null;
 		\in_array("supplier_name", $columns) ? $crud->bulkCrudUpdate("supplier_name", "text") : null;
@@ -204,6 +230,28 @@ class PDOCrudService
 			[2, "Verificando"],
 			[3, "Aceito"],
 		]) : null;
+		\in_array("shipping_box_number", $columns) ? $crud->bulkCrudUpdate("shipping_box_number", "text") : null;
+		\in_array("status_on_shipping_box", $columns) ? $crud->bulkCrudUpdate("status_on_shipping_box", "select", ['status_on_shipping_box_key' => 'status_on_shipping_box_val'], [
+			[0, "Fora da caixa"],
+			[1, "Na caixa"],
+		]) : null;
+
+		\in_array("delivery_hub", $columns) ? $crud->bulkCrudUpdate("delivery_hub", "text") : null;
+		\in_array("url", $columns) ? $crud->bulkCrudUpdate("url", "text") : null;
+		\in_array("courier_delivered_date", $columns) ? $crud->bulkCrudUpdate("courier_delivered_date", "date") : null;
+		\in_array("items", $columns) ? $crud->bulkCrudUpdate("items", "number") : null;
+		\in_array("weight", $columns) ? $crud->bulkCrudUpdate("weight", "number") : null;
+		\in_array("total_cost", $columns) ? $crud->bulkCrudUpdate("total_cost", "number") : null;
+		\in_array("delivered_on_envia_com", $columns) ? $crud->bulkCrudUpdate("delivered_on_envia_com", "select", ['status_on_shipping_box_key' => 'status_on_shipping_box_val'], [
+			[0, "Não"],
+			[1, "Sim"],
+		]) : null;
+		\in_array("hub_ship_date", $columns) ? $crud->bulkCrudUpdate("hub_ship_date", "date") : null;
+		\in_array("status", $columns) ? $crud->bulkCrudUpdate("status", "select", ['status_on_shipping_box_key' => 'status_on_shipping_box_val'], [
+			[0, "Em aberto"],
+			[1, "Encerrado"],
+		]) : null;
+		if(\in_array($phase, ["4.11", "4.21"])) \in_array("expected_date", $columns) ? $crud->bulkCrudUpdate("expected_date", "date") : null;
 
 		return $crud;
 	}
@@ -241,7 +289,7 @@ class PDOCrudService
 
 			return $crud;
 		}
-		if(is_numeric($phase)) $crud->where('id_phase', $phase);
+		if(is_numeric($phase) && !\in_array($phase, ['4.11', '4.21'])) $crud->where('id_phase', $phase);
 
 		if(isset($orderNumber)) $crud->where('online_order_number', $orderNumber);
 
