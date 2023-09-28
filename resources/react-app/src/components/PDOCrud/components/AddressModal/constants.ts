@@ -52,6 +52,18 @@ export const CURRENCIES = {
     prefix: null,
     name: null,
     amazon_link: null,
+  },
+  10: {
+    currency: null,
+    prefix: null,
+    name: null,
+    amazon_link: null,
+  },
+  11: {
+    currency: 'EUR',
+    prefix: '€',
+    name: 'Euro',
+    amazon_link: 'Fnac.es',
   }
 } as {[key: number]: {
     currency: string | null,
