@@ -10,8 +10,12 @@ class ImportFromFNACAction
 
   public function handle(string $fromDate, int $idCompany)
   {
-    $fnac = new FNAC('pt', 0);
+    $this->handleFNAC($fromDate, new FNAC('pt', 0));
+    $this->handleFNAC($fromDate, new FNAC('es', 0));
+  }
 
+  private function handleFNAC(string $fromDate, FNAC $fnac)
+  {
     $unregisteredOrders = $this->getUnregisteredOrders($fnac->ordersQuery(
       fromDate: $fromDate, 
       dateType: 'CreatedAt', 
