@@ -127,7 +127,7 @@ Route::controller(TrackingController::class)
     ->group(function() {
         Route::get('/read', 'readOrders');
         Route::get('/read-purchases', 'readPurchases');
-        Route::get('/consult-zipcode', 'consultZipCode');
+        Route::get('/consult-zipcode', 'consultPostalCode');
         Route::get('/consult-price-and-shipping', 'consultPriceAndShipping');
         Route::post('/read-for-excel', 'readForExcel');
         Route::post('/update', 'update');

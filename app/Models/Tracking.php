@@ -36,7 +36,7 @@ class Tracking extends Model
 		if($deliveryMethod == "Correios") $response = $this->fetchCorreios($trackingCode);
 		if($deliveryMethod == "Jadlog") $response = $this->fetchJadlog($trackingCode);
 		if($deliveryMethod == "FedEx") $response = $this->fetchFedex($trackingCode);
-		// if($deliveryMethod == "Mercado Livre") $response = "Mercado";
+		
 		if($deliveryMethod == "DHL"){
 			$response = $this->fetchDHLMyAPI($trackingCode);
 
