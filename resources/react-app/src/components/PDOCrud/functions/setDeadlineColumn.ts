@@ -3,10 +3,11 @@ import getColumnFieldIndex from "./getColumnFieldIndex";
 import setNewColumn from "./setNewColumn";
 
 const setDeadlineColumn = (phase: number) => {
+	if([4.11, 4.21].indexOf(phase) !== -1) return
 	setNewColumn.columns = {}
 	const generateData = (row: HTMLTableRowElement) => {
 		const sellercentralIdx = getColumnFieldIndex("Canal de venda")
-		const sellercentral = (row.children[sellercentralIdx] as HTMLTableCellElement).innerText
+		const sellercentral = (row.children[sellercentralIdx] as HTMLTableCellElement || {}).innerText
 		const dateIdx = getColumnFieldIndex(getDateColumnName(sellercentral))
 		const div = document.createElement('div')
 

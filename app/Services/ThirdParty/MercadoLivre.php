@@ -136,6 +136,21 @@ class MercadoLivre
         return $response->object();
     }
 
+    public function getShipmentByOrderId(string $orderId, int $attempt=0)
+    {
+        if($attempt >= $this->maxAttempts) $this->throwMaxAttemptsError(__FUNCTION__);
+        $this->authenticate();
+
+        $response = Http::mercadoLivre(accessToken: $this->credential['access_token'])->get("/orders/$orderId/shipments");
+
+        if($response->unauthorized()) return $this->authenticate(true, fn() => $this->getShipment(
+            $orderId, 
+            attempt: $attempt+1, 
+        ));
+
+        return $response->object();
+    }
+
     public function getMessage(string $orderNumber, int $attempt=0)
     {
         if($attempt >= $this->maxAttempts) $this->throwMaxAttemptsError(__FUNCTION__);
