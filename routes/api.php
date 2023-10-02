@@ -134,7 +134,7 @@ Route::controller(TrackingController::class)
         Route::post('/update-purchase', 'updatePurchase');
         Route::post('/update-all', 'updateAll');
         Route::post('/update-field', 'updateField');
-        Route::post('/update-phase', 'updateOrderPhaseAction');
+        Route::post('/update-phase', 'updateOrderPhase');
     });
 
 Route::controller(BlacklistController::class)
