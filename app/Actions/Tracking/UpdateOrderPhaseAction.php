@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
 class UpdateOrderPhaseAction
 {
     public function handle(Request $request)
@@ -13,7 +12,7 @@ class UpdateOrderPhaseAction
         return $this->updateOrderPhase($orderNumber, $deliveredDate);
     }
 
-    private function updateOrderPhase($orderNumber, $deliveredDate)
+    private function updateOrderPhase(string $orderNumber, string $deliveredDate)
     {
         $response = DB::table('order_control')
             ->where('online_order_number','=', $orderNumber)
