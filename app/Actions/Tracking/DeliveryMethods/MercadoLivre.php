@@ -1,8 +1,6 @@
 <?php namespace App\Actions\Tracking\DeliveryMethods;
 
 use App\Services\ThirdParty\MercadoLivre as ML;
-use Illuminate\Support\Facades\DB;
-
 class MercadoLivre
 {
     private int $idCompany;
@@ -47,7 +45,7 @@ class MercadoLivre
                         (isset($status->date_delivered) 
                             ? "\nEntregue: " . date('Y-m-d', strtotime(str_replace('/', '-', $status->date_delivered))) 
                             : null),
-            "client_deadline" => "",
+            "client_deadline" => null,
         ];
     }
 
