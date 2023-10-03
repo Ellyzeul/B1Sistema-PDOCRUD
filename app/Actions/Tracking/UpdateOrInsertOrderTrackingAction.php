@@ -61,6 +61,7 @@ class UpdateOrInsertOrderTrackingAction
 		"DHL" => true,
 		"FedEx" => true,
 		"Mercado Livre" => true,
+		"Envia.com" => true,
 	];
 
 	private function getOrderIdAndcompanyId(string $trackingCode)

@@ -4,23 +4,28 @@ use Illuminate\Support\Facades\Http;
 
 class EnviaDotcom
 {
-    public function fetch(string $tracking_code)
-    {
-        $response = Http::withToken(env('ENVIA_DOT_COM_API_KEY'))
-            ->get("http://queries.envia.com/guide/$tracking_code");
+	public function fetch(string $tracking_code)
+	{
+		$response = Http::withToken(env('ENVIA_DOT_COM_API_TOKEN'))
+			->get("http://queries.envia.com/guide/$tracking_code")
+			->json();
+		$tracking = array_pop($response)[0];
 
-        // $response = request('GET', 'http://queries.envia.com/guide/$tracking_code', [
-        //     'headers' => [
-        //         'Accept' => 'application/json',
-        //         'Authorization' => 'Bearer '.env('ENVIA_DOT_COM_API_KEY'),
-        //     ],
-        // ]);
+		return [
+			"status" => $this->statusMessage[$tracking["status"]] ?? $tracking["status"],
+			"last_update_date" => isset($tracking["delivered_at"])
+				? date('Y-m-d', strtotime(str_replace('/', '-', $tracking["delivered_at"])))
+				: null,
+			"details" => (isset($tracking["created_at"]) ? "Criado: " . date('Y-m-d', strtotime(str_replace('/', '-', $tracking["created_at"]))) : null) .
+					(isset($tracking["shipped_at"]) ? "\nEnviado: " . date('Y-m-d', strtotime(str_replace('/', '-', $tracking["shipped_at"]))) : null) .
+					(isset($tracking["delivered_at"]) ? "\nEntregue: " . date('Y-m-d', strtotime(str_replace('/', '-', $tracking["delivered_at"]))) : null),												
+			"client_deadline" => null,
+		];        
+	}
 
-        // $response = Http::withHeaders([
-        //     'Content-Type' => 'application/json',
-        //     'Authorization' => 'Bearer '. env('ENVIA_DOT_COM_API_KEY'),
-        // ])->get("http://queries.envia.com/guide/$tracking_code");
-
-        return [$tracking_code => $response->object()];
-    }
+	private array $statusMessage = [
+	"Created" => "Criado",
+	"Delivered" => "Entregue",
+	"Canceled" => "Cancelado",
+];
 }
