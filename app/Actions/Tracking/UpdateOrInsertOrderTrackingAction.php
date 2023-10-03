@@ -46,7 +46,7 @@ class UpdateOrInsertOrderTrackingAction
 		DB::table('trackings')->updateOrInsert(
 			['tracking_code' => $trackingCode],
 			isset($response)
-				? [$response]
+				? $response
 				: []
 		);
 
