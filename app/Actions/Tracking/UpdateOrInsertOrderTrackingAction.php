@@ -46,7 +46,7 @@ class UpdateOrInsertOrderTrackingAction
 		DB::table('trackings')->updateOrInsert(
 			['tracking_code' => $trackingCode],
 			isset($response)
-				? $response
+				? [$response]
 				: []
 		);
 
@@ -61,6 +61,7 @@ class UpdateOrInsertOrderTrackingAction
 		"DHL" => true,
 		"FedEx" => true,
 		"Mercado Livre" => true,
+		"Envia.com" => true,
 	];
 
 	private function getOrderIdAndcompanyId(string $trackingCode)
