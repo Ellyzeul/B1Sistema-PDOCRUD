@@ -6,9 +6,10 @@ class EnviaDotcom
 {
 	public function fetch(string $tracking_code)
 	{
-		$response = Http::withToken(env('ENVIA_DOT_COM_API_TOKEN'))
-			->get("http://queries.envia.com/guide/$tracking_code")
+		$response = Http::enviaCom(env('ENVIA_DOT_COM_API_TOKEN'))
+			->get("/guide/$tracking_code")
 			->json();
+
 		$tracking = array_pop($response)[0];
 
 		return [
