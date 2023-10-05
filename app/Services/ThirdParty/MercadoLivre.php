@@ -170,7 +170,7 @@ class MercadoLivre
         if($attempt >= $this->maxAttempts) $this->throwMaxAttemptsError(__FUNCTION__);
         $this->authenticate();
 
-        $response = Http::mercadoLivre(accessToken: $this->credential['access_token'])->post("/messages$resourceId?tag=post_sale", [
+        $response = Http::mercadoLivre(accessToken: $this->credential['access_token'])->post("/messages$resourceId", [
             'from' => [ 'user_id' => $this->sellerId ], 
             'to' => [ 'user_id' => $clientId ], 
             'text' => $text
