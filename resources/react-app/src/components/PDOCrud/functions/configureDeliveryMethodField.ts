@@ -53,19 +53,21 @@ const configureDeliveryMethodField = () => {
 		cell.appendChild(container)
 	})
 
-	rows.forEach(row => {
+	rows.forEach(async(row) => {
 		const container = row.cells[deliveryMethodIdx].querySelector('div') as HTMLDivElement
 		const blingNumberInput = row.cells[numberBlingIdx].querySelector('input') as HTMLInputElement
 		const deliveryMethodSelect = container.querySelector('select') as HTMLSelectElement
+		const deliveryMethod = deliveryMethodSelect.value
 		const hasBlingNumber = !!blingNumberInput.value
 		const hasDeliveryMethod = !!deliveryMethodSelect.value
 
 		if(!hasDeliveryMethod || !hasBlingNumber) return
-
-		const orderId = row.cells[idIdx].textContent?.trim()
+		
+		const orderId = row.cells[idIdx].textContent?.trim() as string
+		const link = await setLink(deliveryMethod, orderId)
 		const i = document.createElement('i')
 
-		i.onclick = () => window.open(`/etiquetas/${orderId}`, "_blank", "noreferrer")
+		i.onclick = () => window.open(link, "_blank", "noreferrer")
 	
 		i.className = 'fa-solid fa-tag icon-css'
 		i.style.position = "relative"
@@ -78,3 +80,11 @@ const configureDeliveryMethodField = () => {
 }
 
 export default configureDeliveryMethodField
+
+const setLink = async(deliveryMethod: string, orderId: string): Promise<string> => {
+	if(deliveryMethod === '8') return await api.get(`/api/tracking/envia-dot-com-shipment-label?order_id=${orderId}`)
+		.then(response => response.data)
+		.then(({ link }) => link)
+
+	return `/etiquetas/${orderId}`
+}

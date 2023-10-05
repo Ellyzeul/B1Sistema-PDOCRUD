@@ -1,14 +1,18 @@
 <?php namespace App\Actions\Tracking\DeliveryMethods;
 
-use Illuminate\Support\Facades\Http;
+use App\Services\ThirdParty\EnviaDotCom as API;
 
-class EnviaDotcom
+class EnviaDotCom
 {
-	public function fetch(string $tracking_code)
+	private array $statusMessage = [
+		"Created" => "Criado",
+		"Delivered" => "Entregue",
+		"Canceled" => "Cancelado",
+	];
+
+	public function fetch(string $trackingNumber)
 	{
-		$response = Http::enviaCom(env('ENVIA_DOT_COM_API_TOKEN'))
-			->get("/guide/$tracking_code")
-			->json();
+		$response = (new API())->getShipment($trackingNumber);
 
 		$tracking = array_pop($response)[0];
 
@@ -17,16 +21,18 @@ class EnviaDotcom
 			"last_update_date" => isset($tracking["delivered_at"])
 				? date('Y-m-d', strtotime(str_replace('/', '-', $tracking["delivered_at"])))
 				: null,
-			"details" => (isset($tracking["created_at"]) ? "Criado: " . date('Y-m-d', strtotime(str_replace('/', '-', $tracking["created_at"]))) : null) .
-					(isset($tracking["shipped_at"]) ? "\nEnviado: " . date('Y-m-d', strtotime(str_replace('/', '-', $tracking["shipped_at"]))) : null) .
-					(isset($tracking["delivered_at"]) ? "\nEntregue: " . date('Y-m-d', strtotime(str_replace('/', '-', $tracking["delivered_at"]))) : null),												
+			"details" => 
+				$this->formatDateMessage('Criado', $tracking["created_at"]) .
+				$this->formatDateMessage('Enviado', $tracking["shipped_at"]) .
+				$this->formatDateMessage('Entregue', $tracking["delivered_at"]), 
 			"client_deadline" => null,
 		];        
 	}
 
-	private array $statusMessage = [
-	"Created" => "Criado",
-	"Delivered" => "Entregue",
-	"Canceled" => "Cancelado",
-];
+	private function formatDateMessage(string $msg, string | null $date)
+	{
+		if(!isset($date)) return '';
+
+		return "$msg: " . date('Y-m-d', strtotime(str_replace('/', '-', $date))) . "\n";
+	}
 }
