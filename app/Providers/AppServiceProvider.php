@@ -51,5 +51,9 @@ class AppServiceProvider extends ServiceProvider
             if(isset($accessToken)) return Http::withToken($accessToken)->baseUrl($baseUrl);
             if(isset($authForm)) return Http::asForm()->post("$baseUrl/oauth/token", $authForm)->json();
         });
+
+        Http::macro('enviaCom', fn(string $token) => 
+            Http::withToken($token)->baseUrl('https://queries.envia.com')
+        );
     }
 }
