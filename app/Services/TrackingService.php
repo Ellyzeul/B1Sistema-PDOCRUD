@@ -11,6 +11,8 @@ use App\Actions\Tracking\UpdateOrInsertOrderTrackingAction;
 use App\Actions\Tracking\UpdateOrInsertPurchaseTrackingAction;
 use App\Actions\Tracking\ConsultPriceAndShippingAction;
 use App\Actions\Tracking\ConsultPostalCodeAction;
+use App\Actions\Tracking\GetEnviaDotComShipmentLabelAction;
+
 class TrackingService
 {
     public function readOrders()
@@ -67,5 +69,10 @@ class TrackingService
     public function consultPostalCode(Request $request)
     {
         return (new ConsultPostalCodeAction())->handle($request);
-    }    
+    }
+    
+    public function getEnviaDotComShipmentLabel(Request $request)
+    {
+        return (new GetEnviaDotComShipmentLabelAction())->handle($request);
+    }
 }

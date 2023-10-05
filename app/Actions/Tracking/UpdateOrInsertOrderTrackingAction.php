@@ -6,7 +6,7 @@ use App\Actions\Tracking\DeliveryMethods\DHL;
 use App\Actions\Tracking\DeliveryMethods\FedEx;
 use App\Actions\Tracking\DeliveryMethods\Jadlog;
 use App\Actions\Tracking\DeliveryMethods\MercadoLivre;
-use App\Actions\Tracking\DeliveryMethods\EnviaDotcom;
+use App\Actions\Tracking\DeliveryMethods\EnviaDotCom;
 
 class UpdateOrInsertOrderTrackingAction
 {
@@ -23,7 +23,7 @@ class UpdateOrInsertOrderTrackingAction
 		if($deliveryMethod == "Correios") $response = (new Correios())->fetch($trackingCode);
 		if($deliveryMethod == "Jadlog") $response = (new Jadlog())->fetch($trackingCode);
 		if($deliveryMethod == "FedEx") $response = (new FedEx())->fetch($trackingCode);
-		if($deliveryMethod == "Envia.com") $response = (new EnviaDotcom())->fetch($trackingCode);
+		if($deliveryMethod == "Envia.com") $response = (new EnviaDotCom())->fetch($trackingCode);
 		
 		if($deliveryMethod == "Mercado Livre") {
 			$data = $this->getOrderIdAndcompanyId($trackingCode);

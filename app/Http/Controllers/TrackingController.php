@@ -5,20 +5,20 @@ use App\Services\TrackingService;
 use Illuminate\Http\Request;
 class TrackingController extends Controller
 {
-    public static function readOrders()
-    {
-        return (new TrackingService())->readOrders();
-    }		
+	public static function readOrders()
+	{
+		return (new TrackingService())->readOrders();
+	}		
 
 	public static function readPurchases()
-    {
-        return (new TrackingService())->readPurchases();
-    }		
+	{
+		return (new TrackingService())->readPurchases();
+	}		
 
 	public static function readForExcel(Request $request)
-    {
-        return (new TrackingService())->readForExcel($request);
-    }	
+	{
+		return (new TrackingService())->readForExcel($request);
+	}	
 	
 	public function update(Request $request)
 	{
@@ -47,17 +47,22 @@ class TrackingController extends Controller
 	}
 
 	public static function consultPriceAndShipping(Request $request)
-    {
-        return (new TrackingService())->consultPriceAndShipping($request);
-    }
+	{
+		return (new TrackingService())->consultPriceAndShipping($request);
+	}
 
 	public function consultPostalCode(Request $request)
 	{
-        return (new TrackingService())->consultPostalCode($request);
+		return (new TrackingService())->consultPostalCode($request);
 	}
 
-    public static function updateOrderPhase(Request $request)
-    {
-        return (new TrackingService())->updateOrderPhase($request);
-    }	
+	public static function updateOrderPhase(Request $request)
+	{
+		return (new TrackingService())->updateOrderPhase($request);
+	}
+
+	public static function getEnviaDotComShipmentLabel(Request $request)
+	{
+		return (new TrackingService())->getEnviaDotComShipmentLabel($request);
+	}
 }
