@@ -62,6 +62,7 @@ Route::controller(OrderController::class)
         Route::post('/import-from-date', 'importOrdersFromDate');
         Route::post('/send-bling-order', 'sendOrderToBling');
         Route::post('/ask-rating', 'sendAskRating');
+        Route::post('/envia-dot-com-address', 'postOrderAddressOnEnviaDotCom');
         Route::patch('/accept-fnac', 'acceptFNACOrder');
         Route::patch('/bling/order', 'putBlingOrder');
         Route::patch('/address-verified', 'updateAddressVerified');
