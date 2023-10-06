@@ -26,7 +26,7 @@ class EnviaDotCom
 
   private function validateAddressBody(array $address)
   {
-    $fields = ['type','category_id','name','company','email','phone','street','number','district','city','state','country','postal_code','reference',];
+    $fields = ['type','category_id','name','company','email','phone','street','number','district','city','state','country','postal_code','reference'];
     $missing = [];
 
     foreach($fields as $field) {
