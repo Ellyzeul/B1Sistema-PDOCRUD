@@ -127,13 +127,13 @@ const AddressForm = (props: AddressFormProp) => {
         email: "entregas@biblio1.com.br",
         phone: sellercentral.buyer_phone === null || sellercentral.buyer_phone === "" ? "--------" : sellercentral.buyer_phone,
         street: sellercentral.address_1,
-        number: sellercentral.address_2 === null || sellercentral.address_2 === "" ? "--" : sellercentral.address_2,
+        number: sellercentral.address_2 === null || sellercentral.address_2 === "" ? "-----" : sellercentral.address_2,
         district: "--",
         city: sellercentral.city,
-        state: sellercentral.state === null || sellercentral.state === "" ? "--" : sellercentral.state,
+        state: sellercentral.state === null || sellercentral.state === "" ? "----" : sellercentral.state,
         country: sellercentral.country === "PRT" ? "PT" : sellercentral.country,
         postal_code: sellercentral.postal_code,
-        reference: sellercentral.address_3 === null || sellercentral.address_3 === "" ?  "--" : sellercentral.address_3
+        reference: sellercentral.address_3 === null || sellercentral.address_3 === "" ?  "----" : sellercentral.address_3
       }
     })
     .then(response => response.data)
