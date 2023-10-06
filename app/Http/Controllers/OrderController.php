@@ -181,4 +181,9 @@ class OrderController extends Controller
 
 		return $response;		
 	}
+
+	public static function postOrderAddressOnEnviaDotCom(Request $request)
+	{
+		return (new OrderService())->postOrderAddressOnEnviaDotCom($request);
+	}
 }

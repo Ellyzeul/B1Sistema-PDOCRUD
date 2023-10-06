@@ -117,8 +117,41 @@ const AddressForm = (props: AddressFormProp) => {
     )
   }
 
+  const handleClickEnviaDotCom = () => {
+    api.post('/api/orders/envia-dot-com-address', {
+      address: {
+        type: 2,
+        category_id: 1,
+        name: `sellercentral.buyer_name (#${orderId})`,
+        company: `BOOK/${bling.items[0].sku.split('_')[1]}`,
+        email: "entregas@biblio1.com.br",
+        phone: sellercentral.buyer_phone ?? "--------",
+        street: sellercentral.address_1,
+        number: sellercentral.address_2 ?? "--",
+        district: "--",
+        city: sellercentral.city,
+        state: sellercentral.state ?? "--",
+        country: sellercentral.country === "PRT" ? "PT" : sellercentral.country,
+        postal_code: sellercentral.postal_code,
+        reference: sellercentral.address_3 ?? "--"
+      }
+    })
+    .then(response => response.data)
+    .then((response) => {
+      console.log(response)
+      if(response.missing_fields) toast.error("Dados faltantes! Por favor, verifique e tente novamente")
+      if(response.error) toast.error("Por favor, verifique os dados e tente novamente. Caso o erro persista, entre em contato com a equipe de TI")
+      if(response.id) toast.success(`Sucesso ao cadastrar os dados no Envia.com (id: ${response.id})`)
+    })
+    .catch(error => {
+      console.log(error)
+      toast.error('Algum erro ocorreu, consultar o TI...')
+    })
+  }
+
   return (
     <div className="address-form">
+      <div className="address-envia-btn" onClick={handleClickEnviaDotCom}>Envia.com</div>
       <div className="address-form-save-btn" onClick={handleClick}>Salvar</div>
       <div ref={addressFormRef} className="address-panel">
         <strong className="address-panel-section-header">Dados do Cliente</strong>
