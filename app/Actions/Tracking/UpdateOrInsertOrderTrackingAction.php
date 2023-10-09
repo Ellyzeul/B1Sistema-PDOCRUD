@@ -1,12 +1,12 @@
 <?php namespace App\Actions\Tracking;
 
 use Illuminate\Support\Facades\DB;
-use App\Actions\Tracking\DeliveryMethods\Correios;
 use App\Actions\Tracking\DeliveryMethods\DHL;
 use App\Actions\Tracking\DeliveryMethods\FedEx;
 use App\Actions\Tracking\DeliveryMethods\Jadlog;
-use App\Actions\Tracking\DeliveryMethods\MercadoLivre;
+use App\Actions\Tracking\DeliveryMethods\Correios;
 use App\Actions\Tracking\DeliveryMethods\EnviaDotCom;
+use App\Actions\Tracking\DeliveryMethods\MercadoLivre;
 
 class UpdateOrInsertOrderTrackingAction
 {
