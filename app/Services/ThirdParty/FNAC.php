@@ -87,7 +87,7 @@ class FNAC
 
     $xml = <<<XML
     <?xml version="1.0" encoding="utf-8"?>
-    <messages_update 
+    <messages_query 
       xmlns="http://www.fnac.com/schemas/mp-dialog.xsd" 
       shop_id="$shopId" 
       partner_id="$partnerId" 
@@ -95,7 +95,7 @@ class FNAC
     >
       <message action="mark_as_read" id="$messageId" />
       <message action="$action" id="$messageId">
-        <message_to>CLIENT</message_to>
+        <message_to><![CDATA[CLIENT]]</message_to>
         <message_description><![CDATA[$text]]></message_description>
       </message>
     </messages_update>

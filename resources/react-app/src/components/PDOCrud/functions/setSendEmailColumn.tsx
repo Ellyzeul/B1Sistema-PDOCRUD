@@ -120,7 +120,9 @@ const getClickHandler = (row: HTMLTableRowElement, companyId: number, orderId: n
   })
     .then(response => response.data)
     .then(response => {
-      toast.success(response.message)
+      console.log(response)
+      if(!response.success) return toast.error(`Pedido: ${orderId} - Erro ao enviar mensagem de avaliação`) 
+      toast.success(`Pedido: ${orderId} - Sucesso ao enviar mensagem de avaliação`)
       const select = (row.children[askRatingIdx] as HTMLTableCellElement).children[0] as HTMLSelectElement
       select.selectedIndex = select.selectedIndex === 3 ? 4 : 3
     })
