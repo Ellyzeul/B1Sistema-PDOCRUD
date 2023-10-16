@@ -20,15 +20,18 @@ class SendAskRatingFNACAction
     $orderNumber = Order::select('online_order_number')->where('id', $orderId)->first()->online_order_number;
     $order = $fnac->ordersQuery(ordersId: [ $orderNumber ])[0];
 
-    return $fnac->messagesUpdate(
-      $orderNumber, 
-      $this->getMessageBody(
-        $this->country, 
+    return [
+      'success' => true, 
+      'content' => $fnac->messagesUpdate(
         $orderNumber, 
-        "$order->client_firstname $order->client_lastname"
-      ), 
-      'create'
-    );
+        $this->getMessageBody(
+          $this->country, 
+          $orderNumber, 
+          "$order->client_firstname $order->client_lastname"
+        ), 
+        'create', 
+      )
+    ];
   }
 
   private function getMessageBody(string $country, string $orderNumber, string $clientName)

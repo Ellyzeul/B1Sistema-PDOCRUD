@@ -6,8 +6,10 @@ class EnviaDotCom
 {
 	private array $statusMessage = [
 		"Created" => "Criado",
+		"Shipped" => "Enviado",
 		"Delivered" => "Entregue",
 		"Canceled" => "Cancelado",
+		"Delayed" => "Atrasado",
 	];
 
 	public function fetch(string $trackingNumber)
