@@ -77,25 +77,32 @@ class FNAC
    * Posta mensagens no pedido
    */
 
-  public function messagesUpdate(string $messageId, string $text, ?string $action = 'reply')
+  public function messagesUpdate(string $messageId, string $text, ?string $action='reply', ?string $subject=null)
   {
     $this->authenticate();
 
     $partnerId = $this->partnerId;
     $shopId = $this->shopId;
     $token = $this->token;
+    $markAsRead = $action === 'reply' 
+      ? "<message action=\"mark_as_read\" id=\"$messageId\"/>"
+      : '';
+    $messageSubject = isset($subject) 
+      ? "<message_subject><![CDATA[$subject]]></message_subject>"
+      : '';
 
     $xml = <<<XML
     <?xml version="1.0" encoding="utf-8"?>
-    <messages_query 
+    <messages_update 
       xmlns="http://www.fnac.com/schemas/mp-dialog.xsd" 
       shop_id="$shopId" 
       partner_id="$partnerId" 
       token="$token"
     >
-      <message action="mark_as_read" id="$messageId" />
+      $markAsRead
       <message action="$action" id="$messageId">
-        <message_to><![CDATA[CLIENT]]</message_to>
+        <message_to><![CDATA[CLIENT]]></message_to>
+        $messageSubject
         <message_description><![CDATA[$text]]></message_description>
       </message>
     </messages_update>

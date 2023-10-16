@@ -36,10 +36,7 @@ class OrderMessageService
 			$handlerKey = "$sellercentral-$companyId";
 			
 			try {
-				return [
-					'success' => true, 
-					'content' => $this->handlers[$handlerKey]->handle($orderId)
-				];
+				return $this->handlers[$handlerKey]->handle($orderId);
 			}
 			catch(\Exception $_) {
 				return [ 'success' => false, 'content' => [ 
