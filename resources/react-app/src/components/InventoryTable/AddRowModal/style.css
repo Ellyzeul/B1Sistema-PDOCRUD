@@ -1,22 +1,27 @@
-.add-row-modal {
+.delete-sellercentral-icon {
+    border: none;
+    background-color: transparent;
+    padding: 0px 7px;
+}
+
+.delete-sellercentral-icon > img {
+    height: 20px;
+}
+
+.delete-sellercentral-modal {
     display: grid;
     place-items: center;
 }
 
-.add-row-modal-input {
-    border: none;
-    background-color: rgb(230, 230, 230);
-}
-
-.add-row-modal-container {
-    height: 50vh;
+.delete-sellercentral-modal-container {
+    height: 30vh;
     width: 30vw;
     position: relative;
     background-color: white;
     border-radius: 3px;
 }
 
-.add-row-container-block {
+.delete-sellercentral-container-block {
     width: 100%;
     height: 100%;
     display: grid; 
@@ -24,7 +29,7 @@
     position: relative;
 }
 
-.close-add-row-modal {
+.close-delete-sellercentral-modal {
     padding: 5px 12px;
     position: absolute;
     top: 5px;
@@ -35,13 +40,13 @@
     color: black;
     border-radius: 100%;
 }
-.close-add-row-modal:hover {
+.close-delete-sellercentral-modal:hover {
     cursor: pointer;
     filter: invert(1);
     transition: 125ms;
 }
 
-.add-row-modal-btn {
+.delete-sellercentral-modal-btn {
     border: none;
     padding: 10px;
     border-radius: 10px;
@@ -50,13 +55,42 @@
     font-weight: bold;
 }
 
-.add-row-modal-btn:hover {
+.delete-sellercentral-modal-btn:hover {
     cursor: pointer;
     transition: 125ms;
     background-color: #4f4e4e;
     color: #FFFFFF;
 }   
 
-.selects-container > label{
-    padding-right: 5px;
+.delete-sellercentral-container-block {
+    width: 100%;
+    height: 100%;
+    display: grid; 
+    place-items: center;
+    position: relative;
+}
+
+.delete-sellercentral-container-block > strong {
+    position: relative;
+    padding: 25px 20px; 
+}
+
+.delete-sellercentral-container-block > div {
+    display: flex;
+    flex-direction: row;
+}
+
+.delete-sellercentral-container-block > div > button {
+    margin-right: 10px;
+    width: 80px;
+}
+
+.confirm-btn:hover {
+    background-color: green;
+}
+
+.book-info {
+    position: relative;
+    padding-top: 10px;
+    padding-left: 10px;
 }

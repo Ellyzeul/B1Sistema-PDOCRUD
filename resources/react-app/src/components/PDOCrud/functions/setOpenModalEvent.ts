@@ -19,8 +19,13 @@ const setOpenModalEvent = (refModal: MutableRefObject<null>, refModalId: Mutable
 		const rowId = ((rowData[0].textContent as string).match(/[0-9]{1,}/) as string[])[0]
 		const rowOnlineOrderNumber = rowData[onlineNumberIdx].textContent as string
 
-		isbnCell.style.cursor = 'pointer'
-		isbnCell.onclick = () => openModal(modal, modalId, onlineOrderNumber, urlInput, rowId, rowOnlineOrderNumber)
+		const linkBtn = document.createElement('div')
+
+		linkBtn.className = 'fa-solid fa-link'
+		linkBtn.style.cursor = 'pointer'
+
+		linkBtn.onclick = () => openModal(modal, modalId, onlineOrderNumber, urlInput, rowId, rowOnlineOrderNumber)
+		isbnCell.appendChild(linkBtn)
 	})
 }
 

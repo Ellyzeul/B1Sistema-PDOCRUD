@@ -1,0 +1,62 @@
+.delete-book-icon {
+    border: none;
+    background-color: transparent;
+    padding: 0px 7px;
+    z-index: 10;
+}
+
+.delete-book-icon > img {
+    height: 20px;
+}
+
+.delete-sellercentral-modal-btn {
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #000000;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+.delete-sellercentral-modal-btn:hover {
+    cursor: pointer;
+    transition: 125ms;
+    background-color: #4f4e4e;
+    color: #FFFFFF;
+}   
+
+.delete-sellercentral-modal-container {
+    height: 45vh;
+    width: 40vw;
+    position: relative;
+    background-color: white;
+    border-radius: 3px;
+}
+
+.delete-sellercentral-btn:hover {
+    background-color: red;
+}
+
+.sellercentrals > label{
+    padding-right: 5px;
+}
+.delete-sellercentral-container-block {
+    width: 100%;
+    height: 100%;
+    display: grid; 
+    place-items: center;
+    position: relative;
+}
+
+.sellercentrals > label {
+    display: block;
+    padding-right: 5px;
+}
+
+.info-sellercentrals {
+    margin-left: 30px; 
+}
+
+.status-sellercentral {
+    margin-top: 5px;
+}
