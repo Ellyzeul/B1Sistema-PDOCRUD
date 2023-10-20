@@ -39,7 +39,7 @@ export const AddRowModal = () => {
       toast.success(`${isbn} adicionado/atualizado com sucesso`)
       setIsOpen(false)
     })
-    .catch(() => toast.error(`Erro ao adicionar/atualizar ${isbn}`));
+    .catch(() => toast.error(`Erro ao adicionar/atualizar ${isbn}`))
     }
 
     return(

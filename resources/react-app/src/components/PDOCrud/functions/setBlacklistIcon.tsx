@@ -3,6 +3,7 @@ import api from "../../../services/axios"
 import getColumnFieldIndex from "./getColumnFieldIndex"
 import getTableRows from "./getTableRows"
 import { AddBlacklistModal } from "../components/AddBlacklistModal"
+import { DeleteBookModal } from "../components/DeleteBookModal"
 
 const setBlacklistIcon = (phase: number) => {
   const isbnIdx = getColumnFieldIndex("ISBN")
@@ -25,20 +26,23 @@ const setBlacklistIcon = (phase: number) => {
     .then(response => response.data as {[key: string]: boolean})
     .then(response => {        
       rows.forEach(row => {
-          const cell = row.cells[isbnIdx]
-          const isbn = cell.textContent?.toString().trim()
-          const originCell = row.cells[originIdx]
-
-          
-          if(!isbn) return
-          if((!response[isbn]) && (phase === 1.2 || phase === 1.3 || phase === 8.1)) {
+        const cell = row.cells[isbnIdx]
+        const isbn = cell.textContent?.toString().trim()
+        const originCell = row.cells[originIdx]
+ 
+        if(!isbn) return
+        if(phase === 1.2 || phase === 1.3 || phase === 8.1) {
+          if(!response[isbn]) {
             originCell.style.display = 'flex'
-            return originCell.appendChild(createModalButton(isbn))
+            return originCell.appendChild(createModalButton(<AddBlacklistModal isbn={isbn}/>))
           }
-          if(!response[isbn]) return
-          
-          cell.appendChild(createBlacklistIcon())
-          cell.style.display = 'flex'
+          cell.appendChild(createModalButton(<DeleteBookModal isbn={isbn}/>))
+        }
+        
+        if(!response[isbn]) return
+        
+        cell.appendChild(createBlacklistIcon())
+        cell.style.display = 'flex'
       })
     })
     .catch((error) => console.log(error));
@@ -58,11 +62,11 @@ const createBlacklistIcon = () => {
   return div
 }
 
-const createModalButton = (isbn: string) => {
+const createModalButton = (component: JSX.Element) => {
   const modalContainer = document.createElement('div')
   const modalRoot = createRoot(modalContainer)
 
-  modalRoot.render(<AddBlacklistModal isbn={isbn}/>)
+  modalRoot.render(component)
 
   return modalContainer
 }
