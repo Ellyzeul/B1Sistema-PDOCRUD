@@ -7,7 +7,6 @@ import "./style.css"
 
 export const DeleteBookModal = (props: DeleteBookButtonProps) => {
 	const [ isOpen, setIsOpen ] = useState(false)
-  const sellercentralRef = useRef(null)
 	const { isbn } = props
 
   const handleOpen: MouseEventHandler = event => {
@@ -16,19 +15,18 @@ export const DeleteBookModal = (props: DeleteBookButtonProps) => {
 	}
 
   const deleteFromSellercentral = () => {
-    if(!sellercentralRef.current) return
-    const sellercentral = (sellercentralRef.current as HTMLSelectElement).value
+    api.delete("http://servicos.b1sistema.com.br:6500/api/offer", {data: {isbn: isbn}})
+    	.then(response => response.data as {status: string, sellercentral: string}[])
+			.then(response => {
+				const toastTimer = { autoClose: 10000 }
+				response.forEach(({ status, sellercentral }) => {
+					if(status === 'not_found') return toast.success(`Anúncio não existente em: ${sellercentral}`, toastTimer)
+					if(status === 'deleted') return toast.success(`Exclusão feita com sucesso em: ${sellercentral}`, toastTimer)
 
-    api.delete("http://servicos.b1sistema.com.br:6500/api/book/delete", {
-      data: {
-        isbn: isbn,
-        sellercentral: sellercentral
-      }
-    })
-    .then((response) => {
-      if(response.data.status === 200) return toast.success(response.data.message)
-        toast.error(response.data.message)
-    }).catch(() => toast.error(`Erro ao deletar ISBN ${isbn} do canal de venda: ${sellercentral}`))
+					toast.error(`Erro ao exlcuir em: ${sellercentral}`, toastTimer)
+				})
+			})
+			.catch(() => toast.error(`Erro ao excluir o anúncio de ISBN: ${isbn}. Em todos os canais de venda`))
   }
 
   return (
@@ -50,17 +48,6 @@ export const DeleteBookModal = (props: DeleteBookButtonProps) => {
 			</div>
 			<div className="delete-sellercentral-container-block">
 				<strong>Deletar permanentemente o ISBN {isbn.trim()}?</strong>
-        <div className="sellercentrals">
-        	<label><strong>Canais de venda:</strong></label>
-					<div className="info-sellercentrals">
-						<p className="status-sellercentral">Nuvemshop (Seline):</p>
-						<p className="status-sellercentral">Mercado Livre (Seline):</p>
-						<p className="status-sellercentral">Fnac PT (Seline):</p>
-						<p className="status-sellercentral">Fnac ES (Seline):</p>
-						<p className="status-sellercentral">Fnac FR (Seline):</p>
-						<p className="status-sellercentral">Mercado Livre (B1):</p>
-					</div>
-        </div>
 				<div className="delete-sellercentral-modal-btns">
 					<button className="delete-sellercentral-modal-btn delete-sellercentral-btn" onClick={deleteFromSellercentral}>Sim</button>
 					<button className="delete-sellercentral-modal-btn" onClick={() => setIsOpen(false)}>Não</button>
