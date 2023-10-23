@@ -57,6 +57,10 @@ const sellercentrals = {
     sell_page: (onlineOrderNumber) => `https://sellercentral.amazon.com/orders-v3/order/${onlineOrderNumber}`,
     product_page: (isbn) => `https://www.amazon.com/s?k=${isbn}&__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&ref=nb_sb_noss`
   },
+  "Amazon-ES": {
+    sell_page: (onlineOrderNumber) => `https://sellercentral.amazon.es/orders-v3/order/${onlineOrderNumber}`,
+    product_page: (isbn) => `https://www.amazon.es/s?k=${isbn}&__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&ref=nb_sb_noss`
+  },
   "Seline-BR": {
     sell_page: (onlineOrderNumber) => `https://livrariaseline.lojavirtualnuvem.com.br/admin/v2/orders?page=1&q=%23${onlineOrderNumber}&status=all`,
     product_page: (isbn) => `https://www.livrariaseline.com.br/search/?q=${isbn}`

@@ -94,6 +94,7 @@ class FileUpload extends Model
 		if($sellercentral === "Amazon.ca") return 2;
 		if($sellercentral === "Amazon.co.uk") return 3;
 		if($sellercentral === "Amazon.com") return 4;
+		if($sellercentral === "Amazon.es") return 12;
 
 		throw("Invalid sellercentral: " . $sellercentral);
 	}
