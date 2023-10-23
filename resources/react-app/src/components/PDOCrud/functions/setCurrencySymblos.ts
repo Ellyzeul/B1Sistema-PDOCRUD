@@ -11,7 +11,7 @@ const setCurrencySymbols = () => {
 		{regex: /CA/, symbol: "CA$"},
 		{regex: /UK/, symbol: "£"},
 		{regex: /US/, symbol: "US$"},
-		{regex: /PT/, symbol: "€"},
+		{regex: /(PT|ES)/, symbol: "€"},
 	]
 	const getCurrency = (country: string) => {
 		return regex
