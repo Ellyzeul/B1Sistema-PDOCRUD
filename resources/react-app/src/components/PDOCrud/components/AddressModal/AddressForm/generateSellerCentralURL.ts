@@ -50,6 +50,10 @@ const sellercentrals = {
     "FNAC-ES": {
       sell_page: (onlineOrderNumber) => `https://seller.fnac.es/compte/vendeur/commande/${onlineOrderNumber}`, 
       product_page: (isbn) => `https://www.fnac.es/SearchResult/ResultList.aspx?Search=${isbn}&sft=1&sa=0`
+    },
+    "Amazon-ES": {
+      sell_page: (onlineOrderNumber) => `https://sellercentral.amazon.es/orders-v3/order/${onlineOrderNumber}`,
+      product_page: (isbn) => `https://www.amazon.es/s?k=${isbn}&__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&ref=nb_sb_noss`
     }
   } as {
     [key: string]: {
