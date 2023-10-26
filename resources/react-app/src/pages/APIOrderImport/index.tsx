@@ -6,13 +6,16 @@ import { ToastContainer, toast } from "react-toastify"
 
 const APIOrderImportPage = () => {
   const [imported, setImported] = useState([] as {
-    id_company: number, 
-		id_sellercentral: number, 
-		online_order_number: string, 
-		order_date: string, 
-		isbn: string, 
-		selling_price: number, 
-		ship_date: string, 
+    status: string;
+    content: Array<{
+      id_company: number;
+      id_sellercentral: number;
+      online_order_number: string;
+      order_date: string;
+      isbn: string;
+      selling_price: number;
+      ship_date: string;
+    }>
   }[])
   const dateRef = useRef(null)
 
@@ -28,7 +31,9 @@ const APIOrderImportPage = () => {
       .then(response => response.data)
       .then(response => {
         toast.dismiss(loadingId)
-        toast.success('Pedidos importados!')
+        response.forEach((element: { status: string, content: string }) => {
+          if(element.status === 'error') return toast.error(element.content)
+        })
         console.log(response)
         setImported(response)
       })
@@ -52,18 +57,26 @@ const APIOrderImportPage = () => {
           <div id="api-order-import-action-button" onClick={handleClick}>Importar pedidos</div>
         </div>
         <div id="imported-orders">
-          {
+        {
             imported.length === 0
               ? <>Nada foi importado.</>
               : <>
-                <div className="imported-report">Novos Pedidos - Total {imported.length}</div>
-                <div className="imported-report">{
-                  imported
-                    .map(({ online_order_number, selling_price, isbn, id_company, id_sellercentral }) => 
-                      `${companies[id_company]} ${sellercentrals[id_sellercentral]}: #${online_order_number}\n\t- ISBN: ${isbn}\n\t- Valor: ${selling_price}`
-                    )
-                    .join('\n')
-                }</div>
+                {imported.map((responseItem, index) => (
+                  <div key={index}>
+                    {responseItem.status === 'success' && (
+                      <div className="imported-report">Novos Pedidos - Total {responseItem.content.length}</div>
+                    )}
+                    {responseItem.content.map((order, orderIndex) => (
+                      <div className="imported-report" key={orderIndex}>
+                        {`${companies[order.id_company]} ${sellercentrals[order.id_sellercentral]}: #${order.online_order_number}`}
+                        <ul>
+                          <li>ISBN: {order.isbn}</li>
+                          <li>Valor: {order.selling_price}</li>
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+              ))}
               </>
           }
         </div>
