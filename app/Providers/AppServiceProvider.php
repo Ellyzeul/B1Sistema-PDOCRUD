@@ -55,5 +55,18 @@ class AppServiceProvider extends ServiceProvider
         Http::macro('enviaDotCom', fn(string $token) => 
             Http::withToken($token)->baseUrl('https://queries.envia.com')
         );
+
+        Http::macro('nuvemshop', function (
+            string $token, 
+            string $shopId, 
+            string $appName, 
+            string $appDomain
+        )
+        {
+            return Http::withHeaders([
+                'User-Agent' => "$appName ($appDomain)",
+                'Authentication' => "bearer $token"
+            ])->baseUrl("https://api.nuvemshop.com.br/v1/$shopId");
+        });
     }
 }
