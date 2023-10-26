@@ -63,6 +63,7 @@ class ImportFromNuvemshopAction
         'selling_price' => floatval($item->price) * intval($item->quantity),
         'order_date' => date('Y-m-d', strtotime($order->created_at)),
         'expected_date' => (new \DateTime($order->created_at))->modify("+{$order->shipping_max_days} days")->format('Y-m-d'),
+        'ship_date' => (new \DateTime($order->paid_at))->modify("+5 days")->format('Y-m-d'),
       ]);
     }
 
