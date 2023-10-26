@@ -31,10 +31,10 @@ const setBlacklistIcon = (phase: number) => {
         const originCell = row.cells[originIdx]
  
         if(!isbn) return
-        if(phase === 1.2 || phase === 1.3 || phase === 8.1) {
+        if(phase === 1.1 || phase === 1.2 || phase === 1.3 || phase === 1.4 || phase === 1.5 || phase === 8.1) {
           if(!response[isbn]) {
             originCell.style.display = 'flex'
-            return originCell.appendChild(createModalButton(<AddBlacklistModal isbn={isbn}/>))
+            originCell.appendChild(createModalButton(<AddBlacklistModal isbn={isbn}/>))
           }
           cell.appendChild(createModalButton(<DeleteBookModal isbn={isbn}/>))
         }
