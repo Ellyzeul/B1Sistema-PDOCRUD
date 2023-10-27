@@ -53,7 +53,6 @@ Route::controller(OrderController::class)
         Route::get('/shipment-label-data', 'getShipmentLabelData');
         Route::get('/invoice-link', 'getInvoiceLink');
         Route::get('/get-total-orders-in-phase', 'getTotalOrdersInPhase');
-        // Route::get('/ask-rating/whatsapp', 'getAskRatingWhatsapp');
         Route::get('/ask-rating/spreadsheet-data', 'getDataForAskRatingSpreadSheet');
         Route::get('/get-order-control', 'readOrderControlByOrderNumber');
         Route::get('/get-order-addresses', 'readOrderAddressesByOrderNumber');
