@@ -385,12 +385,12 @@ class FileUpload extends Model
 		$addressesFormatted = [];
 		$orders = [];
 		$sellecentralsToPost = [3, 12];
-		$countries = ['BR' => '', 'PT' => 'PORTUGAL', 'ES' => 'ESPANHA', 'UK' => 'REINO UNIDO'];
+		$countries = ['PT' => 'PORTUGAL', 'ES' => 'ESPANHA', 'UK' => 'REINO UNIDO'];
 		$skuPrefixes = ['PT-0' => 'SEL', 'ES-0' => 'SELESP', 'UK-0' => 'SELUK', 'PT-1' => 'B1', 'ES-1' => 'B1ESP', 'UK-1' => 'B1UK'];
 
 		foreach($addressData as $address) {
+			$country = $countries[$address['country']] ?? '';
 			$freight = floatval($address['freight']);
-			$total = floatval($address['price']) + $freight;
 
 			$addressesFormatted[$address['online_order_number']] = [
 				'country' => $address['country'], 
@@ -401,7 +401,6 @@ class FileUpload extends Model
 				'observacoes' => "Nº Pedido Loja: {$address['online_order_number']}", 
 				'observacoesInternas' => null, 
 				'desconto' => ['valor' => 0, 'unidade' => 'REAL'], 
-				// 'parcelas' => ['valor' => $total, 'observacoes' => null, 'formaPagamento' => ['id' => 92896]], 
 				'transporte' => [
 					'frete' => $freight, 
 					'etiqueta' => [
@@ -413,7 +412,7 @@ class FileUpload extends Model
 						'uf' => $address['country'] === 'BR' ? $address['state'] : 'EX', 
 						'cep' => $address['postal_code'], 
 						'bairro' => $address['county'], 
-						'nomePais' => $countries[$address['country']], 
+						'nomePais' => $country, 
 						'email' => $address['buyer_email'], 
 						'phone' => $address['ship_phone'], 
 					]
@@ -426,7 +425,6 @@ class FileUpload extends Model
 			
 			$addressesFormatted[$item['online_order_number']]['id_company'] = $item['id_company'];
 			$addressesFormatted[$item['online_order_number']]['data'] = date('Y-m-d',strtotime($item['order_date']));
-			// $addressesFormatted[$item['online_order_number']]['parcelas']['dataVencimento'] = date('Y-m-d', strtotime('+30 days', strtotime($item['order_date'])));
 			$skuPrefix = $skuPrefixes[$addressesFormatted[$item['online_order_number']]['country'] . '-' . $item['id_company']];
 
 			unset($addressesFormatted[$item['online_order_number']]['country']);
