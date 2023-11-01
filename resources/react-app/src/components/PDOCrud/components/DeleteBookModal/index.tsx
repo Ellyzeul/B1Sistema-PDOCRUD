@@ -4,7 +4,6 @@ import { DeleteBookButtonProps } from "./types"
 import api from "../../../../services/axios"
 import { toast } from "react-toastify"
 import "./style.css"
-import apiServices from "../../../../services/apiServices"
 
 export const DeleteBookModal = (props: DeleteBookButtonProps) => {
 	const [ isOpen, setIsOpen ] = useState(false)
@@ -16,7 +15,7 @@ export const DeleteBookModal = (props: DeleteBookButtonProps) => {
 	}
 
   const deleteFromSellercentral = () => {
-    apiServices.delete('/offer', {data: {isbn: isbn}})
+    api.delete('/api/offer', {data: {isbn: isbn}})
     	.then(response => response.data as {status: string, sellercentral: string}[])
 			.then(response => {
 				const toastTimer = { autoClose: 10000 }
