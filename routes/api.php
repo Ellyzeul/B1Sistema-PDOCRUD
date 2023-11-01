@@ -16,6 +16,8 @@ use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BlacklistController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\OfferController;
+use Illuminate\Support\Facades\Http;
 
 /*
 |--------------------------------------------------------------------------
@@ -156,4 +158,10 @@ Route::controller(InventoryController::class)
         Route::post('/verify-list', 'verifyListInventory');
         Route::patch('/avaliable-quantity', 'updateAvaliableQuantityInventory');
         Route::delete('/delete', 'deleteFromInventory');
-    });       
+    });
+    
+Route::controller(OfferController::class)
+    ->prefix('offer')
+    ->group(function() {
+        Route::delete('/', 'delete');
+    });
