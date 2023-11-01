@@ -27,7 +27,10 @@ export const DeleteBookModal = (props: DeleteBookButtonProps) => {
 					toast.error(`Erro ao exlcuir em: ${sellercentral}`, toastTimer)
 				})
 			})
-			.catch(() => toast.error(`Erro ao excluir o anúncio de ISBN: ${isbn}. Em todos os canais de venda`))
+			.catch((err) => {
+				console.log(err)
+				toast.error(`Erro ao excluir o anúncio de ISBN: ${isbn}. Em todos os canais de venda`)
+			})
   }
 
   return (
