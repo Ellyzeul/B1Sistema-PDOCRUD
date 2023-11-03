@@ -6,10 +6,11 @@ use App\Actions\Order\AcceptFNACOrderAction;
 use App\Actions\Order\GetOrderMessagesAction;
 use App\Actions\Order\PostOrderAddressOnEnviaDotComAction;
 use App\Actions\Order\PostOrderMessageAction;
-use App\Actions\Order\UpdateAddressVerifiedActionAction;
+use App\Actions\Order\UpdateAddressVerifiedAction;
 use App\Actions\Order\ReadOrderControlByOrderNumberAction;
 use App\Actions\Order\ReadOrderAddressesByOrderNumberAction;
 use App\Actions\Order\SendOrderToBlingAction;
+use App\Actions\Order\UpdateCancelInvoiceAction;
 
 class OrderService
 {
@@ -29,7 +30,12 @@ class OrderService
 
   public function updateAddressVerified(Request $request)
   {
-    return (new UpdateAddressVerifiedActionAction())->handle($request);
+    return (new UpdateAddressVerifiedAction())->handle($request);
+  }
+
+  public function updateCancelInvoice(Request $request)
+  {
+    return (new UpdateCancelInvoiceAction())->handle($request);
   }
 
   public function readOrderControlByOrderNumber(Request $request) {
