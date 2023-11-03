@@ -37,6 +37,7 @@ class PDOCrudService
 		"accepted" => "Aceito",
 		"shipping_box_number" => "Nº da caixa",
 		"status_on_shipping_box" => "Status na caixa",
+		"cancel_invoice" => "NF cancelada",
 
 		"delivery_hub" => "Transportadora HUB", 
 		"url" => "Monitoramento", 
@@ -49,15 +50,15 @@ class PDOCrudService
 		"status" => "Status", 
 	];
 	private array $columnsPerPhase = [
-		"id" => ["general", "Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "4.1", "4.11", "4.2", "4.21", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "aceitar-fnac"],
+		"id" => ["general", "Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "4.1", "4.11", "4.2", "4.21", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "aceitar-fnac", "cancelar-nf"],
 		"address_verified" => ["general", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado"],
 		"ready_for_ship" => ["general", "não-enviado"],
-		"id_company" => ["general", "Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "aceitar-fnac"],
-		"id_sellercentral" => ["general", "Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "aceitar-fnac"],
-		"id_phase" => ["general", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado"],
-		"invoice_number" => ["general", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9"],
-		"online_order_number" => ["general", "Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "aceitar-fnac"],
-		"bling_number" => ["general", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "4.1", "4.2", "6.2", "6.21", "não-verificado", "não-enviado"],
+		"id_company" => ["general", "Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "aceitar-fnac", "cancelar-nf"],
+		"id_sellercentral" => ["general", "Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "aceitar-fnac", "cancelar-nf"],
+		"id_phase" => ["general", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "cancelar-nf"],
+		"invoice_number" => ["general", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "cancelar-nf"],
+		"online_order_number" => ["general", "Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "aceitar-fnac", "cancelar-nf"],
+		"bling_number" => ["general", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "4.1", "4.2", "6.2", "6.21", "não-verificado", "não-enviado", "cancelar-nf"],
 		"order_date" => ["general", "Pré-0", "2.1", "2.3", "3.1", "3.2", "4.1", "4.2", "não-verificado", "não-enviado"],
 		"ship_date" => ["general", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "4.1", "4.2", "não-verificado", "não-enviado", "aceitar-fnac"],
 		"expected_date" => ["general", "Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "4.1", "4.11", "4.2", "4.21", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "aceitar-fnac"],
@@ -78,6 +79,7 @@ class PDOCrudService
 		"accepted" => ["general", "aceitar-fnac"],
 		"shipping_box_number" => ["general", "4.1", "4.2"],
 		"status_on_shipping_box" => ["general", "4.1", "4.2"],
+		"cancel_invoice" => ["cancelar-nf"],
 
 		"delivery_hub" => ["4.11", "4.21"], 
 		"url" => ["4.11", "4.21"], 
@@ -218,6 +220,7 @@ class PDOCrudService
 		\in_array("tracking_code", $columns) ? $crud->bulkCrudUpdate("tracking_code", "text") : null;
 		\in_array("collection_code", $columns) ? $crud->bulkCrudUpdate("collection_code", "text") : null;
 		\in_array("delivered_date", $columns) ? $crud->bulkCrudUpdate("delivered_date", "date") : null;
+		\in_array("cancel_invoice", $columns) ? $crud->bulkCrudUpdate("cancel_invoice", "number") : null;
 		\in_array("ask_rating", $columns) ? $crud->bulkCrudUpdate("ask_rating", "select", ['askrating_key' => 'askrating_val'], [
 			[1, "Sim"],
 			[0, "Não"],
@@ -286,6 +289,12 @@ class PDOCrudService
 		if($phase == "não-enviado") return $this->filterByUnverified($crud, 'ready_for_ship');
 		if($phase == "aceitar-fnac") {
 			$crud->where('accepted', 2, '<=');
+
+			return $crud;
+		}
+		if($phase == "cancelar-nf") {
+			$crud->where('id_phase', 8.2, ">=");
+			$crud->where('cancel_invoice', 0);
 
 			return $crud;
 		}

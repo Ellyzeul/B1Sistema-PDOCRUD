@@ -53,6 +53,11 @@ class OrderController extends Controller
 		return (new OrderService())->updateAddressVerified($request);
 	}
 
+	public static function updateCancelInvoice(Request $request)
+	{
+		return (new OrderService())->updateCancelInvoice($request);
+	}
+
 	public static function getOrderMessages()
 	{
 		return (new OrderService())->getOrderMessages();

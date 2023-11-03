@@ -20,6 +20,7 @@ import configureReadyForShipColumn from "./configureReadyForShipColumn";
 import setInvoiceNumberUpdateButton from "./setInvoiceNumberUpdateButton";
 import setBlacklistIcon from "./setBlacklistIcon";
 import setInventoryIcon from "./setInventoryIcon";
+import configureCancelInvoiceColumn from "./configureCancelInvoiceColumn";
 
 const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObject<null>, refModalId: MutableRefObject<null>, refOnlineOrderNumber: MutableRefObject<null>, refURLInput: MutableRefObject<null>) => {
 	if(!elemRef.current) return
@@ -41,6 +42,7 @@ const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObje
 	setSearchTrim()
 	configureDatepickers()
 	configureAddressVerifiedColumn()
+	configureCancelInvoiceColumn()
 	configureReadyForShipColumn()
 	configureSellercentralColumn()
 	setConditionalStyling()

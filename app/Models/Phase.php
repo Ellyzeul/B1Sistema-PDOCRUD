@@ -9,6 +9,7 @@ class Phase
         "não-verificado" => "Endereços a arrumar", 
         "não-enviado" => "Em prepraração para envio", 
         "aceitar-fnac" => "Aceitar FNAC", 
+        "cancelar-nf" => "Cancelar Notas Fiscais (Fase 8)", 
     ];
     public static function read($email)
     {

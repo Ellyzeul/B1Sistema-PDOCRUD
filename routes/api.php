@@ -67,6 +67,7 @@ Route::controller(OrderController::class)
         Route::patch('/accept-fnac', 'acceptFNACOrder');
         Route::patch('/bling/order', 'putBlingOrder');
         Route::patch('/address-verified', 'updateAddressVerified');
+        Route::patch('/cancel-invoice', 'updateCancelInvoice');
         Route::patch('/read-for-ship', 'updateReadForShip');
         Route::patch('/traking-id', 'updateTrackingCode');
         Route::patch('/traking-service', 'updateDeliveryMethod');
