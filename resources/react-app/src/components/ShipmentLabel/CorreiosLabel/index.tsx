@@ -37,7 +37,7 @@ const CorreiosLabel = (props: ShipmentLabelProp) => {
       bcid: 'code128', 
       text: postalCode, 
       width: 293.283, 
-      height: 73.95, 
+      height: 51.77, 
     })
 
     setDatamatrixURI(datamatrix.toDataURL())
@@ -154,7 +154,7 @@ const CorreiosLabel = (props: ShipmentLabelProp) => {
           {cep && <strong>{cep.replace('.', '')}</strong>} {cidade && <>{cidade}</>}{uf && <>/{uf}</>}{cep || cidade || uf ? <br /> : null}
           <img src={postalCodeBarcodeURI} style={{
             width: '148.55px', 
-            height: '73.95px', 
+            height: '51.77px', 
           }} alt="" />
         </div>
       </div>
