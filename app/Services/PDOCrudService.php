@@ -95,7 +95,7 @@ class PDOCrudService
 	public function getHTML(Request $request)
 	{
 		$phase = $request->input('phase') ?? null;
-		$orderNumber = $request->input('order_number') ?? null;
+		$orderNumber = $request->input('origem') ?? null;
 
 		if($phase === '6.1') $this->updateReadyTo6_2();
 

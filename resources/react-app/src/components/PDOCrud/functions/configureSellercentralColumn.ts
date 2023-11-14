@@ -44,15 +44,22 @@ const configureSellercentralColumn = () => {
       div.style.display = 'flex'
       div.style.flexDirection = 'column'
   
-      const total = document.createElement('p')
       const totalText = orderNumbersTotals[orderNumber] > 1
         ? `Pedido com ${orderNumbersTotals[orderNumber]} livros`
         : ''
 
-      total.innerText = totalText
-  
       div.appendChild(upperContainer)
-      div.appendChild(total)
+
+      if(totalText.length > 0) {
+        const total = document.createElement('a')
+
+        total.innerText = totalText
+        total.href = totalText.length > 0 ? `/pedidos?origem=${orderNumber}` : ''
+        total.target = 'blank'
+        total.style.color = 'black'
+
+        div.appendChild(total)
+      }
   
       cell.textContent = ""
       cell.appendChild(div)
