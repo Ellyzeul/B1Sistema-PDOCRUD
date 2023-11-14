@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use App\Actions\Order\ImportOrdersFromDateAction;
 use App\Actions\Order\AcceptFNACOrderAction;
 use App\Actions\Order\GetOrderMessagesAction;
+use App\Actions\Order\GetOrderNumberTotalFromListAction;
 use App\Actions\Order\PostOrderAddressOnEnviaDotComAction;
 use App\Actions\Order\PostOrderMessageAction;
 use App\Actions\Order\UpdateAddressVerifiedAction;
@@ -71,5 +72,10 @@ class OrderService
   public function postOrderAddressOnEnviaDotCom(Request $request)
   {
     return (new PostOrderAddressOnEnviaDotComAction())->handle($request);
+  }
+
+  public function getOrderNumberTotalFromList(Request $request)
+  {
+    return (new GetOrderNumberTotalFromListAction())->handle($request);
   }
 }
