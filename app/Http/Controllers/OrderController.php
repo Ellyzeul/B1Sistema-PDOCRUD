@@ -191,4 +191,9 @@ class OrderController extends Controller
 	{
 		return (new OrderService())->postOrderAddressOnEnviaDotCom($request);
 	}
+
+	public function getOrderNumberTotalFromList(Request $request)
+	{
+		return (new OrderService())->getOrderNumberTotalFromList($request);
+	}
 }
