@@ -38,6 +38,7 @@ class PDOCrudService
 		"shipping_box_number" => "Nº da caixa",
 		"status_on_shipping_box" => "Status na caixa",
 		"cancel_invoice" => "NF cancelada",
+		"weight" => "Peso", 
 
 		"delivery_hub" => "Transportadora HUB", 
 		"url" => "Monitoramento", 
@@ -80,12 +81,12 @@ class PDOCrudService
 		"shipping_box_number" => ["general", "4.1", "4.2"],
 		"status_on_shipping_box" => ["general", "4.1", "4.2"],
 		"cancel_invoice" => ["cancelar-nf"],
+		"weight" => ["general", "2.9", "4.1", "4.11", "4.2", "4.21"],
 
 		"delivery_hub" => ["4.11", "4.21"], 
 		"url" => ["4.11", "4.21"], 
 		"courier_delivered_date" => ["4.11", "4.21"], 
 		"items" => ["4.11", "4.21"], 
-		"weight" => ["4.11", "4.21"], 
 		"total_cost" => ["4.11", "4.21"], 
 		"delivered_on_envia_com" => ["4.11", "4.21"], 
 		"hub_ship_date" => ["4.11", "4.21"], 
@@ -221,6 +222,7 @@ class PDOCrudService
 		\in_array("collection_code", $columns) ? $crud->bulkCrudUpdate("collection_code", "text") : null;
 		\in_array("delivered_date", $columns) ? $crud->bulkCrudUpdate("delivered_date", "date") : null;
 		\in_array("cancel_invoice", $columns) ? $crud->bulkCrudUpdate("cancel_invoice", "number") : null;
+		\in_array("weight", $columns) ? $crud->bulkCrudUpdate("weight", "number") : null;
 		\in_array("ask_rating", $columns) ? $crud->bulkCrudUpdate("ask_rating", "select", ['askrating_key' => 'askrating_val'], [
 			[1, "Sim"],
 			[0, "Não"],
