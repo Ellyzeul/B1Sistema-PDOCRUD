@@ -10,8 +10,12 @@ class ImportFromFNACAction
 
   public function handle(string $fromDate, int $idCompany)
   {
-    $this->handleFNAC($fromDate, new FNAC('pt', 0));
-    $this->handleFNAC($fromDate, new FNAC('es', 0));
+    $response = [];
+
+    $response = array_merge($response, $this->handleFNAC($fromDate, new FNAC('pt', 0)));
+    $response = array_merge($response, $this->handleFNAC($fromDate, new FNAC('es', 0)));
+
+    return $response;
   }
 
   private function handleFNAC(string $fromDate, FNAC $fnac)
