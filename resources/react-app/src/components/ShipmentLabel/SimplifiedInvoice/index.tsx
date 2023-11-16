@@ -1,14 +1,12 @@
 import "./style.css"
-import { ShipmentLabelProp } from "../type"
 import { companyLogos } from "../constants"
 import { useEffect, useState } from "react"
 import BwipJs from "bwip-js"
-import axios from "axios"
 import { SimplifiedInvoiceProp } from "./types"
 
 const SimplifiedInvoice = (props: SimplifiedInvoiceProp) => {
   const { include_company_icon, label_data: { company, bling_data }} = props
-  const { id, company_name, cnpj, state_registration } = company
+  const { id, cnpj, state_registration } = company
   const [accessKeyURI, setAccessKeyURI] = useState('')
 
   useEffect(() => {
@@ -91,11 +89,6 @@ const SimplifiedInvoice = (props: SimplifiedInvoiceProp) => {
           <div><strong>VALOR TOTAL</strong></div>
           <div className="simplified-invoice-bought-item-cost">{(totalCost + freight).toFixed(2)}</div>
         </div>
-      </div>
-      <div id="simplified-invoice-observation-field">
-        <strong>INFORMAÇÕES ADICIONAIS DE INTERESSE DO CONTRIBUINTE</strong>
-        <br />
-        <div id="simplified-invoice-observation">{observacoes}</div>
       </div>
     </div>
   )
