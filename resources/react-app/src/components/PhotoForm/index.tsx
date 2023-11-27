@@ -1,9 +1,14 @@
-import { ChangeEventHandler, FormEventHandler } from "react"
+import { ChangeEventHandler, FormEventHandler, useRef, useState } from "react"
 import { toast, ToastContainer } from "react-toastify"
 import api, { postFile } from "../../services/axios"
 import "./style.css"
+import WebcamModal from "../WebcamModal"
 
 export const PhotoForm = () => {
+  const inputRef = useRef(null as HTMLInputElement | null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [imageFile, setImageFile] = useState(null as File | null)
+
   const renameImage = (img: File, newName: string): File => {
     const imgType = img.type
     const blob = img.slice(0, img.size, imgType)
@@ -20,15 +25,13 @@ export const PhotoForm = () => {
   const onSubmit: FormEventHandler = (event) => {
     event.preventDefault()
     const form = event.target as HTMLFormElement
-    const fileList = (form[1] as HTMLInputElement).files as FileList
 
-    if(fileList.length === 0) {
+    if(!imageFile) {
       toast.error("Selecione alguma imagem")
       return
     }
 
     const imageName = (form[0] as HTMLInputElement).value
-    const imageFile = fileList[0]
     const formData = new FormData()
 
     const photoFile = renameImage(imageFile, imageName)
@@ -52,6 +55,25 @@ export const PhotoForm = () => {
     input.value = value.substring(29, 34)
   }
 
+  const onChangePhotoInput: ChangeEventHandler = (event) => {
+    setImageFile(((event.target as HTMLInputElement).files as FileList)[0])
+  }
+
+  const onClickMobile = () => {
+    if(!inputRef.current) return
+    
+    inputRef.current.click()
+  }
+
+  const onClickComputer = () => setIsModalOpen(true)
+
+  const handleWebcamImage = (imageURL: string) => {
+    if(!inputRef.current) return
+    const input = inputRef.current
+    
+    setImageFile(dataURLtoFile(imageURL, 'image.png'))
+  }
+
   return (
     <>
       <form 
@@ -62,18 +84,35 @@ export const PhotoForm = () => {
           <label htmlFor="photo-name">Nome da foto</label>
           <input type="text" name="photo-name" id="photo-name" onChange={onChange} />
         </div>
-        <div>
-          <label htmlFor="photo-image">Foto a ser postada</label>
+        <div id="buttons-container">
+          <p>Dispositivo para enviar a foto</p>
+          <i className="fa-solid fa-mobile-screen-button mobile-button" onClick={onClickMobile}/>
+          <i className="fa-solid fa-computer computer-button" onClick={onClickComputer}/>
           <input 
+            ref={inputRef}
+            onChange={onChangePhotoInput}
             type="file" 
             name="photo-image"
             id="photo-image"
             accept="image/jpeg, image/jpg, image/png"
           />
+          <WebcamModal is_open={isModalOpen} set_is_open={setIsModalOpen} handle_image={handleWebcamImage}/>
         </div>
         <input type="submit" value="Salvar" />
       </form>
       <ToastContainer/>
     </>
   )
+}
+
+const dataURLtoFile = (dataURL: string, filename: string) => {
+  const arr = dataURL.split(',')
+  const mime = (arr[0].match(/:(.*?);/) as RegExpMatchArray)[1]
+  const bstr = atob(arr[arr.length - 1]) 
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+
+  while(n--) u8arr[n] = bstr.charCodeAt(n)
+
+  return new File([u8arr], filename, {type:mime});
 }
