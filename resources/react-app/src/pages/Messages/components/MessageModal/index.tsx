@@ -61,7 +61,7 @@ const MessageModal = (props: MessageModalProp) => {
             <div>Pedido: {online_order_number}</div>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <a href={getOrderLink(sellercentral, online_order_number)}>Canal de venda</a>
-              <a href={`/pedidos?order_number=${online_order_number}`} target="blank">Pedido no sistema</a>
+              <a href={`/pedidos?origem=${online_order_number}`} target="blank">Pedido no sistema</a>
             </div>
           </div>
           {messagesElements}

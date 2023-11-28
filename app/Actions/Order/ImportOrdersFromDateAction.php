@@ -30,12 +30,14 @@ class ImportOrdersFromDateAction
         $status = 'success';
       }
       catch(\Exception $_) {
-        $response = "Erro no canal de venda: {$sellercentral['channel']} - $company";
         $status = 'error';
+        $response = [];
+        $errMsg = "Erro no canal de venda: {$sellercentral['channel']} - $company";
       }
       $responses[] = [
         'status' => $status, 
         'content' => $response, 
+        'err_msg' => $errMsg ?? null, 
       ];
     }
 

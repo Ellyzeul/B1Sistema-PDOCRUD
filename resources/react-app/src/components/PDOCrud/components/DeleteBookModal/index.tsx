@@ -15,7 +15,7 @@ export const DeleteBookModal = (props: DeleteBookButtonProps) => {
 	}
 
   const deleteFromSellercentral = () => {
-    api.delete("http://servicos.b1sistema.com.br:6500/api/offer", {data: {isbn: isbn}})
+    api.delete('/api/offer', {data: {isbn: isbn}})
     	.then(response => response.data as {status: string, sellercentral: string}[])
 			.then(response => {
 				const toastTimer = { autoClose: 10000 }
@@ -26,7 +26,10 @@ export const DeleteBookModal = (props: DeleteBookButtonProps) => {
 					toast.error(`Erro ao exlcuir em: ${sellercentral}`, toastTimer)
 				})
 			})
-			.catch(() => toast.error(`Erro ao excluir o anúncio de ISBN: ${isbn}. Em todos os canais de venda`))
+			.catch((err) => {
+				console.log(err)
+				toast.error(`Erro ao excluir o anúncio de ISBN: ${isbn}. Em todos os canais de venda`)
+			})
   }
 
   return (

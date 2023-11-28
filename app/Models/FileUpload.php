@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\ThirdParty\Bling;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -81,6 +82,8 @@ class FileUpload extends Model
 			'expected_date' => $this->treatAmazonDatetime($registry['expected_date']), 
 			'delivery_instructions' => $registry['delivery_instructions'], 
 		], $data);
+
+		$this->postAmazonOrderOnBling($addressData, $orderData);
 
 		$this->orderAddressInsert($addressData);
 		$this->orderDataInsert($orderData);
@@ -375,5 +378,183 @@ class FileUpload extends Model
 			: date("Y-m-d", $expectedDate);
 		
 		return $registry;
+	}
+
+	private function postAmazonOrderOnBling(array $addressData, array $orderData)
+	{
+		$addressesFormatted = [];
+		$orders = [];
+		$sellecentralsToPost = [3, 12];
+		$countries = ['PT' => 'PORTUGAL', 'ES' => 'ESPANHA', 'UK' => 'REINO UNIDO'];
+		$skuPrefixes = ['PT-0' => 'SEL', 'ES-0' => 'SELESP', 'UK-0' => 'SELUK', 'PT-1' => 'B1', 'ES-1' => 'B1ESP', 'UK-1' => 'B1UK'];
+
+		foreach($addressData as $address) {
+			$country = $countries[$address['country']] ?? '';
+			$freight = floatval($address['freight']);
+
+			$addressesFormatted[$address['online_order_number']] = [
+				'country' => $address['country'], 
+				'numeroLoja' => $address['online_order_number'], 
+				'dataPrevista' => $address['expected_date'], 
+				'loja' => ['id' => 0], 
+				'outrasDespesas' => 0, 
+				'observacoes' => "Nº Pedido Loja: {$address['online_order_number']}", 
+				'observacoesInternas' => null, 
+				'desconto' => ['valor' => 0, 'unidade' => 'REAL'], 
+				'transporte' => [
+					'frete' => $freight, 
+					'etiqueta' => [
+						'nome' => $address['recipient_name'], 
+						'endereco' => $address['address_1'], 
+						'numero' => '', 
+						'complemento' => $address['address_2'], 
+						'municipio' => $address['city'], 
+						'uf' => $address['country'] === 'BR' ? $address['state'] : 'EX', 
+						'cep' => $address['postal_code'], 
+						'bairro' => $address['county'], 
+						'nomePais' => $country, 
+						'email' => $address['buyer_email'], 
+						'phone' => $address['ship_phone'], 
+					]
+				]
+			];
+		}
+
+		foreach($orderData as $item) {
+			if(!in_array($item['id_sellercentral'], $sellecentralsToPost)) continue;
+			
+			$addressesFormatted[$item['online_order_number']]['id_company'] = $item['id_company'];
+			$addressesFormatted[$item['online_order_number']]['data'] = date('Y-m-d',strtotime($item['order_date']));
+			$skuPrefix = $skuPrefixes[$addressesFormatted[$item['online_order_number']]['country'] . '-' . $item['id_company']];
+
+			if(isset($addressesFormatted[$item['online_order_number']]['itens'])) {
+				array_push($addressesFormatted[$item['online_order_number']]['itens'], [
+					"descricao" => $item['isbn'],
+          "codigo"  => $skuPrefix . '_' . $item['isbn'],
+          "valor" => $item['selling_price'],
+          "quantidade" => 1
+				]);
+			}
+			else {
+				$addressesFormatted[$item['online_order_number']]['itens'] = [[
+					"descricao" => $item['isbn'],
+          "codigo"  => $skuPrefix . '_' . $item['isbn'],
+          "valor" => $item['selling_price'],
+          "quantidade" => 1
+				]];
+			}
+		}
+
+		foreach($addressesFormatted as $order) {
+			unset($order['country']);
+			if(isset($order['itens'])) array_push($orders, $order);
+		}
+
+		$this->handlePostAmazonOrderOnBling($orders);
+
+		return;
+	}
+
+	private function handlePostAmazonOrderOnBling(array $orders)
+	{
+		$blings = [
+			0 => new Bling(0), 
+			1 => new Bling(1), 
+		];
+
+		foreach($orders as $order) {
+			$idCompany = $order['id_company'];
+			unset($order['id_company']);
+			$address = $order['transporte']['etiqueta'];
+			
+			$contact = $blings[$idCompany]->postContact([
+				"nome" => $address['nome'],
+				"codigo" => null,
+				"situacao" => "A",
+				"numeroDocumento"=> null,
+				"telefone"=> null,
+				"celular"=> $address['phone'],
+				"fantasia"=> null,
+				"tipo"=> 'E',
+				"indicadorIe"=> 9,
+				"ie"=> null,
+				"rg"=> null,
+				"orgaoEmissor"=> null,
+				"email"=> $address['email'],
+				"endereco" => [
+					"geral" => [
+						"endereco" => $address['endereco'],
+						"cep" => $address['cep'],
+						"bairro" => $address['bairro'],
+						"municipio" => $address['municipio'],
+						"uf" => $address['uf'], 
+						"numero" => $address['numero'],
+						"complemento" => $address['complemento'], 
+					],
+					"cobranca" => [
+						"endereco" => null,
+						"cep" => null,
+						"bairro" => null,
+						"municipio" => null,
+						"uf" => null,
+						"numero" => null,
+						"complemento" => null
+					]
+				],
+				"vendedor" => ["id" => null],
+				"dadosAdicionais" => [
+					"dataNascimento" => null,
+					"sexo" => null,
+					"naturalidade" => null
+				],
+				"financeiro" => [
+					"limiteCredito" => 0,
+					"condicaoPagamento" => null,
+					"categoria" => ["id" => null]
+				],
+				"pais" => ["nome" => $address['nomePais']],
+				"tiposContato" => [[
+					"id" => 1431605062, 
+					"descricao" => "Cliente"
+				]],
+				"pessoasContato" => [[
+					"id" => 1431605062,
+					"descricao" => "Cliente"
+				]]
+			]);
+
+			unset($order['transporte']['etiqueta']['phone']);
+			unset($order['transporte']['etiqueta']['email']);
+
+			$order['contato'] = ['id' => $contact->id];
+
+			$totalItems = count($order['itens']);
+			for($i = 0; $i < $totalItems; $i++) {
+				$product = $blings[$idCompany]->getProductByCode($order['itens'][$i]['codigo']);
+
+				if(!isset($product->id)) $product = $blings[$idCompany]->postProduct([
+					"nome" => $order['itens'][$i]['descricao'],
+					"codigo" => $order['itens'][$i]['codigo'],
+					"unidade" => "UN",
+					"tipo" => "P",
+					"situacao" => "A",
+					"preco" => $order['itens'][$i]['valor'],
+					"formato" => "S",
+					"gtin" => $order['itens'][$i]['descricao'],
+					"gtinEmbalagem" => $order['itens'][$i]['descricao'],
+					"tributacao" => [
+						"origem" => 0,
+						"ncm" => "4901.99.00",
+						"cest"=> "28.064.00"
+					]
+				]);
+
+				$order['itens'][$i]['produto'] = ['id' => $product->id];
+			}
+
+			$blings[$idCompany]->postOrder($order);
+		}
+
+		return;
 	}
 }

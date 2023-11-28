@@ -15,6 +15,7 @@ class ImportFromNuvemshopAction
   private function getNuvemshopOrdersFromDate(string $fromDate, Nuvemshop $nuvemshop)
   {
     $orders = $nuvemshop->getOrdersFromDate($fromDate);
+    if($orders->code === 404) return [];
 
     $unregisteredOrders = $this->getUnregisteredOrders($orders, 'id');
 

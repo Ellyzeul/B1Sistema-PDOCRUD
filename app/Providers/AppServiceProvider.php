@@ -68,5 +68,9 @@ class AppServiceProvider extends ServiceProvider
                 'Authentication' => "bearer $token"
             ])->baseUrl("https://api.nuvemshop.com.br/v1/$shopId");
         });
+
+        Http::macro('b1servicos', function() {
+            return Http::baseUrl('https://servicos.b1sistema.com.br/api');
+        });
     }
 }

@@ -5,7 +5,7 @@ import getTableRows from "./getTableRows"
 import { AddBlacklistModal } from "../components/AddBlacklistModal"
 import { DeleteBookModal } from "../components/DeleteBookModal"
 
-const setBlacklistIcon = (phase: number) => {
+const setBlacklistIcon = (phase: number, rawPhase: string) => {
   const isbnIdx = getColumnFieldIndex("ISBN")
   const originIdx = getColumnFieldIndex("ORIGEM")
 
@@ -31,7 +31,7 @@ const setBlacklistIcon = (phase: number) => {
         const originCell = row.cells[originIdx]
  
         if(!isbn) return
-        if(phase === 1.1 || phase === 1.2 || phase === 1.3 || phase === 1.4 || phase === 1.5 || phase === 8.1) {
+        if(phase === 1.1 || phase === 1.2 || phase === 1.3 || phase === 1.4 || phase === 1.5 || phase === 8.1 || rawPhase === '0.0') {
           if(!response[isbn]) {
             originCell.style.display = 'flex'
             originCell.appendChild(createModalButton(<AddBlacklistModal isbn={isbn}/>))

@@ -8,13 +8,19 @@ class ImportFromFNACAction
 {
   use ImportOrdersFromDateCommon;
 
+  private array $sellercentralFromCountry = [ 'pt' => 8, 'es' => 11 ];
+
   public function handle(string $fromDate, int $idCompany)
   {
-    $this->handleFNAC($fromDate, new FNAC('pt', 0));
-    $this->handleFNAC($fromDate, new FNAC('es', 0));
+    $response = [];
+
+    $response = array_merge($response, $this->handleFNAC($fromDate, 'pt', new FNAC('pt', 0)));
+    $response = array_merge($response, $this->handleFNAC($fromDate, 'es', new FNAC('es', 0)));
+
+    return $response;
   }
 
-  private function handleFNAC(string $fromDate, FNAC $fnac)
+  private function handleFNAC(string $fromDate, string $country, FNAC $fnac)
   {
     $unregisteredOrders = $this->getUnregisteredOrders($fnac->ordersQuery(
       fromDate: $fromDate, 
@@ -24,7 +30,7 @@ class ImportFromFNACAction
 
     $blingNumbers = $this->handleBlingOrderCreate($unregisteredOrders);
 
-    $toInsert = $this->handleItemsAndAddressesSeparation($unregisteredOrders, function($order) use ($blingNumbers): array {
+    $toInsert = $this->handleItemsAndAddressesSeparation($unregisteredOrders, function($order) use ($blingNumbers, $country): array {
       $shippingAddress = $order->shipping_address;
       $freight = $this->getFNACOrderFreight($order);
 
@@ -44,7 +50,7 @@ class ImportFromFNACAction
           'ship_phone' => "$shippingAddress->mobile", 
           'freight' => $freight
         ], 
-          'items' => $this->getFNACOrderItems($order, $blingNumbers), 
+          'items' => $this->getFNACOrderItems($order, $blingNumbers, $country), 
       ];
     });
 
@@ -61,7 +67,7 @@ class ImportFromFNACAction
     return array_reduce($freights, fn($acc, $cur) => $acc + $cur, 0);
   }
 
-  private function getFNACOrderItems(object $order, array $blingNumbers)
+  private function getFNACOrderItems(object $order, array $blingNumbers, string $country)
   {
     $items = [];
     $orderDate = explode('T', $order->created_at)[0];
@@ -69,7 +75,7 @@ class ImportFromFNACAction
       $quantity = intval("$item->quantity");
       for($i = 0; $i < $quantity; $i++) array_push($items, [
         'id_company' => 0, 
-        'id_sellercentral' => 8, 
+        'id_sellercentral' => $this->sellercentralFromCountry[$country], 
         'accepted' => (string) $item->state === 'ToAccept' ? 2 : 3, 
         'online_order_number' => "$order->order_id", 
         'bling_number' => $blingNumbers["$order->order_id"], 

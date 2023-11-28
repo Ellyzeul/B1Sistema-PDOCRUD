@@ -6,7 +6,7 @@ import SimplifiedInvoice from "../SimplifiedInvoice"
 import { companyLogos } from "../constants"
 
 const CorreiosLabel = (props: ShipmentLabelProp) => {
-  const { order_id, company, bling_data } = props
+  const { company, bling_data } = props
   const [datamatrixURI, setDatamatrixURI] = useState('')
   const [trackingCodeBarcodeURI, setTrackingCodeBarcodeURI] = useState('')
   const [postalCodeBarcodeURI, setPostalCodeBarcodeURI] = useState('')
@@ -31,13 +31,13 @@ const CorreiosLabel = (props: ShipmentLabelProp) => {
       bcid: 'code128', 
       text: trackingCode, 
       width: 293.283, 
-      height: 73.95, 
+      height: 63.95, 
     })
     const postalCodeBarcode = BwipJs.toCanvas(document.createElement('canvas'), {
       bcid: 'code128', 
       text: postalCode, 
       width: 293.283, 
-      height: 73.95, 
+      height: 51.77, 
     })
 
     setDatamatrixURI(datamatrix.toDataURL())
@@ -114,7 +114,7 @@ const CorreiosLabel = (props: ShipmentLabelProp) => {
           height: '73.95px', 
           paddingBottom: '8px'
         }}>
-          <img src={trackingCodeBarcodeURI} style={{width: '293.283px'}} alt="" />
+          <img src={trackingCodeBarcodeURI} style={{width: '293.283px', height: '63.95px'}} alt="" />
           <div style={{
             height: '100%', 
             display: 'flex', 
@@ -154,7 +154,7 @@ const CorreiosLabel = (props: ShipmentLabelProp) => {
           {cep && <strong>{cep.replace('.', '')}</strong>} {cidade && <>{cidade}</>}{uf && <>/{uf}</>}{cep || cidade || uf ? <br /> : null}
           <img src={postalCodeBarcodeURI} style={{
             width: '148.55px', 
-            height: '73.95px', 
+            height: '51.77px', 
           }} alt="" />
         </div>
       </div>

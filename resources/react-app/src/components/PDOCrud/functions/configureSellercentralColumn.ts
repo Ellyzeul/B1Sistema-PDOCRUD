@@ -1,3 +1,4 @@
+import api from "../../../services/axios"
 import getColumnFieldIndex from "./getColumnFieldIndex"
 import getTableRows from "./getTableRows"
 
@@ -9,35 +10,60 @@ const configureSellercentralColumn = () => {
 
   if(sellercentralIdx === -1 || orderNumberIdx === -1 || isbnIdx === -1) return
 
-  rows.forEach(row => {
-    const { children } = row
-    const cell = children[sellercentralIdx] as HTMLTableCellElement
-    const sellercentral = cell.textContent?.trim()
-    const orderNumber = children[orderNumberIdx].textContent?.trim() || ""
-    const isbn = children[isbnIdx].textContent?.trim() || ""
+  const orderNumbersList = rows.map(row => row.children[orderNumberIdx].textContent?.trim() || '')
+  api.get(`/api/orders/order-number-total?order_numbers_list=${JSON.stringify(orderNumbersList)}`)
+    .then(response => response.data)
+    .then(orderNumbersTotals => rows.forEach(row => {
+      const { children } = row
+      const cell = children[sellercentralIdx] as HTMLTableCellElement
+      const sellercentral = cell.textContent?.trim()
+      const orderNumber = children[orderNumberIdx].textContent?.trim() || ""
+      const isbn = children[isbnIdx].textContent?.trim() || ""
+  
+      const upperContainer = document.createElement("div")
+      
+      const sellPageAnchor = document.createElement('a')
+      sellPageAnchor.href = sellercentral ? sellercentrals[sellercentral].sell_page(orderNumber) : ""
+      sellPageAnchor.target = "_blank"
+      sellPageAnchor.text = sellercentral || ""
+  
+      const productPageAnchor = document.createElement('a')
+      productPageAnchor.href = sellercentral ? sellercentrals[sellercentral].product_page(isbn) : ""
+      productPageAnchor.target = "_blank"
+      const icon = document.createElement('img')
+      icon.src = '/icons/url_16x16.png'
+      productPageAnchor.appendChild(icon)
+  
+      upperContainer.appendChild(sellPageAnchor)
+      upperContainer.appendChild(productPageAnchor)
+      upperContainer.style.display = "flex"
+      upperContainer.style.justifyContent = "space-evenly"
+  
+      const div = document.createElement('div')
+  
+      div.style.display = 'flex'
+      div.style.flexDirection = 'column'
+  
+      const totalText = orderNumbersTotals[orderNumber] > 1
+        ? `Pedido com ${orderNumbersTotals[orderNumber]} livros`
+        : ''
 
-    const div = document.createElement("div")
-    
-    const sellPageAnchor = document.createElement('a')
-    sellPageAnchor.href = sellercentral ? sellercentrals[sellercentral].sell_page(orderNumber) : ""
-    sellPageAnchor.target = "_blank"
-    sellPageAnchor.text = sellercentral || ""
+      div.appendChild(upperContainer)
 
-    const productPageAnchor = document.createElement('a')
-    productPageAnchor.href = sellercentral ? sellercentrals[sellercentral].product_page(isbn) : ""
-    productPageAnchor.target = "_blank"
-    const icon = document.createElement('img')
-    icon.src = '/icons/url_16x16.png'
-    productPageAnchor.appendChild(icon)
+      if(totalText.length > 0) {
+        const total = document.createElement('a')
 
-    div.appendChild(sellPageAnchor)
-    div.appendChild(productPageAnchor)
-    div.style.display = "flex"
-    div.style.justifyContent = "space-evenly"
+        total.innerText = totalText
+        total.href = totalText.length > 0 ? `/pedidos?origem=${orderNumber}` : ''
+        total.target = 'blank'
+        total.style.color = 'black'
 
-    cell.textContent = ""
-    cell.appendChild(div)
-  })
+        div.appendChild(total)
+      }
+  
+      cell.textContent = ""
+      cell.appendChild(div)
+    }))
 }
 
 const sellercentrals = {

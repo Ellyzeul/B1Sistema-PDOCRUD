@@ -16,6 +16,8 @@ use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BlacklistController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\OfferController;
+use Illuminate\Support\Facades\Http;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +59,7 @@ Route::controller(OrderController::class)
         Route::get('/get-order-control', 'readOrderControlByOrderNumber');
         Route::get('/get-order-addresses', 'readOrderAddressesByOrderNumber');
         Route::get('/order-messages', 'getOrderMessages');
+        Route::get('/order-number-total', 'getOrderNumberTotalFromList');
         Route::post('/order-message', 'postOrderMessage');
         Route::post('/import-from-date', 'importOrdersFromDate');
         Route::post('/send-bling-order', 'sendOrderToBling');
@@ -65,6 +68,7 @@ Route::controller(OrderController::class)
         Route::patch('/accept-fnac', 'acceptFNACOrder');
         Route::patch('/bling/order', 'putBlingOrder');
         Route::patch('/address-verified', 'updateAddressVerified');
+        Route::patch('/cancel-invoice', 'updateCancelInvoice');
         Route::patch('/read-for-ship', 'updateReadForShip');
         Route::patch('/traking-id', 'updateTrackingCode');
         Route::patch('/traking-service', 'updateDeliveryMethod');
@@ -156,4 +160,10 @@ Route::controller(InventoryController::class)
         Route::post('/verify-list', 'verifyListInventory');
         Route::patch('/avaliable-quantity', 'updateAvaliableQuantityInventory');
         Route::delete('/delete', 'deleteFromInventory');
-    });       
+    });
+    
+Route::controller(OfferController::class)
+    ->prefix('offer')
+    ->group(function() {
+        Route::delete('/', 'delete');
+    });

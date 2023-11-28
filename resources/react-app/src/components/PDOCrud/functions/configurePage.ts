@@ -20,6 +20,7 @@ import configureReadyForShipColumn from "./configureReadyForShipColumn";
 import setInvoiceNumberUpdateButton from "./setInvoiceNumberUpdateButton";
 import setBlacklistIcon from "./setBlacklistIcon";
 import setInventoryIcon from "./setInventoryIcon";
+import configureCancelInvoiceColumn from "./configureCancelInvoiceColumn";
 
 const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObject<null>, refModalId: MutableRefObject<null>, refOnlineOrderNumber: MutableRefObject<null>, refURLInput: MutableRefObject<null>) => {
 	if(!elemRef.current) return
@@ -28,7 +29,8 @@ const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObje
 	if(elem.children.length === 0) return
 	if(!document.querySelectorAll('.pdocrud-data-row')[0].children[1]) return
 
-	const phase = Number(window.location.search.split(/=/)[1]) || 0
+	const rawPhase = window.location.search.split(/=/)[1]
+	const phase = Number(rawPhase) || 0
 
 	const h1 = document.querySelector(".panel-title") as HTMLHeadingElement
 	h1.textContent = "Controle de fases"
@@ -41,6 +43,7 @@ const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObje
 	setSearchTrim()
 	configureDatepickers()
 	configureAddressVerifiedColumn()
+	configureCancelInvoiceColumn()
 	configureReadyForShipColumn()
 	configureSellercentralColumn()
 	setConditionalStyling()
@@ -48,7 +51,7 @@ const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObje
 	configureDeliveryMethodField()
 	setTrackingCodeUpdateButton()
 	setInvoiceNumberUpdateButton()
-	setBlacklistIcon(phase)
+	setBlacklistIcon(phase, rawPhase)
 	if(phase === 0) setInventoryIcon()
 	if(phase < 7 && (phase !== 6.2 && phase !== 6.21)) setDeadlineColumn(phase)
 	if(phase >= 6.2 && phase < 6.3) setSendEmailColumn(phase)
