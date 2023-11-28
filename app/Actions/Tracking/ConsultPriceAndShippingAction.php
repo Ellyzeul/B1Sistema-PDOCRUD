@@ -9,12 +9,12 @@ class ConsultPriceAndShippingAction
 {
     public function handle(Request $request)
     {
-		$orderId = $request->input('order_id');
-		$originId = $request->input('origin_id');
-		$clientPostalCode = $request->input('client_postal_code');
-		$weight = $request->input('weight') ?? null;        
+			$orderId = $request->input('order_id');
+			$originId = $request->input('origin_id');
+			$clientPostalCode = $request->input('client_postal_code');
+			$weight = $request->input('weight') ?? null;        
 
-        return $this->consultPriceAndShipping($originId, $orderId, $clientPostalCode, $weight);
+      return $this->consultPriceAndShipping($originId, $orderId, $clientPostalCode, $weight);
     }
 
     private function consultPriceAndShipping(string $originId, string $orderId, string $clientPostalCode, float | null $weight)

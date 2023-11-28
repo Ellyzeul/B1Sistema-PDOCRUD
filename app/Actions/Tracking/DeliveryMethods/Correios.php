@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\Date;
 
 class Correios
 {
-    use DeliveryMethodsCommon;
+  use DeliveryMethodsCommon;
 
-    public function fetch(string $trackingCode)
+  public function fetch(string $trackingCode)
 	{	
 		$today = Date::parse(date("Y-m-d H:i:s"));
 
@@ -75,6 +75,7 @@ class Correios
 			'03220' => 'Sedex', 
 			'03204' => 'Sedex Hoje', 
 		];
+
 		$shipping_response = $this->fetchShipping($apikey->token, $originZipCode, $destinyZipCode);
 		$price_response = $this->fetchPrice($apikey->token, $originZipCode, $destinyZipCode, $weight);
 
@@ -136,7 +137,7 @@ class Correios
 
 		$response = Http::withHeaders(["X-locale" => "pt_BR"])
 			->withToken($apiToken)
-			->post("https://api.correios.com.br/prazo/v1/nacional/", [
+			->post("https://api.correios.com.br/prazo/v1/nacional", [
 				'idLote' => '1',
 				'parametrosPrazo' => array_map(fn($serviceCode, $index) => [
 					'coProduto' => $serviceCode,
