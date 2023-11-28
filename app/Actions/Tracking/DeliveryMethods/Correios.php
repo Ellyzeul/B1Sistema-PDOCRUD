@@ -77,11 +77,7 @@ class Correios
 		];
 
 		$shipping_response = $this->fetchShipping($apikey->token, $originZipCode, $destinyZipCode);
-		// var_dump($shipping_response);
-		// die();
 		$price_response = $this->fetchPrice($apikey->token, $originZipCode, $destinyZipCode, $weight);
-		// var_dump($price_response);
-		// die();
 
 		if(!isset($shipping_response) || !isset($price_response)) return [];
 		
