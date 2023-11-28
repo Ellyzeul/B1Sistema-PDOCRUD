@@ -427,8 +427,6 @@ class FileUpload extends Model
 			$addressesFormatted[$item['online_order_number']]['data'] = date('Y-m-d',strtotime($item['order_date']));
 			$skuPrefix = $skuPrefixes[$addressesFormatted[$item['online_order_number']]['country'] . '-' . $item['id_company']];
 
-			unset($addressesFormatted[$item['online_order_number']]['country']);
-
 			if(isset($addressesFormatted[$item['online_order_number']]['itens'])) {
 				array_push($addressesFormatted[$item['online_order_number']]['itens'], [
 					"descricao" => $item['isbn'],
@@ -448,6 +446,7 @@ class FileUpload extends Model
 		}
 
 		foreach($addressesFormatted as $order) {
+			unset($order['country']);
 			if(isset($order['itens'])) array_push($orders, $order);
 		}
 

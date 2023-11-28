@@ -37,7 +37,7 @@ class ImportOrdersFromDateAction
       $responses[] = [
         'status' => $status, 
         'content' => $response, 
-        'err_msg' => $errMsg, 
+        'err_msg' => $errMsg ?? null, 
       ];
     }
 
