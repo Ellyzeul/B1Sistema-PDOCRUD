@@ -50,7 +50,7 @@ const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObje
 	setCompaniesIcons()
 	configureDeliveryMethodField()
 	setTrackingCodeUpdateButton()
-	setInvoiceNumberUpdateButton()
+	setInvoiceNumberUpdateButton(phase)
 	setBlacklistIcon(phase, rawPhase)
 	if(phase === 0) setInventoryIcon()
 	if(phase < 7 && (phase !== 6.2 && phase !== 6.21)) setDeadlineColumn(phase)

@@ -484,6 +484,7 @@ class Order extends Model
         $linkFull = $response['retorno']['notasfiscais'][0]['notafiscal']['linkDanfe'];
 
         return [
+            "id_bling" => $idBling,
             "invoice_number" => $invoice_number,
             "serie" => $serie,
             "link_full" => $linkFull, 

@@ -3,7 +3,7 @@ import getTableRows from "./getTableRows"
 import { InvoiceButtons } from "../components/InvoiceButtons"
 import { createRoot } from "react-dom/client"
 
-const setInvoiceNumberUpdateButton = () => {
+const setInvoiceNumberUpdateButton = (phase: number) => {
 	const numberBlingIdx = getColumnFieldIndex("Nº Bling")
 	const orderIdx = getColumnFieldIndex("Nº")
 	const companyIdx = getColumnFieldIndex("Empresa")
@@ -27,6 +27,7 @@ const setInvoiceNumberUpdateButton = () => {
 			orderId={orderId} 
 			companyId={companyId} 
 			sellercentralId={sellercentralId} 
+			idPhase={phase}
 			blingNumber={blingNumber} 
 			invoiceNumber={invoiceNumberInput.value} 
 			invoiceInput={invoiceNumberInput}
