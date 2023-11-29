@@ -5,10 +5,10 @@ import "./style.css"
 import InvoiceButtonsProp from "./types"
 
 export const InvoiceButtons  = (props: InvoiceButtonsProp) => {
-    const { orderId, companyId, blingNumber, invoiceNumber, invoiceInput} = props
+    const { orderId, companyId, sellercentralId, blingNumber, invoiceNumber, invoiceInput} = props
     const [ invoiceData, setInvoiceData ] = useState({} as {
 		invoice_number: string | null,
-        serie: string | null,
+		serie: string | null,
 		link: string | null
 	})
 
@@ -32,24 +32,24 @@ export const InvoiceButtons  = (props: InvoiceButtonsProp) => {
 	const getInvoicePDF: MouseEventHandler = event => {
 		event.preventDefault()
 		if(invoiceData.link) {
-			toast.success("O link será aberto em alguns segundos...")
 			window.open(invoiceData.link, "_blank", "noreferrer")
 			return
 		}
 
+		toast.info("O link será aberto em alguns segundos...")
 		api.get("/api/orders/invoice-link", {
 			params: {
 				"company_id": companyId,
 				"bling_number": blingNumber
 			}			
 		})
-		.then(response => response.data)
-		.then((data) => {
-			setInvoiceData(data)
-			toast.success("O link será aberto em alguns segundos...")
-			window.open(data.link, "_blank", "noreferrer")
-		})
-		.catch(() => toast.error("Erro. Tente novamente ou contate o TI em caso de muitos erros..."))
+			.then(response => response.data)
+			.then(({ invoice_number, serie, link_full, link_simplified }) => {
+				const link = sellercentralIsBR(sellercentralId) ? link_full : link_simplified
+				setInvoiceData({ invoice_number, serie, link })
+				window.open(link, "_blank", "noreferrer")
+			})
+			.catch(() => toast.error("Erro. Tente novamente ou contate o TI em caso de muitos erros..."))
 	}
     
     return (
@@ -68,4 +68,10 @@ export const InvoiceButtons  = (props: InvoiceButtonsProp) => {
 			</button>       
         </>
     )
+}
+
+const sellercentralIsBR = (sellercentralId: string | null) => {
+	const id = Number(sellercentralId)
+
+	return [0, 1, 5, 6, 9, 10].findIndex(isBR => isBR === id) !== -1
 }
