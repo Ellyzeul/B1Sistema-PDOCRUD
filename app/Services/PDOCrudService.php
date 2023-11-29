@@ -36,7 +36,6 @@ class PDOCrudService
 		"ready_to_6_2" => "Pronto para 6.2",
 		"accepted" => "Aceito",
 		"shipping_box_number" => "Nº da caixa",
-		"status_on_shipping_box" => "Status na caixa",
 		"cancel_invoice" => "NF cancelada",
 		"weight" => "Peso", 
 
@@ -57,7 +56,7 @@ class PDOCrudService
 		"id_company" => ["general", "Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "aceitar-fnac", "cancelar-nf"],
 		"id_sellercentral" => ["general", "Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "aceitar-fnac", "cancelar-nf"],
 		"id_phase" => ["general", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "cancelar-nf"],
-		"invoice_number" => ["general", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "cancelar-nf"],
+		"invoice_number" => ["general", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "4.1", "4.11", "4.2", "4.21", "cancelar-nf"],
 		"online_order_number" => ["general", "Pré-0", "0.0", "1.1", "1.2" ,"1.3", "1.4", "1.5", "2.0", "2.1", "2.11", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2", "5.3", "5.4", "5.5", "6.1", "6.2", "6.21", "7.0", "8.1", "8.12", "8.13", "8.2", "8.3", "8.4", "8.5", "8.6", "não-verificado", "não-enviado", "aceitar-fnac", "cancelar-nf"],
 		"bling_number" => ["general", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "4.1", "4.2", "6.2", "6.21", "não-verificado", "não-enviado", "cancelar-nf"],
 		"order_date" => ["general", "Pré-0", "2.1", "2.3", "3.1", "3.2", "4.1", "4.2", "não-verificado", "não-enviado"],
@@ -79,7 +78,6 @@ class PDOCrudService
 		"ready_to_6_2" => ["general", "6.1"],
 		"accepted" => ["general", "aceitar-fnac"],
 		"shipping_box_number" => ["general", "4.1", "4.2"],
-		"status_on_shipping_box" => ["general", "4.1", "4.2"],
 		"cancel_invoice" => ["cancelar-nf"],
 		"weight" => ["general", "2.9", "4.1", "4.11", "4.2", "4.21"],
 
@@ -236,10 +234,6 @@ class PDOCrudService
 			[3, "Aceito"],
 		]) : null;
 		\in_array("shipping_box_number", $columns) ? $crud->bulkCrudUpdate("shipping_box_number", "text") : null;
-		\in_array("status_on_shipping_box", $columns) ? $crud->bulkCrudUpdate("status_on_shipping_box", "select", ['status_on_shipping_box_key' => 'status_on_shipping_box_val'], [
-			[0, "Fora da caixa"],
-			[1, "Na caixa"],
-		]) : null;
 
 		\in_array("delivery_hub", $columns) ? $crud->bulkCrudUpdate("delivery_hub", "text") : null;
 		\in_array("url", $columns) ? $crud->bulkCrudUpdate("url", "text") : null;
@@ -247,12 +241,12 @@ class PDOCrudService
 		\in_array("items", $columns) ? $crud->bulkCrudUpdate("items", "number") : null;
 		\in_array("weight", $columns) ? $crud->bulkCrudUpdate("weight", "number") : null;
 		\in_array("total_cost", $columns) ? $crud->bulkCrudUpdate("total_cost", "number") : null;
-		\in_array("delivered_on_envia_com", $columns) ? $crud->bulkCrudUpdate("delivered_on_envia_com", "select", ['status_on_shipping_box_key' => 'status_on_shipping_box_val'], [
+		\in_array("delivered_on_envia_com", $columns) ? $crud->bulkCrudUpdate("delivered_on_envia_com", "select", ['delivered_on_envia_com_key' => 'delivered_on_envia_com_val'], [
 			[0, "Não"],
 			[1, "Sim"],
 		]) : null;
 		\in_array("hub_ship_date", $columns) ? $crud->bulkCrudUpdate("hub_ship_date", "date") : null;
-		\in_array("status", $columns) ? $crud->bulkCrudUpdate("status", "select", ['status_on_shipping_box_key' => 'status_on_shipping_box_val'], [
+		\in_array("status", $columns) ? $crud->bulkCrudUpdate("status", "select", ['status_key' => 'status_val'], [
 			[0, "Em aberto"],
 			[1, "Encerrado"],
 		]) : null;
