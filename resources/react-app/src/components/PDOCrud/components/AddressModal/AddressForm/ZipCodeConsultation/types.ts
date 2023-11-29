@@ -1,6 +1,6 @@
 export type ZipCodeConsultationProp = {
   bling_postal_code: string,
-  country: string
+  country: string, 
 }
 
 export type AdressData = {

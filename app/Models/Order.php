@@ -241,6 +241,7 @@ class Order extends Model
                 'contact' => $blingContact,
                 'products' => $blingProducts,
             ],
+            'id_bling' => $blingOrder->id,
             'bling_number' => $order->bling_number,
             'buyer_name' => $blingContact->nome,
             'recipient_name' => $blingOrder->transporte->etiqueta->nome ?? "",

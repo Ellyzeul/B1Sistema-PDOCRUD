@@ -5,12 +5,13 @@ import "./style.css"
 import { ShipmentAndPriceProp, CorreiosData, JadlogData } from "./types"
 
 export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
-	const { orderId, address_form_ref, delivery_service, delivery_method, tracking_code } = props
+	const { orderId, address_form_ref, delivery_service, delivery_method, tracking_code, id_bling } = props
 	const inputsRef = useRef<HTMLDivElement | null>(null)
 	const [jadlogData, setJadlogData] = useState({} as JadlogData)
 	const [correiosData, setCorreiosData] = useState({} as CorreiosData)
 	const [jadlogCotations, setjadlogCotations] = useState([] as JSX.Element[])
 	const [correiosCotations, setcorreiosCotations] = useState([] as JSX.Element[])
+	console.log(orderId)
 
 	useEffect(() => {
 		if(jadlogData) JadlogInfo()
@@ -124,6 +125,12 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 					<option value={4.5}>4,5 kg</option>
 					<option value={5}>5 kg</option>
 				</select>
+				<a 
+					className="fa-solid fa-pen" 
+					title="Editar pedido no Bling" 
+					href={`https://www.bling.com.br/vendas.php#edit/${id_bling}`}
+					target="blank"
+				/>
 			</div>
 			<button onClick={handleClick} id={"shipping-button"}>Consultar</button>
 			<div className="correios-content">

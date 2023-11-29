@@ -14,7 +14,7 @@ const AddressForm = (props: AddressFormProp) => {
   const [cotation, setCotation] = useState(1)
   const addressFormRef = useRef(null)
   const observationRef = useRef(null)
-  const { update_data } = bling
+  const { update_data, id_bling } = bling
   const { id_company } = sellercentral
   const items = bling.items.map(({id, sku, title, value, quantity, origin, ncm, cest}, idx) => (
     <div key={idx} className="address-panel-item-row">
@@ -240,6 +240,7 @@ const AddressForm = (props: AddressFormProp) => {
             delivery_service={bling.delivery_service} 
             delivery_method={sellercentral.delivery_method} 
             tracking_code={sellercentral.tracking_code} 
+            id_bling={id_bling} 
           />
         </div>
       </div>

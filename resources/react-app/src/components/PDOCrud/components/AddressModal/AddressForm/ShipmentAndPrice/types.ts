@@ -4,6 +4,7 @@ export type ShipmentAndPriceProp = {
 	delivery_method: string | null,
 	delivery_service: string | null,
 	tracking_code: string | null,
+	id_bling: number,
 } 
 
 export type CorreiosData = {

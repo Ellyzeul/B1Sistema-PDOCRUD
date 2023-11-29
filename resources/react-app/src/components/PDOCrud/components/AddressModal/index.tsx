@@ -12,6 +12,7 @@ const AddressModal = (props: AddressModalProp) => {
   const [{ sellercentral, bling }, setOrderAddress] = useState({} as OrderAddress)
   const [hasAddress, setHasAddress] = useState(true)
   const [addressComponent, setAddressComponent] = useState(<></>)
+  console.log(bling)
 
   const handleOpen: MouseEventHandler = (event) => {
     const { detail } = event
