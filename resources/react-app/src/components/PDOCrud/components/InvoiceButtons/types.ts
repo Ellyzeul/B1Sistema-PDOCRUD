@@ -1,6 +1,7 @@
 type InvoiceButtonsProp = {
     orderId: string | undefined,
     companyId: string | null,
+    sellercentralId: string | null,
     blingNumber: string,
     invoiceNumber: string | null,
     invoiceInput: HTMLInputElement

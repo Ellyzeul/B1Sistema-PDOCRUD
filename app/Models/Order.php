@@ -9,6 +9,8 @@ use App\Mail\AskRating;
 use App\Models\PDOCrudWrapper;
 use App\Models\Services\Bling;
 use App\Models\Services\MercadoLivre;
+use App\Services\ThirdParty\Bling as ThirdPartyBling;
+use Illuminate\Support\Facades\Log;
 
 class Order extends Model
 {
@@ -473,17 +475,19 @@ class Order extends Model
         $data = $this->getInvoiceNumberAndSerie($companyId, $blingNumber);
         $invoice_number = $data['invoice_number'];
         $serie = $data['serie'];
+        $idBling = $data['id_bling'];
 
         $apikey = env($this->blingAPIKeys[$companyId]);
         $response = $this->makeBlingInvoiceRequest($apikey, $invoice_number, $serie);
         if(isset($response['error'])) return $response;
 
-        $link = $response['retorno']['notasfiscais'][0]['notafiscal']['linkDanfe'];
+        $linkFull = $response['retorno']['notasfiscais'][0]['notafiscal']['linkDanfe'];
 
         return [
             "invoice_number" => $invoice_number,
             "serie" => $serie,
-            "link" => $link
+            "link_full" => $linkFull, 
+            "link_simplified" => "https://www.bling.com.br/relatorios/danfe.simplificado.php?idNota1=$idBling"
         ];
     }
 
@@ -491,6 +495,7 @@ class Order extends Model
     {
         $apikey = env($this->blingAPIKeys[$companyId]);
         $response = $this->makeBlingOrderRequest($apikey, $blingNumber);
+        $orderResponse = (new ThirdPartyBling($companyId))->getOrder($blingNumber);
         if(isset($response['error'])) return $response;
 
         $order = $response['retorno']['pedidos'][0]['pedido'];
@@ -502,6 +507,7 @@ class Order extends Model
         $treated_number = $treated_arr[0] ?? null;
 
         return [
+            "id_bling" => $orderResponse->id, 
             "invoice_number" => $treated_number,
             "serie" => $serie
         ];
