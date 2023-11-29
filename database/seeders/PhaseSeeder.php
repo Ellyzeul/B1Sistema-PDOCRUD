@@ -30,6 +30,7 @@ class PhaseSeeder extends Seeder
                 ['id' => '2.2', 'name' => 'Reservado na loja (São Paulo)', 'color' => 'FFFF66'], 
                 ['id' => '2.3', 'name' => 'Comprado Online(Web)', 'color' => 'FFFF00'], 
                 ['id' => '2.4', 'name' => 'Estoque / Expedição', 'color' => 'BF8F00'], 
+                ['id' => '2.41', 'name' => 'Estoque / Expedição (parcial)', 'color' => 'BF8F00'], 
                 ['id' => '2.5', 'name' => 'Estoque / Praça', 'color' => 'BF8F00'], 
                 ['id' => '2.6', 'name' => 'Estoque / Sorocaba', 'color' => 'BF8F00'], 
                 ['id' => '2.7', 'name' => 'Estoque em Reforma', 'color' => 'BF8F00'], 
