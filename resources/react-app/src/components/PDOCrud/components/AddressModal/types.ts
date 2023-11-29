@@ -39,6 +39,7 @@ export type SellercentralAddress = {
 
 export type BlingAddress = {
   update_data: any,
+  id_bling: number,
   bling_number: string,
   buyer_name: string,
   recipient_name: string,
