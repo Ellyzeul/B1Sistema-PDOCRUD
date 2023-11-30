@@ -385,8 +385,8 @@ class FileUpload extends Model
 		$addressesFormatted = [];
 		$orders = [];
 		$sellecentralsToPost = [3, 12];
-		$countries = ['PT' => 'PORTUGAL', 'ES' => 'ESPANHA', 'UK' => 'REINO UNIDO'];
-		$skuPrefixes = ['PT-0' => 'SEL', 'ES-0' => 'SELESP', 'UK-0' => 'SELUK', 'PT-1' => 'B1', 'ES-1' => 'B1ESP', 'UK-1' => 'B1UK'];
+		$countries = ['PT' => 'PORTUGAL', 'ES' => 'ESPANHA', 'UK' => 'REINO UNIDO', 'GB' => 'REINO UNIDO'];
+		$skuPrefixes = ['PT-0' => 'SEL', 'ES-0' => 'SELESP', 'UK-0' => 'SELUK', 'PT-1' => 'B1', 'ES-1' => 'B1ESP', 'UK-1' => 'B1UK', 'GB-1' => 'B1UK'];
 
 		foreach($addressData as $address) {
 			$country = $countries[$address['country']] ?? '';
