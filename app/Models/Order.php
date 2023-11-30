@@ -4,13 +4,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\AskRating;
 use App\Models\PDOCrudWrapper;
 use App\Models\Services\Bling;
-use App\Models\Services\MercadoLivre;
 use App\Services\ThirdParty\Bling as ThirdPartyBling;
-use Illuminate\Support\Facades\Log;
 
 class Order extends Model
 {
@@ -606,7 +602,7 @@ class Order extends Model
         return $response;
     }
 
-    private function getDanfeLink(string $apikey, string | null $invoice_number, string $serie)
+    private function getDanfeLink(string $apikey, string | null $invoice_number, string | null $serie)
     {
         if(!isset($invoice_number)) return null;
         $response = Http::get("https://bling.com.br/Api/v2/notafiscal/$invoice_number/$serie/json/?apikey=$apikey");
