@@ -73,7 +73,7 @@ export const InvoiceButtons  = (props: InvoiceButtonsProp) => {
 			.then(({ id_bling, invoice_number, serie, link_full, link_simplified }) => {
 				const link = sellercentralIsBR(sellercentralId) ? link_full : link_simplified
 				setInvoiceData({ id_bling, invoice_number, serie, link })
-				navigator.clipboard.writeText(`https://www.bling.com.br/notas.fiscais.php?idOrigem=${invoiceData.id_bling}`)
+				navigator.clipboard.writeText(`https://www.bling.com.br/notas.fiscais.php?idOrigem=${id_bling}`)
 				toast.success('Link de criação da nota copiado para sua área de transferência!')
 			})
 			.catch(() => toast.error("Erro. Tente novamente ou contate o TI em caso de muitos erros..."))
