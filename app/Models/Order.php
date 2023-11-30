@@ -475,6 +475,7 @@ class Order extends Model
         $data = $this->getInvoiceNumberAndSerie($companyId, $blingNumber);
         $invoice_number = $data['invoice_number'];
         $serie = $data['serie'];
+        $idInvoice = $data['id_invoice'];
         $idBling = $data['id_bling'];
 
         $apikey = env($this->blingAPIKeys[$companyId]);
@@ -488,7 +489,7 @@ class Order extends Model
             "invoice_number" => $invoice_number,
             "serie" => $serie,
             "link_full" => $linkFull, 
-            "link_simplified" => "https://www.bling.com.br/relatorios/danfe.simplificado.php?idNota1=$idBling"
+            "link_simplified" => "https://www.bling.com.br/relatorios/danfe.simplificado.php?idNota1=$idInvoice"
         ];
     }
 
@@ -509,6 +510,7 @@ class Order extends Model
 
         return [
             "id_bling" => $orderResponse->id, 
+            "id_invoice" => $orderResponse->notaFiscal->id, 
             "invoice_number" => $treated_number,
             "serie" => $serie
         ];

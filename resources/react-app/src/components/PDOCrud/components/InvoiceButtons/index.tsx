@@ -57,11 +57,12 @@ export const InvoiceButtons  = (props: InvoiceButtonsProp) => {
 	const getInvoiceDraft: MouseEventHandler = event => {
 		event.preventDefault()
 		if(invoiceData.id_bling) {
-			window.open(`https://www.bling.com.br/notas.fiscais.php?idOrigem=${invoiceData.id_bling}`, "_blank", "noreferrer")
+			navigator.clipboard.writeText(`https://www.bling.com.br/notas.fiscais.php?idOrigem=${invoiceData.id_bling}`)
+			toast.success('Link de criação da nota copiado para sua área de transferência!')
 			return
 		}
 
-		toast.info("O link será aberto em alguns segundos...")
+		toast.info("O link será copiado em alguns segundos...")
 		api.get("/api/orders/invoice-link", {
 			params: {
 				"company_id": companyId,
@@ -72,7 +73,8 @@ export const InvoiceButtons  = (props: InvoiceButtonsProp) => {
 			.then(({ id_bling, invoice_number, serie, link_full, link_simplified }) => {
 				const link = sellercentralIsBR(sellercentralId) ? link_full : link_simplified
 				setInvoiceData({ id_bling, invoice_number, serie, link })
-				window.open(`https://www.bling.com.br/notas.fiscais.php?idOrigem=${id_bling}`, "_blank", "noreferrer")
+				navigator.clipboard.writeText(`https://www.bling.com.br/notas.fiscais.php?idOrigem=${invoiceData.id_bling}`)
+				toast.success('Link de criação da nota copiado para sua área de transferência!')
 			})
 			.catch(() => toast.error("Erro. Tente novamente ou contate o TI em caso de muitos erros..."))
 	}
@@ -94,8 +96,4 @@ export const InvoiceButtons  = (props: InvoiceButtonsProp) => {
 	)
 }
 
-const sellercentralIsBR = (sellercentralId: string | null) => {
-	const id = Number(sellercentralId)
-
-	return [0, 1, 5, 6, 9, 10].findIndex(isBR => isBR === id) !== -1
-}
+const sellercentralIsBR = (sellercentral: string | null) => sellercentral?.includes('BR')
