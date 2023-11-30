@@ -22,7 +22,7 @@ export const InvoiceButtons  = (props: InvoiceButtonsProp) => {
 		.then(response => response.data)
 		.then(({ id_bling, invoice_number, serie, link_full, link_simplified }) => {
 			const link = sellercentralIsBR(sellercentralId) ? link_full : link_simplified
-			if(id_bling) {
+			if(invoice_number) {
 				setInvoiceData({ id_bling, invoice_number, serie, link })
 				invoiceInput.value = invoice_number
 			}

@@ -456,17 +456,21 @@ class Order extends Model
 
         $data = $this->getInvoiceLink($companyId, $blingNumber);
         $invoice_number = $data['invoice_number'];
+        $idBling = $data['id_bling'];
         $serie = $data['serie'];
-        $link = $data['link'];
+        $linkFull = $data['link_full'];
+        $linkSimplified = $data['link_simplified'];
 
         DB::table('order_control')
             ->where('id', $orderId)
             ->update(['invoice_number' => $invoice_number]);
 
         return [
-                "invoice_number" => $invoice_number,
-                "serie" => $serie,
-                "link" => $link
+            "id_bling" => $idBling,
+            "invoice_number" => $invoice_number,
+            "serie" => $serie,
+            "link_full" => $linkFull,
+            "link_simplified" => $linkSimplified,
         ];
     }
     
@@ -479,10 +483,10 @@ class Order extends Model
         $idBling = $data['id_bling'];
 
         $apikey = env($this->blingAPIKeys[$companyId]);
-        $response = $this->makeBlingInvoiceRequest($apikey, $invoice_number, $serie);
-        if(isset($response['error'])) return $response;
+        $linkDanfe = $this->getDanfeLink($apikey, $invoice_number, $serie);
+        if(isset($linkDanfe['error'])) return $linkDanfe;
 
-        $linkFull = $response['retorno']['notasfiscais'][0]['notafiscal']['linkDanfe'];
+        $linkFull = $linkDanfe;
 
         return [
             "id_bling" => $idBling,
@@ -602,14 +606,15 @@ class Order extends Model
         return $response;
     }
 
-    private function makeBlingInvoiceRequest(string $apikey, string $invoice_number, string $serie)
+    private function getDanfeLink(string $apikey, string | null $invoice_number, string $serie)
     {
+        if(!isset($invoice_number)) return null;
         $response = Http::get("https://bling.com.br/Api/v2/notafiscal/$invoice_number/$serie/json/?apikey=$apikey");
         if(!$response->ok()) return ["error" => [
             ["message" => "Erro na requisição de dados no Bling. Tente novamente mais tarde..."], 
             500
         ]];
 
-        return $response;
+        return $response['retorno']['notasfiscais'][0]['notafiscal']['linkDanfe'];
     }
 }
