@@ -326,6 +326,7 @@ const countryOptions = (
     <option value="NORUEGA">Noruega</option>
     <option value="FILIPINAS">Filipinas</option>
     <option value="POLONIA, REPUBLICA DA">Polônia</option>
+    <option value="PORTO RICO">Porto Rico</option>
     <option value="PORTUGAL">Portugal</option>
     <option value="CATAR">Catar</option>
     <option value="ROMENIA">Romênia</option>
