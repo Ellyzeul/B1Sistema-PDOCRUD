@@ -10,12 +10,12 @@ use App\Actions\Tracking\DeliveryMethods\MercadoLivre;
 
 class UpdateOrInsertOrderTrackingAction
 {
-    public function handle(string $trackingCode, string | null $deliveryMethod)
-    {
-        return $this->updateOrInsertOrderTracking($trackingCode, $deliveryMethod);
-    }
+	public function handle(string $trackingCode, string | null $deliveryMethod)
+  {
+    return $this->updateOrInsertOrderTracking($trackingCode, $deliveryMethod);
+  }
 
-    private function updateOrInsertOrderTracking(string $trackingCode, string | null $deliveryMethod)
+  private function updateOrInsertOrderTracking(string $trackingCode, string | null $deliveryMethod)
 	{
 		if(!isset($this->supportedServices[$deliveryMethod])) return ["Serviço não suportado", 400];
 
@@ -55,7 +55,7 @@ class UpdateOrInsertOrderTrackingAction
 			: ["Erro na atualização", 500];
 	}
 
-    private array $supportedServices = [
+  private array $supportedServices = [
 		"Correios" => true,
 		"Jadlog" => true,
 		"DHL" => true,

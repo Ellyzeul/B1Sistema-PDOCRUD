@@ -1,0 +1,17 @@
+.order-info {
+  grid-column: 3;
+  grid-row: 1;
+  background-color: #f2f4f5;
+}
+
+.borders {
+  border: 1px black solid;
+}
+
+.red-text {
+  color: red;
+}
+
+p, strong {
+  padding-left: 5px;
+}

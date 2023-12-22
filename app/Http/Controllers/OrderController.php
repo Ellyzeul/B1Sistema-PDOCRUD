@@ -58,9 +58,14 @@ class OrderController extends Controller
 		return (new OrderService())->updateCancelInvoice($request);
 	}
 
-	public static function getOrderMessages()
+	public static function getOrderMessages(Request $request)
 	{
-		return (new OrderService())->getOrderMessages();
+		return (new OrderService())->getOrderMessages($request);
+	}
+
+	public static function getOrderChat(Request $request)
+	{
+		return (new OrderService())->getOrderChat($request);
 	}
 
 	public static function postOrderMessage(Request $request)

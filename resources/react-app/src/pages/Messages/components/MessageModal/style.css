@@ -4,8 +4,9 @@
 }
 
 .messages-modal-container {
-  width: 80vw;
-  height: 90vh;
+  /* width: 80vw; */
+  width: 50vw;
+  height: 80vh;
   position: relative;
   background-color: white;
   border-radius: 4px;

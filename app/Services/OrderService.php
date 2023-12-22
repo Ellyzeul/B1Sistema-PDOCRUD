@@ -5,6 +5,7 @@ use App\Actions\Order\ImportOrdersFromDateAction;
 use App\Actions\Order\AcceptFNACOrderAction;
 use App\Actions\Order\GetOrderMessagesAction;
 use App\Actions\Order\GetOrderNumberTotalFromListAction;
+use App\Actions\Order\GetOrderChatAction;
 use App\Actions\Order\PostOrderAddressOnEnviaDotComAction;
 use App\Actions\Order\PostOrderMessageAction;
 use App\Actions\Order\UpdateAddressVerifiedAction;
@@ -57,11 +58,17 @@ class OrderService
     return (new SendOrderToBlingAction())->handle($order, $client, $items, $idCompany);
   }
 
-  public function getOrderMessages()
+  public function getOrderMessages(Request $request)
   {
+    $sellercentral = $request->input('sellercentral');
     \ini_set('max_execution_time', 600);
-    return (new GetOrderMessagesAction())->handle();
+    return (new GetOrderMessagesAction())->handle($sellercentral);
     \ini_set('max_execution_time', 60);
+  }
+
+  public function getOrderChat(Request $request)
+  {
+    return (new GetOrderChatAction())->handle($request);
   }
 
   public function postOrderMessage(Request $request)

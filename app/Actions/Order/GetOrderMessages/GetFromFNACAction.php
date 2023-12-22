@@ -2,42 +2,51 @@
 
 use App\Models\Order;
 use App\Services\ThirdParty\FNAC;
+use App\Actions\Order\Traits\GetOrderMessagesCommon;
 
 class GetFromFNACAction
 {
+  use GetOrderMessagesCommon;
+
   private const ID_SELLERCENTRAL = 8;
+
+  private string $idCompany;
+  private string $region;
+
+  public function __construct(string $region, string $idCompany)
+  {
+    $this->idCompany = $idCompany;
+    $this->region = $region;
+  }
 
   public function handle()
   {
-    $orderNumbers = $this->getOrderNumbers(self::ID_SELLERCENTRAL);
+    // return ["Ainda está em manutenção"];
+    $orderNumbers = ['0FT5KW6VP01XS', '1P8NWPKWJUGPE'];
+    // $orderNumbers = $this->getOrderNumbers(self::ID_SELLERCENTRAL);
+    var_dump($orderNumbers);
+    // $this->getMessages($orderNumbers);
     return $this->getMessages($orderNumbers);
-  }
-
-  private function getOrderNumbers(int $idSellercentral)
-  {
-    $orderNumbers = [];
-    $results = Order::select('online_order_number')
-      ->where('id_sellercentral', $idSellercentral)
-      ->whereRaw('order_date BETWEEN CURDATE() - INTERVAL 60 DAY AND CURDATE()')
-      ->get();
-
-    foreach($results as $result) {
-      array_push($orderNumbers, $result->online_order_number);
-    }
-
-    return $orderNumbers;
   }
 
   private function getMessages(array $orderNumbers)
   {
-    $fnac = new FNAC('pt', 0);
+    // $fnac = new FNAC('pt', 0);
+    $fnac = new FNAC($this->region, $this->idCompany);
     $messages = [];
-
+    var_dump("teste");
     foreach($orderNumbers as $orderNumber) {
       $response = $fnac->messagesQuery(orderId: $orderNumber);
       if(count($response) === 0) continue;
+      // var_dump($orderNumber, $response);
       $messages[$orderNumber] = $this->formatResponse($response, 'order');
+      var_dump("msgs", $messages);
+      // die();
     }
+      
+    $response = $fnac->messagesQuery(orderId: $orderNumber);
+    // var_dump($response);
+    // die();
     $offerMessages = $fnac->messagesQuery(messageType: 'OFFER');
 
     foreach($offerMessages as $message) {
@@ -49,6 +58,9 @@ class GetFromFNACAction
       $messages[$messageId] = $formatted;
     }
 
+    // var_dump($messages, $offerMessages);
+    return $this->writeMessagesInDataBase($messages);
+    // die();    
     return $messages;
   }
 
@@ -73,14 +85,19 @@ class GetFromFNACAction
   {
     $latestMessage = $this->getLatestMessage($response);
 
+    var_dump('last', $latestMessage);
+    // die();
     return [
       'sellercentral' => 'fnac', 
       'company' => 'seline', 
       'type' => $type,
       'to_answer' => [
-        'id' => "$latestMessage->message_id"
+        'id' => "$latestMessage->message_id",
+        'client_id' => '',
       ], 
-      'messages' => $this->formatMessages($response)
+      'has_attachments' => '',
+      'messages' => $this->formatMessages($response),
+      'timestamp' => "$latestMessage->created_at",
     ];
   }
 

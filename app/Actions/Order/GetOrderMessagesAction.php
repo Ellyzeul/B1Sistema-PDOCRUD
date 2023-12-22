@@ -5,25 +5,26 @@ use App\Actions\Order\GetOrderMessages\GetFromMercadoLivreAction;
 
 class GetOrderMessagesAction
 {
-  public function handle()
+  public function handle(string $sellercentral)
   {
     $messagesCollection = [];
     $handlers = [
-      [ 'name' => 'MercadoLivre',  'obj' =>new GetFromMercadoLivreAction() ], 
-      [ 'name' => 'FNAC',  'obj' =>new GetFromFNACAction() ]
+      'mercado-livre-0' => new GetFromMercadoLivreAction(0), 
+      'mercado-livre-1' => new GetFromMercadoLivreAction(1), 
+      'fnac-pt-0' => new GetFromFNACAction('pt', 0),
+      'fnac-es-0' => new GetFromFNACAction('es', 0),
     ];
-    $errors = [];
     
-    foreach($handlers as $handler) {
-      try {
-        $messagesCollection = $messagesCollection + $handler['obj']->handle();
-      }
-      catch(\Exception) {
-        array_push($errors, "Erro ao recuperar as mensagens de: {$handler['name']}");
-      }
+    try {
+      $messagesCollection = $handlers[$sellercentral]->handle();
+    }
+    catch(\Exception) {
+      // return "Erro ao recuperar as mensagens de: $sellercentral";
+      return "Erro ao recuperar as mensagens";
     }
 
-    return $this->mapMessages($messagesCollection);
+    return $messagesCollection;
+    // return $this->mapMessages($messagesCollection);
   }
 
   private function mapMessages(array $messagesCollection)

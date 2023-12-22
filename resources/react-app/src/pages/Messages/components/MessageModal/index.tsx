@@ -37,15 +37,15 @@ const MessageModal = (props: MessageModalProp) => {
 
     setMessagesElements([ mappedElement, ...messagesElements ])
 
-    api.post('/api/orders/order-message', requestBody)
-      .then(response => response.data)
-      .then(response => {
-        console.log(response)
-        if(response.success) return
+    // api.post('/api/orders/order-message', requestBody)
+    //   .then(response => response.data)
+    //   .then(response => {
+    //     console.log(response)
+    //     if(response.success) return
 
-        handleSendError(mappedElement)
-      })
-      .catch(() => handleSendError(mappedElement))
+    //     handleSendError(mappedElement)
+    //   })
+    //   .catch(() => handleSendError(mappedElement))
   }
 
   return (
@@ -93,6 +93,9 @@ const mapMessageToElement = ({ text, from, date }: Message) => (
 )
 
 const getOrderLink = (sellercentralName: string, onlineOrderNumber: string) => {
-  if(sellercentralName === 'fnac') return `https://seller.fnac.pt/compte/vendeur/commande/${onlineOrderNumber}`
-  if(sellercentralName === 'mercado-livre') return `https://www.mercadolivre.com.br/vendas/${onlineOrderNumber}/detalhe?callbackUrl=https%3A%2F%2Fwww.mercadolivre.com.br%2Fvendas%2Fomni%2Flista%3Fplatform.id%3DML%26channel%3Dmarketplace%26filters%3D%26sort%3DDATE_CLOSED_DESC%26page%3D1%26search%3D%26startPeriod%3DWITH_DATE_CLOSED_6M_OLD%26toCurrent%3D%26fromCurrent%3D`
+  if(sellercentralName === 'FNAC-PT' 
+    || sellercentralName === 'FNAC-ES'
+    || sellercentralName === 'FNAC-ES') return `https://seller.fnac.pt/compte/vendeur/commande/${onlineOrderNumber}`
+  if(sellercentralName === 'MercadoLivre-BR') return `https://www.mercadolivre.com.br/vendas/${onlineOrderNumber}/detalhe?callbackUrl=https%3A%2F%2Fwww.mercadolivre.com.br%2Fvendas%2Fomni%2Flista%3Fplatform.id%3DML%26channel%3Dmarketplace%26filters%3D%26sort%3DDATE_CLOSED_DESC%26page%3D1%26search%3D%26startPeriod%3DWITH_DATE_CLOSED_6M_OLD%26toCurrent%3D%26fromCurrent%3D`
 }
+
