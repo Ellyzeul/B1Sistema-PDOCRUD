@@ -8,15 +8,21 @@ const setTrackingCodeUpdateButton = () => {
 	const numberBlingIdx = getColumnFieldIndex("Nº Bling")
 	const orderIdx = getColumnFieldIndex("Nº")
 	const companyIdx = getColumnFieldIndex("Empresa")
+	const orderNumberIdx = getColumnFieldIndex("ORIGEM")
+	const shipDateIdx = getColumnFieldIndex("Data para envio")
+	const sellercentralIdx = getColumnFieldIndex("Canal de venda")
 
-	if(trackingCodeIdx === -1 || numberBlingIdx === -1 || orderIdx === -1 || companyIdx === -1) return
+	if(trackingCodeIdx === -1 || numberBlingIdx === -1 || orderIdx === -1 || companyIdx === -1 || orderNumberIdx === -1 || shipDateIdx === -1 || sellercentralIdx === -1) return
 
 	const rows = getTableRows()
 
 	rows.forEach(row => {
 		const cell = row.cells[trackingCodeIdx]
-		const companyId = row.cells[companyIdx].textContent
+		const orderNumber = row.cells[orderNumberIdx].textContent as string
+		const sellercentral = row.cells[sellercentralIdx].textContent as string
+		const companyId = row.cells[companyIdx].textContent as string
 		const blingNumber = (row.cells[numberBlingIdx].children[0] as HTMLInputElement).value
+		const shipDate = row.cells[shipDateIdx].textContent as string
 		const orderId = row.cells[orderIdx].textContent?.trim()
 		const trackingCodeInput = (cell.children[0] as HTMLInputElement)
 		const container = document.createElement("div")
@@ -50,6 +56,14 @@ const setTrackingCodeUpdateButton = () => {
 		})
 
 		container.appendChild(icon)
+		setChangeTrackingCodeButton(
+			container, 
+			orderNumber.trim(), 
+			sellercentral.trim(), 
+			(companyId as string) === '0' ? 'seline' : 'b1', 
+			trackingCodeInput.value,
+			shipDate.trim(),
+		)
 		cell.appendChild(container)
 	})
 
@@ -57,3 +71,30 @@ const setTrackingCodeUpdateButton = () => {
 }
 
 export default setTrackingCodeUpdateButton
+
+const setChangeTrackingCodeButton = (container: HTMLDivElement, orderNumber: string, sellercentral: string, company: string, trackingNumber: string, shipDate: string) => {
+	const button = document.createElement('i')
+	const dateParts = shipDate.split(' ')[0].split('/')
+	const treatedShipDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`
+
+	button.addEventListener('click', async() => {
+		const { success, reason }: { success: boolean, reason?: string } = await api.post('/api/tracking-code/on-sellercentral', {
+			orderNumber,
+			sellercentral,
+			company,
+			trackingNumber,
+			treatedShipDate,
+		}).then(response => response.data)
+
+		if(success) {
+			toast.success('Rastreio atualizado!')
+		}
+
+		toast.error(`Erro ao atualizar o rastreio: ${reason}`)
+	})
+	button.className = 'fa-solid fa-upload'
+	button.style.padding = '4px 6px'
+	button.style.cursor = 'pointer'
+
+	container.appendChild(button)
+}

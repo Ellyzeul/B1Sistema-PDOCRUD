@@ -196,4 +196,9 @@ class OrderController extends Controller
 	{
 		return (new OrderService())->getOrderNumberTotalFromList($request);
 	}
+
+	public function postTrackingCodeOnSellercentral(Request $request)
+	{
+		return (new OrderService())->postTrackingCodeOnSellercentral($request);
+	}
 }

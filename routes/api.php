@@ -65,6 +65,7 @@ Route::controller(OrderController::class)
         Route::post('/send-bling-order', 'sendOrderToBling');
         Route::post('/ask-rating', 'sendAskRating');
         Route::post('/envia-dot-com-address', 'postOrderAddressOnEnviaDotCom');
+        Route::post('/tracking-code/on-sellercentral', 'postTrackingCodeOnSellercentral');
         Route::patch('/accept-fnac', 'acceptFNACOrder');
         Route::patch('/bling/order', 'putBlingOrder');
         Route::patch('/address-verified', 'updateAddressVerified');
