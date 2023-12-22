@@ -12,6 +12,7 @@ use App\Actions\Order\ReadOrderControlByOrderNumberAction;
 use App\Actions\Order\ReadOrderAddressesByOrderNumberAction;
 use App\Actions\Order\SendOrderToBlingAction;
 use App\Actions\Order\UpdateCancelInvoiceAction;
+use App\Services\ThirdParty\B1Servicos;
 
 class OrderService
 {
@@ -77,5 +78,22 @@ class OrderService
   public function getOrderNumberTotalFromList(Request $request)
   {
     return (new GetOrderNumberTotalFromListAction())->handle($request);
+  }
+
+  public function postTrackingCodeOnSellercentral(Request $request)
+  {
+    $orderNumber = $request->input('orderNumber');
+    $sellercentral = $request->input('sellercentral');
+    $company = $request->input('company');
+    $trackingNumber = $request->input('trackingNumber');
+    $shipDate = $request->input('shipDate');
+
+		return (new B1Servicos())->orderTrackingCodePost(
+      $orderNumber,
+      $sellercentral,
+      $company,
+      $trackingNumber,
+      $shipDate,
+    );
   }
 }

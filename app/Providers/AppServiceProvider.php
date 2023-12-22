@@ -70,7 +70,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Http::macro('b1servicos', function() {
-            return Http::baseUrl('https://servicos.b1sistema.com.br/api');
+            return Http::baseUrl(env('B1SERVICOSURL'));
         });
     }
 }
