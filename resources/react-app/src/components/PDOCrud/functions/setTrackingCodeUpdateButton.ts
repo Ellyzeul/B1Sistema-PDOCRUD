@@ -78,7 +78,7 @@ const setChangeTrackingCodeButton = (container: HTMLDivElement, orderNumber: str
 	const treatedShipDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`
 
 	button.addEventListener('click', async() => {
-		const { success, reason }: { success: boolean, reason?: string } = await api.post('/api/tracking-code/on-sellercentral', {
+		const { success, reason }: { success: boolean, reason?: string } = await api.post('/api/orders/tracking-code/on-sellercentral', {
 			orderNumber,
 			sellercentral,
 			company,
