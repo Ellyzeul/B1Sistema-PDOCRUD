@@ -78,7 +78,7 @@ const setChangeTrackingCodeButton = (container: HTMLDivElement, orderNumber: str
 	const treatedShipDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`
 
 	button.addEventListener('click', async() => {
-		const { success, reason }: { success: boolean, reason?: string } = await api.post('/api/orders/tracking-code/on-sellercentral', {
+		const { success, reason, errorPayload }: { success: boolean, reason?: string, errorPayload?: {} } = await api.post('/api/orders/tracking-code/on-sellercentral', {
 			orderNumber,
 			sellercentral,
 			company,
@@ -90,7 +90,7 @@ const setChangeTrackingCodeButton = (container: HTMLDivElement, orderNumber: str
 			toast.success('Rastreio atualizado!')
 		}
 
-		toast.error(`Erro ao atualizar o rastreio: ${reason}`)
+		toast.error(`Erro ao atualizar o rastreio: ${reason}. ${!!errorPayload ? JSON.stringify(errorPayload) : ''}`)
 	})
 	button.className = 'fa-solid fa-upload'
 	button.style.padding = '4px 6px'
