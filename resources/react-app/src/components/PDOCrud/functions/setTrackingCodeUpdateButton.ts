@@ -20,7 +20,7 @@ const setTrackingCodeUpdateButton = () => {
 		const cell = row.cells[trackingCodeIdx]
 		const orderNumber = row.cells[orderNumberIdx].textContent as string
 		const sellercentral = row.cells[sellercentralIdx].textContent as string
-		const companyId = row.cells[companyIdx].textContent as string
+		const companyId = row.cells[companyIdx].textContent?.trim()
 		const blingNumber = (row.cells[numberBlingIdx].children[0] as HTMLInputElement).value
 		const shipDate = row.cells[shipDateIdx].textContent as string
 		const orderId = row.cells[orderIdx].textContent?.trim()
@@ -60,7 +60,7 @@ const setTrackingCodeUpdateButton = () => {
 			container, 
 			orderNumber.trim(), 
 			sellercentral.trim(), 
-			(companyId as string) === '0' ? 'seline' : 'b1', 
+			companyId === '0' ? 'seline' : 'b1', 
 			trackingCodeInput.value,
 			shipDate.trim(),
 		)
