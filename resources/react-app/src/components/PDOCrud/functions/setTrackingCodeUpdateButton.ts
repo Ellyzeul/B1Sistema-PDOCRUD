@@ -83,7 +83,7 @@ const setChangeTrackingCodeButton = (container: HTMLDivElement, orderNumber: str
 			sellercentral,
 			company,
 			trackingNumber,
-			treatedShipDate,
+			shipDate: treatedShipDate,
 		}).then(response => response.data)
 
 		if(success) {
