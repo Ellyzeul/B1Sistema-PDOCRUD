@@ -2,8 +2,9 @@ import { toast } from "react-toastify"
 import api from "../../../services/axios"
 import getColumnFieldIndex from "./getColumnFieldIndex"
 import getTableRows from "./getTableRows"
+import { MutableRefObject } from "react"
 
-const setTrackingCodeUpdateButton = () => {
+const setTrackingCodeUpdateButton = (refTrackingMethodModal: MutableRefObject<HTMLDivElement | null>, refOnlineOrderNumber: MutableRefObject<null>) => {
 	const trackingCodeIdx = getColumnFieldIndex("Código de rastreio")
 	const numberBlingIdx = getColumnFieldIndex("Nº Bling")
 	const orderIdx = getColumnFieldIndex("Nº")
@@ -63,6 +64,8 @@ const setTrackingCodeUpdateButton = () => {
 			companyId === '0' ? 'seline' : 'b1', 
 			trackingCodeInput.value,
 			shipDate.trim(),
+			refTrackingMethodModal,
+			refOnlineOrderNumber,
 		)
 		cell.appendChild(container)
 	})
@@ -72,12 +75,30 @@ const setTrackingCodeUpdateButton = () => {
 
 export default setTrackingCodeUpdateButton
 
-const setChangeTrackingCodeButton = (container: HTMLDivElement, orderNumber: string, sellercentral: string, company: string, trackingNumber: string, shipDate: string) => {
+const setChangeTrackingCodeButton = (container: HTMLDivElement, orderNumber: string, sellercentral: string, company: string, trackingNumber: string, shipDate: string, refTrackingMethodModal: MutableRefObject<HTMLDivElement | null>, refOnlineOrderNumber: MutableRefObject<null>) => {
 	const button = document.createElement('i')
 	const dateParts = shipDate.split(' ')[0].split('/')
 	const treatedShipDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`
 
 	button.addEventListener('click', async() => {
+		if(sellercentralsToOpenModal.includes(sellercentral)) {
+			if(!refTrackingMethodModal || !refOnlineOrderNumber.current) {
+				toast.error('Tente novamente...')
+				return
+			}
+			const trackingMethodModal = refTrackingMethodModal.current as HTMLDivElement
+
+			(refOnlineOrderNumber.current as HTMLSpanElement).textContent = JSON.stringify({
+				orderNumber,
+				company,
+				sellercentral,
+				trackingNumber,
+				shipDate: treatedShipDate,
+			})
+			trackingMethodModal.classList.remove('close')
+
+			return
+		}
 		const { success, reason, errorPayload }: { success: boolean, reason?: string, errorPayload?: {} } = await api.post('/api/orders/tracking-code/on-sellercentral', {
 			orderNumber,
 			sellercentral,
@@ -98,3 +119,10 @@ const setChangeTrackingCodeButton = (container: HTMLDivElement, orderNumber: str
 
 	container.appendChild(button)
 }
+
+const sellercentralsToOpenModal = [
+	'Amazon-US',
+	'Amazon-ES',
+	'Amazon-CA',
+	'Amazon-UK',
+]

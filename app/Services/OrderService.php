@@ -87,6 +87,7 @@ class OrderService
     $company = $request->input('company');
     $trackingNumber = $request->input('trackingNumber');
     $shipDate = $request->input('shipDate');
+    $customService = $request->input('customService');
 
 		return (new B1Servicos())->orderTrackingCodePost(
       $orderNumber,
@@ -94,6 +95,7 @@ class OrderService
       $company,
       $trackingNumber,
       $shipDate,
+      $customService,
     );
   }
 }

@@ -22,7 +22,7 @@ import setBlacklistIcon from "./setBlacklistIcon";
 import setInventoryIcon from "./setInventoryIcon";
 import configureCancelInvoiceColumn from "./configureCancelInvoiceColumn";
 
-const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObject<null>, refModalId: MutableRefObject<null>, refOnlineOrderNumber: MutableRefObject<null>, refURLInput: MutableRefObject<null>) => {
+const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObject<null>, refModalId: MutableRefObject<null>, refOnlineOrderNumber: MutableRefObject<null>, refURLInput: MutableRefObject<null>, refTrackingMethodModal: MutableRefObject<HTMLDivElement | null>) => {
 	if(!elemRef.current) return
 	const elem = elemRef.current as HTMLDivElement
 
@@ -38,7 +38,7 @@ const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObje
 	setCurrencySymbols()
 	setOpenModalEvent(refModal, refModalId, refOnlineOrderNumber, refURLInput)
 	setTopScrollBar(document.querySelector(".panel-body") as HTMLDivElement)
-	setConfigurationReapply(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput)
+	setConfigurationReapply(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput, refTrackingMethodModal)
 	configureInvoiceField()
 	setSearchTrim()
 	configureDatepickers()
@@ -49,7 +49,7 @@ const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObje
 	setConditionalStyling()
 	setCompaniesIcons()
 	configureDeliveryMethodField()
-	setTrackingCodeUpdateButton()
+	setTrackingCodeUpdateButton(refTrackingMethodModal, refOnlineOrderNumber)
 	setInvoiceNumberUpdateButton(phase)
 	setBlacklistIcon(phase, rawPhase)
 	if(phase === 0) setInventoryIcon()

@@ -9,12 +9,16 @@ import { NavbarContext } from "../../contexts/Navbar"
 import { UserDataContext } from "../../contexts/UserData"
 import api from "../../services/axios"
 import { PhaseResponse } from "./types"
+import TrackingMethodModal from "../../components/PDOCrud/components/TrackingMethodModal"
+import { TrackingMethodParams } from "../../components/PDOCrud/components/TrackingMethodModal/types"
 
 export const OrdersPage = () => {
 	const refModal= useRef(null)
 	const refModalId = useRef(null)
 	const refOnlineOrderNumber = useRef(null)
 	const refURLInput = useRef(null)
+	const refTrackingMethodModal = useRef(null as HTMLDivElement | null)
+	const trackingMethodInfo = { info: {} } as { info: TrackingMethodParams }
 	const navbarContext = useContext(NavbarContext)
 	const userDataContext = useContext(UserDataContext)
 	const navbarItems = navbarContext[0] as {[key: string]: DropdownProp[]}
@@ -59,12 +63,17 @@ export const OrdersPage = () => {
 				refModalId={refModalId} 
 				refOnlineOrderNumber={refOnlineOrderNumber} 
 				refURLInput={refURLInput} 
+				refTrackingMethodModal={refTrackingMethodModal}
 			/>
 			<SupplierURLModal 
 				refModal={refModal} 
 				refModalId={refModalId} 
 				refOnlineOrderNumber={refOnlineOrderNumber} 
 				refURLInput={refURLInput} 
+			/>
+			<TrackingMethodModal 
+				refTrackingMethodModal={refTrackingMethodModal}
+				refOnlineOrderNumber={refOnlineOrderNumber}
 			/>
 			<ToastContainer/>
 		</>
