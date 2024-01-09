@@ -107,11 +107,9 @@ const setChangeTrackingCodeButton = (container: HTMLDivElement, orderNumber: str
 			shipDate: treatedShipDate,
 		}).then(response => response.data)
 
-		if(success) {
-			toast.success('Rastreio atualizado!')
-		}
-
-		toast.error(`Erro ao atualizar o rastreio: ${reason}. ${!!errorPayload ? JSON.stringify(errorPayload) : ''}`)
+		success
+			? toast.success('Rastreio atualizado!')
+			: toast.error(`Erro ao atualizar o rastreio: ${reason}. ${!!errorPayload ? JSON.stringify(errorPayload) : ''}`)
 	})
 	button.className = 'fa-solid fa-upload'
 	button.style.padding = '4px 6px'

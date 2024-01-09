@@ -24,6 +24,7 @@
   justify-content: space-evenly;
   align-items: center;
   flex-direction: column;
+  position: relative;
 }
 
 #tracking-method-form > p {
@@ -41,4 +42,18 @@
   border-radius: 4px;
   background-color: rgb(30, 155, 30);
   color: white;
+}
+
+.tracking-method-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  padding: 2px 4px;
+  border-radius: 100%;
+  transition: 125ms;
+  cursor: pointer;
+}
+.tracking-method-close:hover {
+  color: white;
+  background-color: black;
 }

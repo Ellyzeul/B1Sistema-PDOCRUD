@@ -17,7 +17,7 @@ const TrackingMethodModal = (props: TrackingMethodModalProp) => {
       (refOnlineOrderNumber.current as HTMLSpanElement).textContent?.trim() as string
     )
 
-    toast.loading('Processando...')
+    const loadingId = toast.loading('Processando...')
     
     const { success, reason, errorPayload }: { success: boolean, reason?: string, errorPayload?: {} } = await api.post('/api/orders/tracking-code/on-sellercentral', {
 			orderNumber,
@@ -28,11 +28,18 @@ const TrackingMethodModal = (props: TrackingMethodModalProp) => {
       customService: trackingMethod,
 		}).then(response => response.data)
 
-		if(success) {
-			toast.success('Rastreio atualizado!')
-		}
+    toast.dismiss(loadingId)
 
-		toast.error(`Erro ao atualizar o rastreio: ${reason}. ${!!errorPayload ? JSON.stringify(errorPayload) : ''}`)
+		success
+		  ? toast.success('Rastreio atualizado!')
+      : toast.error(`Erro ao atualizar o rastreio: ${reason}. ${!!errorPayload ? JSON.stringify(errorPayload) : ''}`)
+
+    modal.classList.add('close')
+  }
+
+  const handleClose = () => {
+    if(!refTrackingMethodModal.current) return
+    const modal = refTrackingMethodModal.current as HTMLDivElement
 
     modal.classList.add('close')
   }
@@ -43,6 +50,7 @@ const TrackingMethodModal = (props: TrackingMethodModalProp) => {
         <p>Serviço de entrega</p>
         <input type="text" ref={refInput} />
         <button onClick={handleClick}>Enviar</button>
+        <i className="fa-solid fa-xmark tracking-method-close" onClick={handleClose}/>
       </div>
     </div>
   )
