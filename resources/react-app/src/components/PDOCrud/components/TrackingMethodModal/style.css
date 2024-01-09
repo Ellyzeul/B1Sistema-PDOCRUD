@@ -1,0 +1,44 @@
+#tracking-method-modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  background-color: #000000AA;
+  z-index: 300;
+  overflow: none;
+}
+
+#tracking-method-modal.close {
+  display: none;
+}
+
+#tracking-method-form {
+  width: 40vw;
+  height: 50vh;
+  background-color: white;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+}
+
+#tracking-method-form > p {
+  padding: 20px 0;
+  user-select: none;
+}
+
+#tracking-method-form > input {
+  width: 80%;
+}
+
+#tracking-method-form > button {
+  padding: 6px 8px;
+  border: none;
+  border-radius: 4px;
+  background-color: rgb(30, 155, 30);
+  color: white;
+}

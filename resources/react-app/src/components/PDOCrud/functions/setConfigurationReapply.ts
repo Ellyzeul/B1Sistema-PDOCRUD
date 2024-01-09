@@ -2,7 +2,7 @@ import { MutableRefObject } from "react"
 import configurePage from "./configurePage"
 import getTableHeaders from "./getTableHeaders"
 
-const setConfigurationReapply = (elemRef: MutableRefObject<null>, refModal: MutableRefObject<null>, refModalId: MutableRefObject<null>, refOnlineOrderNumber: MutableRefObject<null>, refURLInput: MutableRefObject<null>) => {
+const setConfigurationReapply = (elemRef: MutableRefObject<null>, refModal: MutableRefObject<null>, refModalId: MutableRefObject<null>, refOnlineOrderNumber: MutableRefObject<null>, refURLInput: MutableRefObject<null>, refTrackingMethodModal: MutableRefObject<HTMLDivElement | null>) => {
 	const saveBtn = document.querySelector(".pdocrud-button-save") as HTMLAnchorElement
 	const searchBtn = document.querySelector("#pdocrud_search_btn") as HTMLAnchorElement
 	const loadGif = document.querySelector("#pdocrud-ajax-loader") as HTMLDivElement
@@ -15,7 +15,7 @@ const setConfigurationReapply = (elemRef: MutableRefObject<null>, refModal: Muta
 			applyConfigsAfterTimeout()
 			return
 		}
-		configurePage(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput)
+		configurePage(elemRef, refModal, refModalId, refOnlineOrderNumber, refURLInput, refTrackingMethodModal)
 	}, 100)
 
 	saveBtn.onclick = () => applyConfigsAfterTimeout()

@@ -5,7 +5,7 @@ import { PDOCrudProp } from "./types"
 import "./style.css"
 
 export const PDOCrud = (props: PDOCrudProp) => {
-	const { refModal, refModalId, refOnlineOrderNumber, refURLInput } = props
+	const { refModal, refModalId, refOnlineOrderNumber, refURLInput, refTrackingMethodModal } = props
 	const [rawHTML, setRawHTML] = useState("")
 	const elemRef = useRef(null)
 
@@ -21,7 +21,8 @@ export const PDOCrud = (props: PDOCrudProp) => {
 		refModal,
 		refModalId,
 		refOnlineOrderNumber,
-		refURLInput
+		refURLInput,
+		refTrackingMethodModal,
 	)
 
 	useEffect(() => {
