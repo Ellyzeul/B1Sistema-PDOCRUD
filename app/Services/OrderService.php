@@ -12,7 +12,9 @@ use App\Actions\Order\ReadOrderControlByOrderNumberAction;
 use App\Actions\Order\ReadOrderAddressesByOrderNumberAction;
 use App\Actions\Order\SendOrderToBlingAction;
 use App\Actions\Order\UpdateCancelInvoiceAction;
+use App\Models\Order;
 use App\Services\ThirdParty\B1Servicos;
+use Illuminate\Support\Facades\DB;
 
 class OrderService
 {
@@ -87,7 +89,7 @@ class OrderService
     $company = $request->input('company');
     $trackingNumber = $request->input('trackingNumber');
     $shipDate = $request->input('shipDate');
-    $customService = $request->input('customService');
+    $service = $request->input('service') ?? $this->getOrderDeliveryMethod($orderNumber);
 
 		return (new B1Servicos())->orderTrackingCodePost(
       $orderNumber,
@@ -95,7 +97,21 @@ class OrderService
       $company,
       $trackingNumber,
       $shipDate,
-      $customService,
+      $service,
     );
+  }
+
+  private function getOrderDeliveryMethod(string $orderNumber)
+  {
+    $deliveryMethodId = Order::select('id_delivery_method')
+      ->where('online_order_number', $orderNumber)
+      ->first()
+      ->id_delivery_method;
+
+    return DB::table('delivery_methods')
+      ->select('name')
+      ->where('id', $deliveryMethodId)
+      ->first()
+      ->name;
   }
 }
