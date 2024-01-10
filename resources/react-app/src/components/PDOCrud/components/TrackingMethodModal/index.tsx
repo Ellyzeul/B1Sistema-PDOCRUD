@@ -25,7 +25,7 @@ const TrackingMethodModal = (props: TrackingMethodModalProp) => {
 			company,
 			trackingNumber,
 			shipDate,
-      customService: trackingMethod,
+      service: trackingMethod,
 		}).then(response => response.data)
 
     toast.dismiss(loadingId)

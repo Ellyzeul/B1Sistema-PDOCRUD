@@ -11,7 +11,7 @@ class B1Servicos
     return $response->object();
   }
 
-  public function orderTrackingCodePost(string $orderNumber, string $sellercentral, string $company, string $trackingNumber, string $shipDate, ?string $customService)
+  public function orderTrackingCodePost(string $orderNumber, string $sellercentral, string $company, string $trackingNumber, string $shipDate, string $service)
   {
     $response = Http::b1servicos()->post('/order/tracking-code', [
       'orderNumber' => $orderNumber,
@@ -19,7 +19,7 @@ class B1Servicos
       'company' => $company,
       'trackingNumber' => $trackingNumber,
       'shipDate' => $shipDate,
-      'customService' => $customService,
+      'service' => $service,
     ]);
 
     return $response;
