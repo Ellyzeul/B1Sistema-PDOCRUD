@@ -6,7 +6,7 @@ import ShipmentLabel from "../../../../components/ShipmentLabel"
 
 const ShipmentLabelPage = () => {
   const { order_id } = useParams()
-  const [{ company, id_delivery_method, bling_data }, setLabelParams] = useState({} as ShipmentLabelProp)
+  const [labelParams, setLabelParams] = useState({} as ShipmentLabelProp)
 
   useEffect(() => {
     if(!order_id) return
@@ -20,13 +20,8 @@ const ShipmentLabelPage = () => {
 
   return (
     <>{
-      (id_delivery_method && bling_data)
-        ? <ShipmentLabel 
-            order_id={order_id}
-            company={company}
-            id_delivery_method={id_delivery_method} 
-            bling_data={bling_data} 
-        />
+      (labelParams.id_delivery_method && labelParams.bling_data)
+        ? <ShipmentLabel {...labelParams}/>
         : null
     }</>
   )

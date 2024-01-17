@@ -114,7 +114,7 @@ class Tracking extends Model
 						$row->delivery_method
 					);
 				}
-				catch(Exception $e) {
+				catch(\Exception $e) {
 					$totalErrors+=1;
 					continue;
 				}
@@ -130,7 +130,7 @@ class Tracking extends Model
 						$row->delivery_method
 					);
 				}
-				catch(Exception $e) {
+				catch(\Exception $e) {
 					$totalErrors+=1;
 					continue;
 				}
@@ -489,7 +489,7 @@ class Tracking extends Model
 					"includeDetailedScans" => true
 				]);
 		}
-		catch(Exception $e) {
+		catch(\Exception $e) {
 			return $this->fetchFedex($trackingCode);
 		}
 
@@ -543,7 +543,7 @@ class Tracking extends Model
 					'client_secret' => env('FEDEX_CLIENT_SECRET')
 				]);
 		}
-		catch(Exception $e) {
+		catch(\Exception $e) {
 			$this->generateFedexToken();
 			return;
 		}

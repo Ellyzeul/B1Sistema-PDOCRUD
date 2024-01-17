@@ -65,4 +65,9 @@ class TrackingController extends Controller
 	{
 		return (new TrackingService())->getEnviaDotComShipmentLabel($request);
 	}
+
+	public static function getKanguShipmentLabel(Request $request)
+	{
+		return (new TrackingService())->getKanguShipmentLabel($request);
+	}
 }

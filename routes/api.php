@@ -135,6 +135,7 @@ Route::controller(TrackingController::class)
         Route::get('/consult-zipcode', 'consultPostalCode');
         Route::get('/consult-price-and-shipping', 'consultPriceAndShipping');
         Route::get('/envia-dot-com-shipment-label', 'getEnviaDotComShipmentLabel');
+        Route::get('/kangu-shipment-label', 'getKanguShipmentLabel');
         Route::post('/read-for-excel', 'readForExcel');
         Route::post('/update', 'update');
         Route::post('/update-purchase', 'updatePurchase');

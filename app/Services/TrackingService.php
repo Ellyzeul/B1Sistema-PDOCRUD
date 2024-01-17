@@ -12,6 +12,7 @@ use App\Actions\Tracking\UpdateOrInsertPurchaseTrackingAction;
 use App\Actions\Tracking\ConsultPriceAndShippingAction;
 use App\Actions\Tracking\ConsultPostalCodeAction;
 use App\Actions\Tracking\GetEnviaDotComShipmentLabelAction;
+use App\Services\ThirdParty\Kangu;
 
 class TrackingService
 {
@@ -74,5 +75,30 @@ class TrackingService
     public function getEnviaDotComShipmentLabel(Request $request)
     {
         return (new GetEnviaDotComShipmentLabelAction())->handle($request);
+    }
+
+    public function getKanguShipmentLabel(Request $request)
+    {
+        try {
+            $company = $request->input('company');
+            $code = $request->input('tracking_code');
+            $response = (new Kangu())->getEtiqueta($company, $code);
+        }
+        catch(\Exception $err) {
+            return [
+                'success' => false,
+                'err_msg' => $err,
+            ];
+        }
+
+        if(isset($response->error)) return [
+            'success' => false,
+            'error_msg' => $response->error->mensagem,
+        ];
+
+        return [
+            'success' => true,
+            'content' => "data:application/pdf;base64, {$response->pdf}",
+        ];
     }
 }

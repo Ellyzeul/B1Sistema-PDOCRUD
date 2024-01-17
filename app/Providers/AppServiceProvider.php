@@ -72,5 +72,16 @@ class AppServiceProvider extends ServiceProvider
         Http::macro('b1servicos', function() {
             return Http::baseUrl(env('B1SERVICOSURL'));
         });
+
+        Http::macro('kangu', function(string $company) {
+            $tokens = [
+                'seline' => env('KANGU_TOKEN_SELINE'),
+                'b1' => env('KANGU_TOKEN_B1'),
+            ];
+
+            return Http::baseUrl('https://portal.kangu.com.br/tms/transporte')->withHeaders([
+                'Token' => $tokens[$company]
+            ]);
+        });
     }
 }

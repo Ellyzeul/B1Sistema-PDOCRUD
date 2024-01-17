@@ -56,7 +56,7 @@ class Order extends Model
     public function getShipmentLabelData(string $orderId)
     {
         $order = DB::table('order_control')
-            ->select('id_company', 'bling_number', 'id_delivery_method')
+            ->select('id_company', 'bling_number', 'id_delivery_method', 'tracking_code')
             ->where('id', $orderId)
             ->first();
         $company = DB::table('companies')
@@ -72,6 +72,7 @@ class Order extends Model
         return [
             'company' => $company, 
             'id_delivery_method' => $order->id_delivery_method, 
+            'tracking_code' => $order->tracking_code,
             'bling_data' => $blingOrder
         ];
     }
