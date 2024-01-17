@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ShipmentLabelProp } from "../type"
 import api from "../../../services/axios"
 
@@ -8,15 +8,17 @@ const KanguLabel = (props: ShipmentLabelProp) => {
   const [placeholder, setPlaceholder] = useState('Carregando...')
   const companyName = companiesNames[id]
 
-  api.get(`/api/tracking/kangu-shipment-label?tracking_code=${tracking_code}&company=${companyName}`)
-    .then(response => response.data)
-    .then(response => {
-      console.log(response)
-      if(!response.success) return setPlaceholder(response.error_msg)
-      const { content } = response
-
-      setPdfUrl(content)
-    })
+  useEffect(() => {
+    api.get(`/api/tracking/kangu-shipment-label?tracking_code=${tracking_code}&company=${companyName}`)
+      .then(response => response.data)
+      .then(response => {
+        console.log(response)
+        if(!response.success) return setPlaceholder(response.error_msg)
+        const { content } = response
+  
+        setPdfUrl(content)
+      })
+  }, [])
 
   return (
     <>{
