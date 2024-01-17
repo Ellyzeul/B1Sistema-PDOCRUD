@@ -9,6 +9,7 @@ export type ShipmentLabelProp = {
     municipal_registration: string
   }, 
   id_delivery_method: number, 
+  tracking_code: string, 
   bling_data: BlingData
 }
 
