@@ -125,7 +125,7 @@
 .address-panel-items-header {
   width: 100%;
   display: grid;
-  grid-template-columns: 40% 24% 10% 13% 13%;
+  grid-template-columns: 40% 24% 5% 10% 8% 13%;
   border-bottom: 1px solid black;
 }
 
@@ -135,7 +135,7 @@
   margin: 4px 0;
   border-bottom: 1px solid rgb(123, 123, 123);
   display: grid;
-  grid-template-columns: 40% 24% 10% 13% 13%;
+  grid-template-columns: 40% 24% 5% 10% 8% 13%;
 }
 .address-panel-item-row > div {
   width: 100%;
