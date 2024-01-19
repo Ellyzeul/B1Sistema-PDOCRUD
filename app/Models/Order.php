@@ -418,7 +418,7 @@ class Order extends Model
         ], 200];
     }
 
-    public function updateDeliveryMethod(string $companyId, string $orderId, string $blingNumber)
+    public function updateTrackingService(string $companyId, string $orderId, string $blingNumber)
     {
         $apikey = env($this->blingAPIKeys[$companyId]);
 

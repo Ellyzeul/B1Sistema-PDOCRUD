@@ -12,6 +12,7 @@ use App\Actions\Order\ReadOrderControlByOrderNumberAction;
 use App\Actions\Order\ReadOrderAddressesByOrderNumberAction;
 use App\Actions\Order\SendOrderToBlingAction;
 use App\Actions\Order\UpdateCancelInvoiceAction;
+use App\Actions\Order\UpdateDeliveryMethodAction;
 use App\Models\Order;
 use App\Services\ThirdParty\B1Servicos;
 use Illuminate\Support\Facades\DB;
@@ -80,6 +81,11 @@ class OrderService
   public function getOrderNumberTotalFromList(Request $request)
   {
     return (new GetOrderNumberTotalFromListAction())->handle($request);
+  }
+
+  public function updateDeliveryMethod(Request $request)
+  {
+    return (new UpdateDeliveryMethodAction())->handle($request);
   }
 
   public function postTrackingCodeOnSellercentral(Request $request)

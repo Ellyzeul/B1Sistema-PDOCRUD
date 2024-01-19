@@ -22,6 +22,7 @@ const AddressForm = (props: AddressFormProp) => {
       <div>{sku}</div>
       <input type="text" name="item_quantity" defaultValue={quantity} data-id={id} />
       <input type="text" name="item_value" defaultValue={(value || 0).toFixed(2)} data-id={id} />
+      <input type="text" name="item_weight" defaultValue={'0'} data-id={id} />
       <input name="item_id" defaultValue={id} style={{display: 'none'}} />
       <input name="item_title" defaultValue={title} style={{display: 'none'}} />
       <input name="item_sku" defaultValue={sku} style={{display: 'none'}} />
@@ -217,6 +218,7 @@ const AddressForm = (props: AddressFormProp) => {
           <strong>SKU</strong>
           <strong>Qnt</strong>
           <strong>Valor</strong>
+          <strong>Peso</strong>
           <strong>Total</strong>
         </div>
         {items}

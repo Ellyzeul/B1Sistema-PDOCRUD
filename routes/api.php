@@ -72,7 +72,8 @@ Route::controller(OrderController::class)
         Route::patch('/cancel-invoice', 'updateCancelInvoice');
         Route::patch('/read-for-ship', 'updateReadForShip');
         Route::patch('/traking-id', 'updateTrackingCode');
-        Route::patch('/traking-service', 'updateDeliveryMethod');
+        Route::patch('/traking-service', 'updateTrackingService');
+        Route::patch('/delivery-method', 'updateDeliveryMethod');
         Route::patch('/invoice-number', 'updateInvoiceNumber');
     });
 

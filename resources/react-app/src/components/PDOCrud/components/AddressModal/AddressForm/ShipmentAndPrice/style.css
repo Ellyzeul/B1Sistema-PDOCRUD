@@ -72,6 +72,12 @@
 .unavailable {
 	color: rgb(174, 174, 174);
 }
+.available {
+	cursor: pointer;
+}
+.available:hover {
+	opacity: 0.8;
+}
 
 .correios-content > div{
 	margin-top: 20px;

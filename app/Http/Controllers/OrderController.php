@@ -144,14 +144,14 @@ class OrderController extends Controller
 		return $response;
 	}
 
-	public static function updateDeliveryMethod(Request $request)
+	public static function updateTrackingService(Request $request)
 	{
 		$order = new Order();
 
 		$companyId = $request->input('company_id');
 		$orderId = $request->input('order_id');
 		$blingNumber = $request->input('bling_number');
-		$response = $order->updateDeliveryMethod($companyId, $orderId, $blingNumber);
+		$response = $order->updateTrackingService($companyId, $orderId, $blingNumber);
 
 		return $response;
 	}
@@ -200,5 +200,10 @@ class OrderController extends Controller
 	public function postTrackingCodeOnSellercentral(Request $request)
 	{
 		return (new OrderService())->postTrackingCodeOnSellercentral($request);
+	}
+
+	public function updateDeliveryMethod(Request $request)
+	{
+		return (new OrderService())->updateDeliveryMethod($request);
 	}
 }

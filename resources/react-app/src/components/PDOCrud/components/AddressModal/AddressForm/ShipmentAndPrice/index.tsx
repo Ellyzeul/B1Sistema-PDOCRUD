@@ -11,11 +11,10 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 	const [correiosData, setCorreiosData] = useState({} as CorreiosData)
 	const [jadlogCotations, setjadlogCotations] = useState([] as JSX.Element[])
 	const [correiosCotations, setcorreiosCotations] = useState([] as JSX.Element[])
-	console.log(orderId)
 
 	useEffect(() => {
-		if(jadlogData) JadlogInfo()
-		if(correiosData) CorreiosInfo()
+		if(jadlogData) mapJadlog()
+		if(correiosData) mapCorreios()
 	}, [jadlogData, correiosData])
 
 			
@@ -42,14 +41,31 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 		})
 	}
 
-	const CorreiosInfo = () => {
+	const handleServiceClick = (order_id: string, delivery_method: string, service_name: string) => {
+		api.patch('/api/orders/delivery-method', { order_id, delivery_method, service_name })
+			.then(response => response.data)
+			.then(({ success, error_msg, msg }) => {
+				if(!success) {
+					toast.error(error_msg)
+					return
+				}
+
+				toast.success(msg)
+			})
+	}
+
+	const mapCorreios = () => {
 		const content = Object.keys(correiosData).map(service => {
 			const { shipping_error_msg, price_error_msg, service_name, delivery_expected_date, max_date, price } = correiosData[service]
+			const unavailable = correiosData && (shipping_error_msg || price_error_msg)
 
-			if(correiosData && ((shipping_error_msg || price_error_msg) || !(delivery_expected_date && max_date))) return(<></>)
+			if(unavailable || (correiosData && !(delivery_expected_date && max_date))) return(<></>)
 
 			return (
-				<div className={correiosData && (shipping_error_msg || price_error_msg) ? "unavailable" : ""}>
+				<div 
+					className={unavailable ? "unavailable" : "available"} 
+					onClick={unavailable ? () => {} : () => handleServiceClick(orderId, 'correios', service_name)}
+				>
 					<strong>{service_name}</strong>
 					<div>
 						<strong>Prazo: </strong>
@@ -69,13 +85,16 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 		setcorreiosCotations(content)
 	}
 
-	const JadlogInfo = () => {
+	const mapJadlog = () => {
 		const { error_msg, price, max_date } = jadlogData
 
 		if(!(price || max_date || error_msg)) return
 
 		const content = (
-			<div className={error_msg ? "unavailable" : ""}>
+			<div 
+				className={error_msg ? "unavailable" : "available"} 
+				onClick={error_msg ? () => {} : () => handleServiceClick(orderId, 'jadlog', '.Package')}
+			>
 				<strong>Jadlog</strong>
 				<div><strong>Custo: </strong>R$ {price ? price.toFixed(2) : '--'}</div>
 				<div><strong>Prazo: </strong> {max_date ? `${max_date} dias úteis` : '--'}</div>
@@ -114,23 +133,17 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 			<div className="label-select-container">
 				<label htmlFor="weight">Peso:</label>
 				<select name="weight" defaultValue={1}>
-					<option value={0.5}>0,5 kg</option>
-					<option value={1}>1 kg</option>
-					<option value={1.5}>1,5 kg</option>
-					<option value={2}>2 kg</option>
-					<option value={2.5}>2,5 kg</option>
-					<option value={3}>3 kg</option>
-					<option value={3.5}>3,5 kg</option>
-					<option value={4}>4 kg</option>
-					<option value={4.5}>4,5 kg</option>
-					<option value={5}>5 kg</option>
+					{
+						Array.from({length: 10}, (_, index) => 0.5 + index * 0.5)
+							.map(value => <option value={value}>{String(value).replace('.', ',')} Kg</option>)
+					}
 				</select>
 				<a 
 					className="fa-solid fa-pen" 
 					title="Editar pedido no Bling" 
 					href={`https://www.bling.com.br/vendas.php#edit/${id_bling}`}
 					target="blank"
-				/>
+				> </a>
 			</div>
 			<button onClick={handleClick} id={"shipping-button"}>Consultar</button>
 			<div className="correios-content">
