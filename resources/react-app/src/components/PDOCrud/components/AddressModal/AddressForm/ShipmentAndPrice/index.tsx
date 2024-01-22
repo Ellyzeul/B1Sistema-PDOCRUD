@@ -109,6 +109,8 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 
 	const mapKangu = () => {
 		const cotations = [] as JSX.Element[]
+		console.log("Dados da Kangu: ")
+		console.log(kanguData)
 
 		kanguData.forEach(({ vlrFrete, dtPrevEnt, prazoEnt, transp_nome }) => cotations.push(
 			<div 
