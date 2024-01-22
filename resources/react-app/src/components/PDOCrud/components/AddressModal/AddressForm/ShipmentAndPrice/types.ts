@@ -23,3 +23,10 @@ export type JadlogData = {
 	max_date: number | null,
 	error_msg: string | null
 }
+
+export type KanguData = Array<{
+	vlrFrete: number,
+	prazoEnt: string,
+	dtPrevEnt: string,
+	transp_nome: string,
+}>
