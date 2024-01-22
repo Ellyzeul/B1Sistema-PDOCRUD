@@ -2,20 +2,23 @@ import { useEffect, useRef, useState } from "react"
 import { toast } from "react-toastify"
 import api from "../../../../../../services/axios"
 import "./style.css"
-import { ShipmentAndPriceProp, CorreiosData, JadlogData } from "./types"
+import { ShipmentAndPriceProp, CorreiosData, JadlogData, KanguData } from "./types"
 
 export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 	const { orderId, address_form_ref, delivery_service, delivery_method, tracking_code, id_bling } = props
 	const inputsRef = useRef<HTMLDivElement | null>(null)
 	const [jadlogData, setJadlogData] = useState({} as JadlogData)
 	const [correiosData, setCorreiosData] = useState({} as CorreiosData)
+	const [kanguData, setKanguData] = useState([] as KanguData)
 	const [jadlogCotations, setjadlogCotations] = useState([] as JSX.Element[])
+	const [kanguCotations, setKanguCotations] = useState([] as JSX.Element[])
 	const [correiosCotations, setcorreiosCotations] = useState([] as JSX.Element[])
 
 	useEffect(() => {
 		if(jadlogData) mapJadlog()
 		if(correiosData) mapCorreios()
-	}, [jadlogData, correiosData])
+		if(kanguData) mapKangu()
+	}, [jadlogData, correiosData, kanguData])
 
 			
 	const getShipmentAndPrice = (originId: string, clientPostalCode: string, weight: string) => {
@@ -33,7 +36,7 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 
 			setCorreiosData(response["Correios"])
 			setJadlogData(response["Jadlog"])
-			console.log(response)
+			setKanguData(response["Kangu"])
 		})
 		.catch((error) => {
 			toast.error("Erro ao calcular o frete. Por favor, tente novamente.")
@@ -104,6 +107,23 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 		setjadlogCotations([content])
 	}
 
+	const mapKangu = () => {
+		const cotations = [] as JSX.Element[]
+
+		kanguData.forEach(({ vlrFrete, dtPrevEnt, prazoEnt, transp_nome }) => cotations.push(
+			<div 
+				className="available" 
+				onClick={() => handleServiceClick(orderId, 'kangu', transp_nome)}
+			>
+				<strong>{`Kangu - ${transp_nome}`}</strong>
+				<div><strong>Custo: </strong>R$ {vlrFrete ? String(vlrFrete).replace('.', ',') : '--'}</div>
+				<div><strong>Prazo: </strong> {`${prazoEnt} dias úteis`} - {new Date(dtPrevEnt).toLocaleDateString()}</div>
+			</div>
+		))
+
+		setKanguCotations(cotations)
+	}
+
 	const handleClick = () => {
 		const addressForm = address_form_ref.current as HTMLDivElement | null
 		if(!inputsRef.current || !addressForm) return
@@ -149,6 +169,7 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 			<div className="correios-content">
 				{correiosCotations}
 				{jadlogCotations}
+				{kanguCotations}
 			</div>
 		</div>
 	)

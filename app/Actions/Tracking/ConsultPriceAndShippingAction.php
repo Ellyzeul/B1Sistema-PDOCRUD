@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Actions\Tracking\DeliveryMethods\Correios;
 use App\Actions\Tracking\DeliveryMethods\Jadlog;
+use App\Services\ThirdParty\Kangu;
 
 class ConsultPriceAndShippingAction
 {
@@ -28,10 +29,12 @@ class ConsultPriceAndShippingAction
 		
 		$responseCorreios = (new Correios())->consultPriceAndShipping($originZipCode, $clientPostalCode, $weight);
 		$responseJadlog = (new Jadlog())->consultPrice($originZipCode, $clientPostalCode, $weight);
+		$responseKangu = (new Kangu())->postSimular('seline', $originZipCode, $clientPostalCode, 100, $weight, 3, 18, 18, ['E' , 'X' , 'M' , 'R'], 'prazo');
 
 		return [
 			"Correios" => $responseCorreios,
-			"Jadlog" => $responseJadlog
+			"Jadlog" => $responseJadlog,
+			"Kangu" => $responseKangu,
 		];
 	}
 }
