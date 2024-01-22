@@ -9,7 +9,7 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 	const inputsRef = useRef<HTMLDivElement | null>(null)
 	const [jadlogData, setJadlogData] = useState({} as JadlogData)
 	const [correiosData, setCorreiosData] = useState({} as CorreiosData)
-	const [kanguData, setKanguData] = useState([] as KanguData)
+	const [kanguData, setKanguData] = useState(null as KanguData | null)
 	const [jadlogCotations, setjadlogCotations] = useState([] as JSX.Element[])
 	const [kanguCotations, setKanguCotations] = useState([] as JSX.Element[])
 	const [correiosCotations, setcorreiosCotations] = useState([] as JSX.Element[])
@@ -17,7 +17,7 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 	useEffect(() => {
 		if(jadlogData) mapJadlog()
 		if(correiosData) mapCorreios()
-		if(kanguData) mapKangu()
+		if(kanguData) mapKangu(kanguData)
 	}, [jadlogData, correiosData, kanguData])
 
 			
@@ -107,10 +107,9 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 		setjadlogCotations([content])
 	}
 
-	const mapKangu = () => {
+	const mapKangu = (kanguData: KanguData) => {
+		if(!Array.isArray(kanguData)) return
 		const cotations = [] as JSX.Element[]
-		console.log("Dados da Kangu: ")
-		console.log(kanguData)
 
 		kanguData.forEach(({ vlrFrete, dtPrevEnt, prazoEnt, transp_nome }) => cotations.push(
 			<div 

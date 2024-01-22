@@ -29,4 +29,7 @@ export type KanguData = Array<{
 	prazoEnt: string,
 	dtPrevEnt: string,
 	transp_nome: string,
-}>
+}> | { error: {
+	codigo: string,
+	mensagem: string,
+} }
