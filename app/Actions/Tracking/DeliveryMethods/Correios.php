@@ -44,9 +44,9 @@ class Correios
 			"status" => $response['descricao'],
 			"last_update_date" => date('Y-m-d', strtotime(str_replace('/', '-', $response['dtHrCriado']))),
 			"details" => "{$response['unidade']['tipo']}" 
-						." - {$city}" 
-						." - {$response['unidade']['endereco']['uf']} "
-						."$street $complement $number $district $cep $info",
+				." - {$city}" 
+				." - {$response['unidade']['endereco']['uf']} "
+				."$street $complement $number $district $cep $info",
 
 			"client_deadline" => $response['dtLimiteRetirada'] ?? null,
 		];
@@ -81,17 +81,15 @@ class Correios
 
 		if(!isset($shipping_response) || !isset($price_response)) return [];
 		
-		$responseMapped = array_map(fn($shipping, $price) => [
-			$shipping['coProduto'] => [
-				'service_name' => $services[$shipping['coProduto']], 
-				'delivery_expected_date' => $shipping['prazoEntrega'] ?? null, 
-				'max_date' => isset($shipping['dataMaxima']) 
-					? date('d/m/Y', strtotime($shipping['dataMaxima'])) 
-					: $date = null,
-				'shipping_error_msg' => $shipping['txErro'] ?? null,
-				'price' => $price['pcFinal'] ?? null,
-				'price_error_msg' => $price['txErro'] ?? null
-			]
+		$responseMapped = array_map(fn($shipping, $price) => (object) [
+			'name' => $services[$shipping['coProduto']], 
+			'expected_deadline' => $shipping['prazoEntrega'] ?? null, 
+			'expected_date' => isset($shipping['dataMaxima']) 
+				? date('d/m/Y', strtotime($shipping['dataMaxima'])) 
+				: $date = null,
+			'shipping_error_msg' => $shipping['txErro'] ?? null,
+			'price' => $price['pcFinal'] ?? null,
+			'price_error_msg' => $price['txErro'] ?? null
 		], $shipping_response->json(), $price_response->json());
 
 		$response = array_reduce($responseMapped, function($acc, $cur) {

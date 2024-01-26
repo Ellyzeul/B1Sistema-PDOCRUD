@@ -82,7 +82,7 @@ class TrackingService
         try {
             $company = $request->input('company');
             $code = $request->input('tracking_code');
-            $response = (new Kangu())->getEtiqueta($company, $code);
+            $response = (new Kangu($company))->getEtiqueta($code);
         }
         catch(\Exception $err) {
             return [
