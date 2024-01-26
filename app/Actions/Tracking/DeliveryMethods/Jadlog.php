@@ -47,10 +47,10 @@ class Jadlog
 			]]
 		]);
 
-		return [
+		return [(object) [
 			'price' => $response['frete'][0]['vltotal'] ?? null,
-			'max_date' => $response['frete'][0]['prazo'] ?? null,
+			'expected_deadline' => $response['frete'][0]['prazo'] ?? null,
 			'error_msg' => $response['error']['descricao'] ?? null
-		];
+		]];
 	}	
 }

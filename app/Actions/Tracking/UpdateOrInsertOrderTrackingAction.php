@@ -6,6 +6,7 @@ use App\Actions\Tracking\DeliveryMethods\FedEx;
 use App\Actions\Tracking\DeliveryMethods\Jadlog;
 use App\Actions\Tracking\DeliveryMethods\Correios;
 use App\Actions\Tracking\DeliveryMethods\EnviaDotCom;
+use App\Actions\Tracking\DeliveryMethods\Kangu;
 use App\Actions\Tracking\DeliveryMethods\MercadoLivre;
 
 class UpdateOrInsertOrderTrackingAction
@@ -24,6 +25,10 @@ class UpdateOrInsertOrderTrackingAction
 		if($deliveryMethod == "Jadlog") $response = (new Jadlog())->fetch($trackingCode);
 		if($deliveryMethod == "FedEx") $response = (new FedEx())->fetch($trackingCode);
 		if($deliveryMethod == "Envia.com") $response = (new EnviaDotCom())->fetch($trackingCode);
+		if($deliveryMethod == "Kangu") {
+			$orderData = $this->getOrderIdAndcompanyId(($trackingCode));
+			$response = (new Kangu($orderData->id_company))->fetch($trackingCode);
+		}
 		
 		if($deliveryMethod == "Mercado Livre") {
 			$data = $this->getOrderIdAndcompanyId($trackingCode);
@@ -55,7 +60,7 @@ class UpdateOrInsertOrderTrackingAction
 			: ["Erro na atualização", 500];
 	}
 
-    private array $supportedServices = [
+	private array $supportedServices = [
 		"Correios" => true,
 		"Jadlog" => true,
 		"DHL" => true,
@@ -66,11 +71,11 @@ class UpdateOrInsertOrderTrackingAction
 
 	private function getOrderIdAndcompanyId(string $trackingCode)
 	{
-        $data = DB::table('order_control')
-                    ->select('id_company', 'online_order_number')
-                    ->where('tracking_code', $trackingCode)
-                    ->first();
+		$data = DB::table('order_control')
+			->select('id_company', 'online_order_number')
+			->where('tracking_code', $trackingCode)
+			->first();
 
-        return $data;
+		return $data;
 	}
 }

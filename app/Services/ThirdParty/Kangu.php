@@ -4,13 +4,24 @@ use Illuminate\Support\Facades\Http;
 
 class Kangu
 {
-  public function getEtiqueta(string $company, string $code)
+  private object $api;
+
+  public function __construct(string $company)
   {
-    return Http::kangu($company)->get("/imprimir-etiqueta/$code")->object();
+    $this->api = Http::kangu($company);
+  }
+
+  public function getRastrear(string $code)
+  {
+    return $this->api->get("/rastrear/$code")->object();
+  }
+
+  public function getEtiqueta(string $code)
+  {
+    return $this->api->get("/imprimir-etiqueta/$code")->object();
   }
 
   public function postSimular(
-    string $company,
     string $zipCodeOrigin,
     string $zipCodeDestination,
     int $value,
@@ -22,7 +33,7 @@ class Kangu
     string $orderBy,
   )
   {
-    return Http::kangu($company)->post('/simular', [
+    return $this->api->post('/simular', [
       'cepOrigem'=> $zipCodeOrigin,
       'cepDestino'=> $zipCodeDestination,
       'vlrMerc'=> $value,
