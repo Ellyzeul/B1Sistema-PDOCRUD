@@ -18,7 +18,7 @@ class UpdateOrInsertOrderTrackingAction
 
     private function updateOrInsertOrderTracking(string $trackingCode, string | null $deliveryMethod)
 	{
-		if(!isset($this->supportedServices[$deliveryMethod])) return ["Serviço não suportado", 400];
+		if(!isset($this->supportedServices[$deliveryMethod])) return [['error_msg' => "Serviço não suportado"], 400];
 
 		$response = null;
 		if($deliveryMethod == "Correios") $response = (new Correios())->fetch($trackingCode);
@@ -67,6 +67,7 @@ class UpdateOrInsertOrderTrackingAction
 		"FedEx" => true,
 		"Mercado Livre" => true,
 		"Envia.com" => true,
+		"Kangu" => true,
 	];
 
 	private function getOrderIdAndcompanyId(string $trackingCode)
