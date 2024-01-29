@@ -20,14 +20,14 @@ class Kangu
   {
     $response = $this->api->getRastrear($trackingCode);
 
-    if(isset($response->error) || !isset($response->historico[0])) return [];
+    if(strlen($response->error->mensagem) > 0  || !isset($response->historico[0])) return [];
 
     $lastEvent = $response->historico[0];
 
     return [
-      'status' => $lastEvent['ocorrencia'],
-			'last_update_date' => $lastEvent['data'],
-			'details' => $lastEvent['observacao'],
+      'status' => $lastEvent->ocorrencia,
+			'last_update_date' => $lastEvent->data,
+			'details' => $lastEvent->observacao,
     ];
   }
 }
