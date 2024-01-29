@@ -93,7 +93,7 @@ class Correios
 		], $shipping_response->json(), $price_response->json());
 
 		$response = array_reduce($responseMapped, function($acc, $cur) {
-			return array_merge($acc ?? [], $cur);
+			return array_merge($acc ?? [], [$cur]);
 		});
 
 		return $response;

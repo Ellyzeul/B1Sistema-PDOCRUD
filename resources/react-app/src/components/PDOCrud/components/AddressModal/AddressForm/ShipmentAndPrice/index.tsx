@@ -8,7 +8,7 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 	const { orderId, address_form_ref, delivery_service, delivery_method, tracking_code, id_bling } = props
 	const inputsRef = useRef<HTMLDivElement | null>(null)
 	const [jadlogData, setJadlogData] = useState({} as JadlogData)
-	const [correiosData, setCorreiosData] = useState({} as CorreiosData)
+	const [correiosData, setCorreiosData] = useState([] as CorreiosData)
 	const [kanguData, setKanguData] = useState(null as KanguData | null)
 	const [jadlogCotations, setjadlogCotations] = useState([] as JSX.Element[])
 	const [kanguCotations, setKanguCotations] = useState([] as JSX.Element[])
@@ -35,7 +35,7 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 			if(response.error_msg) toast.error(response.error_msg)
 
 			setCorreiosData(response["Correios"])
-			setJadlogData(response["Jadlog"])
+			setJadlogData(response["Jadlog"][0])
 			setKanguData(response["Kangu"])
 		})
 		.catch((error) => {
@@ -58,23 +58,23 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 	}
 
 	const mapCorreios = () => {
-		const content = Object.keys(correiosData).map(service => {
-			const { shipping_error_msg, price_error_msg, service_name, delivery_expected_date, max_date, price } = correiosData[service]
-			const unavailable = correiosData && (shipping_error_msg || price_error_msg)
+		const content = correiosData.map(service => {
+			const { shipping_error_msg, price_error_msg, name, expected_deadline, expected_date, price } = service
+			const unavailable = !!shipping_error_msg || !!price_error_msg
 
-			if(unavailable || (correiosData && !(delivery_expected_date && max_date))) return(<></>)
+			if(unavailable || (!expected_deadline && !expected_date)) return(<></>)
 
 			return (
 				<div 
 					className={unavailable ? "unavailable" : "available"} 
-					onClick={unavailable ? () => {} : () => handleServiceClick(orderId, 'correios', service_name)}
+					onClick={unavailable ? () => {} : () => handleServiceClick(orderId, 'correios', name)}
 				>
-					<strong>{service_name}</strong>
+					<strong>{name}</strong>
 					<div>
 						<strong>Prazo: </strong>
 						{
-							(delivery_expected_date && max_date)
-								? `${delivery_expected_date} ${delivery_expected_date === 1 ? 'dia útil' : 'dias úteis'} - ${max_date}`
+							(expected_deadline && expected_date)
+								? `${expected_deadline} ${expected_deadline === 1 ? 'dia útil' : 'dias úteis'} - ${expected_date}`
 								: '--'
 						}
 					</div>
@@ -89,9 +89,9 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 	}
 
 	const mapJadlog = () => {
-		const { error_msg, price, max_date } = jadlogData
+		const { error_msg, price, expected_deadline } = jadlogData
 
-		if(!(price || max_date || error_msg)) return
+		if(!(price || expected_deadline || error_msg)) return
 
 		const content = (
 			<div 
@@ -100,7 +100,7 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 			>
 				<strong>Jadlog</strong>
 				<div><strong>Custo: </strong>R$ {price ? price.toFixed(2) : '--'}</div>
-				<div><strong>Prazo: </strong> {max_date ? `${max_date} dias úteis` : '--'}</div>
+				<div><strong>Prazo: </strong> {expected_deadline ? `${expected_deadline} dias úteis` : '--'}</div>
 			</div>
 		)
 
