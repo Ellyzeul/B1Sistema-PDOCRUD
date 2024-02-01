@@ -243,16 +243,13 @@ class Bling
 
     private function getOrderV3(string $blingNumber)
     {
-        if($this->setOrderId($blingNumber)->error) return (object) ['error' => true];
-
-        $response = Http::bling($this->companyId, 'v3')->get("/pedidos/vendas/{$this->orderId}");
-        $data = $response->object()->data;
+        $response = Http::bling($this->companyId, 'v3')->get("/pedidos/vendas?numero=$blingNumber");
+        $data = $response->object()->data[0];
 
         $this->previousOrderNumber = $blingNumber;
-        $this->contactId = $data->contato->id;
         
         return $response->ok()
-            ? $data
+            ? $this->getOrderById($data->id)
             : (object) ['error' => true];
     }
 
@@ -268,6 +265,8 @@ class Bling
     {
         $response = Http::bling($this->companyId, 'v3')->get("/pedidos/vendas/{$orderId}");
         $data = $response->object()->data;
+        
+        $this->contactId = $data->contato->id;
         
         return $response->ok()
             ? $data
@@ -301,14 +300,14 @@ class Bling
      * Endpoint PUT /vendas/{id}
      */
 
-    public function putOrder(string $orderId, array $requestBody)
+    public function putOrder(string $orderId, array | object $requestBody)
     {
         return $this->version === 'v3'
             ? $this->putOrderV3($orderId, $requestBody)
             : throw new \Exception("Unimplemented");
     }
 
-    public function putOrderV3(string $orderId, array $requestBody)
+    public function putOrderV3(string $orderId, array | object $requestBody)
     {
         $response = Http::bling($this->companyId, 'v3')->put("/pedidos/vendas/{$orderId}", $requestBody);
         
