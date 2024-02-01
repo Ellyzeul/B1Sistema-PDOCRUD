@@ -20,10 +20,10 @@ class UpdateDeliveryMethodAction
       return [ 'success' => false, 'error_msg' => 'Método de envio desconhecido...' ];
     }
 
-    // Order::where('id', $orderId)
-    //   ->update([ 'id_delivery_method' => $deliveryMethodId, 'tracking_code' => $serviceName ]);
+    Order::where('id', $orderId)
+      ->update([ 'id_delivery_method' => $deliveryMethodId, 'tracking_code' => $serviceName ]);
     
-    return $this->updateOnBling(
+    $this->updateOnBling(
       $orderId, 
       $this->deliveryMethods[$deliveryMethod]['bling_aliases'][$serviceName]
     );
@@ -49,7 +49,7 @@ class UpdateDeliveryMethodAction
     array_push($blingOrder->transporte->volumes, (object) [ 'servico' => $blingAlias ]);
     $bling->putOrder($blingOrder->id, $blingOrder);
 
-    return $blingOrder;
+    return;
   }
 
   private function clearCurrentDeliveryMethodOnBling(Bling $bling, object $blingOrder)
