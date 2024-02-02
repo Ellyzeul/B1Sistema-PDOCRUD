@@ -16,13 +16,13 @@ const AddressForm = (props: AddressFormProp) => {
   const observationRef = useRef(null)
   const { update_data, id_bling } = bling
   const { id_company } = sellercentral
-  const items = bling.items.map(({id, sku, title, value, quantity, origin, ncm, cest}, idx) => (
+  const items = bling.items.map(({id, sku, title, value, quantity, origin, ncm, cest, weight}, idx) => (
     <div key={idx} className="address-panel-item-row">
       <div>{title}</div>
       <div>{sku}</div>
       <input type="text" name="item_quantity" defaultValue={quantity} data-id={id} />
       <input type="text" name="item_value" defaultValue={(value || 0).toFixed(2)} data-id={id} />
-      <input type="text" name="item_weight" defaultValue={'0'} data-id={id} />
+      <input type="text" name="item_weight" defaultValue={Number(weight).toLocaleString()} data-id={id} />
       <input name="item_id" defaultValue={id} style={{display: 'none'}} />
       <input name="item_title" defaultValue={title} style={{display: 'none'}} />
       <input name="item_sku" defaultValue={sku} style={{display: 'none'}} />
@@ -51,15 +51,17 @@ const AddressForm = (props: AddressFormProp) => {
         const { value: id } = div.querySelector('input[name="item_id"]') as HTMLInputElement
         const { value: title } = div.querySelector('input[name="item_title"]') as HTMLInputElement
         const { value: quantity } = div.querySelector('input[name="item_quantity"]') as HTMLInputElement
-        const { value: value } = div.querySelector('input[name="item_value"]') as HTMLInputElement
+        const { value: weight } = div.querySelector('input[name="item_weight"]') as HTMLInputElement
+        const { value } = div.querySelector('input[name="item_value"]') as HTMLInputElement
         const { value: sku } = div.querySelector('input[name="item_sku"]') as HTMLInputElement
 
         return {
-          id: id,
-          title: title,
-          quantity: quantity,
-          value: value,
+          id,
+          title,
+          quantity,
+          value,
           isbn: sku.split('_')[1],
+          weight: Number(weight.replace(',', '.')),
         }
       })
 

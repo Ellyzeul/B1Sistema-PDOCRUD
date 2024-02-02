@@ -275,6 +275,11 @@ class Order extends Model
                 'origin' => $item->tributacao->origem ?? null,
                 'ncm' => $item->tributacao->ncm ?? null,
                 'cest' => $item->tributacao->cest ?? null,
+                'weight' => Order::select('weight')
+                    ->where('online_order_number', $orderNumber)
+                    ->where('isbn', explode('_', $item->codigo)[1])
+                    ->first()
+                    ->weight ?? 0
             ], $blingOrderItems),
         ];
     }
@@ -292,7 +297,7 @@ class Order extends Model
     {
         $bling = new Bling($companyId);
         $blingOrder = $blingData['update_data']['order'];
-        $blingOrderItems = $blingData['items'];
+        $blingOrderItems = $this->handlePutBlingItems($blingData['items'], $blingOrder['numero']);
         $blingContact = $blingData['update_data']['contact'];
         $blingProducts = $blingData['update_data']['products'];
         $totalRaw = array_reduce(
@@ -381,6 +386,21 @@ class Order extends Model
             'contact' => $contactResponse,
             'products' => $productsResponse,
         ];
+    }
+
+    private function handlePutBlingItems(array $items, string $blingNumber)
+    {
+        foreach($items as $item) {
+            $weight = $item['weight'];
+            $isbn = $item['isbn'];
+            unset($item['weight']);
+
+            Order::where('bling_number', $blingNumber)
+                ->where('isbn', $isbn)
+                ->update(['weight' => $weight]);
+        }
+
+        return $items;
     }
 
     private function getBlingPersonType(string $personType)
