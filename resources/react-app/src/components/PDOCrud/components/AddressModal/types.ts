@@ -74,5 +74,6 @@ export type BlingAddress = {
     origin: string | null,
     ncm: string | null,
     cest: string | null,
+    weight: number,
   }[]
 }
