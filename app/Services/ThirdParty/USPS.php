@@ -1,6 +1,5 @@
 <?php namespace App\Services\ThirdParty;
 
-use Exception;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;

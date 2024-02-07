@@ -13,7 +13,9 @@ class USPS
   public function fetch(string $trackingCode)
   {
     $response = $this->api->getTracking($trackingCode);
-    $lastEvent = $response->trackingEvents[0];
+    $lastEvent = \is_array($response->trackingEvents)
+      ? $response->trackingEvents[0]
+      : $response->trackingEvents;
 
     return [
 			"status" => $lastEvent->eventType,
