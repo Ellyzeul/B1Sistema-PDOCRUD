@@ -32,7 +32,7 @@ class FedEx
 					"includeDetailedScans" => true
 				]);
 		}
-		catch(Exception $e) {
+		catch(\Exception $_) {
 			return $this->fetch($trackingCode);
 		}
 
@@ -86,7 +86,7 @@ class FedEx
 					'client_secret' => env('FEDEX_CLIENT_SECRET')
 				]);
 		}
-		catch(Exception $e) {
+		catch(\Exception $e) {
 			$this->generateToken();
 			return;
 		}

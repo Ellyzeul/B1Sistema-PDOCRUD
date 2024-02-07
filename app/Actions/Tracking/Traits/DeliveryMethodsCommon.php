@@ -29,5 +29,15 @@ trait DeliveryMethodsCommon
 		return DB::table('api_credentials')
 			->where('id', $id)
 			->exists();
-	}    
+	}
+
+	private function getOrderIdAndcompanyIdByTrackingCode(string $trackingCode)
+	{
+		$data = DB::table('order_control')
+			->select('id_company', 'online_order_number')
+			->where('tracking_code', $trackingCode)
+			->first();
+
+		return $data;
+	}
 }
