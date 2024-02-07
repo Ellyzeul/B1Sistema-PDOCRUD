@@ -83,5 +83,14 @@ class AppServiceProvider extends ServiceProvider
                 'Token' => $tokens[$company]
             ]);
         });
+
+        Http::macro('usps', function(string $resource, ?string $accessToken = null){
+            $configClient = Http::baseUrl("https://api.usps.com/$resource/v3/");
+
+            if($resource === 'oauth2') return $configClient;
+            if(!isset($accessToken)) throw new \Exception("Access token is mandatory on USPS API when requesting $resource resource!");
+
+            return $configClient->withToken($accessToken);
+        });
     }
 }

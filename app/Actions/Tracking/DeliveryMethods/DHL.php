@@ -4,6 +4,15 @@ use Illuminate\Support\Facades\Http;
 
 class DHL
 {
+	public function fetch(string $trackingCode)
+	{
+		$response = $this->fetchDHLMyAPI($trackingCode);
+
+		return $response === []
+			? $this->fetchDHLShipmentTrackingUnified($trackingCode)
+			: $response;
+	}
+
 	public function fetchDHLMyAPI(string $trackingCode)
 	{
 		$response = Http::withHeaders(["Accept-Language" => "pt-BR"])
@@ -13,18 +22,18 @@ class DHL
 		if(!isset($response) || !isset($response['shipments'])) return [];
 		
 		$events = $response['shipments'][0]['events'];
-		$last = sizeof($events)-1;
+		$last = count($events) - 1;
 
 		$lastUpdateDate = $response['shipments'][0]['events'][$last]['date'];
 		$lastUpdateDescription = "{$response['shipments'][0]['events'][$last]['description']}\n";
 		$deliveryExpectedDate = $response['shipments'][0]['estimatedDeliveryDate'] ?? null;
 
-		if($last>=1){
+		if($last >= 1) {
 			$penultimate = $last-1;
 			$penultimateUpdateDate = $response['shipments'][0]['events'][$penultimate]['date'] ?? "";
 			$penultimateUpdateDescription = "{$response['shipments'][0]['events'][$penultimate]['description']}\n" ?? "";
 
-			if($penultimate>=1){
+			if($penultimate >= 1) {
 				$antepenultimate = $penultimate-1;
 				$antepenultimateUpdateDate = $response['shipments'][0]['events'][$antepenultimate]['date'] ?? "";
 				$antepenultimateUpdateDescription = "{$response['shipments'][0]['events'][$antepenultimate]['description']}\n" ?? "";
@@ -35,14 +44,13 @@ class DHL
 			"status" => $lastUpdateDescription,
 			"last_update_date" => date('Y-m-d', strtotime($lastUpdateDate)),
 			"details" => date('d/m/Y', strtotime($lastUpdateDate)) .' '. $lastUpdateDescription
-						.date('d/m/Y', strtotime($penultimateUpdateDate)) .' '. $penultimateUpdateDescription
-						.date('d/m/Y', strtotime($antepenultimateUpdateDate)) .' '. $antepenultimateUpdateDescription
+				.date('d/m/Y', strtotime($penultimateUpdateDate)) .' '. $penultimateUpdateDescription
+				.date('d/m/Y', strtotime($antepenultimateUpdateDate)) .' '. $antepenultimateUpdateDescription
 		];
 
-		$toReturn['delivery_expected_date'] = 
-			isset($deliveryExpectedDate) 
-				? date('Y-m-d', strtotime($deliveryExpectedDate)) 
-				: null;
+		$toReturn['delivery_expected_date'] = isset($deliveryExpectedDate) 
+			? date('Y-m-d', strtotime($deliveryExpectedDate)) 
+			: null;
 		
 		return $toReturn;
 	}

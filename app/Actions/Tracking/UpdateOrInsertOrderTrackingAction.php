@@ -8,43 +8,38 @@ use App\Actions\Tracking\DeliveryMethods\Correios;
 use App\Actions\Tracking\DeliveryMethods\EnviaDotCom;
 use App\Actions\Tracking\DeliveryMethods\Kangu;
 use App\Actions\Tracking\DeliveryMethods\MercadoLivre;
+use App\Actions\Tracking\DeliveryMethods\USPS;
 
 class UpdateOrInsertOrderTrackingAction
 {
-    public function handle(string $trackingCode, string | null $deliveryMethod)
-    {
-        return $this->updateOrInsertOrderTracking($trackingCode, $deliveryMethod);
-    }
+	private array $supportedServices;
 
-    private function updateOrInsertOrderTracking(string $trackingCode, string | null $deliveryMethod)
+	public function __construct()
 	{
-		if(!isset($this->supportedServices[$deliveryMethod])) return [['error_msg' => "Serviço não suportado"], 400];
+		$this->supportedServices = [
+			'Correios' => fn() => new Correios(),
+			'Jadlog' => fn() => new Jadlog(),
+			'FedEx' => fn() => new FedEx(),
+			'Envia.com' => fn() => new EnviaDotCom(),
+			'USPS' => fn() => new USPS(),
+			'Kangu' => fn() => new Kangu(),
+			'Mercado Livre' => fn() => new MercadoLivre(),
+			'DHL' => fn() => new DHL(),
+		];
+	}
 
-		$response = null;
-		if($deliveryMethod == "Correios") $response = (new Correios())->fetch($trackingCode);
-		if($deliveryMethod == "Jadlog") $response = (new Jadlog())->fetch($trackingCode);
-		if($deliveryMethod == "FedEx") $response = (new FedEx())->fetch($trackingCode);
-		if($deliveryMethod == "Envia.com") $response = (new EnviaDotCom())->fetch($trackingCode);
-		if($deliveryMethod == "Kangu") {
-			$orderData = $this->getOrderIdAndcompanyId(($trackingCode));
-			$response = (new Kangu($orderData->id_company))->fetch($trackingCode);
-		}
-		
-		if($deliveryMethod == "Mercado Livre") {
-			$data = $this->getOrderIdAndcompanyId($trackingCode);
-			if(!isset($data)) return ["Erro na leitura dos dados", 500]; 
-			$response = (new MercadoLivre($data->id_company))->fetch($data->online_order_number);
-		} 
+	public function handle(string $trackingCode, string | null $deliveryMethod)
+	{
+		return $this->updateOrInsertOrderTracking($trackingCode, $deliveryMethod);
+	}
 
-		if($deliveryMethod == "DHL"){
-			$DHL = new DHL();
-			$response = $DHL->fetchDHLMyAPI($trackingCode);
+	private function updateOrInsertOrderTracking(string $trackingCode, string | null $deliveryMethod)
+	{
+		if(!isset($this->supportedServices[$deliveryMethod])) return [
+			['error_msg' => "Serviço não suportado"], 400
+		];
 
-			$response = 
-				$response === []
-					? $DHL->fetchDHLShipmentTrackingUnified($trackingCode) 
-					: $response;
-		} 
+		$response = $this->supportedServices[$deliveryMethod]()->fetch($trackingCode);
 
 		if(count($response) > 0) $response['api_calling_date'] = date("Y-m-d");
 
@@ -58,25 +53,5 @@ class UpdateOrInsertOrderTrackingAction
 		return isset($response)
 			? [$response, 200]
 			: ["Erro na atualização", 500];
-	}
-
-	private array $supportedServices = [
-		"Correios" => true,
-		"Jadlog" => true,
-		"DHL" => true,
-		"FedEx" => true,
-		"Mercado Livre" => true,
-		"Envia.com" => true,
-		"Kangu" => true,
-	];
-
-	private function getOrderIdAndcompanyId(string $trackingCode)
-	{
-		$data = DB::table('order_control')
-			->select('id_company', 'online_order_number')
-			->where('tracking_code', $trackingCode)
-			->first();
-
-		return $data;
 	}
 }
