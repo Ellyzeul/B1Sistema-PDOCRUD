@@ -1,46 +1,49 @@
 <?php namespace App\Actions\Order\GetOrderMessages;
 
-use App\Models\Order;
 use App\Services\ThirdParty\FNAC;
 
 class GetFromFNACAction
 {
-  private const ID_SELLERCENTRAL = 8;
-
   public function handle()
   {
-    $orderNumbers = $this->getOrderNumbers(self::ID_SELLERCENTRAL);
-    return $this->getMessages($orderNumbers);
+    return $this->getMessages();
   }
 
-  private function getOrderNumbers(int $idSellercentral)
-  {
-    $orderNumbers = [];
-    $results = Order::select('online_order_number')
-      ->where('id_sellercentral', $idSellercentral)
-      ->whereRaw('order_date BETWEEN CURDATE() - INTERVAL 60 DAY AND CURDATE()')
-      ->get();
-
-    foreach($results as $result) {
-      array_push($orderNumbers, $result->online_order_number);
-    }
-
-    return $orderNumbers;
-  }
-
-  private function getMessages(array $orderNumbers)
+  private function getMessages()
   {
     $fnac = new FNAC('pt', 0);
+    
+    $orderMessages = $this->fetchOrderMessages($fnac->messagesQuery(messageType: 'ORDER'));
+    $offerMessages = $this->fetchOfferMessages($fnac->messagesQuery(messageType: 'OFFER'));
+
+    return array_merge(
+      $orderMessages,
+      $offerMessages,
+    );
+  }
+
+  private function fetchOrderMessages(array $xmlMessages)
+  {
     $messages = [];
 
-    foreach($orderNumbers as $orderNumber) {
-      $response = $fnac->messagesQuery(orderId: $orderNumber);
-      if(count($response) === 0) continue;
-      $messages[$orderNumber] = $this->formatResponse($response, 'order');
+    foreach($xmlMessages as $message) {
+      $orderId = "$message->message_referer";
+      $messages[$orderId] = isset($messages[$orderId])
+        ? array_merge($messages[$orderId], [$message])
+        : [$message];
     }
-    $offerMessages = $fnac->messagesQuery(messageType: 'OFFER');
+    foreach($messages as $orderId => $chat) {
+      $messages[$orderId] = $this->formatResponse($chat, 'order');
+    }
 
-    foreach($offerMessages as $message) {
+    return $messages;
+  }
+
+  private function fetchOfferMessages(array $xmlMessages)
+  {
+    $messages = [];
+
+    foreach($xmlMessages as $message) {
       $formatted = $this->formatResponse(
         $this->handleOfferMessage($message), 
         'offer', 

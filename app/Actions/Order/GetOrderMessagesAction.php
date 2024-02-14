@@ -9,8 +9,8 @@ class GetOrderMessagesAction
   {
     $messagesCollection = [];
     $handlers = [
-      [ 'name' => 'MercadoLivre',  'obj' =>new GetFromMercadoLivreAction() ], 
-      [ 'name' => 'FNAC',  'obj' =>new GetFromFNACAction() ]
+      // [ 'name' => 'MercadoLivre', 'obj' => new GetFromMercadoLivreAction() ], 
+      [ 'name' => 'FNAC', 'obj' => new GetFromFNACAction() ],
     ];
     $errors = [];
     
