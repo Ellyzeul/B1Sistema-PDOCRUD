@@ -1,7 +1,5 @@
 <?php namespace App\Services\ThirdParty;
 
-use Illuminate\Support\Facades\Http;
-
 class FNAC
 {
   const CREDENTIALS = [

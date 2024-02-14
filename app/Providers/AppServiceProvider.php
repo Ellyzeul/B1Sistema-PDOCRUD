@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\ServiceProvider;
 
@@ -39,10 +40,10 @@ class AppServiceProvider extends ServiceProvider
             ])->baseUrl('https://bling.com.br/Api/v3');
         });
 
-        Http::macro('mercadoLivre', function(
-            bool $authless = false, 
-            string | null $accessToken = null, 
-            array | null $authForm = null
+        $mercadoLivreHandler = function(
+            ?bool $authless = false, 
+            ?string $accessToken = null, 
+            ?array $authForm = null
         ) 
         {
             $baseUrl = 'https://api.mercadolibre.com';
@@ -50,7 +51,9 @@ class AppServiceProvider extends ServiceProvider
             if($authless) return Http::baseUrl($baseUrl);
             if(isset($accessToken)) return Http::withToken($accessToken)->baseUrl($baseUrl);
             if(isset($authForm)) return Http::asForm()->post("$baseUrl/oauth/token", $authForm)->json();
-        });
+        };
+        Http::macro('mercadoLivre', $mercadoLivreHandler);
+        PendingRequest::macro('mercadoLivre', $mercadoLivreHandler);
 
         Http::macro('enviaDotCom', fn(string $token) => 
             Http::withToken($token)->baseUrl('https://queries.envia.com')

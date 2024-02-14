@@ -1,8 +1,10 @@
 <?php namespace App\Services\ThirdParty;
 
+use Illuminate\Http\Client\Pool;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class MercadoLivre
 {
@@ -163,6 +165,31 @@ class MercadoLivre
         return $response->ok()
             ? $response->object()->messages
             : [];
+    }
+
+    public function getMessages(array $orderNumbers, int $attempt=0)
+    {
+        if($attempt >= $this->maxAttempts) $this->throwMaxAttemptsError(__FUNCTION__);
+        $this->authenticate();
+
+        $responses = Http::pool(fn(Pool $pool) => array_map(fn($orderNumber) => 
+            $pool->as($orderNumber)
+                ->withToken($this->credential['access_token'])
+                ->get("https://api.mercadolibre.com/messages/packs/$orderNumber/sellers/$this->sellerId?tag=post_sale"), 
+            $orderNumbers
+        ));
+        Log::debug(json_encode(array_map(fn($resp) => $resp->getStatusCode(), $responses), JSON_PRETTY_PRINT));
+
+        $messages = [];
+
+        foreach($orderNumbers as $orderNumber) {
+            $response = $responses[$orderNumber];
+            $messages[$orderNumber] = $response->ok()
+                ? $response->object()->messages
+                : [];
+        }
+
+        return $messages;
     }
 
     public function postMessage(string $resourceId, string $clientId, string $text, int $attempt=0)
