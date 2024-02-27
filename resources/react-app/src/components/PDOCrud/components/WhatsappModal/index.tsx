@@ -1,5 +1,5 @@
 import WhatsappModalProp from "./types"
-import { Button, Modal } from "@mui/material"
+import { Modal } from "@mui/material"
 import api from "../../../../services/axios"
 import "./style.css"
 import { MouseEventHandler, useEffect, useRef, useState } from "react"

@@ -14,11 +14,12 @@ class OrderMessageService
 	public function __construct()
 	{
 		$this->handlers = [
-			'Amazon-BR-0' => new SendAskRatingAmazonAction(), 
-			'Amazon-CA-0' => new SendAskRatingAmazonAction(), 
-			'Amazon-US-0' => new SendAskRatingAmazonAction(), 
-			'Amazon-UK-0' => new SendAskRatingAmazonAction(), 
-			'Amazon-BR-1' => new SendAskRatingAmazonAction(), 
+			'Amazon-BR-0' => new SendAskRatingAmazonAction('Amazon-BR'), 
+			'Amazon-CA-0' => new SendAskRatingAmazonAction('Amazon-CA'), 
+			'Amazon-ES-0' => new SendAskRatingAmazonAction('Amazon-ES'), 
+			'Amazon-US-0' => new SendAskRatingAmazonAction('Amazon-US'), 
+			'Amazon-UK-0' => new SendAskRatingAmazonAction('Amazon-UK'), 
+			'Amazon-BR-1' => new SendAskRatingAmazonAction('Amazon-BR'), 
 			'FNAC-PT-0' => new SendAskRatingFNACAction('pt', 0), 
 			'FNAC-ES-0' => new SendAskRatingFNACAction('es', 0), 
 			'FNAC-PT-1' => new SendAskRatingFNACAction('pt', 1), 
@@ -38,19 +39,19 @@ class OrderMessageService
 			try {
 				return $this->handlers[$handlerKey]->handle($orderId);
 			}
-			catch(\Exception $_) {
+			catch(\Exception) {
 				return [ 'success' => false, 'content' => [ 
 					'message' => 'Serviço indisponível para esse canal de venda nesta empresa'
 				] ];
 			}
 	}
 
-	public function sendAskRatingAmazon(Request $request)
-	{
-		$orderId = $request->input('order_id');
+	// public function sendAskRatingAmazon(Request $request)
+	// {
+	// 	$orderId = $request->input('order_id');
 
-		return (new SendAskRatingAmazonAction())->handle($orderId);
-	}
+	// 	return (new SendAskRatingAmazonAction())->handle($orderId);
+	// }
 
 	public function sendAskRatingEstante(Request $request)
 	{
