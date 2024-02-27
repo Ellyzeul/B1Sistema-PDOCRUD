@@ -6,11 +6,6 @@ class GetFromFNACAction
 {
   public function handle()
   {
-    return $this->getMessages();
-  }
-
-  private function getMessages()
-  {
     $fnac = new FNAC('pt', 0);
     
     $orderMessages = $this->fetchOrderMessages($fnac->messagesQuery(messageType: 'ORDER'));

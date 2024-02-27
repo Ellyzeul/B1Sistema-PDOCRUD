@@ -87,10 +87,10 @@ class OrderController extends Controller
 		return $response;
 	}
 
-	public static function sendAskRatingAmazon(Request $request)
-	{
-		return (new OrderMessageService())->sendAskRatingAmazon($request);
-	}
+	// public static function sendAskRatingAmazon(Request $request)
+	// {
+	// 	return (new OrderMessageService())->sendAskRatingAmazon($request);
+	// }
 
 	public static function sendAskRatingEstante(Request $request)
 	{
