@@ -38,13 +38,17 @@ class SendAskRatingAmazonAction
             'client_name' => $address->buyer_name,
             'client_email' => $address->buyer_email,
             'sellercentral' => $this->sellercentral,
-        ]);
+            'company' => $order->id_company === 0 ? 'seline' : 'b1'
+        ])->object();
         
         Order::where('id', $orderId)->increment('ask_rating');
 
-        return $response->success
-            ? [["message" => "E-mail enviado com sucesso!"], 200]
-            : [["message" => $response->errPayload], 400];
+        return [
+            'success' => $response->success, 
+            'content' => $response->success 
+                ? "E-mail enviado com sucesso!" 
+                : $response->errPayload
+        ];
     }
 
     private function errorMessage(?object $order, ?object $address, string $id)

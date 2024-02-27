@@ -107,8 +107,8 @@ class OrderController extends Controller
 		$response = (new OrderMessageService())->sendAskRating($request);
 
 		return $response['success']
-			? $response['content']
-			: response($response['content'], 400);
+			? $response
+			: response($response, 400);
 	}	 
 
 	public static function getAddress(Request $request)
