@@ -98,6 +98,7 @@ const createFNACButton = (row: HTMLTableRowElement, companyId: number, orderId: 
 const createButtonOfSellercentral = {
   'Amazon-BR': createAmazonButton, 
   'Amazon-CA': createAmazonButton, 
+  'Amazon-ES': createAmazonButton, 
   'Amazon-UK': createAmazonButton, 
   'Amazon-US': createAmazonButton, 
   'Estante-BR': createEstanteVirtualButton, 
