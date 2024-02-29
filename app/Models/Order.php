@@ -546,33 +546,6 @@ class Order extends Model
         return false;
     }
 
-    // private function getMailingInfo(string $orderId)
-    // {
-    //     $result = DB::table('order_control')
-    //         ->join('mailer_info', 'order_control.id_company', '=', 'mailer_info.id_company')
-    //         ->select(
-    //             'order_control.bling_number', 
-    //             'mailer_info.token_name', 
-    //             'mailer_info.from_email', 
-    //             'mailer_info.company_name', 
-    //             DB::raw('(
-    //                 SELECT IF(POSITION("BR" IN name) > 0, 1, 0) 
-    //                 FROM sellercentrals
-    //                 WHERE id = order_control.id_sellercentral
-    //             ) AS is_national')
-    //         )
-    //         ->where('order_control.id', $orderId)
-    //         ->first();
-        
-    //     return [
-    //         $result->bling_number, 
-    //         env($result->token_name), 
-    //         $result->from_email, 
-    //         $result->company_name, 
-    //         $result->is_national == 1, 
-    //     ];
-    // }
-
     private function getBlingMessagingInfo(string $apikey, string $blingNumber)
     {
         $response = $this->makeBlingOrderRequest($apikey, $blingNumber);
@@ -595,9 +568,9 @@ class Order extends Model
         if(isset($response['error'])) return $response;
 
         $order = $response['retorno']['pedidos'][0]['pedido'];
-        $trackingCode = $order['transporte']['volumes'][0]['volume']['codigoRastreamento'];
+        $trackingCode = $order['transporte']['volumes'][0]['volume']['codigoRastreamento'] ?? null;
 
-        if($trackingCode == "") $trackingCode = $order['transporte']['volumes'][0]['volume']['remessa']['numero'];
+        if(!isset($trackingCode)) $trackingCode = $order['transporte']['volumes'][0]['volume']['remessa']['numero'] ?? null;
 
         return $trackingCode;         
     }

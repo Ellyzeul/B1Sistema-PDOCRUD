@@ -1,6 +1,6 @@
 <?php namespace App\Actions\Tracking\DeliveryMethods;
 
-use App\Actions\Tracking\traits\DeliveryMethodsCommon;
+use App\Actions\Tracking\Traits\DeliveryMethodsCommon;
 use App\Services\ThirdParty\Kangu as API;
 
 class Kangu
