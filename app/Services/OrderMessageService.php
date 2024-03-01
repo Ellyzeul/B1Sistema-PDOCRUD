@@ -6,6 +6,7 @@ use App\Actions\OrderMessage\AskRatingMessage\SendAskRatingEstanteAction;
 use App\Actions\OrderMessage\AskRatingMessage\GetAskRatingWhatsappAction;
 use App\Actions\OrderMessage\AskRatingMessage\SendAskRatingFNACAction;
 use App\Actions\OrderMessage\AskRatingMessage\SendAskRatingMercadoLivreAction;
+use App\Actions\OrderMessage\SendCancellationNoticeAction;
 
 class OrderMessageService
 {
@@ -34,27 +35,23 @@ class OrderMessageService
 
 	public function sendAskRating(Request $request)
 	{
-			$orderId = $request->input('order_id');
-			$companyId = $request->input('company_id');
-			$sellercentral = $request->input('seller_central');
-			$handlerKey = "$sellercentral-$companyId";
-			
-			try {
-				return $this->handlers[$handlerKey]->handle($orderId);
-			}
-			catch(\Exception) {
-				return [ 'success' => false, 'content' => [ 
+		$orderId = $request->input('order_id');
+		$companyId = $request->input('company_id');
+		$sellercentral = $request->input('seller_central');
+		$handlerKey = "$sellercentral-$companyId";
+		
+		try {
+			return $this->handlers[$handlerKey]->handle($orderId);
+		}
+		catch(\Exception) {
+			return [
+				'success' => false, 
+				'content' => [
 					'message' => 'Serviço indisponível para esse canal de venda nesta empresa'
-				] ];
-			}
+				]
+			];
+		}
 	}
-
-	// public function sendAskRatingAmazon(Request $request)
-	// {
-	// 	$orderId = $request->input('order_id');
-
-	// 	return (new SendAskRatingAmazonAction())->handle($orderId);
-	// }
 
 	public function sendAskRatingEstante(Request $request)
 	{
@@ -66,5 +63,15 @@ class OrderMessageService
 	public function getAskRatingWhatsapp(Request $request)
 	{
 		return (new GetAskRatingWhatsappAction())->handle($request);
-	}   
+	}
+
+	public function sendPreCancellationNotice(Request $request)
+	{
+		return;
+	}
+
+	public function sendCancellationNotice(Request $request)
+	{
+		return (new SendCancellationNoticeAction())->handle($request);
+	}
 }

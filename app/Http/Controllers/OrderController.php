@@ -206,4 +206,14 @@ class OrderController extends Controller
 	{
 		return (new OrderService())->updateDeliveryMethod($request);
 	}
+
+	public function sendPreCancellationNotice(Request $request)
+	{
+		return (new OrderMessageService())->sendPreCancellationNotice($request);
+	}
+
+	public function sendCancellationNotice(Request $request)
+	{
+		return (new OrderMessageService())->sendCancellationNotice($request);
+	}
 }

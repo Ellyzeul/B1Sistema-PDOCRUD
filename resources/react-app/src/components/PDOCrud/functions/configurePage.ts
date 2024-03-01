@@ -21,6 +21,7 @@ import setInvoiceNumberUpdateButton from "./setInvoiceNumberUpdateButton";
 import setBlacklistIcon from "./setBlacklistIcon";
 import setInventoryIcon from "./setInventoryIcon";
 import configureCancelInvoiceColumn from "./configureCancelInvoiceColumn";
+import setSendCancellationNoticeColumn from "./setSendCancellationNoticeColumn";
 
 const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObject<null>, refModalId: MutableRefObject<null>, refOnlineOrderNumber: MutableRefObject<null>, refURLInput: MutableRefObject<null>, refTrackingMethodModal: MutableRefObject<HTMLDivElement | null>) => {
 	if(!elemRef.current) return
@@ -56,6 +57,7 @@ const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObje
 	if(phase < 7 && (phase !== 6.2 && phase !== 6.21)) setDeadlineColumn(phase)
 	if(phase >= 6.2 && phase < 6.3) setSendEmailColumn(phase)
 	if(phase === 2.1) setURLColumn()
+	setSendCancellationNoticeColumn(phase)
 }
 
 export default configurePage
