@@ -64,6 +64,8 @@ Route::controller(OrderController::class)
         Route::post('/import-from-date', 'importOrdersFromDate');
         Route::post('/send-bling-order', 'sendOrderToBling');
         Route::post('/ask-rating', 'sendAskRating');
+        Route::post('/pre-cancellation-notice', 'sendPreCancellationNotice');
+        Route::post('/cancellation-notice', 'sendCancellationNotice');
         Route::post('/envia-dot-com-address', 'postOrderAddressOnEnviaDotCom');
         Route::post('/tracking-code/on-sellercentral', 'postTrackingCodeOnSellercentral');
         Route::patch('/accept-fnac', 'acceptFNACOrder');
