@@ -69,6 +69,6 @@ const handleClick = (event: MouseEvent, phase: number, orderId: string) => {
 }
 
 const ENDPOINTS: Record<number, string> = {
-  8.1: '/api/orders/cancellation-notice',
-  8.12: '/api/orders/pre-cancellation-notice',
+  8.1: '/api/orders/pre-cancellation-notice',
+  8.12: '/api/orders/cancellation-notice',
 }
