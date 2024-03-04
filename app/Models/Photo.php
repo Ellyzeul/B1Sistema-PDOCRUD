@@ -4,10 +4,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use \PDOCrud;
 
 class Photo extends Model
 {
@@ -58,12 +56,15 @@ class Photo extends Model
     public function read(string $photoNamePattern)
     {
         $photos = $this->disk->files();
+        $filtered = array_filter($photos, fn($item) => str_starts_with($item, $photoNamePattern));
 
-        $links = array_map(function($item) {
-            return $this->readPath . $item;
-        }, array_filter($photos, function($item) use ($photoNamePattern) {
-            return str_starts_with($item, $photoNamePattern);
-        }));
+        if(count($filtered) === 0) {
+            $order = Order::where('online_order_number', $photoNamePattern)->first();
+
+            $filtered = array_filter($photos, fn($item) => str_starts_with($item, $order->invoice_number));
+        }
+
+        $links = array_map(fn($item) => $this->readPath . $item, $filtered);
 
         return [
             "message" => "Fotos com o padrão buscado foram retornadas!",
@@ -77,7 +78,11 @@ class Photo extends Model
         $photos = $this->disk->files();
         foreach($numbers as $number) {
             $response[$number] = $this->array_some($photos, function($photo) use ($number) {
-                return str_starts_with($photo, $number);
+                if(str_starts_with($photo, $number)) return true;
+                $order = Order::where('online_order_number', $number)->first();
+                if(!isset($order->invoice_number) || strlen($order->invoice_number) === 0) return false;
+
+                return str_starts_with($photo, $order->invoice_number);
             });
         }
 
