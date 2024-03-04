@@ -3,30 +3,35 @@ import getColumnFieldIndex from "./getColumnFieldIndex"
 
 const configureInvoiceField = () => {
   const invoiceIdx = getColumnFieldIndex("NF")
-  if(invoiceIdx === -1) return
+  const sellercentralIdx = getColumnFieldIndex("ORIGEM")
+  if(invoiceIdx === -1 || sellercentralIdx === -1) return
   const rows = document.querySelector(".pdocrud-table > tbody")?.children as HTMLCollectionOf<HTMLTableRowElement>
   const cells = {} as {[key: string]: HTMLTableCellElement[]}
-  let numbersList = ""
+  const numbersList: Array<string> = []
+
   for(let i = 1; i < rows.length; i++) {
+    const orderNumber = (rows[i].children[sellercentralIdx] as HTMLTableCellElement).textContent?.trim() as string
     const cell = rows[i].children[invoiceIdx] as HTMLTableCellElement
     const input = cell.children[0] as HTMLInputElement
-    const invoiceNumber = input.value
 
     input.oninput = (event) => {
       const input = event.target as HTMLInputElement
       const value = input.value
       if(value.length !== 44) return
     
-      input.value = value.substring(29, 34)}
+      input.value = value.substring(29, 34)
+    }
 
-    numbersList += numbersList === "" ? invoiceNumber : `,${invoiceNumber}`
-    cells[invoiceNumber] = cells[invoiceNumber] ? cells[invoiceNumber] : []
-    cells[invoiceNumber].push(cell)
+    numbersList.push(orderNumber)
+    cells[orderNumber] = cells[orderNumber] ? cells[orderNumber] : []
+    cells[orderNumber].push(cell)
   }
 
-  api.get(`/api/photo/verify-list?numbers_list=${numbersList}`)
+  console.log('numberList', numbersList)
+  api.get(`/api/photo/verify-list?numbers_list=${numbersList.join(',')}`)
     .then(response => response.data as {[key: string]: boolean})
     .then(response => Object.keys(response).forEach(number => {
+      console.log(response)
       if(!response[number]) return
 
       cells[number].forEach(cell => {

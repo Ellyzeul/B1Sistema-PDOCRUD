@@ -9,8 +9,6 @@ class PhotoController extends Controller
 {
     public static function create(Request $request)
     {
-        Log::notice("Foto de pedido enviada para salvar");
-
         $photoFile = $request->file("photo");
         $photoName = $photoFile->getClientOriginalName();
 
