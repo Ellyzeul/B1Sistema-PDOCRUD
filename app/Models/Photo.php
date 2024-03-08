@@ -56,14 +56,8 @@ class Photo extends Model
     public function read(string $photoNamePattern)
     {
         $photos = $this->disk->files();
+        
         $filtered = array_filter($photos, fn($item) => str_starts_with($item, $photoNamePattern));
-
-        if(count($filtered) === 0) {
-            $order = Order::where('online_order_number', $photoNamePattern)->first();
-
-            $filtered = array_filter($photos, fn($item) => str_starts_with($item, $order->invoice_number));
-        }
-
         $links = array_map(fn($item) => $this->readPath . $item, $filtered);
 
         return [
@@ -77,13 +71,7 @@ class Photo extends Model
         $response = [];
         $photos = $this->disk->files();
         foreach($numbers as $number) {
-            $response[$number] = $this->array_some($photos, function($photo) use ($number) {
-                if(str_starts_with($photo, $number)) return true;
-                $order = Order::where('online_order_number', $number)->first();
-                if(!isset($order->invoice_number) || strlen($order->invoice_number) === 0) return false;
-
-                return str_starts_with($photo, $order->invoice_number);
-            });
+            $response[$number] = $this->array_some($photos, fn($photo) => str_starts_with($photo, $number));
         }
 
         return $response;
