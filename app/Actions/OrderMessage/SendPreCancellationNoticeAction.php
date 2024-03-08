@@ -1,7 +1,7 @@
 <?php namespace App\Actions\OrderMessage;
 
 use App\Models\Order;
-use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
@@ -30,7 +30,7 @@ class SendPreCancellationNoticeAction
     ];
 
     $deliveryMethod = DB::table('delivery_methods')->where('id', $order->id_delivery_method)->first();
-  
+
     if(!isset($deliveryMethod)) return (object) [
       'success' => false,
       'content' => 'Pedido não tem forma de envio definida',
@@ -42,10 +42,11 @@ class SendPreCancellationNoticeAction
       'success' => true,
       'content' => [
         'order_number' => $order->online_order_number,
-        'client_name' => $address->buyer_name,
         'client_email' => $address->buyer_email,
+        'client_name' => $address->buyer_name,
         'delivery_method' => $deliveryMethod->name,
         'ship_date' => $order->ship_date,
+        'expected_date' => $address->expected_date,
         'sellercentral' => $sellercentral,
         'company' => $order->id_company === 0 ? 'seline' : 'b1',
       ]

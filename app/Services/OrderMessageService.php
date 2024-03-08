@@ -7,6 +7,7 @@ use App\Actions\OrderMessage\AskRatingMessage\GetAskRatingWhatsappAction;
 use App\Actions\OrderMessage\AskRatingMessage\SendAskRatingFNACAction;
 use App\Actions\OrderMessage\AskRatingMessage\SendAskRatingMercadoLivreAction;
 use App\Actions\OrderMessage\SendCancellationNoticeAction;
+use App\Actions\OrderMessage\SendPreCancellationNoticeAction;
 
 class OrderMessageService
 {
@@ -67,7 +68,7 @@ class OrderMessageService
 
 	public function sendPreCancellationNotice(Request $request)
 	{
-		return;
+		return (new SendPreCancellationNoticeAction())->handle($request);
 	}
 
 	public function sendCancellationNotice(Request $request)

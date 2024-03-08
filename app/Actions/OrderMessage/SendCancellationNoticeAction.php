@@ -30,7 +30,7 @@ class SendCancellationNoticeAction
     ];
 
     $deliveryMethod = DB::table('delivery_methods')->where('id', $order->id_delivery_method)->first();
-
+  
     if(!isset($deliveryMethod)) return (object) [
       'success' => false,
       'content' => 'Pedido não tem forma de envio definida',
@@ -42,11 +42,10 @@ class SendCancellationNoticeAction
       'success' => true,
       'content' => [
         'order_number' => $order->online_order_number,
-        'client_email' => $address->buyer_email,
         'client_name' => $address->buyer_name,
+        'client_email' => $address->buyer_email,
         'delivery_method' => $deliveryMethod->name,
         'ship_date' => $order->ship_date,
-        'expected_date' => $address->expected_date,
         'sellercentral' => $sellercentral,
         'company' => $order->id_company === 0 ? 'seline' : 'b1',
       ]

@@ -50,7 +50,9 @@ const handleClick = (event: MouseEvent, phase: number, orderId: string) => {
 
   api.post(ENDPOINTS[phase], { order_id: orderId })
     .then(response => response.data)
-    .then(({ success, content }) => {
+    .then((data) => {
+      const { success, content } = data
+      console.log(data)
       toast.dismiss(loadingId)
       console.log(success, content)
 
