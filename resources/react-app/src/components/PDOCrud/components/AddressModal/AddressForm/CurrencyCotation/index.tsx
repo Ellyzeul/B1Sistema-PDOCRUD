@@ -31,6 +31,10 @@ const CurrencyCotation = (props: CurrencyCotationProp) => {
       toast.error('Este pedido é nacional, sem cotação...')
       return
     }
+    const setHardcodedCotation = (cotation: number) => {
+      setCotation(cotation)
+      updateValues(cotation)
+    }
 
     api.get(`https://economia.awesomeapi.com.br/json/daily/${currency}-BRL?start_date=${cotationDate}&end_date=${cotationDate}`)
       .then(response => response.data)
@@ -41,8 +45,12 @@ const CurrencyCotation = (props: CurrencyCotationProp) => {
       })
       .catch((err) => {
         console.log(err)
-        toast.error(`Sem cotação de ${name.toLocaleLowerCase()} para este dia...`)
-        setCotation(1)
+        if(currency === 'USD') return setHardcodedCotation(4.98)
+        if(currency === 'CAD') return setHardcodedCotation(3.7)
+        if(currency === 'EUR') return setHardcodedCotation(5.46)
+        if(currency === 'GBP') return setHardcodedCotation(6.41)
+        // toast.error(`Sem cotação de ${name.toLocaleLowerCase()} para este dia...`)
+        // setCotation(1)
       })
   }
 
