@@ -34,6 +34,7 @@ const CurrencyCotation = (props: CurrencyCotationProp) => {
     const setHardcodedCotation = (cotation: number) => {
       setCotation(cotation)
       updateValues(cotation)
+      textarea.value = generateCotationMessage(cotation, amazon_link as string, prefix, name, cotationDateInput.value)
     }
 
     api.get(`https://economia.awesomeapi.com.br/json/daily/${currency}-BRL?start_date=${cotationDate}&end_date=${cotationDate}`)
