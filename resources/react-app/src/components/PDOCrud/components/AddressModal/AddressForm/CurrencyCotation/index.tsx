@@ -31,27 +31,19 @@ const CurrencyCotation = (props: CurrencyCotationProp) => {
       toast.error('Este pedido é nacional, sem cotação...')
       return
     }
-    const setHardcodedCotation = (cotation: number) => {
-      setCotation(cotation)
-      updateValues(cotation)
-      textarea.value = generateCotationMessage(cotation, amazon_link as string, prefix, name, cotationDateInput.value)
-    }
-    if(currency === 'USD') return setHardcodedCotation(4.98)
-    if(currency === 'CAD') return setHardcodedCotation(3.7)
-    if(currency === 'EUR') return setHardcodedCotation(5.46)
-    if(currency === 'GBP') return setHardcodedCotation(6.41)
-    // api.get(`https://economia.awesomeapi.com.br/json/daily/${currency}-BRL?start_date=${cotationDate}&end_date=${cotationDate}`)
-    //   .then(response => response.data)
-    //   .then(([{ ask }]) => {
-    //     setCotation(ask)
-    //     updateValues(ask)
-    //     textarea.value = generateCotationMessage(ask, amazon_link as string, prefix, name, cotationDateInput.value)
-    //   })
-    //   .catch((err) => {
-    //     console.log(err)
-    //     toast.error(`Sem cotação de ${name.toLocaleLowerCase()} para este dia...`)
-    //     setCotation(1)
-    //   })
+
+    api.get(`https://economia.awesomeapi.com.br/json/daily/${currency}-BRL?start_date=${cotationDate}&end_date=${cotationDate}`)
+      .then(response => response.data)
+      .then(([{ ask }]) => {
+        setCotation(ask)
+        updateValues(ask)
+        textarea.value = generateCotationMessage(ask, amazon_link as string, prefix, name, cotationDateInput.value)
+      })
+      .catch((err) => {
+        console.log(err)
+        toast.error(`Sem cotação de ${name.toLocaleLowerCase()} para este dia...`)
+        setCotation(1)
+      })
   }
 
   const updateValues = (cotation: number) => {
