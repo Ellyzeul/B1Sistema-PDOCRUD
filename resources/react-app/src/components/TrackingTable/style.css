@@ -143,3 +143,18 @@
   height: 4vh;
   width: 8vw;
 }
+
+.tracking-table-notify-client {
+  width: 100%;
+  text-align: center;
+}
+.tracking-table-notify-client > i {
+  padding: 2px 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 125ms;
+}
+.tracking-table-notify-client > i:hover {
+  background-color: #155532;
+  color: white;
+}

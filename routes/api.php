@@ -66,6 +66,7 @@ Route::controller(OrderController::class)
         Route::post('/ask-rating', 'sendAskRating');
         Route::post('/pre-cancellation-notice', 'sendPreCancellationNotice');
         Route::post('/cancellation-notice', 'sendCancellationNotice');
+        Route::post('/send-tracking-update', 'sendTrackingUpdateAction');
         Route::post('/envia-dot-com-address', 'postOrderAddressOnEnviaDotCom');
         Route::post('/tracking-code/on-sellercentral', 'postTrackingCodeOnSellercentral');
         Route::patch('/accept-fnac', 'acceptFNACOrder');
