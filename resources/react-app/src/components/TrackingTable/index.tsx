@@ -79,6 +79,21 @@ const updatePhase = (orderNumber: string, lastUpdateDate: string) => {
   .catch(_ => toast.error("Ocorreu algum erro... Entrar em contato com o setor de TI"))
 }
 
+const handleClientNotify = async(order_number: string) => {
+  const loadingId = toast.loading('Processando...')
+  const response = await api.post('/api/orders/send-tracking-update', { order_number })
+    .then(response => response.data)
+    .catch(() => null)
+  
+  toast.dismiss(loadingId)
+  if(!response) return toast.error('Erro na requisição')
+  const { success, reason } = response
+
+  if(!success) return toast.error(reason)
+
+  toast.success('Mensagem enviada com sucesso!')
+}
+
 const getRows = (data: {[key: string]: string}[], fieldsKeys: string[], actualPage: number) => {
   const rowsElements = [] as JSX.Element[]
   const offset = actualPage * ROWS_PER_PAGE
@@ -95,6 +110,18 @@ const getRows = (data: {[key: string]: string}[], fieldsKeys: string[], actualPa
     const rowElement = <tr key={idx}>{[
       btnCell, 
       ...fieldsKeys.map((key, idx) => {
+        if(key === 'tracking_code') return (
+          <td>
+            {row.tracking_code}
+            {
+              /^[0-9]{3}-[0-9]{7}-[0-9]{7}$/.test(row.online_order_number)
+                ? <div className="tracking-table-notify-client">
+                    <i className="fa-regular fa-envelope" onClick={() => handleClientNotify(row.online_order_number)}/>
+                  </div>
+                : null
+            }
+          </td>
+        )
         if(key === "last_update_date") return [<td key={idx}>{fields[key].isDate ? row[key] ? (new Date(`${row[key]} 00:00`)).toLocaleDateString("pt-BR") : "" : row[key]}</td>, btnUpdate6dot1]
         return <td key={idx}>{
         fields[key].editable

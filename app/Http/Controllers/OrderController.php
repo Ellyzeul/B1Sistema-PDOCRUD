@@ -216,4 +216,9 @@ class OrderController extends Controller
 	{
 		return (new OrderMessageService())->sendCancellationNotice($request);
 	}
+
+	public function sendTrackingUpdateAction(Request $request)
+	{
+		return (new OrderMessageService())->sendTrackingUpdateAction($request);
+	}
 }

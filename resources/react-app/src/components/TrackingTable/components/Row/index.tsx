@@ -9,7 +9,7 @@ const TrackingTableRow = (props: TrackingTableRowProp) => {
   return (
     <TableRow>
       <TableCell><i className="fa-solid fa-rotate"></i></TableCell>
-      <TableCell>{row.tracking_code}</TableCell>
+      <TableCell>{row.tracking_code} <i className="fa-regular fa-envelope"/></TableCell>
       <TableCell>{row.delivery_method}</TableCell>
       <TableCell>{row.online_order_number}</TableCell>
       <TableCell>{row.status}</TableCell>

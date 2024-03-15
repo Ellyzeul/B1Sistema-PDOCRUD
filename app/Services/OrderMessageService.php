@@ -8,6 +8,7 @@ use App\Actions\OrderMessage\AskRatingMessage\SendAskRatingFNACAction;
 use App\Actions\OrderMessage\AskRatingMessage\SendAskRatingMercadoLivreAction;
 use App\Actions\OrderMessage\SendCancellationNoticeAction;
 use App\Actions\OrderMessage\SendPreCancellationNoticeAction;
+use App\Actions\OrderMessage\SendTrackingUpdateAction;
 
 class OrderMessageService
 {
@@ -74,5 +75,10 @@ class OrderMessageService
 	public function sendCancellationNotice(Request $request)
 	{
 		return (new SendCancellationNoticeAction())->handle($request);
+	}
+
+	public function sendTrackingUpdateAction(Request $request)
+	{
+		return (new SendTrackingUpdateAction())->handle($request);
 	}
 }
