@@ -34,7 +34,7 @@ class SendTrackingUpdateAction
       ? (new EnviaDotCom())->getShipment($order->tracking_code)['data'][0]
       : null;
   
-    if($order->id_delivery_method === self::ENVIA_ID && !isset($shipment)) return [
+    if($order->id_delivery_method === self::ENVIA_ID && !isset($shipment)) return (object) [
       'success' => false,
       'reason' => 'Não foi possível recuperar o rastreio do Envia.com',
     ];
