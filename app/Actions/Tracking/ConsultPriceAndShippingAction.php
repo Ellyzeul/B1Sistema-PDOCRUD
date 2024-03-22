@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Actions\Tracking\DeliveryMethods\Correios;
+use App\Actions\Tracking\DeliveryMethods\EnviaDotCom;
 use App\Actions\Tracking\DeliveryMethods\Jadlog;
 use App\Services\ThirdParty\Kangu;
 
@@ -44,10 +45,10 @@ class ConsultPriceAndShippingAction
 		$clientPostalCode = $request->input('client_postal_code');
 		$weight = $request->input('weight') ?? 0;        
 
-		return $this->consultPriceAndShipping($originId, $clientPostalCode, $weight);
+		return $this->consultPriceAndShipping($orderId, $originId, $clientPostalCode, $weight);
 	}
 
-	private function consultPriceAndShipping(string $originId, string $clientPostalCode, float $weight)
+	private function consultPriceAndShipping(string $orderId, string $originId, string $clientPostalCode, float $weight)
 	{
 		$originZipCode = DB::table('delivery_addresses')
 			->select('postal_code')
@@ -58,11 +59,13 @@ class ConsultPriceAndShippingAction
 		$responseCorreios = (new Correios())->consultPriceAndShipping($originZipCode, $clientPostalCode, $weight);
 		$responseJadlog = (new Jadlog())->consultPrice($originZipCode, $clientPostalCode, $weight);
 		$responseKangu = (new Kangu('seline'))->postSimular($originZipCode, $clientPostalCode, 100, $weight, 3, 18, 18, ['E' , 'X' , 'M' , 'R'], 'prazo');
+		$responseEnvia = (new EnviaDotCom('seline'))->postQuoteShipment($orderId, $originZipCode, $clientPostalCode, $weight);
 
 		return [
 			"Correios" => $responseCorreios,
 			"Jadlog" => $responseJadlog,
 			"Kangu" => $responseKangu,
+			"Envia" => $responseEnvia,
 		];
 	}
 

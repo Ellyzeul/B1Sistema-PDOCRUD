@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { toast } from "react-toastify"
 import api from "../../../../../../services/axios"
 import "./style.css"
-import { ShipmentAndPriceProp, CorreiosData, JadlogData, KanguData } from "./types"
+import { ShipmentAndPriceProp, CorreiosData, JadlogData, KanguData, EnviaData } from "./types"
 
 export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 	const { orderId, address_form_ref, delivery_service, delivery_method, tracking_code, id_bling } = props
@@ -10,15 +10,18 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 	const [jadlogData, setJadlogData] = useState({} as JadlogData)
 	const [correiosData, setCorreiosData] = useState([] as CorreiosData)
 	const [kanguData, setKanguData] = useState(null as KanguData | null)
+	const [enviaData, setEnviaData] = useState(null as EnviaData | null)
 	const [jadlogCotations, setjadlogCotations] = useState([] as JSX.Element[])
 	const [kanguCotations, setKanguCotations] = useState([] as JSX.Element[])
+	const [enviaCotations, setEnviaCotations] = useState([] as JSX.Element[])
 	const [correiosCotations, setcorreiosCotations] = useState([] as JSX.Element[])
 
 	useEffect(() => {
 		if(jadlogData) mapJadlog()
 		if(correiosData) mapCorreios()
 		if(kanguData) mapKangu(kanguData)
-	}, [jadlogData, correiosData, kanguData])
+		if(enviaData) mapEnvia(enviaData)
+	}, [jadlogData, correiosData, kanguData, enviaData])
 
 			
 	const getShipmentAndPrice = (originId: string, clientPostalCode: string, weight: string) => {
@@ -37,6 +40,7 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 			setCorreiosData(response["Correios"])
 			setJadlogData(response["Jadlog"][0])
 			setKanguData(response["Kangu"])
+			setEnviaData(response["Envia"])
 		})
 		.catch((error) => {
 			toast.error("Erro ao calcular o frete. Por favor, tente novamente.")
@@ -125,6 +129,19 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 		setKanguCotations(cotations)
 	}
 
+	const mapEnvia = (data: EnviaData) => {
+		setEnviaCotations(data.map(({ name, price, expected_deadline }) => 
+			<div 
+				className="available" 
+				onClick={() => handleServiceClick(orderId, 'envia', name)}
+			>
+				<strong>{name}</strong>
+				<div><strong>Custo: </strong>R$ {price ? String(price).replace('.', ',') : '--'}</div>
+				<div><strong>Prazo: </strong> {expected_deadline}</div>
+			</div>
+		))
+	}
+
 	const handleClick = () => {
 		const addressForm = address_form_ref.current as HTMLDivElement | null
 		if(!inputsRef.current || !addressForm) return
@@ -155,8 +172,9 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 				<label htmlFor="weight">Peso:</label>
 				<select name="weight" defaultValue={1}>
 					{
-						Array.from({length: 10}, (_, index) => 0.5 + index * 0.5)
-							.map(value => <option value={value}>{String(value).replace('.', ',')} Kg</option>)
+						[0.25, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5].map(value => 
+							<option value={value}>{String(value).replace('.', ',')} Kg</option>
+						)
 					}
 				</select>
 				<a 
@@ -171,6 +189,7 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 				{correiosCotations}
 				{jadlogCotations}
 				{kanguCotations}
+				{enviaCotations}
 			</div>
 		</div>
 	)

@@ -23,7 +23,7 @@ class UpdateDeliveryMethodAction
     Order::where('id', $orderId)
       ->update([ 'id_delivery_method' => $deliveryMethodId, 'tracking_code' => $serviceName ]);
     
-    $this->updateOnBling(
+    if(isset($this->deliveryMethods[$deliveryMethod]['bling_aliases'])) $this->updateOnBling(
       $orderId, 
       $this->deliveryMethods[$deliveryMethod]['bling_aliases'][$serviceName]
     );
@@ -84,6 +84,9 @@ class UpdateDeliveryMethodAction
         'Kangu - PAC' => 'kangu_E_99999999000000',
         'Kangu - Sedex' => 'kangu_X_99999999000000',
       ],
+    ],
+    'envia' => [
+      'id' => 8,
     ],
   ];
 }
