@@ -80,7 +80,7 @@ class ImportFromFNACAction
         'online_order_number' => "$order->order_id", 
         'bling_number' => $blingNumbers["$order->order_id"], 
         'order_date' => $orderDate, 
-        'isbn' => explode('_', $item->offer_seller_id)[1], 
+        'isbn' => $this->getISBN($item), 
         'selling_price' => "$item->price", 
         'ship_date' => "$order->max_expedition_date", 
         'expected_date' => "$order->max_delivery_date", 
@@ -98,7 +98,7 @@ class ImportFromFNACAction
       foreach($order->order_detail as $item){
         array_push($items, [
           "title" => "$item->product_name",
-          "isbn"  => explode('_', $item->offer_seller_id)[1],
+          "isbn"  => $this->getISBN($item),
           "value" => "$item->price",
           "quantity" => "$item->quantity"
         ]);
@@ -149,5 +149,12 @@ class ImportFromFNACAction
     }
 
     return $sendOrders;
+  }
+  
+  private function getISBN(object $item)
+  {
+    return str_starts_with($item->offer_seller_id, 'SEL_')
+      ? explode('_', $item->offer_seller_id)[1]
+      : $item->offer_seller_id;
   }
 }
