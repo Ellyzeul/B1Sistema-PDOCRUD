@@ -31,3 +31,9 @@ export type KanguData = Array<{
 	codigo: string,
 	mensagem: string,
 } }
+
+export type EnviaData = Array<{
+	name: string,
+	price?: number,
+	expected_deadline?: string,
+}>

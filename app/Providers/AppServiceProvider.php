@@ -59,6 +59,10 @@ class AppServiceProvider extends ServiceProvider
             Http::withToken($token)->baseUrl('https://queries.envia.com')
         );
 
+        Http::macro('envia', fn() => 
+            Http::withToken(env('ENVIA_DOT_COM_API_TOKEN'))->baseUrl('https://api.envia.com')
+        );
+
         Http::macro('nuvemshop', function (
             string $token, 
             string $shopId, 
