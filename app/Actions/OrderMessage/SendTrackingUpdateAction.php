@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Http;
 
 class SendTrackingUpdateAction
 {
+  private const ENVIA_ID = 8;
   public function handle(Request $request)
   {
     $sendData = $this->getSendData($request->input('order_number'));
@@ -29,11 +30,11 @@ class SendTrackingUpdateAction
       'reason' => $this->errorMessage($order, $address, $orderNumber),
     ];
 
-    $shipment = $order->id_delivery_method === 8
-      ? (new EnviaDotCom())->getShipment($order->tracking_code)[0]
+    $shipment = $order->id_delivery_method === self::ENVIA_ID
+      ? (new EnviaDotCom())->getShipment($order->tracking_code)['data'][0]
       : null;
   
-    if($order->id_delivery_method === 8 && !isset($shipment)) return [
+    if($order->id_delivery_method === self::ENVIA_ID && !isset($shipment)) return (object) [
       'success' => false,
       'reason' => 'Não foi possível recuperar o rastreio do Envia.com',
     ];
@@ -68,7 +69,7 @@ class SendTrackingUpdateAction
         ),
         'update_status' => $updateStatusResponse->content,
         'sellercentral' => $sellercentral,
-        'company' => $order->id_company ? 'seline' : 'b1',
+        'company' => $order->id_company === 0 ? 'seline' : 'b1',
       ]
     ];
   }
@@ -113,7 +114,7 @@ class SendTrackingUpdateAction
     string $postalCode,
     string $country,
     array | null $shipment,
-  )
+  ): string | null
   {
     if($deliveryMethodId === 2) return "https://rastreamento.correios.com.br/app/index.php?objetos=$trackingCode";
     if($deliveryMethodId === 3) return "https://www.dhl.com/br-pt/home/tracking/tracking-express.html?submit=1&tracking-id=$trackingCode";
