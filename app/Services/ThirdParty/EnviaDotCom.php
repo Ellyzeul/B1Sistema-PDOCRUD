@@ -104,9 +104,9 @@ class EnviaDotCom
         "weightUnit" => "KG",
         "lengthUnit" => "CM",
         "dimensions" => [
-          "length" => $weight === 0.25 ? 20 : 18,
-          "width" => $weight === 0.25 ? 18 : 18,
-          "height" => $weight === 0.25 ? 1 : 3
+          "length" => $weight <= 0.5 ? 25 : 18,
+          "width" => $weight <= 0.5 ? 20 : 18,
+          "height" => $weight <= 0.5 ? 2 : 3
         ]
       ]],
       "shipment" => [
