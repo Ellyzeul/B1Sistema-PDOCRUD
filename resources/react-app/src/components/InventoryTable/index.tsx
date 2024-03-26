@@ -26,6 +26,7 @@ export const InventoryTable = () => {
         .then(response => response.data)
         .then(response => {
           if (response.length === 0) return toast.error("Nenhum resultado encontrado")
+          console.log(response)
           setData(response)
           toast.success(`Resultados encontrados para o ISBN ${filterInput.value}`)
         })
@@ -49,7 +50,7 @@ export const InventoryTable = () => {
         </div>
 
         <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="blacklist table"  size={'small'}>
+            <Table sx={{ minWidth: 750 }} aria-label="blacklist table"  size={'small'}>
             <TableHead>
                 <TableRow>
                 <TableCell align='center' sx={{ fontWeight: 'bold' }}>ISBN</TableCell>
@@ -57,6 +58,7 @@ export const InventoryTable = () => {
                 <TableCell align='center' sx={{ fontWeight: 'bold' }}>Condição</TableCell>
                 <TableCell align='center' sx={{ fontWeight: 'bold' }}>Localização</TableCell>
                 <TableCell align='center' sx={{ fontWeight: 'bold' }}>Prateleira</TableCell>
+                <TableCell align='center' sx={{ fontWeight: 'bold' }}>Lista Negra</TableCell>
                 <TableCell align='center' sx={{ fontWeight: 'bold' }}>Observação</TableCell>
                 <TableCell align='center'></TableCell>
                 </TableRow>
@@ -72,6 +74,7 @@ export const InventoryTable = () => {
                     <TableCell align='center' padding="none">{row.condition}</TableCell>
                     <TableCell align='center' padding="none">{row.location}</TableCell>
                     <TableCell align='center' padding="none">{row.bookshelf}</TableCell>
+                    <TableCell align='center' padding="none">{row.blacklisted ? 'Sim' : 'Não'}</TableCell>
                     <TableCell align='center' padding="none">{row.observation}</TableCell>
                     <TableCell align='center' padding="none"><RemoveRowModal isbn={row.isbn} location={row.location}/></TableCell>
                 </TableRow>
