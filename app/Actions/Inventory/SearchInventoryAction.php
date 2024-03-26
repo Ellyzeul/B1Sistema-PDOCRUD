@@ -1,7 +1,9 @@
 <?php namespace App\Actions\Inventory;
 
+use App\Services\BlacklistService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class SearchInventoryAction
 {
@@ -9,10 +11,10 @@ class SearchInventoryAction
     {
         $isbn = $request->input('isbn');
 
-        return $this->seach($isbn);
+        return $this->search($isbn);
     }
 
-    private function seach(string $isbn)
+    private function search(string $isbn)
     {
         $response = DB::table('inventory')
             ->select(
@@ -27,8 +29,22 @@ class SearchInventoryAction
             ->join('inventory_location', 'inventory.id_location', '=', 'inventory_location.id')
             ->where('inventory.isbn', '=', $isbn)
             ->where('inventory.quantity', '>', 0)
-            ->get();
+            ->get()
+            ->toArray();
+        
+        $blacklist = $this->getBlacklist($response);
+        
+        foreach($response as $item) {
+            $item->blacklisted = $blacklist[$item->isbn];
+        }
     
         return $response; 
+    }
+
+    private function getBlackList(array $inventory)
+    {
+        $isbns = join(',', array_map(fn($item) => $item->isbn, $inventory));
+
+        return (new BlacklistService())->verifyListBlacklist(new Request([ 'isbns' => $isbns ]));
     }
 }
