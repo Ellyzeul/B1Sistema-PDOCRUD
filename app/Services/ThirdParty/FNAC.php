@@ -75,7 +75,7 @@ class FNAC
    * Posta mensagens no pedido
    */
 
-  public function messagesUpdate(string $messageId, string $text, ?string $action='reply', ?string $subject=null)
+  public function messagesUpdate(string $messageId, string $text, ?string $action='reply', string $subject='order_information')
   {
     $this->authenticate();
 
@@ -84,9 +84,6 @@ class FNAC
     $token = $this->token;
     $markAsRead = $action === 'reply' 
       ? "<message action=\"mark_as_read\" id=\"$messageId\"/>"
-      : '';
-    $messageSubject = isset($subject) 
-      ? "<message_subject><![CDATA[$subject]]></message_subject>"
       : '';
 
     $xml = <<<XML
@@ -99,9 +96,10 @@ class FNAC
     >
       $markAsRead
       <message action="$action" id="$messageId">
-        <message_to><![CDATA[CLIENT]]></message_to>
-        $messageSubject
+        <message_to>CLIENT</message_to>
+        <message_subject>$subject</message_subject>
         <message_description><![CDATA[$text]]></message_description>
+        <message_type>ORDER</message_type>
       </message>
     </messages_update>
     XML;
