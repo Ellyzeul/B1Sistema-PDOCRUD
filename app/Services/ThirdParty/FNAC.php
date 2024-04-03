@@ -1,5 +1,8 @@
 <?php namespace App\Services\ThirdParty;
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
+
 class FNAC
 {
   const CREDENTIALS = [
@@ -130,6 +133,41 @@ class FNAC
     $ordersQuery = $this->postXML('/orders_query', $requestBody);
     $response = [];
     foreach($ordersQuery->order as $order) array_push($response, $order);
+
+    return $response;
+  }
+
+  public function ordersUpdate(
+    string $orderId,
+    string $action,
+    array $payload=[],
+  )
+  {
+    $this->authenticate();
+
+    $partnerId = $this->partnerId;
+    $shopId = $this->shopId;
+    $token = $this->token;
+
+    $orderDetails = collect($payload)
+      ->map(fn($value, $key) => "<$key>$value</$key>")
+      ->join('');
+    
+    $response = $this->postXML('/orders_update', <<<XML
+    <?xml version="1.0" encoding="utf-8"?>
+    <orders_update 
+      xmlns="http://www.fnac.com/schemas/mp-dialog.xsd" 
+      shop_id="$shopId" 
+      partner_id="$partnerId" 
+      token="$token"
+    >
+      <order order_id="$orderId" action="$action">
+        <order_detail>
+          $orderDetails
+        </order_detail>
+      </order>
+    </orders_update>
+    XML);
 
     return $response;
   }

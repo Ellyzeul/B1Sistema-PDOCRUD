@@ -7,6 +7,7 @@ use App\Actions\Order\GetOrderMessagesAction;
 use App\Actions\Order\GetOrderNumberTotalFromListAction;
 use App\Actions\Order\PostOrderAddressOnEnviaDotComAction;
 use App\Actions\Order\PostOrderMessageAction;
+use App\Actions\Order\PostTrackingCodeOnSellercentralAction;
 use App\Actions\Order\UpdateAddressVerifiedAction;
 use App\Actions\Order\ReadOrderControlByOrderNumberAction;
 use App\Actions\Order\ReadOrderAddressesByOrderNumberAction;
@@ -90,34 +91,6 @@ class OrderService
 
   public function postTrackingCodeOnSellercentral(Request $request)
   {
-    $orderNumber = $request->input('orderNumber');
-    $sellercentral = $request->input('sellercentral');
-    $company = $request->input('company');
-    $trackingNumber = $request->input('trackingNumber');
-    $shipDate = $request->input('shipDate');
-    $service = $request->input('service') ?? $this->getOrderDeliveryMethod($orderNumber);
-
-		return (new B1Servicos())->orderTrackingCodePost(
-      $orderNumber,
-      $sellercentral,
-      $company,
-      $trackingNumber,
-      $shipDate,
-      $service,
-    );
-  }
-
-  private function getOrderDeliveryMethod(string $orderNumber)
-  {
-    $deliveryMethodId = Order::select('id_delivery_method')
-      ->where('online_order_number', $orderNumber)
-      ->first()
-      ->id_delivery_method;
-
-    return DB::table('delivery_methods')
-      ->select('name')
-      ->where('id', $deliveryMethodId)
-      ->first()
-      ->name;
+    return (new PostTrackingCodeOnSellercentralAction())->handle($request);
   }
 }
