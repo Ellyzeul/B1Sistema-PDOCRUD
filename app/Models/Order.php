@@ -572,8 +572,6 @@ class Order extends Model
             ?? $order['transporte']['volumes'][0]['volume']['remessa']['numero']
             ?? null;
 
-        if(!isset($trackingCode)) $trackingCode = $order['transporte']['volumes'][0]['volume']['remessa']['numero'] ?? null;
-
         return $trackingCode;         
     }
 
