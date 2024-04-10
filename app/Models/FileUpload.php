@@ -457,9 +457,10 @@ class FileUpload extends Model
 
 	private function handlePostAmazonOrderOnBling(array $orders)
 	{
+		$b1Bling = new Bling(1);
 		$blings = [
-			0 => new Bling(0), 
-			1 => new Bling(1), 
+			0 => new Bling(0),
+			1 => $b1Bling,
 		];
 
 		foreach($orders as $order) {
@@ -467,7 +468,7 @@ class FileUpload extends Model
 			unset($order['id_company']);
 			$address = $order['transporte']['etiqueta'];
 			
-			$contact = $blings[$idCompany]->postContact([
+			$contact = ($blings[$idCompany] ?? $b1Bling)->postContact([
 				"nome" => $address['nome'],
 				"codigo" => null,
 				"situacao" => "A",
@@ -530,9 +531,9 @@ class FileUpload extends Model
 
 			$totalItems = count($order['itens']);
 			for($i = 0; $i < $totalItems; $i++) {
-				$product = $blings[$idCompany]->getProductByCode($order['itens'][$i]['codigo']);
+				$product = ($blings[$idCompany] ?? $b1Bling)->getProductByCode($order['itens'][$i]['codigo']);
 
-				if(!isset($product->id)) $product = $blings[$idCompany]->postProduct([
+				if(!isset($product->id)) $product = ($blings[$idCompany] ?? $b1Bling)->postProduct([
 					"nome" => $order['itens'][$i]['descricao'],
 					"codigo" => $order['itens'][$i]['codigo'],
 					"unidade" => "UN",
@@ -552,7 +553,7 @@ class FileUpload extends Model
 				$order['itens'][$i]['produto'] = ['id' => $product->id];
 			}
 
-			$blings[$idCompany]->postOrder($order);
+			($blings[$idCompany] ?? $b1Bling)->postOrder($order);
 		}
 
 		return;
