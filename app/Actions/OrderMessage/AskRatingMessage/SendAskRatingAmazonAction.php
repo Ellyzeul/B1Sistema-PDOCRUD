@@ -1,6 +1,7 @@
 <?php namespace App\Actions\OrderMessage\AskRatingMessage;
 
 use App\Actions\OrderMessage\Traits\AskRatingMessageCommon;
+use App\Actions\OrderMessage\Traits\OrderMessageCommon;
 use App\Models\Order;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -8,6 +9,7 @@ use Illuminate\Support\Facades\Http;
 class SendAskRatingAmazonAction
 {
     use AskRatingMessageCommon;
+    use OrderMessageCommon;
 
     private string $sellercentral;
 
@@ -38,7 +40,7 @@ class SendAskRatingAmazonAction
             'client_name' => $address->buyer_name,
             'client_email' => $address->buyer_email,
             'sellercentral' => $this->sellercentral,
-            'company' => $order->id_company === 0 ? 'seline' : 'b1'
+            'company' => $this->getCompanyName($order->id_company),
         ])->object();
         
         Order::where('id', $orderId)->increment('ask_rating');

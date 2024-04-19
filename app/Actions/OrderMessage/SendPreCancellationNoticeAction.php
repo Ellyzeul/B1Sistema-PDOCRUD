@@ -1,5 +1,6 @@
 <?php namespace App\Actions\OrderMessage;
 
+use App\Actions\OrderMessage\Traits\OrderMessageCommon;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -7,6 +8,8 @@ use Illuminate\Support\Facades\Http;
 
 class SendPreCancellationNoticeAction
 {
+  use OrderMessageCommon;
+
   public function handle(Request $request)
   {
     $sendDataResponse = $this->getSendData($request->input('order_id'));
@@ -48,7 +51,7 @@ class SendPreCancellationNoticeAction
         'ship_date' => $order->ship_date,
         'expected_date' => $address->expected_date,
         'sellercentral' => $sellercentral,
-        'company' => $order->id_company === 0 ? 'seline' : 'b1',
+        'company' => $this->getCompanyName($order->id_company),
       ]
     ];
   }
