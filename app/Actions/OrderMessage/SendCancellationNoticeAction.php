@@ -1,5 +1,6 @@
 <?php namespace App\Actions\OrderMessage;
 
+use App\Actions\OrderMessage\Traits\OrderMessageCommon;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -7,6 +8,8 @@ use Illuminate\Support\Facades\Http;
 
 class SendCancellationNoticeAction
 {
+  use OrderMessageCommon;
+
   public function handle(Request $request)
   {
     $sendDataResponse = $this->getSendData($request->input('order_id'));
@@ -47,7 +50,7 @@ class SendCancellationNoticeAction
         'delivery_method' => $deliveryMethod->name,
         'ship_date' => $order->ship_date,
         'sellercentral' => $sellercentral,
-        'company' => $order->id_company === 0 ? 'seline' : 'b1',
+        'company' => $this->getCompanyName($order->id_company),
       ]
     ];
   }

@@ -1,5 +1,6 @@
 <?php namespace App\Actions\OrderMessage;
 
+use App\Actions\OrderMessage\Traits\OrderMessageCommon;
 use App\Actions\Tracking\UpdateOrInsertOrderTrackingAction;
 use App\Models\Order;
 use App\Services\ThirdParty\EnviaDotCom;
@@ -9,6 +10,8 @@ use Illuminate\Support\Facades\Http;
 
 class SendTrackingUpdateAction
 {
+  use OrderMessageCommon;
+
   private const ENVIA_ID = 8;
   public function handle(Request $request)
   {
@@ -69,7 +72,7 @@ class SendTrackingUpdateAction
         ),
         'update_status' => $updateStatusResponse->content,
         'sellercentral' => $sellercentral,
-        'company' => $order->id_company === 0 ? 'seline' : 'b1',
+        'company' => $this->getCompanyName($order->id_company),
       ]
     ];
   }
