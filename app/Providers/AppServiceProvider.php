@@ -1,6 +1,4 @@
-<?php
-
-namespace App\Providers;
+<?php namespace App\Providers;
 
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
@@ -25,19 +23,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $blingAPIKeys = [
-            0 => 'SELINE_BLING_API_TOKEN',
-            1 => 'B1_BLING_API_TOKEN',
-        ];
+        $blingApiKey = function(int $idCompany): string {
+            return [ 0 => 'SELINE_BLING_API_TOKEN', 1 => 'B1_BLING_API_TOKEN', ][$idCompany]
+                ?? 'B1_BLING_API_TOKEN';
+        };
 
-        Http::macro('bling', function (int $companyId, string $version) use ($blingAPIKeys) {
+        Http::macro('bling', function (int $companyId, string $version, ?string $accessToken=null) use ($blingApiKey) {
             if($version === 'v2') return Http::withUrlParameters([
-                'apikey' => env($blingAPIKeys[$companyId])
+                'apikey' => env($blingApiKey($companyId))
             ])->baseUrl('https://bling.com.br/Api/v2');
             
-            if($version === 'v3') return Http::withHeaders([
-                'x-api-key' => env($blingAPIKeys[$companyId])
-            ])->baseUrl('https://bling.com.br/Api/v3');
+            if($version === 'v3') return isset($accessToken)
+                ? Http::withToken($accessToken)->baseUrl('https://bling.com.br/Api/v3')
+                : Http::baseUrl('https://bling.com.br/Api/v3');
         });
 
         $mercadoLivreHandler = function(
