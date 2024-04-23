@@ -40,6 +40,11 @@ class OrderMessageService
 		$orderId = $request->input('order_id');
 		$companyId = $request->input('company_id');
 		$sellercentral = $request->input('seller_central');
+
+		if(str_starts_with($sellercentral, 'Amazon')) {
+			$companyId = $companyId > 1 ? 1 : $companyId;
+		}
+		
 		$handlerKey = "$sellercentral-$companyId";
 		
 		try {
