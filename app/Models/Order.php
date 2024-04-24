@@ -63,7 +63,7 @@ class Order extends Model
             ->select('id', 'name', 'company_name', 'cnpj', 'state_registration', 'municipal_registration')
             ->where('id', $order->id_company)
             ->first();
-        $apikey = env(($this->blingAPIKeys[$order->id_company]));
+        $apikey = env(($this->blingAPIKeys[$order->id_company > 1 ? 1 : $order->id_company]));
         $blingResponse = $this->makeBlingOrderRequest($apikey, $order->bling_number);
         if(isset($blingResponse['error'])) return $blingResponse;
 
@@ -128,7 +128,7 @@ class Order extends Model
         
         $handled = array_map(function($result) {
             $blingResponse = Order::getBlingMessagingInfo(
-                env($this->blingAPIKeys[$result->id_company]),
+                env($this->blingAPIKeys[$result->id_company > 1 ? 1 : $result->id_company]),
                 $result->bling_number
             );
             if(isset($blingResponse['error'])) return [
@@ -422,7 +422,7 @@ class Order extends Model
 
     public function updateTrackingCode(string $companyId, string $orderId, string $blingNumber)
     {
-        $apikey = env($this->blingAPIKeys[$companyId]);
+        $apikey = env($this->blingAPIKeys[$companyId > 1 ? 1 : $companyId]);
         $blingResponse = Order::getBlingTrakingCodeRequest($apikey, $blingNumber);
         if(isset($blingResponse['error'])) return $blingResponse['error'];
 
@@ -440,7 +440,7 @@ class Order extends Model
 
     public function updateTrackingService(string $companyId, string $orderId, string $blingNumber)
     {
-        $apikey = env($this->blingAPIKeys[$companyId]);
+        $apikey = env($this->blingAPIKeys[$companyId > 1 ? 1 : $companyId]);
 
         $blingResponse = Order::getBlingDeliveryMethodRequest($apikey, $blingNumber);
         if(isset($blingResponse['error'])) return ['message' => 'Erro na requisição de dados ao Bling...'];
@@ -499,7 +499,7 @@ class Order extends Model
         $idInvoice = $data['id_invoice'];
         $idBling = $data['id_bling'];
 
-        $apikey = env($this->blingAPIKeys[$companyId]);
+        $apikey = env($this->blingAPIKeys[$companyId > 1 ? 1 : $companyId]);
         $linkDanfe = $this->getDanfeLink($apikey, $invoice_number, $serie);
         if(isset($linkDanfe['error'])) return $linkDanfe;
 
@@ -516,9 +516,9 @@ class Order extends Model
 
     private function getInvoiceNumberAndSerie(string $companyId, string $blingNumber)
     {
-        $apikey = env($this->blingAPIKeys[$companyId]);
+        $apikey = env($this->blingAPIKeys[$companyId > 1 ? 1 : $companyId]);
         $response = $this->makeBlingOrderRequest($apikey, $blingNumber);
-        $orderResponse = (new ThirdPartyBling($companyId))->getOrder($blingNumber);
+        $orderResponse = (new ThirdPartyBling($companyId > 1 ? 1 : $companyId))->getOrder($blingNumber);
         if(isset($response['error'])) return $response;
 
         $order = $response['retorno']['pedidos'][0]['pedido'];
