@@ -1,6 +1,9 @@
 <?php namespace App\Services\ThirdParty;
 
+use App\Models\ApiCredential;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class Bling
 {
@@ -9,6 +12,12 @@ class Bling
     private string $previousOrderNumber;
     private string $orderId;
     private string $contactId;
+
+    const API_KEYS = [ 0 => 'bling_seline', 1 => 'bling_b1' ];
+    const OAUTH_CREDENTIALS = [
+        0 => ['id' => 'SELINE_BLING_CLIENT_ID', 'secret' => 'SELINE_BLING_CLIENT_SECRET'],
+        1 => ['id' => 'B1_BLING_CLIENT_ID', 'secret' => 'B1_BLING_CLIENT_SECRET'],
+    ];
 
     public function __construct(int $companyId, string $version = 'v3')
     {
@@ -65,7 +74,8 @@ class Bling
 
     private function putContactV3(string $contactId, array $requestBody)
     {
-        $response = Http::bling($this->companyId, 'v3')->put("/contatos/$contactId", $requestBody);
+        $accessToken = $this->auth();
+        $response = Http::bling($this->companyId, 'v3', $accessToken)->put("/contatos/$contactId", $requestBody);
 
         return $response->ok()
             ? $response->object()->data
@@ -89,8 +99,9 @@ class Bling
  
      private function getContactV3(array $params)
      {
+        $accessToken = $this->auth();
         $urlParams = http_build_query($params);
-        $response = Http::bling($this->companyId, 'v3')->get("/contatos?$urlParams");
+        $response = Http::bling($this->companyId, 'v3', $accessToken)->get("/contatos?$urlParams");
 
         return $response->ok()
             ? (
@@ -117,7 +128,8 @@ class Bling
 
     private function postContactV3(array $requestBody)
     {
-        $response = Http::bling($this->companyId, 'v3')->post("/contatos", $requestBody);
+        $accessToken = $this->auth();
+        $response = Http::bling($this->companyId, 'v3', $accessToken)->post("/contatos", $requestBody);
 
         return $response->getStatusCode() === 201
             ? $response->object()->data
@@ -140,7 +152,8 @@ class Bling
 
     private function getProductV3(string $productId)
     {
-        $response = Http::bling($this->companyId, 'v3')->get("/produtos/$productId");
+        $accessToken = $this->auth();
+        $response = Http::bling($this->companyId, 'v3', $accessToken)->get("/produtos/$productId");
         if(!$response->ok()) return (object) ['error' => true];
 
         return $response->object()->data;
@@ -163,7 +176,8 @@ class Bling
 
     private function getProductByCodeV3(string $code)
     {
-        $response = Http::bling($this->companyId, 'v3')->get("/produtos?codigo=$code");
+        $accessToken = $this->auth();
+        $response = Http::bling($this->companyId, 'v3', $accessToken)->get("/produtos?codigo=$code");
         if(!$response->ok() || count($response->object()->data) == 0) return (object) ['error' => true];
 
         return $this->getProductV3($response->object()->data[0]->id);
@@ -186,7 +200,8 @@ class Bling
 
     private function putProductV3(string $productId, array $requestBody)
     {
-        $response = Http::bling($this->companyId, 'v3')->put("/produtos/$productId", $requestBody);
+        $accessToken = $this->auth();
+        $response = Http::bling($this->companyId, 'v3', $accessToken)->put("/produtos/$productId", $requestBody);
 
         return $response->ok()
             ? $response->object()->data
@@ -209,7 +224,8 @@ class Bling
 
     private function postProductV3(array $requestBody)
     {
-        $response = Http::bling($this->companyId, 'v3')->post("/produtos", $requestBody);
+        $accessToken = $this->auth();
+        $response = Http::bling($this->companyId, 'v3', $accessToken)->post("/produtos", $requestBody);
 
         return $response->ok()
             ? $response->object()->data
@@ -243,7 +259,9 @@ class Bling
 
     private function getOrderV3(string $blingNumber)
     {
-        $response = Http::bling($this->companyId, 'v3')->get("/pedidos/vendas?numero=$blingNumber");
+        $accessToken = $this->auth();
+        $response = Http::bling($this->companyId, 'v3', $accessToken)->get("/pedidos/vendas?numero=$blingNumber");
+        Log::debug(json_encode($response->object()));
         $data = $response->object()->data[0];
 
         $this->previousOrderNumber = $blingNumber;
@@ -263,7 +281,8 @@ class Bling
 
     public function getOrderById(string $orderId)
     {
-        $response = Http::bling($this->companyId, 'v3')->get("/pedidos/vendas/{$orderId}");
+        $accessToken = $this->auth();
+        $response = Http::bling($this->companyId, 'v3', $accessToken)->get("/pedidos/vendas/{$orderId}");
         $data = $response->object()->data;
         
         $this->contactId = $data->contato->id;
@@ -287,7 +306,8 @@ class Bling
  
      public function postOrderV3(array $requestBody)
      {
-         $response = Http::bling($this->companyId, 'v3')->post("/pedidos/vendas", $requestBody);
+        $accessToken = $this->auth();
+        $response = Http::bling($this->companyId, 'v3', $accessToken)->post("/pedidos/vendas", $requestBody);
          
         return $response->ok()
             ? $response->object()->data
@@ -309,7 +329,8 @@ class Bling
 
     public function putOrderV3(string $orderId, array | object $requestBody)
     {
-        $response = Http::bling($this->companyId, 'v3')->put("/pedidos/vendas/{$orderId}", $requestBody);
+        $accessToken = $this->auth();
+        $response = Http::bling($this->companyId, 'v3', $accessToken)->put("/pedidos/vendas/{$orderId}", $requestBody);
         
         return $response->ok()
             ? $response->object()->data
@@ -320,15 +341,66 @@ class Bling
      * Funções auxiliares do endpoint /vendas
      */
 
-    private function setOrderId(string $blingNumber)
+    private function setOrderId(string $blingNumber, string $accessToken)
     {
         if(isset($this->previousOrderNumber) && $blingNumber === $this->previousOrderNumber) return (object) ['error' => false];
 
-        $response = Http::bling($this->companyId, 'v3')->get("/pedidos/vendas?numero=$blingNumber");
+        $response = Http::bling($this->companyId, 'v3', $accessToken)->get("/pedidos/vendas?numero=$blingNumber");
         if(!$response->ok()) return (object) ['error' => true];
 
         $this->orderId = $response->object()->data[0]->id;
 
         return (object) ['error' => false];
+    }
+
+    private function auth(bool $force=false)
+    {
+        $credential = ApiCredential::get(self::API_KEYS[$this->getBlingId()] ?? 1);
+
+        if($this->isCredentialExpired($credential) || $force) {
+            $credential = $this->fetchUpdatedCredential($credential);
+        }
+
+        return $credential->access_token;
+    }
+
+    private function isCredentialExpired(object $credential)
+    {
+        return Date::now()->diffInMilliseconds($credential->expire_date, false) <= 0;
+    }
+
+    private function fetchUpdatedCredential(object $credential): object
+    {
+        $now = Date::now();
+        $oauthCredential = $this->getOAuthCredentials();
+        $updated = Http::bling($this->companyId, 'v3')->withBasicAuth(
+            $oauthCredential->id,
+            $oauthCredential->secret,
+        )->post('/oauth/token', [
+            'grant_type' => 'refresh_token',
+            'refresh_token' => $credential->refresh_token,
+        ])->object();
+
+        $updated->expire_date = $now->addSeconds($updated->expires_in)->toISOString();
+
+        ApiCredential::set(self::API_KEYS[$this->getBlingId()], $updated);
+
+        return $updated;
+    }
+
+    private function getOAuthCredentials(): object
+    {
+        $id = $this->getBlingId();
+        $envKeys = self::OAUTH_CREDENTIALS[$id];
+
+        return (object) [
+            'id' => env($envKeys['id']),
+            'secret' => env($envKeys['secret']),
+        ];
+    }
+
+    private function getBlingId(): int
+    {
+        return $this->companyId <= 1 ? $this->companyId : 1;
     }
 }
