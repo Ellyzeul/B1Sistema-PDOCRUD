@@ -3,6 +3,7 @@ import api from "../../../services/axios"
 import getColumnFieldIndex from "./getColumnFieldIndex"
 import getTableRows from "./getTableRows"
 import { MutableRefObject } from "react"
+import getCompany from "../../../lib/getCompany"
 
 const setTrackingCodeUpdateButton = (refTrackingMethodModal: MutableRefObject<HTMLDivElement | null>, refOnlineOrderNumber: MutableRefObject<null>) => {
 	const trackingCodeIdx = getColumnFieldIndex("Código de rastreio")
@@ -58,10 +59,10 @@ const setTrackingCodeUpdateButton = (refTrackingMethodModal: MutableRefObject<HT
 
 		container.appendChild(icon)
 		setChangeTrackingCodeButton(
-			container, 
-			orderNumber.trim(), 
-			sellercentral.trim(), 
-			companyId === '0' ? 'seline' : 'b1', 
+			container,
+			orderNumber.trim(),
+			sellercentral.trim(),
+			getCompany(companyId),
 			trackingCodeInput.value,
 			shipDate.trim(),
 			refTrackingMethodModal,

@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react"
 import { ShipmentLabelProp } from "../type"
 import api from "../../../services/axios"
+import getCompany from "../../../lib/getCompany"
 
 const KanguLabel = (props: ShipmentLabelProp) => {
   const { company: { id }, tracking_code } = props
   const [pdfUrl, setPdfUrl] = useState('')
   const [placeholder, setPlaceholder] = useState('Carregando...')
-  const companyName = companiesNames[id]
+  const companyName = getCompany(id, true)
 
   useEffect(() => {
     api.get(`/api/tracking/kangu-shipment-label?tracking_code=${tracking_code}&company=${companyName}`)
@@ -36,8 +37,3 @@ const KanguLabel = (props: ShipmentLabelProp) => {
 }
 
 export default KanguLabel
-
-const companiesNames = {
-  0: 'seline',
-  1: 'b1',
-} as {[id: number]: string}
