@@ -5,7 +5,6 @@ use App\Services\ThirdParty\B1Servicos;
 use App\Services\ThirdParty\FNAC;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class PostTrackingCodeOnSellercentralAction
@@ -50,7 +49,6 @@ class PostTrackingCodeOnSellercentralAction
   public function handle(Request $request)
   {
     $sellercentralPrefix = Str::before($request->input('sellercentral'), '-');
-    Log::debug($sellercentralPrefix);
 
     if(!isset($this->handlers[$sellercentralPrefix])) return [
       'success' => false,

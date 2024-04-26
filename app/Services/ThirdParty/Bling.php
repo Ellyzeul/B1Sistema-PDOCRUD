@@ -3,7 +3,6 @@
 use App\Models\ApiCredential;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class Bling
 {
@@ -261,7 +260,6 @@ class Bling
     {
         $accessToken = $this->auth();
         $response = Http::bling($this->companyId, 'v3', $accessToken)->get("/pedidos/vendas?numero=$blingNumber");
-        Log::debug(json_encode($response->object()));
         $data = $response->object()->data[0];
 
         $this->previousOrderNumber = $blingNumber;
