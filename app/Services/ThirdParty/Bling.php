@@ -226,7 +226,7 @@ class Bling
         $accessToken = $this->auth();
         $response = Http::bling($this->companyId, 'v3', $accessToken)->post("/produtos", $requestBody);
 
-        return $response->ok()
+        return $response->created()
             ? $response->object()->data
             : $response->object();
     }    
