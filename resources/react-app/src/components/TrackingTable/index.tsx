@@ -114,7 +114,7 @@ const getRows = (data: {[key: string]: string}[], fieldsKeys: string[], actualPa
           <td>
             {row.tracking_code}
             {
-              /^[0-9]{3}-[0-9]{7}-[0-9]{7}$/.test(row.online_order_number)
+              /^([0-9]{3}-[0-9]{7}-[0-9]{7}|[A-Z0-9]{13})$/.test(row.online_order_number)
                 ? <div className="tracking-table-notify-client">
                     <i className="fa-regular fa-envelope" onClick={() => handleClientNotify(row.online_order_number)}/>
                   </div>
