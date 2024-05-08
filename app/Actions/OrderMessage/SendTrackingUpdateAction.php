@@ -148,7 +148,7 @@ class SendTrackingUpdateAction
       return 'https://www.correosexpress.pt, https://www.correos.es';
     }
 
-    return "https://envia.com/pt-BR/monitorando";
+    return "https://envia.com/pt-BR/rastreamento";
   }
 
   private function errorMessage(?object $order, ?object $address, string $orderNumber)
