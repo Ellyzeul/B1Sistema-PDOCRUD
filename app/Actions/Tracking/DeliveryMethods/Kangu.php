@@ -18,7 +18,7 @@ class Kangu
   {
     if(!isset($idCompany)) return;
 
-    $this->api = new API(self::COMPANIES[$idCompany]);
+    $this->api = new API(self::COMPANIES[$idCompany] ?? 1);
   }
 
   public function fetch(string $trackingCode)
@@ -42,6 +42,6 @@ class Kangu
     if(isset($this->api)) return;
 
     $orderData = $this->getOrderIdAndcompanyIdByTrackingCode($trackingCode);
-    $this->api = new API(self::COMPANIES[$orderData->id_company]);
+    $this->api = new API(self::COMPANIES[$orderData->id_company] ?? 1);
   }
 }
