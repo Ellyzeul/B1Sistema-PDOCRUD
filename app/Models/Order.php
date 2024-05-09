@@ -568,9 +568,9 @@ class Order extends Model
         if(isset($response['error'])) return $response;
 
         $order = $response['retorno']['pedidos'][0]['pedido'];
-        $trackingCode = $order['transporte']['volumes'][0]['volume']['codigoRastreamento']
-            ?? $order['transporte']['volumes'][0]['volume']['remessa']['numero']
-            ?? null;
+        $trackingCode = strval($order['transporte']['volumes'][0]['volume']['codigoRastreamento'] ?? null);
+        if(strlen($trackingCode) === 0) $trackingCode = strval($order['transporte']['volumes'][0]['volume']['remessa']['numero'] ?? null);
+        if(strlen($trackingCode) === 0) $trackingCode = null;
 
         return $trackingCode;         
     }
