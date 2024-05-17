@@ -42,6 +42,6 @@ class Kangu
     if(isset($this->api)) return;
 
     $orderData = $this->getOrderIdAndcompanyIdByTrackingCode($trackingCode);
-    $this->api = new API(self::COMPANIES[$orderData->id_company] ?? 1);
+    $this->api = new API(self::COMPANIES[$orderData->id_company] ?? 'b1');
   }
 }
