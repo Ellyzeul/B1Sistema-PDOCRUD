@@ -97,5 +97,10 @@ class AppServiceProvider extends ServiceProvider
 
             return $configClient->withToken($accessToken);
         });
+
+        Http::macro('b1rastreamento', function() {
+            return Http::baseUrl(config('cache.intregrations.b1rastreamento.url') . '/api')
+                ->withToken(config('cache.intregrations.b1rastreamento.token'));
+        });
     }
 }

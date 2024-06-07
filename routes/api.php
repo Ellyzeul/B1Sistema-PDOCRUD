@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\B1RastreamentoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
@@ -17,6 +18,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\BlacklistController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\OfferController;
+use App\Http\Middleware\AuthenticateB1Rastreamento;
 use Illuminate\Support\Facades\Http;
 
 /*
@@ -146,6 +148,7 @@ Route::controller(TrackingController::class)
         Route::post('/update-all', 'updateAll');
         Route::post('/update-field', 'updateField');
         Route::post('/update-phase', 'updateOrderPhase');
+        Route::post('/create-internal', 'createInternal');
     });
 
 Route::controller(BlacklistController::class)
@@ -172,4 +175,11 @@ Route::controller(OfferController::class)
     ->prefix('offer')
     ->group(function() {
         Route::delete('/', 'delete');
+    });
+
+Route::controller(B1RastreamentoController::class)
+    ->middleware(AuthenticateB1Rastreamento::class)
+    ->prefix('b1rastreamento')
+    ->group(function() {
+        Route::get('/tracking-info', 'index');
     });

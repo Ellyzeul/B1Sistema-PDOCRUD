@@ -107,4 +107,13 @@ return [
 
     'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache_'),
 
+    'intregrations' => [
+
+        'b1rastreamento' => [
+            'url' => env('B1_RASTREAMENTO_URL'),
+            'token' => env('B1_RASTREAMENTO_TOKEN'),
+        ],
+
+    ],
+
 ];

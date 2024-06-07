@@ -22,6 +22,7 @@ import setBlacklistIcon from "./setBlacklistIcon";
 import setInventoryIcon from "./setInventoryIcon";
 import configureCancelInvoiceColumn from "./configureCancelInvoiceColumn";
 import setSendCancellationNoticeColumn from "./setSendCancellationNoticeColumn";
+import configureInternalTrackingCodeColumn from "./configureInternalTrackingCodeColumn";
 
 const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObject<null>, refModalId: MutableRefObject<null>, refOnlineOrderNumber: MutableRefObject<null>, refURLInput: MutableRefObject<null>, refTrackingMethodModal: MutableRefObject<HTMLDivElement | null>) => {
 	if(!elemRef.current) return
@@ -47,6 +48,7 @@ const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObje
 	configureCancelInvoiceColumn()
 	configureReadyForShipColumn()
 	configureSellercentralColumn()
+	configureInternalTrackingCodeColumn()
 	setConditionalStyling()
 	setCompaniesIcons()
 	configureDeliveryMethodField()

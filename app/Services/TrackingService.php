@@ -11,6 +11,7 @@ use App\Actions\Tracking\UpdateOrInsertOrderTrackingAction;
 use App\Actions\Tracking\UpdateOrInsertPurchaseTrackingAction;
 use App\Actions\Tracking\ConsultPriceAndShippingAction;
 use App\Actions\Tracking\ConsultPostalCodeAction;
+use App\Actions\Tracking\CreateInternalAction;
 use App\Actions\Tracking\GetEnviaDotComShipmentLabelAction;
 use App\Services\ThirdParty\Kangu;
 
@@ -101,4 +102,9 @@ class TrackingService
             'content' => "data:application/pdf;base64, {$response->pdf}",
         ];
     }
+
+    public static function createInternal(Request $request)
+	{
+		return (new B1RastreamentoService())->createTracking($request);
+	}
 }
