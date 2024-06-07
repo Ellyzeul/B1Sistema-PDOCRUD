@@ -70,4 +70,9 @@ class TrackingController extends Controller
 	{
 		return (new TrackingService())->getKanguShipmentLabel($request);
 	}
+
+	public static function createInternal(Request $request)
+	{
+		return (new TrackingService())->createInternal($request);
+	}
 }
