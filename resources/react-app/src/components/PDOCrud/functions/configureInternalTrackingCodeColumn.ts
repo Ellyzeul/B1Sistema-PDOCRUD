@@ -8,6 +8,8 @@ export default function configureInternalTrackingCodeColumn() {
   const orderNumberIdx = getColumnFieldIndex('ORIGEM')
   const rows = getTableRows()
 
+  if(internalTrackingIdx === -1 || orderNumberIdx === -1) return
+
   rows.forEach(({children: row}) => {
     if(row[internalTrackingIdx].textContent?.trim() !== '') return
 
