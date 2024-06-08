@@ -27,11 +27,9 @@ const configureInvoiceField = () => {
     cells[orderNumber].push(cell)
   }
 
-  console.log('numberList', numbersList)
   api.get(`/api/photo/verify-list?numbers_list=${numbersList.join(',')}`)
     .then(response => response.data as {[key: string]: boolean})
     .then(response => Object.keys(response).forEach(number => {
-      console.log(response)
       if(!response[number]) return
 
       cells[number].forEach(cell => {
