@@ -16,6 +16,7 @@ use App\Http\Controllers\SupplierURLController;
 use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BlacklistController;
+use App\Http\Controllers\ClientBlacklistController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\OfferController;
 use App\Http\Middleware\AuthenticateB1Rastreamento;
@@ -175,6 +176,13 @@ Route::controller(OfferController::class)
     ->prefix('offer')
     ->group(function() {
         Route::delete('/', 'delete');
+    });
+
+Route::controller(ClientBlacklistController::class)
+    ->prefix('client-blacklist')
+    ->group(function() {
+        Route::get('/{key}', 'index');
+        Route::post('/', 'create');
     });
 
 Route::controller(B1RastreamentoController::class)
