@@ -23,8 +23,10 @@
   grid-template-rows: 80px calc(100% - 80px);
 }
 
-#container-head {
+#container-head, #container-body {
   width: 90%;
+}
+#container-head {
   height: 100%;
   display: flex;
   justify-content: space-between;
@@ -49,6 +51,26 @@
   border-radius: 4px;
   font-size: large;
   cursor: pointer;
+}
+
+#container-body {
+
+}
+
+#blacklist-table {
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 4px;
+}
+
+#blacklist-table > tbody > tr {
+  width: 100%;
+  text-align: center;
+}
+
+#table-placeholder {
+  width: 100%;
+  text-align: center;
 }
 
 #modal-container {

@@ -12,7 +12,9 @@ class ClientBlacklistController extends Controller
 {
     public function index(Request $request)
     {
-        return ClientBlacklist::where('key', 'like', $request->key)->get();
+        if(isset($request->key)) return ClientBlacklist::where('key', 'like', "%$request->key%")->get();
+
+        return ClientBlacklist::take(10)->get();
     }
 
     public function create(Request $request)
