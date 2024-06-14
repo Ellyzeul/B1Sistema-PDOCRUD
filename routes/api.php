@@ -181,7 +181,7 @@ Route::controller(OfferController::class)
 Route::controller(ClientBlacklistController::class)
     ->prefix('client-blacklist')
     ->group(function() {
-        Route::get('/{key}', 'index');
+        Route::get('/{key?}', 'index');
         Route::post('/', 'create');
     });
 

@@ -1,11 +1,32 @@
-import { FormEvent, FormEventHandler, useState } from "react"
+import { FormEvent, FormEventHandler, useEffect, useRef, useState } from "react"
 import { Navbar } from "../../../../components/Navbar"
 import "./style.css"
 import api from "../../../../services/axios"
 import { ToastContainer, toast } from "react-toastify"
 
+const PLACEHOLDER = <tr key={0}>
+  <td><p id="table-placeholder">Sem registros...</p></td>
+  <td></td>
+</tr>
+
 export default function BlacklistClientPage() {
   const [modalOpen, setModalOpen] = useState('hidden' as 'hidden' | 'visible')
+  const [list, setList] = useState([PLACEHOLDER])
+  const inputRef = useRef(null as HTMLInputElement | null)
+
+  async function requestList(search?: string): Promise<Array<JSX.Element>> {
+    return api.get('/api/client-blacklist' + (search ? `/${search}` : ''))
+      .then(response => response.data)
+      .then((list: Array<{key: string, type: string}>) => list.map(({key, type}, id) => <tr key={id}>
+        <td>{key}</td>
+        <td>{type.toUpperCase()}</td>
+      </tr>))
+      .then(list => list.length > 0 ? list : [PLACEHOLDER])
+  }
+
+  useEffect(() => {(async() => {
+    setList(await requestList())
+  })()}, [])
 
   function openModal() {
     setModalOpen('visible')
@@ -43,14 +64,28 @@ export default function BlacklistClientPage() {
         <div id="table-container">
           <div id="container-head">
             <div>
-              <input type="text" />
-              <button>Buscar</button>
+              <input type="text" ref={inputRef}/>
+              <button
+                onClick={async() => inputRef.current && setList(await requestList(inputRef.current.value))}
+              >
+                Buscar
+              </button>
             </div>
             <div>
               <button id="add-item-button" onClick={openModal}>+</button>
             </div>
           </div>
-          <div id="container-body"></div>
+          <div id="container-body">
+            <table id="blacklist-table">
+              <thead>
+                <tr>
+                  <th>Valor</th>
+                  <th>Tipo</th>
+                </tr>
+              </thead>
+              <tbody>{list}</tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div id="modal-container" className={modalOpen} onClick={e => (e.target as HTMLElement).className === 'visible' && closeModal()}>
