@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ClientBlacklist;
+use App\Services\ClientBlacklistService;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -15,6 +16,11 @@ class ClientBlacklistController extends Controller
         if(isset($request->key)) return ClientBlacklist::where('key', 'like', "%$request->key%")->get();
 
         return ClientBlacklist::take(10)->get();
+    }
+
+    public function readFromOrders(Request $request)
+    {
+        return (new ClientBlacklistService())->readFromOrders($request);
     }
 
     public function create(Request $request)

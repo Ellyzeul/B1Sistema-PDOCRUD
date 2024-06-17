@@ -7,7 +7,7 @@ import AddressForm from "./AddressForm"
 import { toast } from "react-toastify"
 
 const AddressModal = (props: AddressModalProp) => {
-  const { orderNumber, orderId, salesChannel} = props
+  const {orderNumber, orderId, salesChannel, blacklisted} = props
   const [isOpen, setIsOpen] = useState(false)
   const [{ sellercentral, bling }, setOrderAddress] = useState({} as OrderAddress)
   const [hasAddress, setHasAddress] = useState(true)
@@ -58,8 +58,10 @@ const AddressModal = (props: AddressModalProp) => {
       <button
         className="open-address-modal"
         onClick={handleOpen}
+        disabled={blacklisted}
+        title={blacklisted ? 'Cliente na lista negra' : ''}
       >
-        <i className="address-modal-btn fa-solid fa-house"></i>
+        <i className={`address-modal-btn fa-solid fa-house ${blacklisted && 'address-modal-btn-disabled'}`}></i>
       </button>
       <Modal
         className='address-modal' 

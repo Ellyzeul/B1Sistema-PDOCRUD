@@ -2,6 +2,9 @@
   color: black;
   font-size: larger;
 }
+.address-modal-btn-disabled {
+  color: rgba(139, 0, 0, 0.507);
+}
 
 .open-address-modal {
   border: none;

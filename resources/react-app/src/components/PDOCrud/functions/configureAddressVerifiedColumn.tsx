@@ -24,13 +24,13 @@ const configureHeader = (headers: HTMLTableRowElement, colIdx: number) => {
   header.children[0].replaceWith(newIcon)
 }
 
-const configureRows = (rows: HTMLTableRowElement[], colIdx: number) => {
+const configureRows = async(rows: HTMLTableRowElement[], colIdx: number) => {
   const saveBtn = document.querySelector(".pdocrud-button-save") as HTMLAnchorElement
   const checkboxes = [] as {id: string, checkbox: HTMLInputElement}[]
   const orderNumberColIdx = getColumnFieldIndex('ORIGEM')
   const orderIdColIdx = getColumnFieldIndex('Nº')
-  const companyColIdx = getColumnFieldIndex('Empresa')
   const salesChannelColIdx = getColumnFieldIndex('Canal de venda')
+  const blacklist = await clientBlacklist(rows)
   const onKeyDown = (key: string) => {
     if(key !== "Enter") return
     saveBtn.click()
@@ -61,10 +61,22 @@ const configureRows = (rows: HTMLTableRowElement[], colIdx: number) => {
     style.placeItems = 'center'
 
     addCheckbox(input, checkboxes, onKeyDown)
-    addModal(cell, orderNumber, orderId, salesChannel)
+    addModal(cell, orderNumber, orderId, salesChannel, blacklist)
   })
 
   saveBtn.addEventListener('click', onClick)
+}
+
+async function clientBlacklist(rows: Array<HTMLTableRowElement>): Promise<Record<string, boolean>> {
+  const orderNumberIdx = getColumnFieldIndex('ORIGEM')
+  if(orderNumberIdx === -1) return {}
+
+  return api.get(`/api/client-blacklist/from-orders?${
+    rows
+      .map(row => (row.children[orderNumberIdx] as HTMLTableCellElement).innerText.trim())
+      .map(orderNumber => `order_number[]=${orderNumber}`)
+      .join('&')
+  }`).then(response => response.data).then(({list}) => list)
 }
 
 const addCheckbox = (
@@ -89,11 +101,16 @@ const addCheckbox = (
   })
 }
 
-const addModal = (cell: HTMLTableCellElement, orderNumber: string, orderId: string, salesChannel: string) => {
+const addModal = (cell: HTMLTableCellElement, orderNumber: string, orderId: string, salesChannel: string, blacklist: Record<string, boolean>) => {
   const modalContainer = document.createElement('div')
   const modalRoot = createRoot(modalContainer)
 
-  modalRoot.render(<AddressModal orderNumber={orderNumber} orderId={orderId} salesChannel={salesChannel}/>)
+  modalRoot.render(<AddressModal
+    orderNumber={orderNumber}
+    orderId={orderId}
+    salesChannel={salesChannel}
+    blacklisted={blacklist[orderNumber] ?? false}
+  />)
 
   cell.appendChild(modalContainer)
 }
