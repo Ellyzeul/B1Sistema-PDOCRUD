@@ -2,6 +2,7 @@ export type AddressModalProp = {
   orderNumber: string,
   orderId: string,
   salesChannel: string,
+  blacklisted: boolean,
 }
 
 export type OrderAddress = {
