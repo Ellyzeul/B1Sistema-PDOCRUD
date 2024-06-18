@@ -182,6 +182,13 @@ class Order extends Model
             $response['sellercentral']->delivery_method = $deliveryMethod->name ?? null;
             $response['sellercentral']->tracking_code = $order->tracking_code;
             $response['sellercentral']->expected_date = date('d/m/Y', strtotime($order->expected_date));
+
+            if(!isset($response['sellercentral']->cpf_cnpj) || strlen($response['sellercentral']->cpf_cnpj) === 0) {
+                $response['sellercentral']->cpf_cnpj = $response['bling']['cpf_cnpj'];
+                DB::table('order_addresses')
+                    ->where('online_order_number', $orderNumber)
+                    ->update(['cpf_cnpj' => $response['bling']['cpf_cnpj']]);
+            }
         }
         
         return $response;
