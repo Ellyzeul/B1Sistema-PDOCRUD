@@ -58,7 +58,6 @@ const AddressModal = (props: AddressModalProp) => {
       <button
         className="open-address-modal"
         onClick={handleOpen}
-        disabled={blacklisted}
         title={blacklisted ? 'Cliente na lista negra' : ''}
       >
         <i className={`address-modal-btn fa-solid fa-house ${blacklisted && 'address-modal-btn-disabled'}`}></i>
