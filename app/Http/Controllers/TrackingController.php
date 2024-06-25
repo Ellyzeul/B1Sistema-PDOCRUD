@@ -75,4 +75,9 @@ class TrackingController extends Controller
 	{
 		return (new TrackingService())->createInternal($request);
 	}
+
+	public static function updateInternal(Request $request)
+	{
+		return (new TrackingService())->updateInternal($request);
+	}
 }
