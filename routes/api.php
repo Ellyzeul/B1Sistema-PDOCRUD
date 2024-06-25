@@ -150,6 +150,7 @@ Route::controller(TrackingController::class)
         Route::post('/update-field', 'updateField');
         Route::post('/update-phase', 'updateOrderPhase');
         Route::post('/create-internal', 'createInternal');
+        Route::post('/update-internal', 'updateInternal');
     });
 
 Route::controller(BlacklistController::class)

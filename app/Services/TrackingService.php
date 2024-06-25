@@ -107,4 +107,9 @@ class TrackingService
 	{
 		return (new B1RastreamentoService())->createTracking($request);
 	}
+
+	public static function updateInternal(Request $request)
+	{
+		return (new B1RastreamentoService())->updateTracking($request);
+	}
 }

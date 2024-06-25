@@ -6,14 +6,12 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class B1RastreamentoService
 {
   public function createTracking(Request $request)
   {
-    $order = Order::where('online_order_number', $request->order_number)
-      ->get(['id_phase', 'online_order_number'])
-      ->first();
     $address = DB::table('order_addresses')
       ->where('online_order_number', $request->order_number)
       ->get(['city', 'country', 'state'])
@@ -29,7 +27,6 @@ class B1RastreamentoService
       'uf' => $address->country === 'BR' ? $address->state : $address->country,
     ])->json();
 
-    echo json_encode($response);
     if(!isset($response['tracking'])) return response([
       'error_message' => 'Erro na criação de rastreio...',
     ], 500);
@@ -54,5 +51,21 @@ class B1RastreamentoService
         'has_tracking' => isset($order->tracking_code) && strlen($order->tracking_code) > 0,
       ]
       : ['error' => 'Não existe pedido para o {order_number} especificado'];
+  }
+
+  public function updateTracking(Request $request)
+  {
+    $orders = Order::whereIn('online_order_number', $request->order_numbers)
+      ->get(['id_phase', 'tracking_code', 'internal_tracking_code']);
+
+    $filtered = $orders->filter(fn(Order $order) => isset($order->internal_tracking_code));
+
+    return Http::b1rastreamento()->put('/tracking', [
+      'batch' => $filtered->map(fn(Order $order) => (object) [
+        'tracking_code' => $order->internal_tracking_code,
+        'phase' => floatval($order->id_phase),
+        'has_tracking' => isset($order->tracking_code) && strlen($order->tracking_code) > 0,
+      ])->toArray()
+    ])->object();
   }
 }
