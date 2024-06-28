@@ -6,7 +6,6 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class B1RastreamentoService
 {
@@ -55,16 +54,16 @@ class B1RastreamentoService
 
   public function updateTracking(Request $request)
   {
-    $orders = Order::whereIn('online_order_number', $request->order_numbers)
-      ->get(['id_phase', 'tracking_code', 'internal_tracking_code']);
+    $orders = Order::whereIn('online_order_number', array_keys($request->orders_phases))
+      ->get(['online_order_number', 'tracking_code', 'internal_tracking_code']);
 
     $filtered = $orders->filter(fn(Order $order) => isset($order->internal_tracking_code));
 
     return Http::b1rastreamento()->put('/tracking', [
       'batch' => $filtered->map(fn(Order $order) => (object) [
         'tracking_code' => $order->internal_tracking_code,
-        'phase' => floatval($order->id_phase),
-        'has_tracking' => isset($order->tracking_code) && strlen($order->tracking_code) > 0,
+        'phase' => floatval($request->orders_phases[$order->online_order_number]),
+        'has_tracking' => isset($order->tracking_code) && (strlen($order->tracking_code) > 0),
       ])->toArray()
     ])->object();
   }
