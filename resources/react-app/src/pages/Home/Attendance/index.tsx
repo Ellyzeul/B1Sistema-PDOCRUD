@@ -7,6 +7,7 @@ export const Attendance = () => {
       {icon: "/icons/rotina.png", label: "Rotina de desempenho / Rotinas críticas / E-mails", url: "/atendimento/rotina"},
       {icon: "/icons/api.png", label: "Puxar pedidos via API", url: "/atendimento/importacao-api"},
       {icon: "/icons/mensagens.png", label: "Comunicação com os clientes", url: "/atendimento/mensagens"},
+      {icon: "/icons/gestao.png", label: "Lista negra clientes", url: "/atendimento/lista-negra/cliente"},
     ]} />
   )
 }

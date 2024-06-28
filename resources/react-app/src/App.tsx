@@ -64,13 +64,13 @@ function App() {
           <Route path='/expedicao/fotos/pesquisar' element={getElement(<PhotosSearchPage/>)} />
           <Route path='/expedicao/compras/rastreamento' element={getElement(<PurchaseTrackingPage/>)} />
           <Route path='/expedicao/compras/inventario' element={getElement(<InventoryPage/>)} />
-          <Route path='/expedicao/lista-negra/cliente' element={getElement(<BlacklistClientPage/>)} />
           <Route path='/atendimento' element={getElement(<Attendance/>)} />
           <Route path='/atendimento/rastreamento' element={getElement(<TrackingPage/>)} />
           <Route path='/atendimento/rotina' element={getElement(<RoutinePage/>)} />
           <Route path='/atendimento/importacao-api' element={getElement(<APIOrderImportPage/>)} />
           <Route path='/atendimento/importacao-api/aceitar-fnac' element={getElement(<AcceptFNACPage/>)} />
           <Route path='/atendimento/enviar-pedidos' element={getElement(<SendOrderToBlingPage/>)} />
+          <Route path='/atendimento/lista-negra/cliente' element={getElement(<BlacklistClientPage/>)} />
           <Route path='/compras' element={getElement(<PurchasePage/>)} />
           <Route path='/compras/isbn' element={getElement(<BlacklistISBNPage/>)} />
           <Route path='/compras/fornecedor' element={getElement(<BlacklistSupplierPage/>)} />
