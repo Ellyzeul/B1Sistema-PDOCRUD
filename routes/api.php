@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\B1RastreamentoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -81,6 +82,13 @@ Route::controller(OrderController::class)
         Route::patch('/traking-service', 'updateTrackingService');
         Route::patch('/delivery-method', 'updateDeliveryMethod');
         Route::patch('/invoice-number', 'updateInvoiceNumber');
+    });
+
+Route::controller(AddressController::class)
+    ->prefix('address')
+    ->group(function() {
+        Route::get('/', 'read');
+        Route::put('/', 'update');
     });
 
 Route::get('/phases/read', function (Request $request) {
