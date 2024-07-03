@@ -30,6 +30,7 @@ import { BlacklistPublisherPage } from './pages/Purchases/BlacklistPublisher';
 import MessagesPage from './pages/Messages';
 import { InventoryPage } from './pages/Inventory';
 import BlacklistClientPage from './pages/Home/Shipment/BlacklistClient';
+import AddressPage from './pages/Home/Attendance/Address';
 
 function App() {
   const userDataRaw = window.localStorage.getItem("userData")
@@ -65,6 +66,7 @@ function App() {
           <Route path='/expedicao/compras/rastreamento' element={getElement(<PurchaseTrackingPage/>)} />
           <Route path='/expedicao/compras/inventario' element={getElement(<InventoryPage/>)} />
           <Route path='/atendimento' element={getElement(<Attendance/>)} />
+          <Route path='/atendimento/enderecos' element={getElement(<AddressPage/>)} />
           <Route path='/atendimento/rastreamento' element={getElement(<TrackingPage/>)} />
           <Route path='/atendimento/rotina' element={getElement(<RoutinePage/>)} />
           <Route path='/atendimento/importacao-api' element={getElement(<APIOrderImportPage/>)} />
