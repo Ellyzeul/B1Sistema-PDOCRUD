@@ -5,6 +5,7 @@ use App\Actions\Tracking\DeliveryMethods\DHL;
 use App\Actions\Tracking\DeliveryMethods\FedEx;
 use App\Actions\Tracking\DeliveryMethods\Jadlog;
 use App\Actions\Tracking\DeliveryMethods\Correios;
+use App\Actions\Tracking\DeliveryMethods\Delnext;
 use App\Actions\Tracking\DeliveryMethods\EnviaDotCom;
 use App\Actions\Tracking\DeliveryMethods\Kangu;
 use App\Actions\Tracking\DeliveryMethods\MercadoLivre;
@@ -25,6 +26,7 @@ class UpdateOrInsertOrderTrackingAction
 			'Kangu' => fn() => new Kangu(),
 			'Mercado Livre' => fn() => new MercadoLivre(),
 			'DHL' => fn() => new DHL(),
+			'Delnext' => fn() => new Delnext(),
 		];
 	}
 
