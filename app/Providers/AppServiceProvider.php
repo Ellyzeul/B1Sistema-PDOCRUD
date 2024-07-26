@@ -102,5 +102,11 @@ class AppServiceProvider extends ServiceProvider
             return Http::baseUrl(config('cache.intregrations.b1rastreamento.url') . '/api')
                 ->withToken(config('cache.intregrations.b1rastreamento.token'));
         });
+
+        Http::macro('delnext', function(string $country = 'PT', string | null $apikey = null) {
+            if(!isset($apikey)) return Http::baseUrl("https://www.delnext.com/$country");
+
+            return Http::baseUrl("https://www.delnext.com/$country");
+        });
     }
 }
