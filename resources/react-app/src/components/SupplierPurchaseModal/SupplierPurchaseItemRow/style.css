@@ -1,0 +1,18 @@
+.supplier-purchase-item-row > td > input {
+  width: 95%;
+}
+
+.supplier-purchase-item-row > td:nth-child(2),
+.supplier-purchase-item-row > td:nth-child(7)
+{
+  display: flex;
+  justify-content: center;
+}
+
+.supplier-purchase-item-row > td > i {
+  cursor: pointer;
+}
+
+.row-delete-disable {
+  cursor: default !important;
+}

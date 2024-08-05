@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Services\TrackingService;
 use Illuminate\Http\Request;
+
 class TrackingController extends Controller
 {
 	public static function readOrders()

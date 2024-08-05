@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Actions\SupplierPurchase\CreateOrUpdateAction;
+use App\Models\Order;
+use App\Models\SupplierPurchase;
+use Illuminate\Http\Request;
+
+class SupplierPurchaseController extends Controller
+{
+  public function read()
+  {
+    return SupplierPurchase::get();
+  }
+
+  public function save(Request $request)
+  {
+    (new CreateOrUpdateAction())->handle($request);
+  }
+
+  public function orderDetails(Request $request)
+  {
+    $order = Order::find($request->id_order);
+
+    if(!isset($order)) return response([
+      'err_msg' => 'ID de pedido não existe...',
+    ], 400);
+    if($order->is_on_purchase === 1) return response([
+      'err_msg' => "Pedido já está na compra $order->supplier_name",
+    ], 400);
+
+    return $order;
+  }
+}
