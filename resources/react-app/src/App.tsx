@@ -31,6 +31,7 @@ import MessagesPage from './pages/Messages';
 import { InventoryPage } from './pages/Inventory';
 import BlacklistClientPage from './pages/Home/Shipment/BlacklistClient';
 import AddressPage from './pages/Home/Attendance/Address';
+import SupplierPurchasePage from './pages/Purchases/SupplierPurchase';
 
 function App() {
   const userDataRaw = window.localStorage.getItem("userData")
@@ -74,6 +75,7 @@ function App() {
           <Route path='/atendimento/enviar-pedidos' element={getElement(<SendOrderToBlingPage/>)} />
           <Route path='/atendimento/lista-negra/cliente' element={getElement(<BlacklistClientPage/>)} />
           <Route path='/compras' element={getElement(<PurchasePage/>)} />
+          <Route path='/compras/lista' element={getElement(<SupplierPurchasePage/>)} />
           <Route path='/compras/isbn' element={getElement(<BlacklistISBNPage/>)} />
           <Route path='/compras/fornecedor' element={getElement(<BlacklistSupplierPage/>)} />
           <Route path='/compras/editora' element={getElement(<BlacklistPublisherPage/>)} />

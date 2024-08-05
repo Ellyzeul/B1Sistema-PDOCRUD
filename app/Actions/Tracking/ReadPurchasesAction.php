@@ -27,7 +27,7 @@ class ReadPurchasesAction
 				'purchase_trackings.api_calling_date',
 				'purchase_trackings.observation',
 			)
-			->where('order_control.id_phase', '=', '3.1')
+			->where('order_control.id_phase', '=', '2.31')
 			->get();
 		
 		return $results;        
