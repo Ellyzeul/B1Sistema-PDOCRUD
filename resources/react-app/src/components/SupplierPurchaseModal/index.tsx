@@ -26,8 +26,6 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase}: Pro
     }
     const form = formRef.current
 
-    console.log(parseForm(form))
-    return
     if(!purchase) {
       api.post('/api/supplier-purchase', parseForm(form))
         .then(response => response.data)
