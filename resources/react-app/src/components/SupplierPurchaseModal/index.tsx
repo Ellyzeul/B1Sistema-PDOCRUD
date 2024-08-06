@@ -26,6 +26,8 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase}: Pro
     }
     const form = formRef.current
 
+    console.log(parseForm(form))
+    return
     if(!purchase) {
       api.post('/api/supplier-purchase', parseForm(form))
         .then(response => response.data)
@@ -158,7 +160,7 @@ function parseItemsTable(form: HTMLFormElement) {
     .map(row => {
       const body = {
         id_order: Number((row.children[0].children[0] as HTMLInputElement).value),
-        value: Number((row.children[5].children[0] as HTMLInputElement).value),
+        value: Number((row.children[5].children[0] as HTMLInputElement).value.replace(',', '.')),
       }
       const id = fieldValue(row, "input[name='item_id']")
 

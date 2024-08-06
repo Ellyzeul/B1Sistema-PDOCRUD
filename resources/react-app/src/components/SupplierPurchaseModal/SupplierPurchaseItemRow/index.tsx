@@ -33,6 +33,12 @@ export default function SupplierPurchaseItemRow({id, item}: Prop) {
 
     setTableRows(tableRows.filter(row => Number(row.key) !== id))
   }
+  
+  function formatValue(input: HTMLInputElement) {
+    input.value = Number(input.value)
+      .toFixed(2)
+      .replace('.', ',')
+  }
 
   useEffect(() => {
     if(!orderDetails && item) {
@@ -56,7 +62,7 @@ export default function SupplierPurchaseItemRow({id, item}: Prop) {
       <td>{currency?.name}</td>
       <td>{currency?.symbol} {(orderDetails?.selling_price || '').toString().replace('.', ',')}</td>
       <td>{orderDetails?.brlPrice && `R$ ${orderDetails?.brlPrice}`}</td>
-      <td><input type="text" name="value" defaultValue={item?.value}/></td>
+      <td><input type="text" name="value" onBlur={({target}) => formatValue(target)} defaultValue={item?.value}/></td>
       <td>
         <i
           className={`fa-solid fa-trash ${tableRows.length === 1 ? 'row-delete-disable' : ''}`}
