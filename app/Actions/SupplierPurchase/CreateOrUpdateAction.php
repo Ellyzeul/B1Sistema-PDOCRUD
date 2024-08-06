@@ -6,7 +6,6 @@ use App\Models\Supplier;
 use App\Models\SupplierPurchase;
 use App\Models\SupplierPurchaseItems;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class CreateOrUpdateAction
 {
@@ -15,9 +14,12 @@ class CreateOrUpdateAction
     $purchase = $this->purchase($request);
 
     $this->savePurchase($purchase, $request);
-    $this->saveItems($request, $purchase->id);
+    $this->saveItems($request, $purchase);
 
-    return response(['message' => 'Pedido inserido'], 201);
+    return response([
+      'message' => 'Pedido inserido',
+      'purchase' => $purchase,
+    ], 201);
   }
 
   private function purchase(Request $request)
@@ -45,16 +47,19 @@ class CreateOrUpdateAction
       ->reduce(fn($acc, $cur) => $acc + $cur, 0);
   }
 
-  private function saveItems(Request $request, int $idPurchase)
+  private function saveItems(Request $request, SupplierPurchase $purchase)
   {
-    foreach($request->items as $itemData) {
-      $item = $this->purchaseItem($idPurchase, $itemData['id'] ?? null);
+    $purchase->items = [];
 
-      $item->id_purchase = $idPurchase;
+    foreach($request->items as $itemData) {
+      $item = $this->purchaseItem($purchase->id, $itemData['id'] ?? null);
+
+      $item->id_purchase = $purchase->id;
       $item->id_order = $itemData['id_order'];
       $item->value = $itemData['value'];
 
       $item->save();
+      array_push($purchase->items, $item);
     }
   }
 
