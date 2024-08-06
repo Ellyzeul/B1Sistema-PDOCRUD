@@ -9,6 +9,7 @@ import { SupplierPurchase } from "../../pages/Purchases/SupplierPurchase/types"
 export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase}: Prop) {
   const [tableRows, setTableRows] = useState([<SupplierPurchaseItemRow key={0} id={0}/>])
   const [rowId, setRowId] = useState((purchase?.items.length || 0) + 1)
+  const [savedPurchase, setSavedPurchase] = useState(purchase)
   const formRef = useRef(null)
 
   function addRow() {
@@ -26,14 +27,17 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase}: Pro
     }
     const form = formRef.current
 
-    if(!purchase) {
+    if(!savedPurchase) {
       api.post('/api/supplier-purchase', parseForm(form))
-        .then(response => response.data)
-        .then(() => toast.success('Compra salva!'))
+        .then(response => response.data as {purchase: SupplierPurchase})
+        .then(({purchase}) => {
+          toast.success('Compra salva!')
+          setSavedPurchase(purchase)
+        })
         .catch(() => toast.error('Algum erro ocorreu...'))
     }
     else {
-      api.put('/api/supplier-purchase', parseForm(form, purchase))
+      api.put('/api/supplier-purchase', parseForm(form, savedPurchase))
         .then(response => response.data)
         .then(() => toast.success('Compra atualizada!'))
         .catch(() => toast.error('Algum erro ocorreu...'))
@@ -41,14 +45,14 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase}: Pro
   }
 
   useEffect(() => {
-    if(!purchase) return
+    if(!savedPurchase) return
 
-    setTableRows(purchase.items.map((item, key) => <SupplierPurchaseItemRow
+    setTableRows(savedPurchase.items.map((item, key) => <SupplierPurchaseItemRow
       key={key}
       id={key+1}
       item={item}
     />))
-  }, [purchase])
+  }, [savedPurchase])
 
   return (
     <div className={`supplier-purchase-modal-component ${isOpen ? '' : 'supplier-purchase-modal-is-close'}`}>
@@ -58,10 +62,10 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase}: Pro
         <form ref={formRef} className="supplier-purchase-modal-form">
           <div className="supplier-purchase-modal-form-supplier">
             <label htmlFor="supplier">Fornecedor: </label>
-            <input type="text" name="supplier" defaultValue={purchase?.supplier}/>
+            <input type="text" name="supplier" defaultValue={savedPurchase?.supplier}/>
             <br />
             <label htmlFor="purchase_method">Forma de pagamento: </label>
-            <select name="purchase_method" defaultValue={purchase?.purchase_method}>
+            <select name="purchase_method" defaultValue={savedPurchase?.purchase_method}>
               <option value="email">Email</option>
               <option value="site">Site</option>
               <option value="phone">Telefone</option>
@@ -70,7 +74,7 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase}: Pro
           </div>
           <div>
             <label htmlFor="company">Empresa: </label>
-            <select name="company" defaultValue={purchase?.id_company}>
+            <select name="company" defaultValue={savedPurchase?.id_company}>
               <option value="0">Seline</option>
               <option value="1">B1</option>
               <option value="2">J1</option>
@@ -78,7 +82,7 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase}: Pro
             </select>
             <br />
             <label htmlFor="freight">Frete: </label>
-            <input type="text" name="freight" defaultValue={purchase?.freight || 0}/>
+            <input type="text" name="freight" defaultValue={savedPurchase?.freight || 0}/>
           </div>
           <div>
             <div className="supplier-purchase-modal-items-header">
