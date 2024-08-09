@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Override;
 
 class SupplierPurchase extends Model
@@ -19,17 +20,12 @@ class SupplierPurchase extends Model
     protected $casts = ['freight' => 'float', 'sales_total' => 'float'];
     protected $appends = ['supplier', 'items'];
 
-    public function items()
-    {
-        return $this->hasMany(SupplierPurchaseItems::class);
-    }
-
     public function getSupplierAttribute()
     {
         return Supplier::find($this->id_supplier)->name;
     }
 
-    public function getItemsAttribute()
+    public function getItemsAttribute(): Collection
     {
         return SupplierPurchaseItems::where('id_purchase', $this->id)->get([
             'id',

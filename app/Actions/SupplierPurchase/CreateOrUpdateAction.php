@@ -59,11 +59,11 @@ class CreateOrUpdateAction
       $item->value = $itemData['value'];
 
       $item->save();
-      array_push($purchase->items, $item);
+      $purchase->items->push($item);
     }
   }
 
-  private function purchaseItem(int $idPurchase, int | null $idItem)
+  private function purchaseItem(int $idPurchase, int | null $idItem): SupplierPurchaseItems
   {
     if($idItem === null) return new SupplierPurchaseItems();
 
