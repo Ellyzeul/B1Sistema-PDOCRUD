@@ -16,7 +16,7 @@ class SupplierPurchaseController extends Controller
 
   public function save(Request $request)
   {
-    (new CreateOrUpdateAction())->handle($request);
+    return (new CreateOrUpdateAction())->handle($request);
   }
 
   public function orderDetails(Request $request)
