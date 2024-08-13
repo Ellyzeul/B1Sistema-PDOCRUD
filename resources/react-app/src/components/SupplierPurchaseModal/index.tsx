@@ -83,6 +83,17 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase}: Pro
             <br />
             <label htmlFor="freight">Frete: </label>
             <input type="text" name="freight" defaultValue={savedPurchase?.freight || 0}/>
+            <br />
+            <label htmlFor="date">Data do pedido:</label>
+            <input type="date" name="date" defaultValue={savedPurchase?.date || (new Date().toISOString().split('T')[0])}/>
+            <br />
+            <label htmlFor="status">Status do pedido:</label>
+            <select name="status" defaultValue={savedPurchase?.status || 'normal'}>
+              <option value="normal">Normal</option>
+              <option value="cancelled">Cancelado integral</option>
+              <option value="cancelled_partial">Cancelado parcial</option>
+              <option value="multiple_delivery">Múltiplas entregas do fornecedor</option>
+            </select>
           </div>
           <div>
             <div className="supplier-purchase-modal-items-header">
@@ -96,6 +107,7 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase}: Pro
               <thead>
                 <tr>
                   <th>ID do pedido</th>
+                  <th>Status</th>
                   <th>ISBN</th>
                   <th>Moeda</th>
                   <th>Valor</th>
@@ -138,6 +150,8 @@ function parseForm(form: HTMLFormElement, purchase?: SupplierPurchase) {
     purchase_method: fieldValue(form, "select[name='purchase_method']", 'select'),
     id_company: Number(fieldValue(form, "select[name='company']")),
     freight: Number(fieldValue(form, "input[name='freight']")),
+    status: Number(fieldValue(form, "select[name='status']")),
+    date: Number(fieldValue(form, "input[name='date']")),
     items: parseItemsTable(form),
   }
 
@@ -163,6 +177,7 @@ function parseItemsTable(form: HTMLFormElement) {
       const body = {
         id_order: Number((row.children[0].children[0] as HTMLInputElement).value),
         value: Number((row.children[5].children[0] as HTMLInputElement).value.replace(',', '.')),
+        status: Number((row.children[1].children[0] as HTMLSelectElement).value),
       }
       const id = fieldValue(row, "input[name='item_id']")
 

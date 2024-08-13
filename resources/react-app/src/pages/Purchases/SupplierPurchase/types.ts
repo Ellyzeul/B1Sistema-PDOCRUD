@@ -5,6 +5,8 @@ export type SupplierPurchase = {
   purchase_method: string,
   freight: number,
   sales_total: number,
+  date: string,
+  status: string,
   items: Array<SupplierPurchaseItem>,
 }
 
@@ -12,4 +14,5 @@ export type SupplierPurchaseItem = {
   id: number,
   id_order: number,
   value: number,
+  status: string,
 }

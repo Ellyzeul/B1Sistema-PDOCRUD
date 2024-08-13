@@ -35,6 +35,8 @@ class CreateOrUpdateAction
     $purchase->id_supplier = Supplier::idFromName($request->supplier);
     $purchase->purchase_method = $request->purchase_method;
     $purchase->freight = $request->freight;
+    $purchase->date = $request->date;
+    $purchase->status = $request->status;
     $purchase->sales_total = $this->salesTotal($request);
 
     $purchase->save();
@@ -57,6 +59,7 @@ class CreateOrUpdateAction
       $item->id_purchase = $purchase->id;
       $item->id_order = $itemData['id_order'];
       $item->value = $itemData['value'];
+      $item->status = $itemData['status'];
 
       $item->save();
       $purchase->items->push($item);

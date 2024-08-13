@@ -58,6 +58,12 @@ export default function SupplierPurchaseItemRow({id, item}: Prop) {
   return (
     <tr className="supplier-purchase-item-row">
       <td><input type="text" name="id_order" defaultValue={item?.id_order || ''} onBlur={(ev) => fetchOrderDetails(ev.target.value)}/></td>
+      <td><select name="date" defaultValue={item?.status || 'pending'}>
+        <option value="pending">Pendente</option>
+        <option value="delivered">Entregue</option>
+        <option value="cancelled">Cancelado</option>
+        <option value="failed">Fornecedor furou</option>
+      </select></td>
       <td>{orderDetails?.isbn}</td>
       <td>{currency?.name}</td>
       <td>{currency?.symbol} {(orderDetails?.selling_price || '').toString().replace('.', ',')}</td>
