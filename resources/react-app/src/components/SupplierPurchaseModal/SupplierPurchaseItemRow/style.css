@@ -2,8 +2,8 @@
   width: 95%;
 }
 
-.supplier-purchase-item-row > td:nth-child(2),
-.supplier-purchase-item-row > td:nth-child(7)
+.supplier-purchase-item-row > td:nth-child(3),
+.supplier-purchase-item-row > td:nth-child(8)
 {
   display: flex;
   justify-content: center;
