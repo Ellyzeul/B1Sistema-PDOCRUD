@@ -170,14 +170,14 @@ function parseItemsTable(form: HTMLFormElement) {
 
   return Array.from(rows)
     .filter(row => 
-      (row.children[0].children[0] as HTMLInputElement).value !== '' &&
-      (row.children[5].children[0] as HTMLInputElement).value !== ''
+      row.querySelector<HTMLInputElement>("input[name='id_order']")?.value !== '' &&
+      row.querySelector<HTMLInputElement>("input[name='value']")?.value !== ''
     )
     .map(row => {
       const body = {
-        id_order: Number((row.querySelector("input[name='id_order']") as HTMLInputElement).value),
-        value: Number((row.querySelector("input[name='value']") as HTMLInputElement).value.replace(',', '.')),
-        status: Number((row.querySelector("input[name='status']") as HTMLSelectElement).value),
+        id_order: Number(row.querySelector<HTMLInputElement>("input[name='id_order']")?.value),
+        value: Number(row.querySelector<HTMLInputElement>("input[name='value']")?.value.replace(',', '.')),
+        status: Number(row.querySelector<HTMLSelectElement>("input[name='status']")?.value),
       }
       const id = fieldValue(row, "input[name='item_id']")
 
