@@ -175,9 +175,9 @@ function parseItemsTable(form: HTMLFormElement) {
     )
     .map(row => {
       const body = {
-        id_order: Number((row.children[0].children[0] as HTMLInputElement).value),
-        value: Number((row.children[5].children[0] as HTMLInputElement).value.replace(',', '.')),
-        status: Number((row.children[1].children[0] as HTMLSelectElement).value),
+        id_order: Number((row.querySelector("input[name='id_order']") as HTMLInputElement).value),
+        value: Number((row.querySelector("input[name='value']") as HTMLInputElement).value.replace(',', '.')),
+        status: Number((row.querySelector("input[name='status']") as HTMLSelectElement).value),
       }
       const id = fieldValue(row, "input[name='item_id']")
 
