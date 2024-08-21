@@ -73,18 +73,13 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 					className={unavailable ? "unavailable" : "available"} 
 					onClick={unavailable ? () => {} : () => handleServiceClick(orderId, 'correios', name)}
 				>
-					<strong>{name}</strong>
-					<div>
-						<strong>Prazo: </strong>
-						{
-							(expected_deadline && expected_date)
-								? `${expected_deadline} ${expected_deadline === 1 ? 'dia útil' : 'dias úteis'} - ${expected_date}`
-								: '--'
-						}
-					</div>
-					<div>
-						<strong>Custo: </strong>R$ {price || '--'}
-					</div>
+					<strong>{name} -</strong>
+					<strong> prazo: </strong>{
+						(expected_deadline && expected_date)
+							? `${expected_deadline} ${expected_deadline === 1 ? 'dia útil' : 'dias úteis'} - ${expected_date}`
+							: '--'
+					}
+					<strong> custo: </strong>R$ {price || '--'}
 				</div>
 			)
 		})
@@ -102,9 +97,9 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 				className={error_msg ? "unavailable" : "available"} 
 				onClick={error_msg ? () => {} : () => handleServiceClick(orderId, 'jadlog', '.Package')}
 			>
-				<strong>Jadlog</strong>
-				<div><strong>Custo: </strong>R$ {price ? price.toFixed(2) : '--'}</div>
-				<div><strong>Prazo: </strong> {expected_deadline ? `${expected_deadline} dias úteis` : '--'}</div>
+				<strong>Jadlog - </strong>
+				<strong> custo: </strong>R$ {price ? price.toFixed(2) : '--'}
+				<strong> prazo: </strong> {expected_deadline ? `${expected_deadline} dias úteis` : '--'}
 			</div>
 		)
 
@@ -120,9 +115,9 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 				className="available" 
 				onClick={() => handleServiceClick(orderId, 'kangu', transp_nome)}
 			>
-				<strong>{`Kangu - ${transp_nome}`}</strong>
-				<div><strong>Custo: </strong>R$ {vlrFrete ? String(vlrFrete).replace('.', ',') : '--'}</div>
-				<div><strong>Prazo: </strong> {`${prazoEnt} dias úteis`} - {new Date(dtPrevEnt).toLocaleDateString()}</div>
+				<strong>{`Kangu ${transp_nome}`} -</strong>
+				<strong> custo: </strong>R$ {vlrFrete ? String(vlrFrete).replace('.', ',') : '--'}
+				<strong> prazo: </strong> {`${prazoEnt} dias úteis`} - {new Date(dtPrevEnt).toLocaleDateString()}
 			</div>
 		))
 
@@ -136,8 +131,8 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 				onClick={() => handleServiceClick(orderId, 'envia', name)}
 			>
 				<strong>{name}</strong>
-				<div><strong>Custo: </strong>R$ {price ? String(price).replace('.', ',') : '--'}</div>
-				<div><strong>Prazo: </strong> {expected_deadline}</div>
+				<strong>Custo: </strong>R$ {price ? String(price).replace('.', ',') : '--'}
+				<strong>Prazo: </strong> {expected_deadline}
 			</div>
 		))
 	}

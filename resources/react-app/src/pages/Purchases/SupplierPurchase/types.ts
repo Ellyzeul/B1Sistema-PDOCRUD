@@ -13,6 +13,7 @@ export type SupplierPurchase = {
 export type SupplierPurchaseItem = {
   id: number,
   id_order: number,
+  id_purchase: number,
   value: number,
   status: string,
 }
