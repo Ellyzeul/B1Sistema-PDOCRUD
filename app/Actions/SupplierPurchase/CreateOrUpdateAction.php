@@ -2,10 +2,12 @@
 
 namespace App\Actions\SupplierPurchase;
 
+use App\Models\Order;
 use App\Models\Supplier;
 use App\Models\SupplierPurchase;
 use App\Models\SupplierPurchaseItems;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CreateOrUpdateAction
 {
@@ -55,6 +57,7 @@ class CreateOrUpdateAction
 
     foreach($request->items as $itemData) {
       $item = $this->purchaseItem($purchase->id, $itemData['id'] ?? null);
+      Log::debug(json_encode($itemData));
 
       $item->id_purchase = $purchase->id;
       $item->id_order = $itemData['id_order'];
@@ -63,6 +66,10 @@ class CreateOrUpdateAction
 
       $item->save();
       $purchase->items->push($item);
+      Order::where('id', $item->id_order)->update([
+        'supplier_name' => $purchase->id,
+        'is_on_purchase' => 1,
+      ]);
     }
   }
 

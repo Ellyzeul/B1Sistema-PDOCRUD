@@ -1,0 +1,24 @@
+.supplier-purchase-index {
+  height: 15px;
+  width: 15px;
+  margin: 0 10px;
+  display: inline-block;
+  border-radius: 50%;
+}
+
+.supplier-purchase-index-blank {
+  background-color: grey;
+}
+.supplier-purchase-index-bad {
+  background-color: yellow;
+  border: 1px solid red;
+}
+.supplier-purchase-index-caution {
+  background-color: red;
+}
+.supplier-purchase-index-good {
+  background-color: green;
+}
+.supplier-purchase-index-perfect {
+  background-color: rgb(93, 93, 186);
+}

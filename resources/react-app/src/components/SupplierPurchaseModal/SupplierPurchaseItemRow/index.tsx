@@ -8,12 +8,13 @@ import getCurrentCurrencyCotation from "../../../lib/getCurrencyCotation"
 import { SupplierPurchaseItem } from "../../../pages/Purchases/SupplierPurchase/types"
 
 export default function SupplierPurchaseItemRow({id, item}: Prop) {
-  const {tableRows, setTableRows} = useContext(SupplierPurchaseItemRowContext)
+  const {tableRows, setTableRows, prices, setPrices} = useContext(SupplierPurchaseItemRowContext)
   const [orderDetails, setOrderDetails] = useState(null as OrderDetails | null)
   const [previousDetails, setPreviousDetails] = useState(null as OrderDetails | null)
   const currency = getCurrencyFromSellercentral(orderDetails?.id_sellercentral || 0)
-  const fetchOrderDetails = useCallback((orderId: string) => {
-    api.get('/api/supplier-purchase/order-details?id_order=' + orderId)
+  console.log(item)
+  const fetchOrderDetails = useCallback((orderId: string, purchaseId?: number) => {
+    api.get(`/api/supplier-purchase/order-details?id_order=${orderId}&id_purchase=${purchaseId ?? ''}`)
       .then(response => response.data as OrderDetails)
       .then(response => {
         setPreviousDetails(orderDetails)
@@ -34,7 +35,8 @@ export default function SupplierPurchaseItemRow({id, item}: Prop) {
     setTableRows(tableRows.filter(row => Number(row.key) !== id))
   }
   
-  function formatValue(input: HTMLInputElement) {
+  function handleBlur(input: HTMLInputElement) {
+    setPrices({...prices, items: {...prices.items, [id]: Number(input.value.replace(',', '.'))}})
     input.value = Number(input.value.replace(',', '.'))
       .toFixed(2)
       .replace('.', ',')
@@ -42,22 +44,31 @@ export default function SupplierPurchaseItemRow({id, item}: Prop) {
 
   useEffect(() => {
     if(!orderDetails && item) {
-      fetchOrderDetails(String(item.id_order))
+      fetchOrderDetails(String(item.id_order), item.id_purchase)
     }
     if(previousDetails?.id === orderDetails?.id) return
 
     (async() => {
+      const brlPrice = await getBRLPrice(orderDetails?.selling_price, currency?.code)
+
+      setPrices({
+        ...prices,
+        selling_price: {
+          ...prices.selling_price,
+          [id]: Number(brlPrice?.replace(',', '.') ?? 0)
+        }
+      })
       setPreviousDetails(orderDetails)
       setOrderDetails({
         ...(orderDetails as OrderDetails), 
-        brlPrice: await getBRLPrice(orderDetails?.selling_price, currency?.code),
+        brlPrice,
       })
     })()
   }, [orderDetails, item, previousDetails, currency, fetchOrderDetails])
 
   return (
     <tr className="supplier-purchase-item-row">
-      <td><input type="text" name="id_order" defaultValue={item?.id_order || ''} onBlur={(ev) => fetchOrderDetails(ev.target.value)}/></td>
+      <td><input type="text" name="id_order" defaultValue={item?.id_order || ''} onBlur={(ev) => fetchOrderDetails(ev.target.value, item?.id_purchase)}/></td>
       <td><select name="status" defaultValue={item?.status || 'pending'}>
         <option value="pending">Pendente</option>
         <option value="delivered">Entregue</option>
@@ -73,7 +84,7 @@ export default function SupplierPurchaseItemRow({id, item}: Prop) {
           type="text"
           name="value"
           defaultValue={item?.value.toString().replace('.', ',') ?? ''}
-          onBlur={({target}) => formatValue(target)}
+          onBlur={({target}) => handleBlur(target)}
         />
       </td>
       <td>

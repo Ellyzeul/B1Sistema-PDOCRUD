@@ -30,6 +30,7 @@ class SupplierPurchase extends Model
         return SupplierPurchaseItems::where('id_purchase', $this->id)->get([
             'id',
             'id_order',
+            'id_purchase',
             'value',
         ]);
     }

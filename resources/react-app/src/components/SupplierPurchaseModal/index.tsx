@@ -5,11 +5,18 @@ import SupplierPurchaseItemRowContext from "../../contexts/SupplierPurchaseItemR
 import { toast, ToastContainer } from "react-toastify"
 import api from "../../services/axios"
 import { SupplierPurchase } from "../../pages/Purchases/SupplierPurchase/types"
+import { CostBenefitPrices } from "./CostBenefitIndex/types"
+import CostBenefitIndex from "./CostBenefitIndex"
 
 export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase}: Prop) {
   const [tableRows, setTableRows] = useState([<SupplierPurchaseItemRow key={0} id={0}/>])
   const [rowId, setRowId] = useState((purchase?.items.length || 0) + 1)
   const [savedPurchase, setSavedPurchase] = useState(purchase)
+  const [prices, setPrices] = useState({
+    items: savedPurchase?.items.map(({value}, id) => [id+1, Number(value)]).reduce((acc, [id, value]) => ({...acc, [id]: value}), {}) ?? {},
+    freight: savedPurchase?.freight ?? 0,
+    selling_price: {},
+  } as CostBenefitPrices)
   const formRef = useRef(null)
 
   function addRow() {
@@ -42,6 +49,10 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase}: Pro
         .then(() => toast.success('Compra atualizada!'))
         .catch(() => toast.error('Algum erro ocorreu...'))
     }
+  }
+
+  function handleFreightBlur({value}: HTMLInputElement) {
+    setPrices({...prices, freight: Number(value.replace(',', '.'))})
   }
 
   useEffect(() => {
@@ -82,7 +93,12 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase}: Pro
             </select>
             <br />
             <label htmlFor="freight">Frete: </label>
-            <input type="text" name="freight" defaultValue={savedPurchase?.freight || 0}/>
+            <input
+              type="text"
+              name="freight"
+              onBlur={({target}) => handleFreightBlur(target)}
+              defaultValue={savedPurchase?.freight || 0}
+            />
             <br />
             <label htmlFor="date">Data do pedido:</label>
             <input type="date" name="date" defaultValue={savedPurchase?.date || (new Date().toISOString().split('T')[0])}/>
@@ -94,6 +110,8 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase}: Pro
               <option value="cancelled_partial">Cancelado parcial</option>
               <option value="multiple_delivery">Múltiplas entregas do fornecedor</option>
             </select>
+            <br />
+            <CostBenefitIndex prices={prices}/>
           </div>
           <div>
             <div className="supplier-purchase-modal-items-header">
@@ -117,7 +135,7 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase}: Pro
                 </tr>
               </thead>
               <tbody>
-                <SupplierPurchaseItemRowContext.Provider value={{tableRows, setTableRows}}>
+                <SupplierPurchaseItemRowContext.Provider value={{tableRows, setTableRows, prices, setPrices}}>
                   {tableRows}
                 </SupplierPurchaseItemRowContext.Provider>
               </tbody>
@@ -150,8 +168,8 @@ function parseForm(form: HTMLFormElement, purchase?: SupplierPurchase) {
     purchase_method: fieldValue(form, "select[name='purchase_method']", 'select'),
     id_company: Number(fieldValue(form, "select[name='company']")),
     freight: Number(fieldValue(form, "input[name='freight']")),
-    status: Number(fieldValue(form, "select[name='status']")),
-    date: Number(fieldValue(form, "input[name='date']")),
+    status: fieldValue(form, "select[name='status']"),
+    date: fieldValue(form, "input[name='date']"),
     items: parseItemsTable(form),
   }
 
@@ -177,7 +195,7 @@ function parseItemsTable(form: HTMLFormElement) {
       const body = {
         id_order: Number(row.querySelector<HTMLInputElement>("input[name='id_order']")?.value),
         value: Number(row.querySelector<HTMLInputElement>("input[name='value']")?.value.replace(',', '.')),
-        status: Number(row.querySelector<HTMLSelectElement>("input[name='status']")?.value),
+        status: row.querySelector<HTMLSelectElement>("select[name='status']")?.value,
       }
       const id = fieldValue(row, "input[name='item_id']")
 
