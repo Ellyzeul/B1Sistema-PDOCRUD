@@ -51,8 +51,12 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase}: Pro
     }
   }
 
-  function handleFreightBlur({value}: HTMLInputElement) {
-    setPrices({...prices, freight: Number(value.replace(',', '.'))})
+  function handleFreightBlur(input: HTMLInputElement) {
+    setPrices({...prices, freight: Number(input.value.replace(',', '.'))})
+
+    input.value = Number(input.value.replace(',', '.'))
+      .toFixed(2)
+      .replace('.', ',')
   }
 
   useEffect(() => {
@@ -112,6 +116,8 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase}: Pro
             </select>
             <br />
             <CostBenefitIndex prices={prices}/>
+            <br />
+            <div>Subtotal: R$ {subtotal(prices.items)}</div>
           </div>
           <div>
             <div className="supplier-purchase-modal-items-header">
@@ -167,7 +173,7 @@ function parseForm(form: HTMLFormElement, purchase?: SupplierPurchase) {
     supplier: fieldValue(form, "input[name='supplier']")?.trim(),
     purchase_method: fieldValue(form, "select[name='purchase_method']", 'select'),
     id_company: Number(fieldValue(form, "select[name='company']")),
-    freight: Number(fieldValue(form, "input[name='freight']")),
+    freight: Number(fieldValue(form, "input[name='freight']")?.replace(',', '.')),
     status: fieldValue(form, "select[name='status']"),
     date: fieldValue(form, "input[name='date']"),
     items: parseItemsTable(form),
@@ -219,4 +225,12 @@ function fieldValue(parent: HTMLElement, selector: string, element: 'input' | 's
 function validateForm(form: HTMLFormElement) {
   return fieldValue(form, "input[name='supplier']") !== '' &&
     fieldValue(form, "input[name='freight']") !== ''
+}
+
+function subtotal(items: Record<number, number>) {
+  return Object.keys(items)
+    .map((id) => items[Number(id)])
+    .reduce((acc, cur) => acc + cur, 0)
+    .toFixed(2)
+    .replace('.', ',')
 }
