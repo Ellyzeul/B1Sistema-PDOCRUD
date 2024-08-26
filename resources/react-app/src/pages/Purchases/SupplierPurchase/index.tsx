@@ -9,11 +9,18 @@ import { SupplierPurchase } from "./types"
 export default function SupplierPurchasePage() {
   const [modalOpen, setModalOpen] = useState(false)
   const [purchases, setPurchases] = useState([] as Array<SupplierPurchase>)
+  const [paymentMethods, setPaymentMethods] = useState([] as Array<JSX.Element>)
 
   useEffect(() => {
     api.get('/api/supplier-purchase')
       .then(response => response.data)
       .then(setPurchases)
+    
+    api.get('/api/payment-method')
+      .then(response => response.data as Array<{id: number, operation: string}>)
+      .then(paymentMethods => setPaymentMethods(paymentMethods
+        .map(({id, operation}, key) => <option key={key+1} value={id}>{operation}</option>)
+      ))
   }, [])
 
   return (
@@ -44,26 +51,30 @@ export default function SupplierPurchasePage() {
                 {
                   purchases.length === 0
                     ? <tr><td>Sem pedidos</td></tr>
-                    : purchases.map((purchase, key) => <PurchaseRow key={key} purchase={purchase}/>)
+                    : purchases.map((purchase, key) => <PurchaseRow
+                      key={key}
+                      purchase={purchase}
+                      paymentMethods={paymentMethods}
+                    />)
                 }
               </tbody>
             </table>
           </div>
         </div>
       </div>
-      <SupplierPurchaseModal isOpen={modalOpen} setIsOpen={setModalOpen}/>
+      <SupplierPurchaseModal isOpen={modalOpen} setIsOpen={setModalOpen} paymentMethods={paymentMethods}/>
     </div>
   )
 }
 
-function PurchaseRow({purchase}: {purchase: SupplierPurchase}) {
+function PurchaseRow({purchase, paymentMethods}: {purchase: SupplierPurchase, paymentMethods: Array<JSX.Element>}) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
     <tr className="supplier-purchase-row" onClick={() => setIsOpen(true)}>
       <td>
         {purchase.id}
-        <SupplierPurchaseModal isOpen={isOpen} setIsOpen={setIsOpen} purchase={purchase}/>
+        <SupplierPurchaseModal isOpen={isOpen} setIsOpen={setIsOpen} purchase={purchase} paymentMethods={paymentMethods}/>
       </td>
       <td>{getCompany(purchase.id_company)}</td>
       <td>{purchase.supplier}</td>

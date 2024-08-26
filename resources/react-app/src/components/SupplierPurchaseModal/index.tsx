@@ -8,7 +8,7 @@ import { SupplierPurchase } from "../../pages/Purchases/SupplierPurchase/types"
 import { CostBenefitPrices } from "./CostBenefitIndex/types"
 import CostBenefitIndex from "./CostBenefitIndex"
 
-export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase}: Prop) {
+export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paymentMethods}: Prop) {
   const [tableRows, setTableRows] = useState([<SupplierPurchaseItemRow key={0} id={0}/>])
   const [rowId, setRowId] = useState((purchase?.items.length || 0) + 1)
   const [savedPurchase, setSavedPurchase] = useState(purchase)
@@ -79,13 +79,19 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase}: Pro
             <label htmlFor="supplier">Fornecedor: </label>
             <input type="text" name="supplier" defaultValue={savedPurchase?.supplier}/>
             <br />
-            <label htmlFor="purchase_method">Forma de pagamento: </label>
+            <label htmlFor="purchase_method">Forma de compra: </label>
             <select name="purchase_method" defaultValue={savedPurchase?.purchase_method}>
               <option value="email">Email</option>
               <option value="site">Site</option>
               <option value="phone">Telefone</option>
               <option value="whatsapp">WhatsApp</option>
             </select>
+            <br />
+            <label htmlFor="payment_method">Forma de pagamento: </label>
+            <select name="payment_method" defaultValue={savedPurchase?.id_payment_method ?? ''}>{[
+              <option key={0} value=''>Selecione</option>,
+              ...paymentMethods
+            ]}</select>
           </div>
           <div>
             <label htmlFor="company">Empresa: </label>
@@ -158,6 +164,7 @@ type Prop = {
   isOpen: boolean,
   setIsOpen: (isOpen: boolean) => void,
   purchase?: SupplierPurchase,
+  paymentMethods: Array<JSX.Element>,
 }
 
 function parseForm(form: HTMLFormElement, purchase?: SupplierPurchase) {
@@ -172,6 +179,7 @@ function parseForm(form: HTMLFormElement, purchase?: SupplierPurchase) {
   const body = {
     supplier: fieldValue(form, "input[name='supplier']")?.trim(),
     purchase_method: fieldValue(form, "select[name='purchase_method']", 'select'),
+    payment_method: fieldValue(form, "select[name='payment_method']", 'select'),
     id_company: Number(fieldValue(form, "select[name='company']")),
     freight: Number(fieldValue(form, "input[name='freight']")?.replace(',', '.')),
     status: fieldValue(form, "select[name='status']"),

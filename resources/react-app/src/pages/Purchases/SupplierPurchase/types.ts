@@ -3,6 +3,7 @@ export type SupplierPurchase = {
   id_company: number,
   supplier: string,
   purchase_method: string,
+  id_payment_method?: number,
   freight: number,
   sales_total: number,
   date: string,
