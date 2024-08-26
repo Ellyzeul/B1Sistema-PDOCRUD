@@ -12,7 +12,6 @@ export default function SupplierPurchaseItemRow({id, item}: Prop) {
   const [orderDetails, setOrderDetails] = useState(null as OrderDetails | null)
   const [previousDetails, setPreviousDetails] = useState(null as OrderDetails | null)
   const currency = getCurrencyFromSellercentral(orderDetails?.id_sellercentral || 0)
-  console.log(item)
   const fetchOrderDetails = useCallback((orderId: string, purchaseId?: number) => {
     api.get(`/api/supplier-purchase/order-details?id_order=${orderId}&id_purchase=${purchaseId ?? ''}`)
       .then(response => response.data as OrderDetails)
