@@ -20,6 +20,7 @@ use App\Http\Controllers\BlacklistController;
 use App\Http\Controllers\ClientBlacklistController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\OfferController;
+use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\SupplierPurchaseController;
 use App\Http\Middleware\AuthenticateB1Rastreamento;
 use Illuminate\Support\Facades\Http;
@@ -203,6 +204,12 @@ Route::controller(SupplierPurchaseController::class)
         Route::post('/', 'save');
         Route::put('/', 'save');
         Route::get('/order-details', 'orderDetails');
+    });
+
+Route::controller(PaymentMethodController::class)
+    ->prefix('payment-method')
+    ->group(function() {
+        Route::get('/', 'read');
     });
 
 Route::controller(B1RastreamentoController::class)

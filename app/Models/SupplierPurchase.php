@@ -16,7 +16,7 @@ class SupplierPurchase extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['id_supplier', 'purchase_method', 'id_company', 'freight', 'sales_total'];
+    protected $fillable = ['id_supplier', 'purchase_method', 'id_payment_method', 'id_company', 'freight', 'sales_total'];
     protected $casts = ['freight' => 'float', 'sales_total' => 'float'];
     protected $appends = ['supplier', 'items'];
 
