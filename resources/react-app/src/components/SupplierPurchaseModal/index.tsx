@@ -17,7 +17,7 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paym
     freight: savedPurchase?.freight ?? 0,
     selling_price: {},
   } as CostBenefitPrices)
-  const formRef = useRef(null)
+  const formRef = useRef(null as HTMLFormElement | null)
 
   function addRow() {
     setTableRows([...tableRows, <SupplierPurchaseItemRow
@@ -60,14 +60,24 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paym
   }
 
   useEffect(() => {
-    if(!savedPurchase) return
+    if(!savedPurchase) {
+      return
+    }
+    if(formRef.current) {
+      const paymentMethodSelect = formRef.current.querySelector<HTMLSelectElement>("select[name='payment_method']")
+  
+      if(!paymentMethodSelect) return
+      setTimeout(() => {
+        paymentMethodSelect.value = String(savedPurchase?.id_payment_method ?? '')
+      }, 1000)
+    }
 
     setTableRows(savedPurchase.items.map((item, key) => <SupplierPurchaseItemRow
       key={key}
       id={key+1}
       item={item}
     />))
-  }, [savedPurchase])
+  }, [savedPurchase, formRef])
 
   return (
     <div className={`supplier-purchase-modal-component ${isOpen ? '' : 'supplier-purchase-modal-is-close'}`}>
@@ -88,7 +98,7 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paym
             </select>
             <br />
             <label htmlFor="payment_method">Forma de pagamento: </label>
-            <select name="payment_method" defaultValue={savedPurchase?.id_payment_method ?? ''}>{[
+            <select name="payment_method">{[
               <option key={0} value=''>Selecione</option>,
               ...paymentMethods
             ]}</select>
