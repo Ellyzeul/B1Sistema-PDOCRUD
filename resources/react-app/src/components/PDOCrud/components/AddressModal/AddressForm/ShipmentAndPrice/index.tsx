@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { toast } from "react-toastify"
 import api from "../../../../../../services/axios"
 import "./style.css"
-import { ShipmentAndPriceProp, CorreiosData, JadlogData, KanguData, EnviaData } from "./types"
+import { ShipmentAndPriceProp, CorreiosData, JadlogData, KanguData, EnviaData, LoggiData } from "./types"
 
 export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 	const { orderId, address_form_ref, delivery_service, delivery_method, tracking_code, id_bling } = props
@@ -11,17 +11,20 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 	const [correiosData, setCorreiosData] = useState([] as CorreiosData)
 	const [kanguData, setKanguData] = useState(null as KanguData | null)
 	const [enviaData, setEnviaData] = useState(null as EnviaData | null)
+	const [loggiData, setLoggiData] = useState(null as LoggiData | null)
 	const [jadlogCotations, setjadlogCotations] = useState([] as JSX.Element[])
 	const [kanguCotations, setKanguCotations] = useState([] as JSX.Element[])
 	const [enviaCotations, setEnviaCotations] = useState([] as JSX.Element[])
 	const [correiosCotations, setcorreiosCotations] = useState([] as JSX.Element[])
+	const [loggiCotations, setLoggiCotations] = useState([] as JSX.Element[])
 
 	useEffect(() => {
 		if(jadlogData) mapJadlog()
 		if(correiosData) mapCorreios()
 		if(kanguData) mapKangu(kanguData)
 		if(enviaData) mapEnvia(enviaData)
-	}, [jadlogData, correiosData, kanguData, enviaData])
+		if(loggiData) mapLoggi(loggiData)
+	}, [jadlogData, correiosData, kanguData, enviaData, loggiData])
 
 			
 	const getShipmentAndPrice = (originId: string, clientPostalCode: string, weight: string) => {
@@ -37,6 +40,7 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 		.then((response) => {
 			if(response.error_msg) toast.error(response.error_msg)
 
+			setLoggiData(response['Loggi'])
 			setCorreiosData(response["Correios"])
 			setJadlogData(response["Jadlog"][0])
 			setKanguData(response["Kangu"])
@@ -137,6 +141,19 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 		))
 	}
 
+	const mapLoggi = (data: LoggiData) => {
+		setLoggiCotations(data.map(({ name, price, expected_deadline }) => 
+			<div 
+				className="available" 
+				onClick={() => handleServiceClick(orderId, 'loggi', name)}
+			>
+				<strong>{name}</strong>
+				<strong> - Custo: </strong>R$ {String(price ?? '--').replace('.', ',')}
+				<strong> - Prazo: </strong> {expected_deadline ? `${expected_deadline} dias` : '--'}
+			</div>
+		))
+	}
+
 	const handleClick = () => {
 		const addressForm = address_form_ref.current as HTMLDivElement | null
 		if(!inputsRef.current || !addressForm) return
@@ -181,6 +198,7 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 			</div>
 			<button onClick={handleClick} id={"shipping-button"}>Consultar</button>
 			<div className="correios-content">
+				{loggiCotations}
 				{correiosCotations}
 				{jadlogCotations}
 				{kanguCotations}

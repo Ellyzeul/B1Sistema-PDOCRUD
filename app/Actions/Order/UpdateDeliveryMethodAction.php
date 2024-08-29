@@ -88,5 +88,8 @@ class UpdateDeliveryMethodAction
     'envia' => [
       'id' => 8,
     ],
+    'loggi' => [
+      'id' => 12,
+    ],
   ];
 }

@@ -108,5 +108,16 @@ class AppServiceProvider extends ServiceProvider
 
             return Http::baseUrl("https://www.delnext.com/$country");
         });
+
+        Http::macro('loggi', function(?string $token = null, bool $auth = false) {
+            $baseUrl = 'https://api.loggi.com';
+            if($auth) return Http::baseUrl($baseUrl);
+
+            $client = Http::baseUrl("$baseUrl/v1/companies/". env('LOGGI_ID_COMPANY'));
+
+            return isset($token)
+                ? $client->withToken($token)
+                : $client;
+        });
     }
 }

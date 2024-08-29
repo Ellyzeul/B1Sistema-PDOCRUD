@@ -37,3 +37,9 @@ export type EnviaData = Array<{
 	price?: number,
 	expected_deadline?: string,
 }>
+
+export type LoggiData = Array<{
+	name: string,
+	price: number | null,
+	expected_deadline: number | null,
+}>

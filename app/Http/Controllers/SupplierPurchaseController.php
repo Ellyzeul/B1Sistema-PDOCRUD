@@ -27,8 +27,6 @@ class SupplierPurchaseController extends Controller
     if(!isset($order)) return response([
       'err_msg' => 'ID de pedido não existe...',
     ], 400);
-    Log::debug($order->supplier_name);
-    Log::debug(json_encode($request->input()));
     if($order->is_on_purchase === 1 && $order->supplier_name != $request->id_purchase) return response([
       'err_msg' => "Pedido já está na compra $order->supplier_name",
     ], 400);
