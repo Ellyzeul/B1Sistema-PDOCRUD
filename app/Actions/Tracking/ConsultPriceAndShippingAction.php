@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Actions\Tracking\DeliveryMethods\Correios;
 use App\Actions\Tracking\DeliveryMethods\EnviaDotCom;
 use App\Actions\Tracking\DeliveryMethods\Jadlog;
+use App\Actions\Tracking\DeliveryMethods\Loggi;
 use App\Services\ThirdParty\Kangu;
 
 class ConsultPriceAndShippingAction
@@ -56,12 +57,14 @@ class ConsultPriceAndShippingAction
 			->first()
 			->postal_code;
 	
+		$responseLoggi = (new Loggi())->quotations($originZipCode, $clientPostalCode, $weight);
 		$responseCorreios = (new Correios())->consultPriceAndShipping($originZipCode, $clientPostalCode, $weight);
 		$responseJadlog = (new Jadlog())->consultPrice($originZipCode, $clientPostalCode, $weight);
 		$responseKangu = (new Kangu('seline'))->postSimular($originZipCode, $clientPostalCode, 100, $weight, 3, 18, 18, ['E' , 'X' , 'M' , 'R'], 'prazo');
 		$responseEnvia = (new EnviaDotCom('seline'))->postQuoteShipment($orderId, $originZipCode, $clientPostalCode, $weight);
 
 		return [
+			"Loggi" => $responseLoggi,
 			"Correios" => $responseCorreios,
 			"Jadlog" => $responseJadlog,
 			"Kangu" => $responseKangu,
