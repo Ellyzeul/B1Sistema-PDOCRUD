@@ -77,7 +77,7 @@ export const ShipmentAndPrice = (props: ShipmentAndPriceProp) => {
 					className={unavailable ? "unavailable" : "available"} 
 					onClick={unavailable ? () => {} : () => handleServiceClick(orderId, 'correios', name)}
 				>
-					<strong>{name} -</strong>
+					<strong>Correios {name} -</strong>
 					<strong> prazo: </strong>{
 						(expected_deadline && expected_date)
 							? `${expected_deadline} ${expected_deadline === 1 ? 'dia útil' : 'dias úteis'} - ${expected_date}`

@@ -5,7 +5,6 @@ namespace App\Services\ThirdParty;
 use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class Loggi
 {
@@ -13,12 +12,11 @@ class Loggi
 
   public function quotations(string $fromPostalCode, string $toPostalCode, float $weight)
   {
-    Log::debug(json_encode(Loggi::token()));
     $response = Http::loggi(token: Loggi::token())->post('/quotations', [
       'shipFrom' => $this->quotationAddress($fromPostalCode),
       'shipTo' => $this->quotationAddress($toPostalCode),
       'packages' => [
-        'weight' => $weight,
+        'weight' => $weight * 1000,
         'lengthCm' => 21,
         'widthCm' => 21,
         'heightCm' => 3,
