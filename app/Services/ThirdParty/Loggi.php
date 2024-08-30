@@ -25,9 +25,7 @@ class Loggi
 
     if(!$response->ok() && $response->status() != 404) Loggi::throwError($response->object());
 
-    return collect(
-      $response->object()->packagesQuotations[0]->quotations
-    );
+    return collect($response->object()->packagesQuotations[0]->quotations ?? []);
   }
 
   private function quotationAddress(string $postalCode)
