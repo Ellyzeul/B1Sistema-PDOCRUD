@@ -8,7 +8,7 @@ import getCurrentCurrencyCotation from "../../../lib/getCurrencyCotation"
 import { SupplierPurchaseItem } from "../../../pages/Purchases/SupplierPurchase/types"
 
 export default function SupplierPurchaseItemRow({id, item}: Prop) {
-  const {tableRows, setTableRows, prices, setPrices} = useContext(SupplierPurchaseItemRowContext)
+  const {tableRows, setTableRows, modalState, setModalState} = useContext(SupplierPurchaseItemRowContext)
   const [orderDetails, setOrderDetails] = useState(null as OrderDetails | null)
   const [previousDetails, setPreviousDetails] = useState(null as OrderDetails | null)
   const currency = getCurrencyFromSellercentral(orderDetails?.id_sellercentral || 0)
@@ -35,7 +35,7 @@ export default function SupplierPurchaseItemRow({id, item}: Prop) {
   }
   
   function handleBlur(input: HTMLInputElement) {
-    setPrices({...prices, items: {...prices.items, [id]: Number(input.value.replace(',', '.'))}})
+    setModalState({...modalState, items: {...modalState.items, [id]: Number(input.value.replace(',', '.'))}})
     input.value = Number(input.value.replace(',', '.'))
       .toFixed(2)
       .replace('.', ',')
@@ -50,10 +50,10 @@ export default function SupplierPurchaseItemRow({id, item}: Prop) {
     (async() => {
       const brlPrice = await getBRLPrice(orderDetails?.selling_price, currency?.code)
 
-      setPrices({
-        ...prices,
+      setModalState({
+        ...modalState,
         selling_price: {
-          ...prices.selling_price,
+          ...modalState.selling_price,
           [id]: Number(brlPrice?.replace(',', '.') ?? 0)
         }
       })

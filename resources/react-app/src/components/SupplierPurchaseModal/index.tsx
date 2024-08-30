@@ -4,18 +4,19 @@ import SupplierPurchaseItemRow from "./SupplierPurchaseItemRow"
 import SupplierPurchaseItemRowContext from "../../contexts/SupplierPurchaseItemRow"
 import { toast, ToastContainer } from "react-toastify"
 import api from "../../services/axios"
-import { SupplierPurchase } from "../../pages/Purchases/SupplierPurchase/types"
+import { BankAccount, SupplierPurchase } from "../../pages/Purchases/SupplierPurchase/types"
 import { CostBenefitPrices } from "./CostBenefitIndex/types"
 import CostBenefitIndex from "./CostBenefitIndex"
 
-export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paymentMethods}: Prop) {
+export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paymentMethods, bankAccounts}: Prop) {
   const [tableRows, setTableRows] = useState([<SupplierPurchaseItemRow key={0} id={0}/>])
   const [rowId, setRowId] = useState((purchase?.items.length || 0) + 1)
   const [savedPurchase, setSavedPurchase] = useState(purchase)
-  const [prices, setPrices] = useState({
+  const [modalState, setModalState] = useState({
     items: savedPurchase?.items.map(({value}, id) => [id+1, Number(value)]).reduce((acc, [id, value]) => ({...acc, [id]: value}), {}) ?? {},
     freight: savedPurchase?.freight ?? 0,
     selling_price: {},
+    id_company: savedPurchase?.id_company ?? 0,
   } as CostBenefitPrices)
   const formRef = useRef(null as HTMLFormElement | null)
 
@@ -52,7 +53,7 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paym
   }
 
   function handleFreightBlur(input: HTMLInputElement) {
-    setPrices({...prices, freight: Number(input.value.replace(',', '.'))})
+    setModalState({...modalState, freight: Number(input.value.replace(',', '.'))})
 
     input.value = Number(input.value.replace(',', '.'))
       .toFixed(2)
@@ -65,10 +66,14 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paym
     }
     if(formRef.current) {
       const paymentMethodSelect = formRef.current.querySelector<HTMLSelectElement>("select[name='payment_method']")
+      const bankAccountSelect = formRef.current.querySelector<HTMLSelectElement>("select[name='bank_account']")
   
-      if(!paymentMethodSelect) return
-      setTimeout(() => {
+      if(paymentMethodSelect) setTimeout(() => {
         paymentMethodSelect.value = String(savedPurchase?.id_payment_method ?? '')
+      }, 1000)
+      
+      if(bankAccountSelect) setTimeout(() => {
+        bankAccountSelect.value = String(savedPurchase?.id_bank ?? '')
       }, 1000)
     }
 
@@ -78,6 +83,15 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paym
       item={item}
     />))
   }, [savedPurchase, formRef])
+
+  useEffect(() => {
+    const form = formRef.current
+    if(!form) return
+    const select = form.querySelector<HTMLSelectElement>("select[name='bank_account']")
+    if(!select) return
+
+    select.value = ''
+  }, [modalState.id_company])
 
   return (
     <div className={`supplier-purchase-modal-component ${isOpen ? '' : 'supplier-purchase-modal-is-close'}`}>
@@ -97,6 +111,17 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paym
               <option value="whatsapp">WhatsApp</option>
             </select>
             <br />
+            <label htmlFor="bank_account">Banco: </label>
+            <select name="bank_account">
+              <option key={0} value="">Selecione</option>
+              {bankAccounts
+                .filter(({id_company}) => id_company === modalState.id_company)
+                .map(({id_bank, name, agency, account}, key) => <option key={key+1} value={id_bank}>
+                  {`${id_bank} - ${name} - ${agency} - ${account}`}
+                </option>)
+              }
+            </select>
+            <br />
             <label htmlFor="payment_method">Forma de pagamento: </label>
             <select name="payment_method">{[
               <option key={0} value=''>Selecione</option>,
@@ -105,7 +130,11 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paym
           </div>
           <div>
             <label htmlFor="company">Empresa: </label>
-            <select name="company" defaultValue={savedPurchase?.id_company}>
+            <select
+              name="company"
+              defaultValue={savedPurchase?.id_company}
+              onInput={({target}) => setModalState({...modalState, id_company: Number((target as HTMLSelectElement).value)})}
+            >
               <option value="0">Seline</option>
               <option value="1">B1</option>
               <option value="2">J1</option>
@@ -131,9 +160,10 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paym
               <option value="multiple_delivery">Múltiplas entregas do fornecedor</option>
             </select>
             <br />
-            <CostBenefitIndex prices={prices}/>
+            <CostBenefitIndex modalState={modalState}/>
             <br />
-            <div>Subtotal: R$ {subtotal(prices.items)}</div>
+            <div>Subtotal: R$ {subtotal(modalState.items)}</div>
+            <strong>Total: R$ {total(modalState.items, modalState.freight)}</strong>
           </div>
           <div>
             <div className="supplier-purchase-modal-items-header">
@@ -157,7 +187,7 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paym
                 </tr>
               </thead>
               <tbody>
-                <SupplierPurchaseItemRowContext.Provider value={{tableRows, setTableRows, prices, setPrices}}>
+                <SupplierPurchaseItemRowContext.Provider value={{tableRows, setTableRows, modalState, setModalState}}>
                   {tableRows}
                 </SupplierPurchaseItemRowContext.Provider>
               </tbody>
@@ -175,6 +205,7 @@ type Prop = {
   setIsOpen: (isOpen: boolean) => void,
   purchase?: SupplierPurchase,
   paymentMethods: Array<JSX.Element>,
+  bankAccounts: Array<BankAccount>,
 }
 
 function parseForm(form: HTMLFormElement, purchase?: SupplierPurchase) {
@@ -189,6 +220,7 @@ function parseForm(form: HTMLFormElement, purchase?: SupplierPurchase) {
   const body = {
     supplier: fieldValue(form, "input[name='supplier']")?.trim(),
     purchase_method: fieldValue(form, "select[name='purchase_method']", 'select'),
+    bank_account: fieldValue(form, "select[name='bank_account']", 'select'),
     payment_method: fieldValue(form, "select[name='payment_method']", 'select'),
     id_company: Number(fieldValue(form, "select[name='company']")),
     freight: Number(fieldValue(form, "input[name='freight']")?.replace(',', '.')),
@@ -246,9 +278,19 @@ function validateForm(form: HTMLFormElement) {
 }
 
 function subtotal(items: Record<number, number>) {
+  return calculateSubtotal(items)
+    .toFixed(2)
+    .replace('.', ',')
+}
+
+function total(items: Record<number, number>, freight: number) {
+  return (calculateSubtotal(items) + freight)
+    .toFixed(2)
+    .replace('.', ',')
+}
+
+function calculateSubtotal(items: Record<number, number>) {
   return Object.keys(items)
     .map((id) => items[Number(id)])
     .reduce((acc, cur) => acc + cur, 0)
-    .toFixed(2)
-    .replace('.', ',')
 }

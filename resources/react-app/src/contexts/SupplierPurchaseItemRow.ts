@@ -4,8 +4,8 @@ import { CostBenefitPrices } from "../components/SupplierPurchaseModal/CostBenef
 const SupplierPurchaseItemRowContext = createContext({
   tableRows: [],
   setTableRows: () => {},
-  prices: {items: {}, freight: 0, selling_price: {}},
-  setPrices: () => {},
+  modalState: {items: {}, freight: 0, selling_price: {}, id_company: 0},
+  setModalState: () => {},
 } as Context)
 
 export default SupplierPurchaseItemRowContext
@@ -13,6 +13,6 @@ export default SupplierPurchaseItemRowContext
 type Context = {
   tableRows: Array<JSX.Element>,
   setTableRows: (tableRows: Array<JSX.Element>) => void,
-  prices: CostBenefitPrices,
-  setPrices: (prices: CostBenefitPrices) => void,
+  modalState: CostBenefitPrices,
+  setModalState: (prices: CostBenefitPrices) => void,
 }

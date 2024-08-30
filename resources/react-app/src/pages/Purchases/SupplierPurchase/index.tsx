@@ -4,12 +4,13 @@ import SupplierPurchaseModal from "../../../components/SupplierPurchaseModal"
 import "./style.css"
 import api from "../../../services/axios"
 import getCompany from "../../../lib/getCompany"
-import { SupplierPurchase } from "./types"
+import { BankAccount, SupplierPurchase } from "./types"
 
 export default function SupplierPurchasePage() {
   const [modalOpen, setModalOpen] = useState(false)
   const [purchases, setPurchases] = useState([] as Array<SupplierPurchase>)
   const [paymentMethods, setPaymentMethods] = useState([] as Array<JSX.Element>)
+  const [bankAccounts, setBankAccounts] = useState([] as Array<BankAccount>)
 
   useEffect(() => {
     api.get('/api/supplier-purchase')
@@ -21,6 +22,10 @@ export default function SupplierPurchasePage() {
       .then(paymentMethods => setPaymentMethods(paymentMethods
         .map(({id, operation}, key) => <option key={key+1} value={id}>{operation}</option>)
       ))
+    
+    api.get('/api/company/bank-accounts')
+      .then(response => response.data)
+      .then(setBankAccounts)
   }, [])
 
   return (
@@ -55,6 +60,7 @@ export default function SupplierPurchasePage() {
                       key={key}
                       purchase={purchase}
                       paymentMethods={paymentMethods}
+                      bankAccounts={bankAccounts}
                     />)
                 }
               </tbody>
@@ -62,19 +68,30 @@ export default function SupplierPurchasePage() {
           </div>
         </div>
       </div>
-      <SupplierPurchaseModal isOpen={modalOpen} setIsOpen={setModalOpen} paymentMethods={paymentMethods}/>
+      <SupplierPurchaseModal
+        isOpen={modalOpen}
+        setIsOpen={setModalOpen}
+        paymentMethods={paymentMethods}
+        bankAccounts={bankAccounts}
+      />
     </div>
   )
 }
 
-function PurchaseRow({purchase, paymentMethods}: {purchase: SupplierPurchase, paymentMethods: Array<JSX.Element>}) {
+function PurchaseRow({purchase, paymentMethods, bankAccounts}: {purchase: SupplierPurchase, paymentMethods: Array<JSX.Element>, bankAccounts: Array<BankAccount>}) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
     <tr className="supplier-purchase-row" onClick={() => setIsOpen(true)}>
       <td>
         {purchase.id}
-        <SupplierPurchaseModal isOpen={isOpen} setIsOpen={setIsOpen} purchase={purchase} paymentMethods={paymentMethods}/>
+        <SupplierPurchaseModal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          purchase={purchase}
+          paymentMethods={paymentMethods}
+          bankAccounts={bankAccounts}
+        />
       </td>
       <td>{getCompany(purchase.id_company)}</td>
       <td>{purchase.supplier}</td>
