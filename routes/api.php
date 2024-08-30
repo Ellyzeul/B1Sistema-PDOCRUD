@@ -120,6 +120,7 @@ Route::controller(CompanyController::class)
     ->group(function() {
         Route::get('/read-thumbnails', 'readThumbnails');
         Route::get('/read-info', 'readInfo');
+        Route::get('/bank-accounts', 'bankAccounts');
     });
 
 Route::controller(FileUploadController::class)

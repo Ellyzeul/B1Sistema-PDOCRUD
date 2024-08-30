@@ -1,8 +1,8 @@
 import { CostBenefitPrices } from "./types"
 import "./style.css"
 
-export default function CostBenefitIndex({prices}: Prop) {
-  const ratio = evaluateRatio(prices)
+export default function CostBenefitIndex({modalState}: Prop) {
+  const ratio = evaluateRatio(modalState)
   const index = evaluateIndex(ratio)
 
   return (
@@ -15,7 +15,7 @@ export default function CostBenefitIndex({prices}: Prop) {
 }
 
 type Prop = {
-  prices: CostBenefitPrices,
+  modalState: CostBenefitPrices,
 }
 
 const STATUSES: Record<string, string> = {

@@ -36,6 +36,7 @@ class CreateOrUpdateAction
     $purchase->id_company = $request->id_company;
     $purchase->id_supplier = Supplier::idFromName($request->supplier);
     $purchase->purchase_method = $request->purchase_method;
+    $purchase->id_bank = $request->bank_account;
     $purchase->id_payment_method = $request->payment_method;
     $purchase->freight = $request->freight;
     $purchase->date = $request->date;
