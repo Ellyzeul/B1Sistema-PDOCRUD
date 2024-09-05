@@ -17,7 +17,7 @@ class GetLoggiShipmentLabelAction
   public function handle(Request $request)
   {
     $tracking = $this->api->tracking($request->tracking_code);
-    $label = $this->api->labels($tracking->loggiKey);
+    $label = $this->api->labels($tracking->loggiKey, layout: 'LABEL_LAYOUT_A6');
 
     return $label;
   }
