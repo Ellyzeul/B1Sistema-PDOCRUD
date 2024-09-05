@@ -13,6 +13,7 @@ use App\Actions\Tracking\ConsultPriceAndShippingAction;
 use App\Actions\Tracking\ConsultPostalCodeAction;
 use App\Actions\Tracking\CreateInternalAction;
 use App\Actions\Tracking\GetEnviaDotComShipmentLabelAction;
+use App\Actions\Tracking\GetLoggiShipmentLabelAction;
 use App\Services\ThirdParty\Kangu;
 
 class TrackingService
@@ -101,6 +102,11 @@ class TrackingService
             'success' => true,
             'content' => "data:application/pdf;base64, {$response->pdf}",
         ];
+    }
+
+    public function getLoggiShipmentLabel(Request $request)
+    {
+        return (new GetLoggiShipmentLabelAction())->handle($request);
     }
 
     public static function createInternal(Request $request)
