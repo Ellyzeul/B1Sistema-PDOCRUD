@@ -15,17 +15,46 @@ class Loggi
     $response = Http::loggi(token: Loggi::token())->post('/quotations', [
       'shipFrom' => $this->quotationAddress($fromPostalCode),
       'shipTo' => $this->quotationAddress($toPostalCode),
+      'pickupTypes' => ['PICKUP_TYPE_DROP_OFF'],
       'packages' => [
         'weight' => $weight * 1000,
         'lengthCm' => 21,
         'widthCm' => 21,
         'heightCm' => 3,
-      ]
+      ],
     ]);
 
     if(!$response->ok() && $response->status() != 404) Loggi::throwError($response->object());
 
     return collect($response->object()->packagesQuotations[0]->quotations ?? []);
+  }
+
+  public function labels(
+    string | array $loggiKeys,
+    string $format='LABEL_FORMAT_PDF',
+    string $layout='LABEL_LAYOUT_A4',
+    string $responseType='LABEL_RESPONSE_TYPE_BASE_64',
+  )
+  {
+    $response = Http::loggi(token: Loggi::token())->post('/labels', [
+      'loggiKeys' => is_array($loggiKeys) ? $loggiKeys : [$loggiKeys],
+      'format' => $format,
+      'layout' => $layout,
+      'responseType' => $responseType,
+    ]);
+
+    if(!$response->ok()) Loggi::throwError($response->object());
+
+    return $response->object()->success;
+  }
+
+  public function tracking(string $trackingCode)
+  {
+    $response = Http::loggi(token: Loggi::token())->get("/packages/$trackingCode/tracking");
+
+    if(!$response->ok()) Loggi::throwError($response->object());
+
+    return $response->object()->packages[0];
   }
 
   private function quotationAddress(string $postalCode)
@@ -36,7 +65,7 @@ class Loggi
   private static function throwError(object $err)
   {
     throw new Exception(
-      "Loggi auth error: $err->code - $err->message\n\n" . json_encode($err->details)
+      'Loggi auth error: '.($err->code ?? 'NO CODE')." - $err->message\n\n" . json_encode($err->details)
     );
   }
 
