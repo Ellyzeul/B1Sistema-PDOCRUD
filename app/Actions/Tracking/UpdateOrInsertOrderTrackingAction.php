@@ -8,6 +8,7 @@ use App\Actions\Tracking\DeliveryMethods\Correios;
 use App\Actions\Tracking\DeliveryMethods\Delnext;
 use App\Actions\Tracking\DeliveryMethods\EnviaDotCom;
 use App\Actions\Tracking\DeliveryMethods\Kangu;
+use App\Actions\Tracking\DeliveryMethods\Loggi;
 use App\Actions\Tracking\DeliveryMethods\MercadoLivre;
 use App\Actions\Tracking\DeliveryMethods\USPS;
 
@@ -24,6 +25,7 @@ class UpdateOrInsertOrderTrackingAction
 			'Envia.com' => fn() => new EnviaDotCom(),
 			'USPS' => fn() => new USPS(),
 			'Kangu' => fn() => new Kangu(),
+			'Loggi' => fn() => new Loggi(),
 			'Mercado Livre' => fn() => new MercadoLivre(),
 			'DHL' => fn() => new DHL(),
 			'Delnext' => fn() => new Delnext(),

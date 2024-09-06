@@ -23,4 +23,15 @@ class Loggi
 	    'expected_deadline' => $quotation->sloInDays,
     ]);
   }
+
+  public function fetch(string $trackingCode)
+  {
+    $status = $this->client->tracking($trackingCode)->status;
+
+    return [
+      'status' => $status->highLevelStatus,
+			'last_update_date' => date('Y-m-d', strtotime($status->updatedTime)),
+			'details' => $status->description,
+    ];
+  }
 }
