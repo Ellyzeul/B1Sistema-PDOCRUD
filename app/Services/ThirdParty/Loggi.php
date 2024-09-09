@@ -48,6 +48,15 @@ class Loggi
     return $response->object()->success;
   }
 
+  public function packageDetails(string $trackingCode)
+  {
+    $response = Http::loggi(token: Loggi::token())->get("/packages/$trackingCode");
+
+    if(!$response->ok()) Loggi::throwError($response->object());
+
+    return $response->object()->packages[0];
+  }
+
   public function tracking(string $trackingCode)
   {
     $response = Http::loggi(token: Loggi::token())->get("/packages/$trackingCode/tracking");

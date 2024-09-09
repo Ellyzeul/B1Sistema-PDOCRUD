@@ -237,7 +237,6 @@ class Order extends Model
                 ]
             ];
             $productResponse = $bling->postProduct($requestBody);
-            var_dump($productResponse);
             array_push($blingProducts, array_merge($requestBody, ['id' => $productResponse->id]));
         }
 
