@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use Override;
 
 class SupplierPurchase extends Model
 {
@@ -16,7 +15,7 @@ class SupplierPurchase extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['id_supplier', 'purchase_method', 'id_payment_method', 'id_company', 'freight', 'sales_total'];
+    protected $fillable = ['id_supplier', 'purchase_method', 'id_payment_method', 'id_company', 'freight', 'sales_total', 'observation', 'payment_date'];
     protected $casts = ['freight' => 'float', 'sales_total' => 'float'];
     protected $appends = ['supplier', 'items'];
 
@@ -32,6 +31,7 @@ class SupplierPurchase extends Model
             'id_order',
             'id_purchase',
             'value',
+            'status',
         ]);
     }
 }

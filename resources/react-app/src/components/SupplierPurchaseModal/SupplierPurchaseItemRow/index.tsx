@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react"
+import { useCallback, useContext, useEffect, useRef, useState } from "react"
 import "./style.css"
 import SupplierPurchaseItemRowContext from "../../../contexts/SupplierPurchaseItemRow"
 import api from "../../../services/axios"
@@ -12,6 +12,7 @@ export default function SupplierPurchaseItemRow({id, item}: Prop) {
   const [orderDetails, setOrderDetails] = useState(null as OrderDetails | null)
   const [previousDetails, setPreviousDetails] = useState(null as OrderDetails | null)
   const currency = getCurrencyFromSellercentral(orderDetails?.id_sellercentral || 0)
+  const rowRef = useRef(null as HTMLTableRowElement | null)
   const fetchOrderDetails = useCallback((orderId: string, purchaseId?: number) => {
     api.get(`/api/supplier-purchase/order-details?id_order=${orderId}&id_purchase=${purchaseId ?? ''}`)
       .then(response => response.data as OrderDetails)
@@ -62,18 +63,25 @@ export default function SupplierPurchaseItemRow({id, item}: Prop) {
         ...(orderDetails as OrderDetails), 
         brlPrice,
       })
+
+      const radio = rowRef.current?.querySelector<HTMLInputElement>(
+        `input[name='item_status'][value='${item?.status ?? 'pending'}']`
+      )
+      if(radio) radio.checked = true
     })()
   }, [orderDetails, item, previousDetails, currency, fetchOrderDetails])
 
   return (
-    <tr className="supplier-purchase-item-row">
+    <tr className="supplier-purchase-item-row" ref={rowRef}>
       <td><input type="text" name="id_order" defaultValue={item?.id_order || ''} onBlur={(ev) => fetchOrderDetails(ev.target.value, item?.id_purchase)}/></td>
-      <td><select name="status" defaultValue={item?.status || 'pending'}>
-        <option value="pending">Pendente</option>
-        <option value="delivered">Entregue</option>
-        <option value="cancelled">Cancelado</option>
-        <option value="failed">Fornecedor furou</option>
-      </select></td>
+      <td>
+      <form>
+        <input className="supplier-purchase-item-status" defaultChecked={item?.status === 'pending'} title="Pendente" type="radio" name="item_status" value='pending'/>
+        <input className="supplier-purchase-item-status" defaultChecked={item?.status === 'delivered'} title="Entregue" type="radio" name="item_status" value='delivered'/>
+        <input className="supplier-purchase-item-status" defaultChecked={item?.status === 'failed'} title="Não entregue" type="radio" name="item_status" value='failed'/>
+        <input className="supplier-purchase-item-status" defaultChecked={item?.status === 'cancelled'} title="Cancelado" type="radio" name="item_status" value='cancelled'/>
+      </form>
+      </td>
       <td>{orderDetails?.isbn}</td>
       <td>{currency?.name}</td>
       <td>{currency?.symbol} {(orderDetails?.selling_price || '').toString().replace('.', ',')}</td>

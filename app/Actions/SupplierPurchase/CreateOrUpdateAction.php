@@ -40,7 +40,9 @@ class CreateOrUpdateAction
     $purchase->id_payment_method = $request->payment_method;
     $purchase->freight = $request->freight;
     $purchase->date = $request->date;
+    $purchase->payment_date = $request->payment_date;
     $purchase->status = $request->status;
+    $purchase->observation = $request->observation;
     $purchase->sales_total = $this->salesTotal($request);
 
     $purchase->save();
@@ -68,10 +70,10 @@ class CreateOrUpdateAction
 
       $item->save();
       $purchase->items->push($item);
-      Order::where('id', $item->id_order)->update([
-        'supplier_name' => $purchase->id,
-        'is_on_purchase' => 1,
-      ]);
+      // Order::where('id', $item->id_order)->update([
+      //   'supplier_name' => $purchase->id,
+      //   'is_on_purchase' => 1,
+      // ]);
     }
   }
 
