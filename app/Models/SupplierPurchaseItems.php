@@ -14,7 +14,7 @@ class SupplierPurchaseItems extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['id_purchase', 'id_order', 'value'];
+    protected $fillable = ['id_purchase', 'id_order', 'value', 'status'];
 
     public function purchase()
     {

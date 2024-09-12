@@ -9,6 +9,8 @@ export type SupplierPurchase = {
   sales_total: number,
   date: string,
   status: string,
+  observation: string,
+  payment_date: string,
   items: Array<SupplierPurchaseItem>,
 }
 

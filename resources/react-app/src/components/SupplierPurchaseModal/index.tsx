@@ -98,8 +98,34 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paym
       <div className="supplier-purchase-modal-container">
         <div className="supplier-purchase-modal-close" onClick={() => setTimeout(() => setIsOpen(false), 1)}>X</div>
         <div className="supplier-purchase-modal-save" onClick={savePurchase}>Salvar</div>
-        <form ref={formRef} className="supplier-purchase-modal-form">
+        <div className="supplier-purchase-purchase-id">{savedPurchase?.id ? `Compra Nº ${savedPurchase.id}` : ''}</div>       <form ref={formRef} className="supplier-purchase-modal-form">
           <div className="supplier-purchase-modal-form-supplier">
+            <label htmlFor="company">Empresa: </label>
+            <select
+              name="company"
+              defaultValue={savedPurchase?.id_company}
+              onInput={({target}) => setModalState({...modalState, id_company: Number((target as HTMLSelectElement).value)})}
+            >
+              <option value="0">Seline</option>
+              <option value="1">B1</option>
+              <option value="2">J1</option>
+              <option value="3">R1</option>
+            </select>
+            <span> {COMPANIES[modalState.id_company] ?? ''}</span>
+            <br />
+            <br />
+            <label htmlFor="date">Data do pedido:</label>
+            <input type="date" name="date" defaultValue={savedPurchase?.date || (new Date().toISOString().split('T')[0])}/>
+            <br />
+            <label htmlFor="status">Status do pedido:</label>
+            <select name="status" defaultValue={savedPurchase?.status || 'normal'}>
+              <option value="normal">Normal</option>
+              <option value="cancelled">Cancelado integral</option>
+              <option value="cancelled_partial">Cancelado parcial</option>
+              <option value="multiple_delivery">Múltiplas entregas do fornecedor</option>
+            </select>
+            <CostBenefitIndex modalState={modalState}/>
+            <hr />
             <label htmlFor="supplier">Fornecedor: </label>
             <input type="text" name="supplier" defaultValue={savedPurchase?.supplier}/>
             <br />
@@ -111,6 +137,20 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paym
               <option value="whatsapp">WhatsApp</option>
             </select>
             <br />
+            <div>Subtotal: R$ {subtotal(modalState.items)}</div>
+            <label htmlFor="freight">Frete: </label>
+            <input
+              type="text"
+              name="freight"
+              onBlur={({target}) => handleFreightBlur(target)}
+              defaultValue={savedPurchase?.freight.toFixed(2).replace('.', ',') || '0,00'}
+            />
+            <br />
+            <strong>Total: R$ {total(modalState.items, modalState.freight)}</strong>
+            <br />
+            <label htmlFor="observation">Observações: </label>
+            <textarea name="observation" defaultValue={savedPurchase?.observation} rows={4} style={{width: '95%'}}/>
+            <hr />
             <label htmlFor="bank_account">Banco: </label>
             <select name="bank_account">
               <option key={0} value="">Selecione</option>
@@ -127,45 +167,11 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paym
               <option key={0} value=''>Selecione</option>,
               ...paymentMethods
             ]}</select>
-          </div>
-          <div>
-            <label htmlFor="company">Empresa: </label>
-            <select
-              name="company"
-              defaultValue={savedPurchase?.id_company}
-              onInput={({target}) => setModalState({...modalState, id_company: Number((target as HTMLSelectElement).value)})}
-            >
-              <option value="0">Seline</option>
-              <option value="1">B1</option>
-              <option value="2">J1</option>
-              <option value="3">R1</option>
-            </select>
             <br />
-            <label htmlFor="freight">Frete: </label>
-            <input
-              type="text"
-              name="freight"
-              onBlur={({target}) => handleFreightBlur(target)}
-              defaultValue={savedPurchase?.freight || 0}
-            />
+            <label htmlFor="payment_date">Data do pagamento:</label>
+            <input type="date" name="payment_date" defaultValue={savedPurchase?.payment_date}/>
             <br />
-            <label htmlFor="date">Data do pedido:</label>
-            <input type="date" name="date" defaultValue={savedPurchase?.date || (new Date().toISOString().split('T')[0])}/>
-            <br />
-            <label htmlFor="status">Status do pedido:</label>
-            <select name="status" defaultValue={savedPurchase?.status || 'normal'}>
-              <option value="normal">Normal</option>
-              <option value="cancelled">Cancelado integral</option>
-              <option value="cancelled_partial">Cancelado parcial</option>
-              <option value="multiple_delivery">Múltiplas entregas do fornecedor</option>
-            </select>
-            <br />
-            <CostBenefitIndex modalState={modalState}/>
-            <br />
-            <div>Subtotal: R$ {subtotal(modalState.items)}</div>
-            <strong>Total: R$ {total(modalState.items, modalState.freight)}</strong>
-          </div>
-          <div>
+            <hr />
             <div className="supplier-purchase-modal-items-header">
               <div>Itens da compra:</div>
               <div
@@ -218,14 +224,16 @@ function parseForm(form: HTMLFormElement, purchase?: SupplierPurchase) {
     throw new Error('Form not fully filled...')
   }
   const body = {
+    id_company: Number(fieldValue(form, "select[name='company']")),
+    date: fieldValue(form, "input[name='date']"),
+    status: fieldValue(form, "select[name='status']"),
     supplier: fieldValue(form, "input[name='supplier']")?.trim(),
     purchase_method: fieldValue(form, "select[name='purchase_method']", 'select'),
+    freight: Number(fieldValue(form, "input[name='freight']")?.replace(',', '.')),
+    observation: fieldValue(form, "textarea[name='observation']"),
     bank_account: fieldValue(form, "select[name='bank_account']", 'select'),
     payment_method: fieldValue(form, "select[name='payment_method']", 'select'),
-    id_company: Number(fieldValue(form, "select[name='company']")),
-    freight: Number(fieldValue(form, "input[name='freight']")?.replace(',', '.')),
-    status: fieldValue(form, "select[name='status']"),
-    date: fieldValue(form, "input[name='date']"),
+    payment_date: fieldValue(form, "input[name='payment_date']"),
     items: parseItemsTable(form),
   }
 
@@ -251,7 +259,7 @@ function parseItemsTable(form: HTMLFormElement) {
       const body = {
         id_order: Number(row.querySelector<HTMLInputElement>("input[name='id_order']")?.value),
         value: Number(row.querySelector<HTMLInputElement>("input[name='value']")?.value.replace(',', '.')),
-        status: row.querySelector<HTMLSelectElement>("select[name='status']")?.value,
+        status: row.querySelector<HTMLInputElement>("input[name='item_status']:checked")?.value,
       }
       const id = fieldValue(row, "input[name='item_id']")
 
@@ -261,10 +269,11 @@ function parseItemsTable(form: HTMLFormElement) {
     })
 }
 
-function fieldValue(parent: HTMLElement, selector: string, element: 'input' | 'select' = 'input') {
-  let field: HTMLInputElement | HTMLSelectElement | null
+function fieldValue(parent: HTMLElement, selector: string, element: 'input' | 'select' | 'textarea' = 'input') {
+  let field: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null
 
   if(element === 'input') field = parent.querySelector<HTMLInputElement>(selector)
+  if(element === 'textarea') field = parent.querySelector<HTMLTextAreaElement>(selector)
   else field = parent.querySelector<HTMLSelectElement>(selector)
 
   if(!field) return null
@@ -293,4 +302,11 @@ function calculateSubtotal(items: Record<number, number>) {
   return Object.keys(items)
     .map((id) => items[Number(id)])
     .reduce((acc, cur) => acc + cur, 0)
+}
+
+const COMPANIES: Record<number, string> = {
+  0: 'RV de Lima Comercio de Livros Ltda - CNPJ 26.779.333/0001-54',
+  1: 'B1 Comercio de Livros e Distribuidora LTDA - CNPJ 47.317.204/0001-14',
+  2: '54.315.385 Jaqueline Oliveira da Silva - CNPJ 54.315.385/0001-05',
+  3: '32.853.054 Renato Vicente de Lima - CNPJ 32.853.054/0001-96',
 }

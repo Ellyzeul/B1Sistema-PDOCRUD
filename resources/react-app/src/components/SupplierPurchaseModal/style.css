@@ -23,6 +23,12 @@
   position: relative;
 }
 
+.supplier-purchase-purchase-id {
+  position: absolute;
+  top: 10px;
+  left: 45%;
+}
+
 .supplier-purchase-modal-save {
   padding: 4px 8px;
   background-color: green;
@@ -58,7 +64,8 @@
   margin-top: 40px;
   width: 100%;
 }
-.supplier-purchase-modal-form-supplier > input {
+.supplier-purchase-modal-form-supplier > input[type='text'],
+.supplier-purchase-modal-form-supplier > input[type='number'] {
   width: 80%;
 }
 

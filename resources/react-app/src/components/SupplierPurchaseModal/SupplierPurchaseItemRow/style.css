@@ -2,6 +2,7 @@
   width: 95%;
 }
 
+.supplier-purchase-item-row > td:nth-child(2) > form,
 .supplier-purchase-item-row > td:nth-child(3),
 .supplier-purchase-item-row > td:nth-child(8)
 {
@@ -15,4 +16,17 @@
 
 .row-delete-disable {
   cursor: default !important;
+}
+
+.supplier-purchase-item-status[value='pending'] {
+  accent-color: grey;
+}
+.supplier-purchase-item-status[value='delivered'] {
+  accent-color: green;
+}
+.supplier-purchase-item-status[value='failed'] {
+  accent-color: red;
+}
+.supplier-purchase-item-status[value='cancelled'] {
+  accent-color: black;
 }
