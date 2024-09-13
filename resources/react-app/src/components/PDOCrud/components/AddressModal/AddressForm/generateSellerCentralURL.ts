@@ -1,9 +1,10 @@
 export const generateSellerCentralUrl = (sellercentral: string, onlineOrderNumber: string) => {
-  return sellercentral ? sellercentrals[sellercentral].sell_page(onlineOrderNumber) : ""
+  return sellercentrals[sellercentral] ? sellercentrals[sellercentral].sell_page(onlineOrderNumber) : ""
 }
 
 export const generateProductPageUrl = (sellercentral: string, isbn: string) => {
-  return sellercentral ? sellercentrals[sellercentral].product_page(isbn) : ""
+  console.log(`'${sellercentral}'`)
+  return sellercentrals[sellercentral] ? sellercentrals[sellercentral].product_page(isbn) : ""
 }
 
 const sellercentrals = {
