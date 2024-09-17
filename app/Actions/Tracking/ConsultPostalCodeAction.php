@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use App\Actions\Tracking\DeliveryMethods\Correios;
+use App\Actions\Tracking\DeliveryMethods\EnviaDotCom;
 
 class ConsultPostalCodeAction
 {
