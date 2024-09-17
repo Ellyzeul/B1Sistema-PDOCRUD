@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use App\Actions\Tracking\DeliveryMethods\Correios;
 
-
 class ConsultPostalCodeAction
 {
     public function handle(Request $request)
@@ -15,6 +14,11 @@ class ConsultPostalCodeAction
 
 	private function consultPostalCode(string $postalCode)
 	{
-        return (new Correios())->consultPostalCode($postalCode);
+        try {
+            return (new Correios())->consultPostalCode($postalCode);
+        }
+        catch(\Exception) {
+            return (new EnviaDotCom())->validateAddress($postalCode);
+        }
 	}    
 }
