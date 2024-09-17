@@ -42,6 +42,19 @@ class EnviaDotCom
 		return "$msg: " . date('Y-m-d', strtotime(str_replace('/', '-', $date))) . "\n";
 	}
 
+	public function validateAddress(string $postalCode)
+	{
+		$response = (new API())->getAddressValidation($postalCode);
+
+		return [
+			'postal_code' => $response->zip_code ?? null,
+			'adress' => $response->additional_info->street ?? null,
+			'county' => $response->suburbs[0] ?? null,
+			'city' => $response->locality ?? null,
+			'uf' => $response->state->code->{'2digit'} ?? null,
+		];
+	}
+
 	public function postQuoteShipment(string $orderId, string $originPostalCode, string $clientPostalCode, float $weight)
 	{
 		$clientUF = DB::table('order_addresses')->where('online_order_number', Order::where('id', $orderId)->first()->online_order_number)

@@ -53,8 +53,8 @@ class AppServiceProvider extends ServiceProvider
         Http::macro('mercadoLivre', $mercadoLivreHandler);
         PendingRequest::macro('mercadoLivre', $mercadoLivreHandler);
 
-        Http::macro('enviaDotCom', fn(string $token) => 
-            Http::withToken($token)->baseUrl('https://queries.envia.com')
+        Http::macro('enviaDotCom', fn(string $token, string $scope) => 
+            Http::withToken($token)->baseUrl("https://$scope.envia.com")
         );
 
         Http::macro('envia', fn() => 

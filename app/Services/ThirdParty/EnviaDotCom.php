@@ -1,19 +1,24 @@
 <?php namespace App\Services\ThirdParty;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
 class EnviaDotCom
 {
-  private object $api;
-
-  public function __construct()
-  {
-    $this->api = Http::enviaDotCom(env('ENVIA_DOT_COM_API_TOKEN'));
+  private static function token() {
+    return Cache::rememberForever('envia-api-token', fn() => env('ENVIA_DOT_COM_API_TOKEN'));
   }
 
   public function getShipment(string $trackingNumber)
   {
-    return $this->api->get("/guide/$trackingNumber")->json();
+    return Http::enviaDotCom(token: EnviaDotCom::token(), scope: 'queries')
+      ->get("/guide/$trackingNumber")->json();
+  }
+
+  public function getAddressValidation(string $postalCode)
+  {
+    return Http::enviaDotCom(token: EnviaDotCom::token(), scope: 'geocodes')
+      ->get("/zipcode/BR/$postalCode")->object()[0];
   }
 
   public function postUserAddress(array $address)
@@ -21,7 +26,8 @@ class EnviaDotCom
     $validation = $this->validateAddressBody($address);
     if(!$validation['success']) return ['missing_fields' => $validation['missing']];
 
-    return $this->api->post('/user-address', $address)->json();
+    return Http::enviaDotCom(token: EnviaDotCom::token(), scope: 'queries')
+      ->post('/user-address', $address)->json();
   }
 
   private function validateAddressBody(array $address)
@@ -57,7 +63,8 @@ class EnviaDotCom
       $courier,
     );
 
-    return Http::envia()->post('/ship/rate', $body)->json();
+    return Http::enviaDotCom(scope: 'queries')
+      ->post('/ship/rate', $body)->json();
   }
 
   private function getQuoteShipmentBody(
