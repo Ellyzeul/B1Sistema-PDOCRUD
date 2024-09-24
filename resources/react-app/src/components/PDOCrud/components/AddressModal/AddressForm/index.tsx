@@ -154,7 +154,7 @@ const AddressForm = (props: AddressFormProp) => {
 
   return (
     <div className="address-form">
-      <a href={`/atendimento/enderecos?order-number=${sellercentral.online_order_number}`} target="blank" className="address-internal-btn">Endereço interno</a>
+      <a href={`/atendimento/enderecos?order-number=${sellercentral.online_order_number}&order-id=${orderId}`} target="blank" className="address-internal-btn">Endereço interno</a>
       <div className="address-envia-btn" onClick={handleClickEnviaDotCom}>Envia.com</div>
       <div className="address-form-save-btn" onClick={handleClick}>Salvar</div>
       <div ref={addressFormRef} className="address-panel">

@@ -63,7 +63,7 @@ class EnviaDotCom
       $courier,
     );
 
-    return Http::enviaDotCom(scope: 'queries')
+    return Http::enviaDotCom(token: EnviaDotCom::token(), scope: 'queries')
       ->post('/ship/rate', $body)->json();
   }
 
