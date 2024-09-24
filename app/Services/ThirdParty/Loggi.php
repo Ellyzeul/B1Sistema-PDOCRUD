@@ -5,6 +5,7 @@ namespace App\Services\ThirdParty;
 use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class Loggi
 {
@@ -12,7 +13,7 @@ class Loggi
 
   public function quotations(string $fromPostalCode, string $toPostalCode, float $weight)
   {
-    $response = Http::loggi(token: Loggi::token())->post('/quotations', [
+    $response = Http::loggi(token: self::token())->post('/quotations', [
       'shipFrom' => $this->quotationAddress($fromPostalCode),
       'shipTo' => $this->quotationAddress($toPostalCode),
       'pickupTypes' => ['PICKUP_TYPE_DROP_OFF'],
@@ -24,7 +25,7 @@ class Loggi
       ],
     ]);
 
-    if(!$response->ok() && $response->status() != 404) Loggi::throwError($response->object());
+    if(!$response->ok() && $response->status() != 404) self::throwError($response->object());
 
     return collect($response->object()->packagesQuotations[0]->quotations ?? []);
   }
@@ -36,32 +37,112 @@ class Loggi
     string $responseType='LABEL_RESPONSE_TYPE_BASE_64',
   )
   {
-    $response = Http::loggi(token: Loggi::token())->post('/labels', [
+    $response = Http::loggi(token: self::token())->post('/labels', [
       'loggiKeys' => is_array($loggiKeys) ? $loggiKeys : [$loggiKeys],
       'format' => $format,
       'layout' => $layout,
       'responseType' => $responseType,
     ]);
 
-    if(!$response->ok()) Loggi::throwError($response->object());
+    if(!$response->ok()) self::throwError($response->object());
 
     return $response->object()->success;
   }
 
   public function packageDetails(string $trackingCode)
   {
-    $response = Http::loggi(token: Loggi::token())->get("/packages/$trackingCode");
+    $response = Http::loggi(token: self::token())->get("/packages/$trackingCode");
 
-    if(!$response->ok()) Loggi::throwError($response->object());
+    if(!$response->ok()) self::throwError($response->object());
+
+    return $response->object()->packages[0];
+  }
+
+  public function asyncShipment(array $shipmentData)
+  {
+    Log::debug(json_encode([
+      'shipFrom' => [
+        'name' => 'Expedição Seline',
+        'federalTaxId' => '26779333000154',
+        'address' => ['correiosAddress' => [
+          'logradouro' => 'Rua José Luis da Silva Gomes, 102',
+          'cep' => '02965050',
+          'cidade' => 'São Paulo',
+          'uf' => 'SP',
+        ]],
+      ],
+      'shipTo' => [
+        'name' => $shipmentData['name'],
+        'federalTaxId' => $shipmentData['cpf_cnpj'],
+        'phoneNumber' => $shipmentData['phone'],
+        'address' => ['correiosAddress' => [
+          'logradouro' => $shipmentData['street'],
+          'cep' => $shipmentData['postal_code'],
+          'cidade' => $shipmentData['city'],
+          'uf' => $shipmentData['uf'],
+        ]],
+      ],
+      'pickupType' => 'PICKUP_TYPE_DROP_OFF',
+      'packages' => [[
+        'freightType' => 'FREIGHT_TYPE_ECONOMIC',
+        'weightG' => $shipmentData['weight'],
+        'lengthCm' => $shipmentData['length'],
+        'widthCm' => $shipmentData['width'],
+        'heightCm' => $shipmentData['height'],
+        'documentTypes' => [[
+          'contentDeclaration' => ['totalValue' => $shipmentData['value']]
+        ]],
+      ]],
+    ]));
+    $response = Http::loggi(token: self::token())->post('/async-shipments', [
+      'shipFrom' => [
+        'name' => 'Expedição Seline',
+        'federalTaxId' => '26779333000154',
+        'address' => ['correiosAddress' => [
+          'logradouro' => 'Rua José Luis da Silva Gomes, 102',
+          'cep' => '02965050',
+          'cidade' => 'São Paulo',
+          'uf' => 'SP',
+        ]],
+      ],
+      'shipTo' => [
+        'name' => $shipmentData['name'],
+        'federalTaxId' => $shipmentData['cpf_cnpj'],
+        'phoneNumber' => $shipmentData['phone'],
+        'address' => ['correiosAddress' => [
+          'logradouro' => $shipmentData['street'],
+          'cep' => $shipmentData['postal_code'],
+          'cidade' => $shipmentData['city'],
+          'uf' => $shipmentData['uf'],
+        ]],
+      ],
+      'pickupType' => 'PICKUP_TYPE_DROP_OFF',
+      'packages' => [[
+        'freightType' => 'FREIGHT_TYPE_ECONOMIC',
+        'weightG' => $shipmentData['weight'],
+        'lengthCm' => $shipmentData['length'],
+        'widthCm' => $shipmentData['width'],
+        'heightCm' => $shipmentData['height'],
+        'documentTypes' => [[
+          'contentDeclaration' => [
+            'totalValue' => $shipmentData['value'],
+            'description' => ' ',
+          ]
+        ]],
+      ]],
+    ]);
+
+    Log::debug(json_encode($response->status()));
+    if($response->status() !== 202) self::throwError($response->object());
 
     return $response->object()->packages[0];
   }
 
   public function tracking(string $trackingCode)
   {
-    $response = Http::loggi(token: Loggi::token())->get("/packages/$trackingCode/tracking");
+    $response = Http::loggi(token: self::token())->get("/packages/$trackingCode/tracking");
 
-    if(!$response->ok()) Loggi::throwError($response->object());
+    if(!$response->ok()) self::throwError($response->object());
 
     return $response->object()->packages[0];
   }
@@ -80,7 +161,7 @@ class Loggi
 
   private static function token()
   {
-    return Cache::remember('loggi_token', Loggi::EXPIRES_IN, fn() => Loggi::fetchToken());
+    return Cache::remember('loggi_token', self::EXPIRES_IN, fn() => self::fetchToken());
   }
 
   private static function fetchToken()
@@ -90,7 +171,7 @@ class Loggi
       'client_secret' => env('LOGGI_CLIENT_SECRET'),
     ])->object();
 
-    if(isset($response->code)) Loggi::throwError($response);
+    if(isset($response->code)) self::throwError($response);
 
     return $response->idToken;
   }

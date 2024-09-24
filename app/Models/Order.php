@@ -16,6 +16,8 @@ class Order extends Model
     protected $primaryKey = 'id';
     public $timestamps = false;
 
+    protected $fillable = ['tracking_code'];
+
     private array $deliveryMethods = [
         "PAC CONTRATO AG" => 2,
         "SEDEX CONTRATO AG" => 2,
