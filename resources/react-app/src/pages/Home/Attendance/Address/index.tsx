@@ -9,18 +9,21 @@ import { ToastContainer, toast } from "react-toastify";
 export default function AddressPage() {
   const [params] = useSearchParams()
   const formRef = useRef(null)
-  const [{address, order}, setInitialState] = useState({} as Record<string, Record<string, unknown>>)
+  const [{address, order, validate_address}, setInitialState] = useState({} as Record<string, Record<string, unknown>>)
 
   useEffect(() => {
     api.get(`/api/address?order_number=${params.get('order-number')}&order_id=${params.get('order-id')}`)
       .then(response => response.data)
-      .then((response: Record<string, Record<string, unknown>>) => setInitialState(response))
+      .then((response: Record<string, Record<string, unknown>>) => {
+        console.log(response)
+        setInitialState(response)
+      })
   }, [])
   
   function handleClick() {
     if(!formRef.current) return
     const form = formRef.current as HTMLFormElement
-    const body = Object.keys(form)
+    const body: Record<string, string> = Object.keys(form)
       .map(key => form[key])
       .filter(input => (input instanceof HTMLInputElement) || (input instanceof HTMLSelectElement))
       .map(({name, value, type}: HTMLInputElement | HTMLSelectElement) => ([
@@ -30,6 +33,17 @@ export default function AddressPage() {
           : value
       ]))
       .reduce((acc, [key, value]) => ({...acc, [key]: value}), {})
+
+    if(((body.complement + body.delivery_instructions).length > 100)) {
+      toast.error('Complemento e Instruções de entrega juntos superam 100 caracteres')
+      return
+    }
+    if(body.state.length > 2) {
+      toast.error('Estado deve conter o UF e não ter mais do que dois caracteres')
+    }
+    if(body.ship_phone.length > 16) {
+      toast.error('Telefone dest contém mais do que 16 caracteres')
+    }
 
     const loadingId = toast.loading('Salvando...')
     api.put('/api/address', {
@@ -110,6 +124,10 @@ export default function AddressPage() {
                   <Input type="number" name="height" defaultValue={3} label="Altura"/>
                   <Input type="number" name="width" defaultValue={18} label="Largura"/>
                   <Input type="number" name="length" defaultValue={18} label="Comprimento"/>
+                </div>
+                  <div><strong>Endereço para validação:</strong></div>
+                <div>
+                  <div>{validate_address['adress'] as string}, {validate_address['county'] as string}, {validate_address['city'] as string} - {validate_address['uf'] as string}</div>
                 </div>
               </form>
               <div>
