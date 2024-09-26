@@ -22,28 +22,7 @@ export default function AddressPage() {
   
   function handleClick() {
     if(!formRef.current) return
-    const form = formRef.current as HTMLFormElement
-    const body: Record<string, string> = Object.keys(form)
-      .map(key => form[key])
-      .filter(input => (input instanceof HTMLInputElement) || (input instanceof HTMLSelectElement))
-      .map(({name, value, type}: HTMLInputElement | HTMLSelectElement) => ([
-        name,
-        type === 'number'
-          ? Number(value.replace(',', '.'))
-          : value
-      ]))
-      .reduce((acc, [key, value]) => ({...acc, [key]: value}), {})
-
-    if(((body.complement + body.delivery_instructions).length > 100)) {
-      toast.error('Complemento e Instruções de entrega juntos superam 100 caracteres')
-      return
-    }
-    if(body.state.length > 2) {
-      toast.error('Estado deve conter o UF e não ter mais do que dois caracteres')
-    }
-    if(body.ship_phone.length > 16) {
-      toast.error('Telefone dest contém mais do que 16 caracteres')
-    }
+    const body = getAddress(formRef.current as HTMLFormElement)
 
     const loadingId = toast.loading('Salvando...')
     api.put('/api/address', {
@@ -58,6 +37,29 @@ export default function AddressPage() {
       .catch(() => {
         toast.dismiss(loadingId)
         toast.error('Algum erro ocorreu...')
+      })
+  }
+
+  function handleCreateShipment() {
+    if(!formRef.current) return
+
+    const body = getAddress(formRef.current as HTMLFormElement)
+    if(!validateBody(body)) return
+
+    const loadingId = toast.loading('Criando rastreio')
+
+    api.post('/api/tracking/shipment', {
+      order_id: params.get('order-id'),
+      address: body,
+    })
+      .then(response => response.data)
+      .then(({tracking_code}) => {
+        toast.dismiss(loadingId)
+        toast.success(`Rastreio ${tracking_code} criado!`)
+      })
+      .catch(() => {
+        toast.dismiss(loadingId)
+        toast.error('Erro ao criar rastreio...')
       })
   }
 
@@ -130,13 +132,14 @@ export default function AddressPage() {
                   <div>{validate_address['adress'] as string}, {validate_address['county'] as string}, {validate_address['city'] as string} - {validate_address['uf'] as string}</div>
                 </div>
               </form>
-              <div>
+              <div className="attendance-address-btn-group">
                 <input
                   className="attendance-address-save"
                   type="button"
                   value="Salvar"
                   onClick={handleClick}
                 />
+                <button onClick={handleCreateShipment}>Criar rastreio</button>
               </div>
             </>
             : <div className="attendance-address-loading">
@@ -148,6 +151,38 @@ export default function AddressPage() {
       <ToastContainer/>
     </div>
   )
+}
+
+function getAddress(form: HTMLFormElement): Record<string, string> {
+  return Object.keys(form)
+    .map(key => form[key])
+    .filter(input => (input instanceof HTMLInputElement) || (input instanceof HTMLSelectElement))
+    .map(({name, value, type}: HTMLInputElement | HTMLSelectElement) => ([
+      name,
+      type === 'number'
+        ? Number(value.replace(',', '.'))
+        : value
+    ]))
+    .reduce((acc, [key, value]) => ({...acc, [key]: value}), {})
+}
+
+function validateBody(body: Record<string, string>): boolean {
+  let validate = true
+
+  if(((body.complement + body.delivery_instructions).length > 100)) {
+    toast.error('Complemento e Instruções de entrega juntos superam 100 caracteres')
+    validate = false
+  }
+  if(body.state.length > 2) {
+    toast.error('Estado deve conter o UF e não ter mais do que dois caracteres')
+    validate = false
+  }
+  if(body.ship_phone.length > 16) {
+    toast.error('Telefone dest contém mais do que 16 caracteres')
+    validate = false
+  }
+
+  return validate
 }
 
 const DELIVERY_METHODS: Record<number, string> = {

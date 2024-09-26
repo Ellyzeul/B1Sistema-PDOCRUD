@@ -2,10 +2,10 @@
 
 namespace App\Actions\Tracking;
 
+use App\Models\Order;
 use App\Services\ThirdParty\Loggi;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class CreateShipmentAction
 {
@@ -53,11 +53,23 @@ class CreateShipmentAction
   public function handle(Request $request)
   {
     $deliveryMethod = $request->address['delivery_method'];
-    Log::debug($deliveryMethod);
 
     if(!isset($this->handlers[$deliveryMethod])) return null;
+    $trackingCode = $this->handlers[$deliveryMethod]($request);
 
-    return $this->handlers[$deliveryMethod]($request);
+    $this->updateOrder(Order::find($request->order_id)->first(), $trackingCode);
+
+    return [
+      'tracking_code' => $trackingCode,
+    ];
   }
 
+  private function updateOrder(?Order $order, string $trackingCode)
+  {
+    if(!isset($order)) return;
+
+    $order->tracking_code = $trackingCode;
+
+    $order->save();
+  }
 }

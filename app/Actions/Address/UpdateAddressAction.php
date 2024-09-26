@@ -24,12 +24,6 @@ class UpdateAddressAction
     $order->id_delivery_method = $request->address['delivery_method'] === 0
       ? null
       : $request->address['delivery_method'];
-    
-    if(!isset($order->tracking_code) || $order->tracking_code === '') {
-      $trackingCode = (new CreateShipmentAction())->handle($request);
-
-      if($trackingCode !== null) $order->tracking_code = $trackingCode;
-    }
 
     $order->save();
   }

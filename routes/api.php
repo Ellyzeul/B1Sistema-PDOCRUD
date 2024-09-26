@@ -155,6 +155,7 @@ Route::controller(TrackingController::class)
         Route::get('/envia-dot-com-shipment-label', 'getEnviaDotComShipmentLabel');
         Route::get('/kangu-shipment-label', 'getKanguShipmentLabel');
         Route::get('/loggi-shipment-label', 'getLoggiShipmentLabel');
+        Route::post('/shipment', 'createShipment');
         Route::post('/read-for-excel', 'readForExcel');
         Route::post('/update', 'update');
         Route::post('/update-purchase', 'updatePurchase');
