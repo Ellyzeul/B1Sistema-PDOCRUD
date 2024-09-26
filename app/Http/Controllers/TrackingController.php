@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Tracking\CreateShipmentAction;
 use App\Services\TrackingService;
 use Illuminate\Http\Request;
 
@@ -86,5 +87,10 @@ class TrackingController extends Controller
 	public static function updateInternal(Request $request)
 	{
 		return (new TrackingService())->updateInternal($request);
+	}
+
+	public function createShipment(Request $request)
+	{
+		return (new CreateShipmentAction())->handle($request);
 	}
 }
