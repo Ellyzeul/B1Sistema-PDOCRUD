@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Services\ThirdParty\Loggi;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CreateShipmentAction
 {
@@ -57,7 +58,7 @@ class CreateShipmentAction
     if(!isset($this->handlers[$deliveryMethod])) return null;
     $trackingCode = $this->handlers[$deliveryMethod]($request);
 
-    $this->updateOrder(Order::find($request->order_id)->first(), $trackingCode);
+    $this->updateOrder(Order::where('id', $request->order_id)->first(), $trackingCode);
 
     return [
       'tracking_code' => $trackingCode,
