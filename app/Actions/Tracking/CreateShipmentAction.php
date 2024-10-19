@@ -33,9 +33,10 @@ class CreateShipmentAction
         $response = (new Loggi())->asyncShipment([
           'name' => $address['recipient_name'],
           'street' => $address['address_1'],
-          'complement' => Str::substr($address['address_1'] . ' ' . $address['delivery_instructions'], 0, 128),
+          'complement' => Str::substr($address['address_2'], 0, 128),
           'city' => $address['city'],
           'uf' => $address['state'],
+          'instructions' => $address['delivery_instructions'],
           'postal_code' => $address['postal_code'],
           'phone' => $address['ship_phone'],
           'cpf_cnpj' => $address['cpf_cnpj'],

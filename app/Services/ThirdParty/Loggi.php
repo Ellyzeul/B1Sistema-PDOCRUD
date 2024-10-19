@@ -60,47 +60,13 @@ class Loggi
 
   public function asyncShipment(array $shipmentData)
   {
-    Log::debug(json_encode([
-      'shipFrom' => [
-        'name' => 'Expedição Seline',
-        'federalTaxId' => '26779333000154',
-        'address' => ['correiosAddress' => [
-          'logradouro' => 'Rua José Luis da Silva Gomes, 102',
-          'cep' => '02965050',
-          'cidade' => 'São Paulo',
-          'uf' => 'SP',
-        ]],
-      ],
-      'shipTo' => [
-        'name' => $shipmentData['name'],
-        'federalTaxId' => $shipmentData['cpf_cnpj'],
-        'phoneNumber' => $shipmentData['phone'],
-        'address' => ['correiosAddress' => [
-          'logradouro' => $shipmentData['street'],
-          'cep' => $shipmentData['postal_code'],
-          'cidade' => $shipmentData['city'],
-          'uf' => $shipmentData['uf'],
-        ]],
-      ],
-      'pickupType' => 'PICKUP_TYPE_DROP_OFF',
-      'packages' => [[
-        'freightType' => 'FREIGHT_TYPE_ECONOMIC',
-        'weightG' => $shipmentData['weight'],
-        'lengthCm' => $shipmentData['length'],
-        'widthCm' => $shipmentData['width'],
-        'heightCm' => $shipmentData['height'],
-        'documentTypes' => [[
-          'contentDeclaration' => ['totalValue' => $shipmentData['value']]
-        ]],
-      ]],
-    ]));
     $response = Http::loggi(token: self::token())->post('/async-shipments', [
       'shipFrom' => [
         'name' => 'Expedição Seline',
         'federalTaxId' => '26779333000154',
         'address' => ['correiosAddress' => [
-          'logradouro' => 'Rua José Luis da Silva Gomes, 102',
-          'cep' => '02965050',
+          'logradouro' => 'Praça Mariano Melgar, 3',
+          'cep' => '02754110',
           'cidade' => 'São Paulo',
           'uf' => 'SP',
         ]],
@@ -109,12 +75,16 @@ class Loggi
         'name' => $shipmentData['name'],
         'federalTaxId' => $shipmentData['cpf_cnpj'],
         'phoneNumber' => $shipmentData['phone'],
-        'address' => ['correiosAddress' => [
-          'logradouro' => $shipmentData['street'],
-          'cep' => $shipmentData['postal_code'],
-          'cidade' => $shipmentData['city'],
-          'uf' => $shipmentData['uf'],
-        ]],
+        'address' => [
+          'instructions' => $shipmentData['instructions'],
+          'correiosAddress' => [
+            'logradouro' => $shipmentData['street'],
+            'complemento' => $shipmentData['complement'],
+            'cep' => $shipmentData['postal_code'],
+            'cidade' => $shipmentData['city'],
+            'uf' => $shipmentData['uf'],
+          ],
+        ],
       ],
       'pickupType' => 'PICKUP_TYPE_DROP_OFF',
       'packages' => [[
