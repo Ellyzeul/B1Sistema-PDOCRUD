@@ -9,23 +9,24 @@ import { BankAccount, SupplierPurchase } from "./types"
 export default function SupplierPurchasePage() {
   const [modalOpen, setModalOpen] = useState(false)
   const [purchases, setPurchases] = useState([] as Array<SupplierPurchase>)
-  const [paymentMethods, setPaymentMethods] = useState([] as Array<JSX.Element>)
-  const [bankAccounts, setBankAccounts] = useState([] as Array<BankAccount>)
+  const [{payment_methods, bank_accounts, delivery_addresses, supplier_delivery_methods}, setModalInfo] = useState({} as ModalInfo)
 
   useEffect(() => {
+    api.get('/api/supplier-purchase/modal-info')
+      .then(response => response.data)
+      .then(({payment_methods, bank_accounts, delivery_addresses, supplier_delivery_methods}) => {
+        setModalInfo({
+          payment_methods: (payment_methods as Array<{id: number, operation: string}>)
+            .map(({id, operation}, key) => <option key={key+1} value={id}>{operation}</option>),
+          bank_accounts,
+          delivery_addresses,
+          supplier_delivery_methods,
+        })
+      })
+
     api.get('/api/supplier-purchase')
       .then(response => response.data)
       .then(setPurchases)
-    
-    api.get('/api/payment-method')
-      .then(response => response.data as Array<{id: number, operation: string}>)
-      .then(paymentMethods => setPaymentMethods(paymentMethods
-        .map(({id, operation}, key) => <option key={key+1} value={id}>{operation}</option>)
-      ))
-    
-    api.get('/api/company/bank-accounts')
-      .then(response => response.data)
-      .then(setBankAccounts)
   }, [])
 
   return (
@@ -54,13 +55,15 @@ export default function SupplierPurchasePage() {
               </thead>
               <tbody>
                 {
-                  purchases.length === 0
+                  purchases.length === 0 || !bank_accounts
                     ? <tr><td>Sem pedidos</td></tr>
                     : purchases.map((purchase, key) => <PurchaseRow
                       key={key}
                       purchase={purchase}
-                      paymentMethods={paymentMethods}
-                      bankAccounts={bankAccounts}
+                      paymentMethods={payment_methods}
+                      bankAccounts={bank_accounts}
+                      supplierDeliveryMethods={supplier_delivery_methods}
+                      deliveryAddresses={delivery_addresses}
                     />)
                 }
               </tbody>
@@ -68,17 +71,30 @@ export default function SupplierPurchasePage() {
           </div>
         </div>
       </div>
-      <SupplierPurchaseModal
-        isOpen={modalOpen}
-        setIsOpen={setModalOpen}
-        paymentMethods={paymentMethods}
-        bankAccounts={bankAccounts}
-      />
+      {
+        !bank_accounts
+          ? <></>
+          : <SupplierPurchaseModal
+            isOpen={modalOpen}
+            setIsOpen={setModalOpen}
+            paymentMethods={payment_methods}
+            bankAccounts={bank_accounts}
+            supplierDeliveryMethods={supplier_delivery_methods}
+            deliveryAddresses={delivery_addresses}
+          />
+      }
     </div>
   )
 }
 
-function PurchaseRow({purchase, paymentMethods, bankAccounts}: {purchase: SupplierPurchase, paymentMethods: Array<JSX.Element>, bankAccounts: Array<BankAccount>}) {
+type ModalInfo = {
+  payment_methods: Array<JSX.Element>,
+  bank_accounts: Array<BankAccount>,
+  delivery_addresses: Array<{id: number, name: string}>,
+  supplier_delivery_methods: Array<{id:number, name: string}>,
+}
+
+function PurchaseRow({purchase, paymentMethods, bankAccounts, supplierDeliveryMethods, deliveryAddresses}: {purchase: SupplierPurchase, paymentMethods: Array<JSX.Element>, bankAccounts: Array<BankAccount>, supplierDeliveryMethods: Array<{id: number, name: string}>, deliveryAddresses: Array<{id: number, name: string}>}) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -91,6 +107,8 @@ function PurchaseRow({purchase, paymentMethods, bankAccounts}: {purchase: Suppli
           purchase={purchase}
           paymentMethods={paymentMethods}
           bankAccounts={bankAccounts}
+          supplierDeliveryMethods={supplierDeliveryMethods}
+          deliveryAddresses={deliveryAddresses}
         />
       </td>
       <td>{getCompany(purchase.id_company)}</td>

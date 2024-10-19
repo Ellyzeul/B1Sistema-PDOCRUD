@@ -7,7 +7,6 @@ use App\Models\Supplier;
 use App\Models\SupplierPurchase;
 use App\Models\SupplierPurchaseItems;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class CreateOrUpdateAction
 {
@@ -35,7 +34,6 @@ class CreateOrUpdateAction
   {
     $purchase->id_company = $request->id_company;
     $purchase->id_supplier = Supplier::idFromName($request->supplier);
-    $purchase->purchase_method = $request->purchase_method;
     $purchase->id_bank = $request->bank_account;
     $purchase->id_payment_method = $request->payment_method;
     $purchase->freight = $request->freight;
@@ -44,6 +42,10 @@ class CreateOrUpdateAction
     $purchase->status = $request->status;
     $purchase->observation = $request->observation;
     $purchase->sales_total = $this->salesTotal($request);
+    $purchase->id_delivery_address = $request->delivery_address;
+    $purchase->order_number = $request->supplier_purchase_number;
+    $purchase->tracking_code = $request->supplier_tracking_code;
+    $purchase->id_delivery_method = $request->supplier_delivery_method;
 
     $purchase->save();
   }
@@ -57,11 +59,10 @@ class CreateOrUpdateAction
 
   private function saveItems(Request $request, SupplierPurchase $purchase)
   {
-    $purchase->items = [];
+    $purchase->items = collect([]);
 
     foreach($request->items as $itemData) {
       $item = $this->purchaseItem($purchase->id, $itemData['id'] ?? null);
-      Log::debug(json_encode($itemData));
 
       $item->id_purchase = $purchase->id;
       $item->id_order = $itemData['id_order'];

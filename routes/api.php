@@ -19,6 +19,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\BlacklistController;
 use App\Http\Controllers\ClientBlacklistController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\SupplierPurchaseController;
@@ -132,6 +133,7 @@ Route::controller(FileUploadController::class)
         Route::post('/order-estante-insert', 'orderEstanteInsert');
         Route::post('/order-alibris-insert', 'orderAlibrisInsert');
         Route::post('/order-fnac-insert', 'orderFNACInsert');
+        Route::post('/fsist-ingestion', 'fsistIngestion');
     });
 
 Route::get('/navbar-items/read', function (Request $request) {
@@ -204,15 +206,22 @@ Route::controller(SupplierPurchaseController::class)
     ->prefix('supplier-purchase')
     ->group(function() {
         Route::get('/', 'read');
+        Route::get('/order-details', 'orderDetails');
+        Route::get('/modal-info', 'modalInfo');
         Route::post('/', 'save');
         Route::put('/', 'save');
-        Route::get('/order-details', 'orderDetails');
     });
 
 Route::controller(PaymentMethodController::class)
     ->prefix('payment-method')
     ->group(function() {
         Route::get('/', 'read');
+    });
+
+Route::controller(InvoiceController::class)
+    ->prefix('invoice')
+    ->group(function() {
+        Route::post('/batch', 'createBatch');
     });
 
 Route::controller(B1RastreamentoController::class)

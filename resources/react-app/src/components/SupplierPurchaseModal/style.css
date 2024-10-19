@@ -69,6 +69,22 @@
   width: 80%;
 }
 
+.supplier-purchase-split-container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+
+.supplier-purchase-flex-container {
+  width: 100%;
+  display: flex;
+}
+.supplier-purchase-flex-container > div {
+  padding: 0 5px;
+  display: flex;
+  flex-direction: column;
+}
+
 .supplier-purchase-modal-items {
   width: 100%;
 }

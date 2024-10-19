@@ -8,7 +8,7 @@ import { BankAccount, SupplierPurchase } from "../../pages/Purchases/SupplierPur
 import { CostBenefitPrices } from "./CostBenefitIndex/types"
 import CostBenefitIndex from "./CostBenefitIndex"
 
-export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paymentMethods, bankAccounts}: Prop) {
+export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paymentMethods, bankAccounts, supplierDeliveryMethods, deliveryAddresses}: Prop) {
   const [tableRows, setTableRows] = useState([<SupplierPurchaseItemRow key={0} id={0}/>])
   const [rowId, setRowId] = useState((purchase?.items.length || 0) + 1)
   const [savedPurchase, setSavedPurchase] = useState(purchase)
@@ -114,63 +114,97 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paym
             <span> {COMPANIES[modalState.id_company] ?? ''}</span>
             <br />
             <br />
-            <label htmlFor="date">Data do pedido:</label>
-            <input type="date" name="date" defaultValue={savedPurchase?.date || (new Date().toISOString().split('T')[0])}/>
-            <br />
-            <label htmlFor="status">Status do pedido:</label>
-            <select name="status" defaultValue={savedPurchase?.status || 'normal'}>
-              <option value="normal">Normal</option>
-              <option value="cancelled">Cancelado integral</option>
-              <option value="cancelled_partial">Cancelado parcial</option>
-              <option value="multiple_delivery">Múltiplas entregas do fornecedor</option>
-            </select>
-            <CostBenefitIndex modalState={modalState}/>
+            <div className="supplier-purchase-split-container">
+              <div>
+                <label htmlFor="date">Data do pedido:</label>
+                <input type="date" name="date" defaultValue={savedPurchase?.date || (new Date().toISOString().split('T')[0])}/>
+                <br />
+                <label htmlFor="status">Status do pedido:</label>
+                <select name="status" defaultValue={savedPurchase?.status || 'normal'}>
+                  <option value="normal">Normal</option>
+                  <option value="cancelled">Cancelado integral</option>
+                  <option value="cancelled_partial">Cancelado parcial</option>
+                  <option value="multiple_delivery">Múltiplas entregas do fornecedor</option>
+                </select>
+                <CostBenefitIndex modalState={modalState}/>
+              </div>
+              <div>
+                <label htmlFor="supplier">Fornecedor: </label>
+                <input type="text" name="supplier" defaultValue={savedPurchase?.supplier}/>
+                <br />
+                <label htmlFor="reference">Ref: </label>
+                <input type="text" name="reference" style={{width:'70%'}}/>
+              </div>
+            </div>
             <hr />
-            <label htmlFor="supplier">Fornecedor: </label>
-            <input type="text" name="supplier" defaultValue={savedPurchase?.supplier}/>
             <br />
-            <label htmlFor="purchase_method">Forma de compra: </label>
-            <select name="purchase_method" defaultValue={savedPurchase?.purchase_method}>
-              <option value="email">Email</option>
-              <option value="site">Site</option>
-              <option value="phone">Telefone</option>
-              <option value="whatsapp">WhatsApp</option>
-            </select>
-            <br />
-            <div>Subtotal: R$ {subtotal(modalState.items)}</div>
-            <label htmlFor="freight">Frete: </label>
-            <input
-              type="text"
-              name="freight"
-              onBlur={({target}) => handleFreightBlur(target)}
-              defaultValue={savedPurchase?.freight.toFixed(2).replace('.', ',') || '0,00'}
-            />
-            <br />
-            <strong>Total: R$ {total(modalState.items, modalState.freight)}</strong>
-            <br />
-            <label htmlFor="observation">Observações: </label>
-            <textarea name="observation" defaultValue={savedPurchase?.observation} rows={4} style={{width: '95%'}}/>
-            <hr />
-            <label htmlFor="bank_account">Banco: </label>
-            <select name="bank_account">
-              <option key={0} value="">Selecione</option>
-              {bankAccounts
-                .filter(({id_company}) => id_company === modalState.id_company)
-                .map(({id_bank, name, agency, account}, key) => <option key={key+1} value={id_bank}>
-                  {`${id_bank} - ${name} - ${agency} - ${account}`}
-                </option>)
-              }
-            </select>
-            <br />
-            <label htmlFor="payment_method">Forma de pagamento: </label>
-            <select name="payment_method">{[
-              <option key={0} value=''>Selecione</option>,
-              ...paymentMethods
-            ]}</select>
-            <br />
-            <label htmlFor="payment_date">Data do pagamento:</label>
-            <input type="date" name="payment_date" defaultValue={savedPurchase?.payment_date}/>
-            <br />
+            <div className="supplier-purchase-split-container">
+              <div>
+                <div>Subtotal: R$ {subtotal(modalState.items)}</div>
+                <label htmlFor="freight">Frete: </label>
+                <input
+                  type="text"
+                  name="freight"
+                  onBlur={({target}) => handleFreightBlur(target)}
+                  defaultValue={savedPurchase?.freight.toFixed(2).replace('.', ',') || '0,00'}
+                />
+                <br />
+                <strong>Total: R$ {total(modalState.items, modalState.freight)}</strong>
+                <br />
+                <label htmlFor="observation">Observações: </label>
+                <textarea name="observation" defaultValue={savedPurchase?.observation} rows={2} style={{width: '95%'}}/>
+              </div>
+              <div>
+                <label htmlFor="bank_account">Banco: </label>
+                <select name="bank_account">
+                  <option key={0} value="">Selecione</option>
+                  {bankAccounts
+                    .filter(({id_company}) => id_company === modalState.id_company)
+                    .map(({id_bank, name, agency, account}, key) => <option key={key+1} value={id_bank}>
+                      {`${id_bank} - ${name} - ${agency} - ${account}`}
+                    </option>)
+                  }
+                </select>
+                <br />
+                <label htmlFor="payment_method">Forma de pagamento: </label>
+                <select name="payment_method">{[
+                  <option key={0} value=''>Selecione</option>,
+                  ...paymentMethods
+                ]}</select>
+                <br />
+                <label htmlFor="payment_date">Data do pagamento:</label>
+                <input type="date" name="payment_date" defaultValue={savedPurchase?.payment_date}/>
+              </div>
+            </div>
+            <span>Destino</span>
+            <div className="supplier-purchase-flex-container">
+              <div>
+                <label htmlFor="delivery_address">Endereço de entrega:</label>
+                <select name="delivery_address">
+                  <option value="">Selecionar</option>
+                  {deliveryAddresses.map(({id, name}) => <option value={id}>
+                    {name}
+                  </option>)}
+                </select>
+              </div>
+              <div>
+                <label htmlFor="supplier_purchase_number">Nº de compra:</label>
+                <input type="text" name="supplier_purchase_number"/>
+              </div>
+              <div>
+                <label htmlFor="supplier_tracking_code">Código de rastreio:</label>
+                <input type="text" name="supplier_tracking_code"/>
+              </div>
+              <div>
+                <label htmlFor="supplier_delivery_method">Forma de entrega</label>
+                <select name="supplier_delivery_method">
+                  <option value="">Selecionar</option>
+                  {supplierDeliveryMethods.map(({id, name}, key) => <option key={key} value={id}>
+                    {name}
+                  </option>)}
+                </select>
+              </div>
+            </div>
             <hr />
             <div className="supplier-purchase-modal-items-header">
               <div>Itens da compra:</div>
@@ -212,6 +246,8 @@ type Prop = {
   purchase?: SupplierPurchase,
   paymentMethods: Array<JSX.Element>,
   bankAccounts: Array<BankAccount>,
+  supplierDeliveryMethods: Array<{id: number, name: string}>,
+  deliveryAddresses: Array<{id: number, name: string}>,
 }
 
 function parseForm(form: HTMLFormElement, purchase?: SupplierPurchase) {
@@ -228,7 +264,7 @@ function parseForm(form: HTMLFormElement, purchase?: SupplierPurchase) {
     date: fieldValue(form, "input[name='date']"),
     status: fieldValue(form, "select[name='status']"),
     supplier: fieldValue(form, "input[name='supplier']")?.trim(),
-    purchase_method: fieldValue(form, "select[name='purchase_method']", 'select'),
+    reference: fieldValue(form, "input[name='reference']"),
     freight: Number(fieldValue(form, "input[name='freight']")?.replace(',', '.')),
     observation: fieldValue(form, "textarea[name='observation']"),
     bank_account: fieldValue(form, "select[name='bank_account']", 'select'),
