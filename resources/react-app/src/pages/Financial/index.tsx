@@ -1,0 +1,11 @@
+import { Home } from "../../components/Home";
+
+export default function FinancialPage() {
+  return (
+    <Home
+      sections={[
+        {icon: "/icons/match.png", label: "Match de notas", url: "/financeiro/match"},
+      ]}
+    />
+  )
+}

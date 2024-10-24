@@ -44,10 +44,19 @@ export const FieldsSelection = (props: FieldSelectionProp) => {
       upload_data: filteredUpdate
     })
       .then(response => response.data)
-      .then(_ => {
+      .then(response => {
         toast.dismiss(loadingToastId)
-        toast.success("Envio concluído com êxito!")
-        console.log(_)
+        if('success' in response) {
+          if(response.success) {
+            toast.success("Envio concluído com êxito!")
+          }
+          else {
+            toast.warn(response.message ?? 'Houveram problemas no registro que não impediram o processamento do arquivo.')
+          }
+        }
+        else {
+          toast.success("Envio concluído com êxito!")
+        }
       })
       .catch(() => {
         toast.dismiss(loadingToastId)
