@@ -32,6 +32,8 @@ import { InventoryPage } from './pages/Inventory';
 import BlacklistClientPage from './pages/Home/Shipment/BlacklistClient';
 import AddressPage from './pages/Home/Attendance/Address';
 import SupplierPurchasePage from './pages/Purchases/SupplierPurchase';
+import FinancialPage from './pages/Financial';
+import MatchPage from './pages/Financial/Match';
 
 function App() {
   const userDataRaw = window.localStorage.getItem("userData")
@@ -84,6 +86,8 @@ function App() {
           <Route path='/dashboard/pedidos' element={getElement(<DashboardOrders/>)} />
           <Route path='/empresas' element={getElement(<CompaniesPage/>)} />
           <Route path='/etiquetas/:order_id' element={getElement(<ShipmentLabelPage/>)}/>
+          <Route path='/financeiro' element={getElement(<FinancialPage/>)}/>
+          <Route path='/financeiro/match' element={getElement(<MatchPage/>)}/>
         </Routes>
       </NavbarContext.Provider>
     </UserDataContext.Provider>

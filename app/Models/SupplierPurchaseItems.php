@@ -14,10 +14,24 @@ class SupplierPurchaseItems extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['id_purchase', 'id_order', 'value', 'status'];
+    protected $fillable = ['id_purchase', 'id_order', 'value', 'status', 'invoice_key'];
 
-    public function purchase()
+    protected $casts = [
+        'value' => 'float',
+    ];
+
+    protected $appends = ['supplier', 'items_on_purchase'];
+
+    public function getSupplierAttribute()
     {
-        return $this->belongsTo(SupplierPurchase::class);
+        $purchase = SupplierPurchase::find($this->id_purchase);
+        if($purchase === null) return null;
+
+        return Supplier::find($purchase->id_supplier);
+    }
+
+    public function getItemsOnPurchaseAttribute()
+    {
+        return self::where('id_purchase', $this->id_purchase)->get()->count();
     }
 }

@@ -221,7 +221,9 @@ Route::controller(PaymentMethodController::class)
 Route::controller(InvoiceController::class)
     ->prefix('invoice')
     ->group(function() {
-        Route::post('/batch', 'createBatch');
+        Route::get('/', 'read');
+        Route::get('/purchase-items', 'getPurchaseItems');
+        Route::put('/purchase-items', 'linkPurchaseItems');
     });
 
 Route::controller(B1RastreamentoController::class)

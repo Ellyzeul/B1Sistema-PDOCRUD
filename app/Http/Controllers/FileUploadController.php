@@ -66,7 +66,7 @@ class FileUploadController extends Controller
 
     public function fsistIngestion(Request $request)
     {
-        (new CreateBatchAction())->handle(collect($request->input('upload_data'))
+        return (new CreateBatchAction())->handle(collect($request->input('upload_data'))
             ->map(function(array $item) {
                 foreach(['emitter', 'recipient', 'courier'] as $subject) {
                     $item[$subject] = [
@@ -75,10 +75,10 @@ class FileUploadController extends Controller
                         'ie' => $item["{$subject}_ie"],
                         'uf' => $item["{$subject}_uf"],
                     ];
-                    $item['emitted_at'] = Date::createFromTimestampUTC($item['emitted_at'])->format('Y-m-d H:i:s');
-                    $item['status'] = $item['status'] === 'Autorizada' ? 'authorized' : 'cancelled';
-                    $item['type'] = $item['type'] === 'Saída' ? 'out' : 'in';
-                    $item['manifestation'] = $item['manifestation'] === 'Confirmada' ? 'confirmed' : 'acknowledged';
+                    $item['emitted_at'] = Date::createFromTimeString($item['emitted_at'])->format('Y-m-d H:i:s');
+                    $item['status'] = in_array($item['status'], ['Autorizada', 'authorized']) ? 'authorized' : 'cancelled';
+                    $item['type'] = in_array($item['type'], ['Saída', 'out']) ? 'out' : 'in';
+                    $item['manifestation'] = in_array($item['manifestation'], ['Confirmada', 'confirmed']) ? 'confirmed' : 'acknowledged';
                     $item['has_xml'] = $item['has_xml'] === 'Sim';
                     
                     unset($item["{$subject}_cnpj"]);

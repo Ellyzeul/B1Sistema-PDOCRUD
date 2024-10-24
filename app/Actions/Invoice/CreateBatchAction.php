@@ -6,16 +6,19 @@ use App\Models\Invoice;
 use App\Models\InvoiceCompany;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 
 class CreateBatchAction
 {
   public function handle(Collection $invoices)
   {
+    $results = $invoices->map(fn(array $data) => $this->createInvoice($data));
+    $allDuplicate = !$results->some(fn(bool $result) => $result === true);
+
     return [
-      'success' => $invoices
-        ->map(fn(array $data) => $this->createInvoice($data))
-        ->reduce(fn($acc, $cur) => $acc && $cur, true)
+      'success' => $results->reduce(fn($acc, $cur) => $acc && $cur, true),
+      'message' => $allDuplicate
+        ? 'Todos os registros estão duplicados'
+        : 'Alguns registros estão duplicados',
     ];
   }
 
@@ -26,7 +29,7 @@ class CreateBatchAction
       unset($data[$company]);
       $data["{$company}_cnpj"] = $cnpj;
     }
-    return (new Invoice($data))->save();
+
     try {
       return (new Invoice($data))->save();
     }

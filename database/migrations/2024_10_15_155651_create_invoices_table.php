@@ -23,7 +23,7 @@ return new class extends Migration
             $table->enum('type', ['in', 'out']);
             $table->decimal('value', 9, 2)->unsigned();
             $table->enum('status', ['authorized', 'cancelled']);
-            $table->enum('manifestation', ['confirmed', 'acknowledged']);
+            $table->enum('manifestation', ['confirmed', 'acknowledged'])->nullable();
             $table->foreignIdFor(InvoiceCompany::class, 'emitter_cnpj')->nullable();
             $table->foreignIdFor(InvoiceCompany::class, 'recipient_cnpj')->nullable();
             $table->foreignIdFor(InvoiceCompany::class, 'courier_cnpj')->nullable();

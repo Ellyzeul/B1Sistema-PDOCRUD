@@ -1,0 +1,211 @@
+import { useEffect, useState } from "react"
+import { Navbar } from "../../../components/Navbar"
+import api from "../../../services/axios"
+import "./style.css"
+import { Invoice } from "./types"
+import { toast, ToastContainer } from "react-toastify"
+
+export default function MatchPage() {
+  const [invoices, setInvoices] = useState({
+    linked: [],
+    partially_linked: [],
+    not_linked: [],
+  } as {[key: string]: Array<Invoice>})
+  const [filter, setFilter] = useState({
+    match: 'not_linked',
+    search: '',
+  })
+
+  useEffect(() => {
+    api.get('/api/invoice')
+      .then(response => response.data)
+      .then(setInvoices)
+  }, [])
+
+  return (
+    <>
+      <div className="page-container">
+        <Navbar items={[]}/>
+        <div className="content">
+          <div className="match-page-container">
+            <div className="filter-container">
+              <div>
+                Tipo de vínculo
+                <br />
+                <select defaultValue="not_linked" onChange={({target}) => setFilter({...filter, match: target.value})}>
+                  <option value="not_linked">Sem vínculo</option>
+                  <option value="partially_linked">Vínculo parcial</option>
+                  <option value="linked">Vínculo completo</option>
+                </select>
+              </div>
+            </div>
+            <div className="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Chave</th>
+                    <th>Emitente</th>
+                    <th>Valor</th>
+                    <th>Emissão</th>
+                    <th>Periodo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    invoices[filter.match]
+                      .filter(invoice => Object.keys(invoice)
+                        .map(key => String(invoice[key as keyof Invoice]).includes(filter.search.replace(',', '.')))
+                        .reduce((acc, cur) => acc || cur, false)
+                      )
+                      .map((invoice, key) => <MatchTableRow key={key} invoice={invoice}/>)
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ToastContainer/>
+    </>
+  )
+}
+
+function MatchTableRow({invoice}: {invoice: Invoice}) {
+  const {key, emitted_at, value, period, emitter: {name}} = invoice
+  const [openModal, setOpenModal] = useState(false)
+
+  return (
+    <>
+      <tr className="match-page-table-row" onClick={() => setOpenModal(true)}>
+        <td>{key}</td>
+        <td>{name}</td>
+        <td>R$ {value.toFixed(2).replace('.', ',')}</td>
+        <td>{new Date(emitted_at).toLocaleDateString()}</td>
+        <td>{period}</td>
+      </tr>
+      <Modal open={openModal} setOpen={setOpenModal} invoice={invoice}/>
+    </>
+  )
+}
+
+function Modal({open, setOpen, invoice}: ModalProp) {
+  const [purchaseItems, setPurchaseItems] = useState({
+    linked: [], 
+    not_linked: []
+  } as {linked: Array<SupplierPurchaseItem>, not_linked: Array<SupplierPurchaseItem>})
+
+  useEffect(() => {
+    if(!open || purchaseItems.not_linked.length > 0 || purchaseItems.linked.length > 0) return
+
+    api.get(`/api/invoice/purchase-items?access_key=${invoice.key}`)
+      .then(response => response.data)
+      .then(setPurchaseItems)
+  }, [open])
+
+  return (
+    <div className={`match-page-modal ${!open && 'match-page-modal-closed'}`}>
+      <div className="match-page-modal-container">
+        <div>
+          <p>Itens associados:</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Nº</th>
+                <th>Fornecedor</th>
+                <th>Valor de compra</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody>
+              {purchaseItems.linked.length === 0
+              ? <tr><td>Lista vazia</td></tr>
+              : purchaseItems.linked.map((item, key) => <tr key={key}>
+                <td>{item.id_purchase}</td>
+                <td>{item.supplier?.name ?? '---'}</td>
+                <td>R$ {item.value.toFixed(2).replace('.', ',')}</td>
+                <td>
+                  <button
+                    className="match-page-modal-remove-button"
+                    onClick={() => setPurchaseItems({
+                      linked: purchaseItems.linked.filter(lited => lited.id !== item.id),
+                      not_linked: [...purchaseItems.not_linked, item].sort((a, b) => a.id < b.id ? -1 : 1)
+                    })}
+                  >
+                    Remover
+                  </button>
+                </td>
+              </tr>)}
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <p>Itens não associados:</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Nº</th>
+                <th>Fornecedor</th>
+                <th>Valor de compra</th>
+                <th>Itens na compra</th>
+              </tr>
+            </thead>
+            <tbody>
+              {purchaseItems.not_linked.map((item, key) => <tr
+                key={key}
+                className="match-page-modal-not-linked-table-row"
+                onClick={() => setPurchaseItems({
+                  linked: [...purchaseItems.linked, item].sort((a, b) => a.id < b.id ? -1 : 1),
+                  not_linked: purchaseItems.not_linked.filter(listed => listed.id !== item.id)
+                })}
+              >
+                <td>{item.id_purchase}</td>
+                <td>{item.supplier?.name ?? '---'}</td>
+                <td>R$ {item.value.toFixed(2).replace('.', ',')}</td>
+                <td>{item.items_on_purchase}</td>
+              </tr>)}
+            </tbody>
+          </table>
+        </div>
+        <button
+          className="match-page-modal-save-button"
+          onClick={() => {
+            const loadingId = toast.loading('Processando...')
+
+            api.put('/api/invoice/purchase-items', {
+              linked: purchaseItems.linked,
+              access_key: invoice.key,
+            })
+              .then(response => response.data)
+              .then(response => {
+                toast.dismiss(loadingId)
+                if(response.success) toast.success('Vínculo atualizado')
+              })
+              .catch(() => {
+                toast.dismiss(loadingId)
+                toast.error('Erro ao processar vínculo...')
+              })
+          }}
+        >Salvar</button>
+        <button className="match-page-modal-close-button" onClick={() => setOpen(false)}>Fechar</button>
+      </div>
+    </div>
+  )
+}
+type ModalProp = {
+  open: boolean,
+  setOpen: (open: boolean) => void,
+  invoice: Invoice,
+}
+type SupplierPurchaseItem = {
+  id: number,
+  id_purchase: number,
+  id_order: number,
+  value: number,
+  status: 'pending' | 'delivered' | 'cancelled' | 'failed',
+  invoice_key: string,
+  supplier?: {
+    id: number,
+    name: string,
+  },
+  items_on_purchase: number,
+}
