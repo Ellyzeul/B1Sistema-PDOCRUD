@@ -138,6 +138,48 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paym
             </div>
             <hr />
             <br />
+            {
+              purchase?.items[0]?.invoice
+              ? <>
+                <div>
+                  <span>Fiscal</span>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Chave</th>
+                        <th>Emitente</th>
+                        <th>Valor</th>
+                        <th>Emissão</th>
+                        <th>Período</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {
+                        (purchase?.items ?? [])
+                          .map(({invoice}) => invoice)
+                          .map(invoice => {
+                            if(!invoice) return <></>
+                            const {key, value, emitted_at, period, emitter: {name}} = invoice
+
+                            return (
+                              <tr>
+                                <td>{key}</td>
+                                <td>{name}</td>
+                                <td>R$ {value.toFixed(2).replace('.', ',')}</td>
+                                <td>{new Date(emitted_at).toLocaleDateString()}</td>
+                                <td>{period}</td>
+                              </tr>
+                            )
+                          })
+                      }
+                    </tbody>
+                  </table>
+                </div>
+                <hr />
+                <br />
+              </>
+              : <></>
+            }
             <div className="supplier-purchase-split-container">
               <div>
                 <div>Subtotal: R$ {subtotal(modalState.items)}</div>

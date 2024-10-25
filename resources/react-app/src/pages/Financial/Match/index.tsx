@@ -4,6 +4,7 @@ import api from "../../../services/axios"
 import "./style.css"
 import { Invoice } from "./types"
 import { toast, ToastContainer } from "react-toastify"
+import { SupplierPurchaseItem } from "../../Purchases/SupplierPurchase/types"
 
 export default function MatchPage() {
   const [invoices, setInvoices] = useState({
@@ -257,17 +258,4 @@ type ModalProp = {
   open: boolean,
   setOpen: (open: boolean) => void,
   invoice: Invoice,
-}
-type SupplierPurchaseItem = {
-  id: number,
-  id_purchase: number,
-  id_order: number,
-  value: number,
-  status: 'pending' | 'delivered' | 'cancelled' | 'failed',
-  invoice_key: string,
-  supplier?: {
-    id: number,
-    name: string,
-  },
-  items_on_purchase: number,
 }

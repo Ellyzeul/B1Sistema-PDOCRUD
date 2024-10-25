@@ -32,6 +32,7 @@ class SupplierPurchase extends Model
             'id_purchase',
             'value',
             'status',
+            'invoice_key',
         ]);
     }
 }
