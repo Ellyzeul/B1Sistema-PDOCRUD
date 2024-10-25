@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Navbar } from "../../../components/Navbar"
 import api from "../../../services/axios"
 import "./style.css"
@@ -111,14 +111,18 @@ function Modal({open, setOpen, invoice}: ModalProp) {
     id_purchase: '',
     search: '',
   })
+  const matchSelectRef = useRef(null as HTMLSelectElement | null)
 
   useEffect(() => {
+    if(matchSelectRef.current) {
+      matchSelectRef.current.value = invoice.match
+    }
     if(!open || purchaseItems.not_linked.length > 0 || purchaseItems.linked.length > 0) return
 
     api.get(`/api/invoice/purchase-items?access_key=${invoice.key}`)
       .then(response => response.data)
       .then(setPurchaseItems)
-  }, [open])
+  }, [open, matchSelectRef])
 
   function filterSearch(item: SupplierPurchaseItem) {
     const {search} = filter
@@ -133,6 +137,17 @@ function Modal({open, setOpen, invoice}: ModalProp) {
   return (
     <div className={`match-page-modal ${!open && 'match-page-modal-closed'}`}>
       <div className="match-page-modal-container">
+        <div className="match-page-modal-header">
+          <span>{invoice.emitter.name} - {new Date(invoice.emitted_at).toLocaleDateString()}</span>
+          <div>
+            Vínculo atual:
+            <select ref={matchSelectRef}>
+              <option value="not_linked">Sem vínculo</option>
+              <option value="partially_linked">Vínculo parcial</option>
+              <option value="linked">Vínculo completo</option>
+            </select>
+          </div>
+        </div>
         <div>
           <p>Itens associados:</p>
           <table>
@@ -168,7 +183,7 @@ function Modal({open, setOpen, invoice}: ModalProp) {
         </div>
         <div>
           <p>Itens não associados:</p>
-          <div className="match-page-modal-filter">
+          <div className="match-page-modal-not-linked-filter">
             <div>
               Nº compra
               <br />
@@ -213,11 +228,14 @@ function Modal({open, setOpen, invoice}: ModalProp) {
         <button
           className="match-page-modal-save-button"
           onClick={() => {
+            if(!matchSelectRef.current) return
+            const matchSelect = matchSelectRef.current
             const loadingId = toast.loading('Processando...')
 
             api.put('/api/invoice/purchase-items', {
               linked: purchaseItems.linked,
               access_key: invoice.key,
+              match: matchSelect.value,
             })
               .then(response => response.data)
               .then(response => {

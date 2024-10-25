@@ -11,9 +11,9 @@ class ReadAction
   {
     $invoices = Invoice::where('emitted_at', '>=', now()->subMonths(2))->get();
     return [
-      'linked' => $invoices->filter(fn(Invoice $item) => $item->match === 'linked'),
-      'partially_linked' => $invoices->filter(fn(Invoice $item) => $item->match === 'partially_linked'),
-      'not_linked' => $invoices->filter(fn(Invoice $item) => $item->match === 'not_linked'),
+      'linked' => $invoices->filter(fn(Invoice $item) => $item->match === 'linked')->values(),
+      'partially_linked' => $invoices->filter(fn(Invoice $item) => $item->match === 'partially_linked')->values(),
+      'not_linked' => $invoices->filter(fn(Invoice $item) => $item->match === 'not_linked')->values(),
     ];
   }
 }
