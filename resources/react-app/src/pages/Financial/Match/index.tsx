@@ -22,6 +22,18 @@ export default function MatchPage() {
       .then(setInvoices)
   }, [])
 
+  function filterSearch(invoice: Invoice) {
+    const {search} = filter
+
+    if(invoice.key.includes(search)) return true
+    if(invoice.emitter.name?.toLowerCase().includes(search.toLowerCase())) return true
+    if(invoice.value.toFixed(2).includes(search.replace(',', '.'))) return true
+    if(new Date(invoice.emitted_at).toLocaleDateString().includes(search)) return true
+    if(invoice.period.includes(search)) return true
+
+    return false
+  }
+
   return (
     <>
       <div className="page-container">
@@ -38,6 +50,11 @@ export default function MatchPage() {
                   <option value="linked">Vínculo completo</option>
                 </select>
               </div>
+              <div>
+                Pesquisa
+                <br />
+                <input type="text" onChange={({target}) => setFilter({...filter, search: target.value})}/>
+              </div>
             </div>
             <div className="table-container">
               <table>
@@ -53,10 +70,7 @@ export default function MatchPage() {
                 <tbody>
                   {
                     invoices[filter.match]
-                      .filter(invoice => Object.keys(invoice)
-                        .map(key => String(invoice[key as keyof Invoice]).includes(filter.search.replace(',', '.')))
-                        .reduce((acc, cur) => acc || cur, false)
-                      )
+                      .filter(filterSearch)
                       .map((invoice, key) => <MatchTableRow key={key} invoice={invoice}/>)
                   }
                 </tbody>
@@ -93,6 +107,10 @@ function Modal({open, setOpen, invoice}: ModalProp) {
     linked: [], 
     not_linked: []
   } as {linked: Array<SupplierPurchaseItem>, not_linked: Array<SupplierPurchaseItem>})
+  const [filter, setFilter] = useState({
+    id_purchase: '',
+    search: '',
+  })
 
   useEffect(() => {
     if(!open || purchaseItems.not_linked.length > 0 || purchaseItems.linked.length > 0) return
@@ -101,6 +119,16 @@ function Modal({open, setOpen, invoice}: ModalProp) {
       .then(response => response.data)
       .then(setPurchaseItems)
   }, [open])
+
+  function filterSearch(item: SupplierPurchaseItem) {
+    const {search} = filter
+
+    if(item.supplier?.name.toLowerCase().includes(search.toLowerCase())) return true
+    if(item.value.toFixed(2).includes(search.replace(',', '.'))) return true
+    if(String(item.items_on_purchase).includes(search)) return true
+
+    return false
+  }
 
   return (
     <div className={`match-page-modal ${!open && 'match-page-modal-closed'}`}>
@@ -140,6 +168,18 @@ function Modal({open, setOpen, invoice}: ModalProp) {
         </div>
         <div>
           <p>Itens não associados:</p>
+          <div className="match-page-modal-filter">
+            <div>
+              Nº compra
+              <br />
+              <input type="text" style={{width: '5rem'}} onChange={({target}) => setFilter({...filter, id_purchase: target.value})}/>
+            </div>
+            <div>
+              Pesquisa
+              <br />
+              <input type="text" onChange={({target}) => setFilter({...filter, search: target.value})}/>
+            </div>
+          </div>
           <table>
             <thead>
               <tr>
@@ -150,19 +190,23 @@ function Modal({open, setOpen, invoice}: ModalProp) {
               </tr>
             </thead>
             <tbody>
-              {purchaseItems.not_linked.map((item, key) => <tr
-                key={key}
-                className="match-page-modal-not-linked-table-row"
-                onClick={() => setPurchaseItems({
-                  linked: [...purchaseItems.linked, item].sort((a, b) => a.id < b.id ? -1 : 1),
-                  not_linked: purchaseItems.not_linked.filter(listed => listed.id !== item.id)
-                })}
-              >
-                <td>{item.id_purchase}</td>
-                <td>{item.supplier?.name ?? '---'}</td>
-                <td>R$ {item.value.toFixed(2).replace('.', ',')}</td>
-                <td>{item.items_on_purchase}</td>
-              </tr>)}
+              {purchaseItems.not_linked
+                .filter(({id_purchase}) => String(id_purchase).includes(filter.id_purchase))
+                .filter(filterSearch)
+                .map((item, key) => <tr
+                  key={key}
+                  className="match-page-modal-not-linked-table-row"
+                  onClick={() => setPurchaseItems({
+                    linked: [...purchaseItems.linked, item].sort((a, b) => a.id < b.id ? -1 : 1),
+                    not_linked: purchaseItems.not_linked.filter(listed => listed.id !== item.id)
+                  })}
+                >
+                  <td>{item.id_purchase}</td>
+                  <td>{item.supplier?.name ?? '---'}</td>
+                  <td>R$ {item.value.toFixed(2).replace('.', ',')}</td>
+                  <td>{item.items_on_purchase}</td>
+                </tr>)
+              }
             </tbody>
           </table>
         </div>
