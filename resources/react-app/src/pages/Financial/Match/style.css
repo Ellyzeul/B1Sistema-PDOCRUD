@@ -125,3 +125,12 @@
   background-color: rgba(0, 0, 0, 0.13);
   cursor: pointer;
 }
+
+.match-page-modal-filter {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.match-page-modal-filter > div {
+  margin: 0 10px;
+}
