@@ -2,6 +2,7 @@
 
 namespace App\Actions\Invoice;
 
+use App\Models\Invoice;
 use App\Models\SupplierPurchaseItems;
 use Illuminate\Http\Request;
 
@@ -28,6 +29,8 @@ class LinkPurchaseItemsAction
 
       $item->save();
     });
+
+    Invoice::find($accessKey)->update(['match' => $request->input('match')]);
 
     return ['success' => true];
   }
