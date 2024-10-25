@@ -1,3 +1,5 @@
+import { Invoice } from "../../Financial/Match/types"
+
 export type SupplierPurchase = {
   id: number,
   id_company: number,
@@ -16,10 +18,17 @@ export type SupplierPurchase = {
 
 export type SupplierPurchaseItem = {
   id: number,
-  id_order: number,
   id_purchase: number,
+  id_order: number,
   value: number,
-  status: string,
+  status: 'pending' | 'delivered' | 'cancelled' | 'failed',
+  invoice_key: string,
+  supplier?: {
+    id: number,
+    name: string,
+  },
+  items_on_purchase: number,
+  invoice?: Invoice,
 }
 
 export type BankAccount = {

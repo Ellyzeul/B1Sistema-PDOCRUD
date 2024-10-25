@@ -20,7 +20,7 @@ class SupplierPurchaseItems extends Model
         'value' => 'float',
     ];
 
-    protected $appends = ['supplier', 'items_on_purchase'];
+    protected $appends = ['supplier', 'items_on_purchase', 'invoice'];
 
     public function getSupplierAttribute()
     {
@@ -33,5 +33,10 @@ class SupplierPurchaseItems extends Model
     public function getItemsOnPurchaseAttribute()
     {
         return self::where('id_purchase', $this->id_purchase)->get()->count();
+    }
+
+    public function getInvoiceAttribute()
+    {
+        return Invoice::find($this->invoice_key);
     }
 }
