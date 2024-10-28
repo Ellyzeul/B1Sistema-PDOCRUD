@@ -110,6 +110,8 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paym
               <option value="1">B1</option>
               <option value="2">J1</option>
               <option value="3">R1</option>
+              <option value="5">Livrux</option>
+              <option value="4">teste</option>
             </select>
             <span> {COMPANIES[modalState.id_company] ?? ''}</span>
             <br />
