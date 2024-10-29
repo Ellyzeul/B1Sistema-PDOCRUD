@@ -21,4 +21,6 @@ const COMPANIES: Record<number, string> = {
   1: 'b1',
   2: 'j1',
   3: 'r1',
+  4: 'teste',
+  5: 'livrux',
 }
