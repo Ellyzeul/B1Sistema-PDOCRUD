@@ -67,6 +67,7 @@ Route::controller(OrderController::class)
         Route::get('/get-order-addresses', 'readOrderAddressesByOrderNumber');
         Route::get('/order-messages', 'getOrderMessages');
         Route::get('/order-number-total', 'getOrderNumberTotalFromList');
+        Route::get('/purchase-id', 'getSupplierPurchaseIdForOrders');
         Route::post('/order-message', 'postOrderMessage');
         Route::post('/import-from-date', 'importOrdersFromDate');
         Route::post('/send-bling-order', 'sendOrderToBling');

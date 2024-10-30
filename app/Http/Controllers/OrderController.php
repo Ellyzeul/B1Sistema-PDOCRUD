@@ -1,6 +1,8 @@
 <?php namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\SupplierPurchase;
+use App\Models\SupplierPurchaseItems;
 use App\Services\OrderService;
 use App\Services\PDOCrudService;
 use App\Services\OrderMessageService;
@@ -220,5 +222,21 @@ class OrderController extends Controller
 	public function sendTrackingUpdateAction(Request $request)
 	{
 		return (new OrderMessageService())->sendTrackingUpdateAction($request);
+	}
+
+	public function getSupplierPurchaseIdForOrders(Request $request)
+	{
+		$ids = [];
+		$result = SupplierPurchaseItems::select(['id_order','id_purchase'])
+			->whereIn('id_order', $request->input('order_ids', []))
+			->get()
+			->map(fn(SupplierPurchaseItems $item) => [$item->id_order, $item->id_purchase])
+			->toArray();
+
+		foreach($result as [$idOrder, $idPurchase]) {
+			$ids[$idOrder] = $idPurchase;
+		}
+
+		return $ids;
 	}
 }
