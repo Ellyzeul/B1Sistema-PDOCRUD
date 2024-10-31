@@ -59,6 +59,7 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paym
       .toFixed(2)
       .replace('.', ',')
   }
+  console.log(savedPurchase)
 
   useEffect(() => {
     if(!savedPurchase) {
@@ -67,6 +68,8 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paym
     if(formRef.current) {
       const paymentMethodSelect = formRef.current.querySelector<HTMLSelectElement>("select[name='payment_method']")
       const bankAccountSelect = formRef.current.querySelector<HTMLSelectElement>("select[name='bank_account']")
+      const deliveryAddressSelect = formRef.current.querySelector<HTMLSelectElement>("select[name='delivery_address']")
+      const deliveryMethodSelect = formRef.current.querySelector<HTMLSelectElement>("select[name='supplier_delivery_method']")
   
       if(paymentMethodSelect) setTimeout(() => {
         paymentMethodSelect.value = String(savedPurchase?.id_payment_method ?? '')
@@ -74,6 +77,14 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paym
       
       if(bankAccountSelect) setTimeout(() => {
         bankAccountSelect.value = String(savedPurchase?.id_bank ?? '')
+      }, 1000)
+
+      if(deliveryAddressSelect) setTimeout(() => {
+        deliveryAddressSelect.value = String(savedPurchase?.id_delivery_address ?? '')
+      }, 1000)
+      
+      if(deliveryMethodSelect) setTimeout(() => {
+        deliveryMethodSelect.value = String(savedPurchase?.id_delivery_method ?? '')
       }, 1000)
     }
 
@@ -135,7 +146,10 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paym
                 <input type="text" name="supplier" defaultValue={savedPurchase?.supplier}/>
                 <br />
                 <label htmlFor="reference">Ref: </label>
-                <input type="text" name="reference" style={{width:'70%'}}/>
+                <input type="text" name="reference" style={{width:'70%'}} defaultValue={savedPurchase?.reference}/>
+                <br />
+                <label htmlFor="order_number">Nº Pedido: </label>
+                <input type="text" name="order_number" style={{width:'40%'}} defaultValue={savedPurchase?.order_number}/>
               </div>
             </div>
             <hr />
@@ -232,12 +246,8 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paym
                 </select>
               </div>
               <div>
-                <label htmlFor="supplier_purchase_number">Nº de compra:</label>
-                <input type="text" name="supplier_purchase_number"/>
-              </div>
-              <div>
                 <label htmlFor="supplier_tracking_code">Código de rastreio:</label>
-                <input type="text" name="supplier_tracking_code"/>
+                <input type="text" name="supplier_tracking_code" defaultValue={savedPurchase?.tracking_code}/>
               </div>
               <div>
                 <label htmlFor="supplier_delivery_method">Forma de entrega</label>
@@ -314,6 +324,10 @@ function parseForm(form: HTMLFormElement, purchase?: SupplierPurchase) {
     bank_account: fieldValue(form, "select[name='bank_account']", 'select'),
     payment_method: fieldValue(form, "select[name='payment_method']", 'select'),
     payment_date: fieldValue(form, "input[name='payment_date']"),
+    order_number: fieldValue(form, "input[name='order_number']"),
+    supplier_tracking_code: fieldValue(form, "input[name='supplier_tracking_code']"),
+    delivery_address: fieldValue(form, "select[name='delivery_address']"),
+    supplier_delivery_method: fieldValue(form, "select[name='supplier_delivery_method']"),
     items: parseItemsTable(form),
   }
 

@@ -4,12 +4,13 @@ import "./style.css"
 export default function CostBenefitIndex({modalState}: Prop) {
   const ratio = evaluateRatio(modalState)
   const index = evaluateIndex(ratio)
+  const {hide_text} = modalState
 
   return (
     <div>
-      Margem da compra: {renderRatio(ratio)}
+      {!hide_text && <>Margem da compra: {renderRatio(ratio)}</>}
       <div className={`supplier-purchase-index supplier-purchase-index-${index}`}/>
-      {STATUSES[index]}
+      {!hide_text && STATUSES[index]}
     </div>
   )
 }
