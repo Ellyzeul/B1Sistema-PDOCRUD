@@ -5,6 +5,7 @@ import "./style.css"
 import api from "../../../services/axios"
 import getCompany from "../../../lib/getCompany"
 import { BankAccount, SupplierPurchase } from "./types"
+import CostBenefitIndex from "../../../components/SupplierPurchaseModal/CostBenefitIndex"
 
 export default function SupplierPurchasePage() {
   const [modalOpen, setModalOpen] = useState(false)
@@ -49,8 +50,17 @@ export default function SupplierPurchasePage() {
                 <tr>
                   <th>ID</th>
                   <th>Empresa</th>
+                  <th>Data compra</th>
+                  <th>Data pagamento</th>
                   <th>Fornecedor</th>
+                  <th>Status</th>
+                  <th>Itens</th>
+                  <th>Entrega</th>
+                  <th>Nº Pedido</th>
+                  <th>Transportadora</th>
+                  <th>Rastreio</th>
                   <th>Valor total</th>
+                  <th>Margem</th>
                 </tr>
               </thead>
               <tbody>
@@ -112,8 +122,32 @@ function PurchaseRow({purchase, paymentMethods, bankAccounts, supplierDeliveryMe
         />
       </td>
       <td>{getCompany(purchase.id_company)}</td>
+      <td>{new Date(`${purchase.date} 00:00:00`).toLocaleDateString()}</td>
+      <td>{new Date(`${purchase.payment_date} 00:00:00`).toLocaleDateString()}</td>
       <td>{purchase.supplier}</td>
+      <td>{STATUSES[purchase.status]}</td>
+      <td>{purchase.items.length}</td>
+      <td>{purchase.delivery_address}</td>
+      <td>{purchase.order_number}</td>
+      <td>{purchase.delivery_method}</td>
+      <td>{purchase.tracking_code}</td>
       <td>R$ {(purchase.sales_total + purchase.freight).toFixed(2).replace('.', ',')}</td>
+      <td>
+        <CostBenefitIndex modalState={{
+          items: purchase.items.map(({value}, id) => [id+1, Number(value)]).reduce((acc, [id, value]) => ({...acc, [id]: value}), {}) ?? {},
+          freight: purchase.freight ?? 0,
+          selling_price: purchase.items.map(({selling_price}, id) => [id+1, Number(selling_price)]).reduce((acc, [id, value]) => ({...acc, [id]: value}), {}) ?? {},
+          id_company: purchase.id_company ?? 0,
+          hide_text: true
+        }}/>
+      </td>
     </tr>
   )
+}
+
+const STATUSES: Record<string, string> = {
+  'normal': 'Normal',
+  'cancelled': 'Cancelado',
+  'cancelled_partial': 'Cancelado parcial',
+  'multiple_delivery': 'Múltiplas entregas',
 }

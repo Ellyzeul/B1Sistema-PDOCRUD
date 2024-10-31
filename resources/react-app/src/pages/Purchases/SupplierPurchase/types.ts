@@ -14,6 +14,13 @@ export type SupplierPurchase = {
   observation: string,
   payment_date: string,
   items: Array<SupplierPurchaseItem>,
+  delivery_address: string,
+  delivery_method: string,
+  order_number: string,
+  reference: string,
+  tracking_code: string,
+  id_delivery_address: number,
+  id_delivery_method: number,
 }
 
 export type SupplierPurchaseItem = {
@@ -21,6 +28,7 @@ export type SupplierPurchaseItem = {
   id_purchase: number,
   id_order: number,
   value: number,
+  selling_price: number,
   status: 'pending' | 'delivered' | 'cancelled' | 'failed',
   invoice_key: string,
   supplier?: {

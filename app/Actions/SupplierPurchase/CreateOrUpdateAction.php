@@ -43,9 +43,10 @@ class CreateOrUpdateAction
     $purchase->observation = $request->observation;
     $purchase->sales_total = $this->salesTotal($request);
     $purchase->id_delivery_address = $request->delivery_address;
-    $purchase->order_number = $request->supplier_purchase_number;
     $purchase->tracking_code = $request->supplier_tracking_code;
     $purchase->id_delivery_method = $request->supplier_delivery_method;
+    $purchase->order_number = $request->order_number;
+    $purchase->reference = $request->reference;
 
     $purchase->save();
   }
