@@ -28,7 +28,10 @@ export type SupplierPurchaseItem = {
   id_purchase: number,
   id_order: number,
   value: number,
-  selling_price: number,
+  order: {
+    id_sellercentral: number,
+    selling_price: number,
+  },
   status: 'pending' | 'delivered' | 'cancelled' | 'failed',
   invoice_key: string,
   supplier?: {

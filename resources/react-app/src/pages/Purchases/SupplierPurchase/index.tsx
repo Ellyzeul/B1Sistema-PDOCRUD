@@ -6,6 +6,8 @@ import api from "../../../services/axios"
 import getCompany from "../../../lib/getCompany"
 import { BankAccount, SupplierPurchase } from "./types"
 import CostBenefitIndex from "../../../components/SupplierPurchaseModal/CostBenefitIndex"
+import getBRLPrice from "../../../lib/getBRLPrice"
+import getCurrencyFromSellercentral from "../../../lib/getCurrencyFromSellercentral"
 
 export default function SupplierPurchasePage() {
   const [modalOpen, setModalOpen] = useState(false)
@@ -106,6 +108,19 @@ type ModalInfo = {
 
 function PurchaseRow({purchase, paymentMethods, bankAccounts, supplierDeliveryMethods, deliveryAddresses}: {purchase: SupplierPurchase, paymentMethods: Array<JSX.Element>, bankAccounts: Array<BankAccount>, supplierDeliveryMethods: Array<{id: number, name: string}>, deliveryAddresses: Array<{id: number, name: string}>}) {
   const [isOpen, setIsOpen] = useState(false)
+  const [sellingPrice, setSellingPrice] = useState({} as Record<number, number>)
+  console.log(sellingPrice)
+
+  useEffect(() => {(async () => {
+    const sellingPrice: Record<number, number> = {}
+    let id = 1
+
+    for (const {order: {id_sellercentral, selling_price}} of purchase.items) {
+      sellingPrice[id++] = await getBRLPrice(selling_price, getCurrencyFromSellercentral(id_sellercentral)?.code, false) as number
+    }
+
+    setSellingPrice(sellingPrice)
+  })()}, [])
 
   return (
     <tr className="supplier-purchase-row" onClick={() => setIsOpen(true)}>
@@ -136,7 +151,7 @@ function PurchaseRow({purchase, paymentMethods, bankAccounts, supplierDeliveryMe
         <CostBenefitIndex modalState={{
           items: purchase.items.map(({value}, id) => [id+1, Number(value)]).reduce((acc, [id, value]) => ({...acc, [id]: value}), {}) ?? {},
           freight: purchase.freight ?? 0,
-          selling_price: purchase.items.map(({selling_price}, id) => [id+1, Number(selling_price)]).reduce((acc, [id, value]) => ({...acc, [id]: value}), {}) ?? {},
+          selling_price: sellingPrice,
           id_company: purchase.id_company ?? 0,
           hide_text: true
         }}/>

@@ -20,7 +20,7 @@ class SupplierPurchaseItems extends Model
         'value' => 'float',
     ];
 
-    protected $appends = ['supplier', 'items_on_purchase', 'invoice', 'selling_price'];
+    protected $appends = ['supplier', 'items_on_purchase', 'invoice', 'order'];
 
     public function getSupplierAttribute()
     {
@@ -40,8 +40,8 @@ class SupplierPurchaseItems extends Model
         return Invoice::find($this->invoice_key);
     }
 
-    public function getSellingPriceAttribute()
+    public function getOrderAttribute()
     {
-        return Order::find($this->id_order)->selling_price;
+        return Order::find($this->id_order);
     }
 }
