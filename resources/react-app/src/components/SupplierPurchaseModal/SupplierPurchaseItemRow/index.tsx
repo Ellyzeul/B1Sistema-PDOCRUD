@@ -6,6 +6,7 @@ import { toast } from "react-toastify"
 import getCurrencyFromSellercentral from "../../../lib/getCurrencyFromSellercentral"
 import getCurrentCurrencyCotation from "../../../lib/getCurrencyCotation"
 import { SupplierPurchaseItem } from "../../../pages/Purchases/SupplierPurchase/types"
+import getBRLPrice from "../../../lib/getBRLPrice"
 
 export default function SupplierPurchaseItemRow({id, item}: Prop) {
   const {tableRows, setTableRows, modalState, setModalState} = useContext(SupplierPurchaseItemRowContext)
@@ -49,7 +50,7 @@ export default function SupplierPurchaseItemRow({id, item}: Prop) {
     if(previousDetails?.id === orderDetails?.id) return
 
     (async() => {
-      const brlPrice = await getBRLPrice(orderDetails?.selling_price, currency?.code)
+      const brlPrice = await getBRLPrice(orderDetails?.selling_price, currency?.code) as string
 
       setModalState({
         ...modalState,
@@ -118,12 +119,4 @@ type OrderDetails = {
   brlPrice?: string,
 }
 
-async function getBRLPrice(price?: number, currencyCode?: string) {
-  if(!price || !currencyCode) return undefined
-  if(currencyCode === 'BRL') return String(price).replace('.', ',')
 
-  const cotation = await getCurrentCurrencyCotation(currencyCode)
-  if(cotation === -1) return 'Erro na cotação'
-
-  return (price * cotation).toFixed(2).replace('.', ',')
-}
