@@ -4,11 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-
-use Carbon\Carbon;
-use Carbon\CarbonPeriod;
 
 class DeleteOldPhotos extends Command
 {
@@ -24,14 +20,14 @@ class DeleteOldPhotos extends Command
      *
      * @var string
      */
-    protected $description = 'Apagar as fotos com seis meses ou mais gravadas na pasta /public/static/photos';
+    protected $description = 'Apagar as fotos com três meses ou mais gravadas na pasta /public/static/photos';
 
     /**
      * Total de meses que uma foto ficará gravada no servidor.
      * 
      * @var int
      */
-    protected $monthsIntervalToDelete = 6;
+    private const MONTHS_INTERVAL = 3;
 
     /**
      * Execute the console command.
@@ -40,18 +36,20 @@ class DeleteOldPhotos extends Command
      */
     public function handle()
     {
-        Log::notice('Rotina de exclusão de fotos antigas');
-
         $disk = Storage::disk('orders-photos');
         $today = Date::today();
 
         foreach($disk->files() as $photo) {
-            $lastMod = Date::createFromTimestamp($disk->lastModified($photo));
-            $monthsPassed = intval($today->diffAsCarbonInterval($lastMod)->format('%m'));
-
-            if($monthsPassed >= $this->monthsIntervalToDelete) {
-                Log::info("Foto $photo deletada");
-                $disk->delete($photo);
+            try {
+                $lastMod = Date::createFromTimestamp($disk->lastModified($photo));
+                $monthsPassed = intval($today->diffAsCarbonInterval($lastMod)->format('%m'));
+    
+                if($monthsPassed >= self::MONTHS_INTERVAL) {
+                    $disk->delete($photo);
+                }
+            }
+            catch(\Throwable) {
+                continue;
             }
         }
 
