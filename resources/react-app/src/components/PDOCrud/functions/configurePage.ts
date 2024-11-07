@@ -25,6 +25,7 @@ import setSendCancellationNoticeColumn from "./setSendCancellationNoticeColumn";
 import configureInternalTrackingCodeColumn from "./configureInternalTrackingCodeColumn";
 import setSaveEvent from "./setSaveEvent";
 import setSupplierColumn from "./setSupplierColumn";
+import configureShippingBoxNumberColumn from "./configureShippingBoxNumberColumn";
 
 const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObject<null>, refModalId: MutableRefObject<null>, refOnlineOrderNumber: MutableRefObject<null>, refURLInput: MutableRefObject<null>, refTrackingMethodModal: MutableRefObject<HTMLDivElement | null>) => {
 	if(!elemRef.current) return
@@ -52,6 +53,7 @@ const configurePage = (elemRef: MutableRefObject<null>, refModal: MutableRefObje
 	configureReadyForShipColumn()
 	configureSellercentralColumn()
 	configureInternalTrackingCodeColumn()
+	configureShippingBoxNumberColumn()
 	setConditionalStyling()
 	setCompaniesIcons()
 	configureDeliveryMethodField()
