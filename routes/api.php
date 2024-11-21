@@ -134,6 +134,7 @@ Route::controller(FileUploadController::class)
         Route::post('/order-estante-insert', 'orderEstanteInsert');
         Route::post('/order-alibris-insert', 'orderAlibrisInsert');
         Route::post('/order-fnac-insert', 'orderFNACInsert');
+        Route::post('/order-abebooks-insert', 'orderAbeBooksInsert');
         Route::post('/fsist-ingestion', 'fsistIngestion');
     });
 

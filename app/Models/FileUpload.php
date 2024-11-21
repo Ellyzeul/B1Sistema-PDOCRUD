@@ -6,6 +6,7 @@ use App\Services\ThirdParty\Bling;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class FileUpload extends Model
 {
@@ -285,6 +286,50 @@ class FileUpload extends Model
 
 		$this->orderDataInsert($firstInserts);
 		$this->handleFNACSecondInserts($secondInserts);
+	}
+
+	public function orderAbeBooksInsert(array $data)
+	{
+		$orderData = [];
+		$addressData = [];
+
+		foreach($data as $row) {
+			if(Order::where('online_order_number', $row['online_order_number'])->exists()) {
+				continue;
+			}
+			for($i = 0; $i < $row['quantity']; $i++) {
+				$orderData[] = [
+					'id_company' => 5,
+					'id_sellercentral' => 13,
+					'online_order_number' => $row['online_order_number'],
+					'isbn' => explode('_', $row['sku'])[1],
+					'selling_price' => $row['price'],
+					'expected_date' => date('Y-m-d', strtotime($row['shipping_time'])),
+					'order_date' => date('Y-m-d', strtotime($row['order_date'])),
+				];
+			}
+
+			$addressData[] = [
+				'online_order_number' => $row['online_order_number'],
+				'recipient_name' => $row['buyer_name'],
+				'buyer_name' => $row['buyer_name'],
+				'buyer_email' => is_array($row['buyer_email']) ? $row['buyer_email']['text'] : $row['buyer_email'],
+				'buyer_phone' => $row['buyer_phone'],
+				'address_1' => $row['address_1'],
+				'address_2' => $row['address_2'],
+				'city' => $row['city'],
+				'state' => $row['uf'],
+				'postal_code' => $row['postal_code'],
+				'country' => $row['country'],
+			];
+		}
+
+		$this->orderDataInsert($orderData);
+		$this->orderAddressInsert($addressData);
+
+		return [
+			'message' => 'Pedidos da AbeBooks inseridos com sucesso!'
+		];
 	}
 
 	private function setPropertyIfExists(array $registry, array $treated, string $key)

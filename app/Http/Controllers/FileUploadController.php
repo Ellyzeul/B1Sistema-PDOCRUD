@@ -64,6 +64,11 @@ class FileUploadController extends Controller
         return $response;
     }
 
+    public function orderAbeBooksInsert(Request $request)
+    {
+        return (new FileUpload())->orderAbeBooksInsert($request->input('upload_data'));
+    }
+
     public function fsistIngestion(Request $request)
     {
         return (new CreateBatchAction())->handle(collect($request->input('upload_data'))
