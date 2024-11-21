@@ -1,5 +1,5 @@
 {
-    "/js/app.js": "/js/app.js?id=c43b1bf09c0a8e4df67d4b880fd6725a",
+    "/js/app.js": "/js/app.js?id=284206dc479023d9c4f72ebf24739628",
     "/b1_logo.png": "/b1_logo.png?id=c1b020382bb764bfe56174580e74cd34",
     "/b1_white_bg.png": "/b1_white_bg.png?id=109cae4a576a25a014bf6ac00cbfb14c",
     "/favicon.ico": "/favicon.ico?id=109cae4a576a25a014bf6ac00cbfb14c",
@@ -25,6 +25,7 @@
     "/icons/mensagens.png": "/icons/mensagens.png?id=6cfa5f886d34379287aba87db91d25c6",
     "/icons/pie-chart.png": "/icons/pie-chart.png?id=3a91c260ebbbf7aad19b58baf8713d02",
     "/icons/rastreamento.png": "/icons/rastreamento.png?id=52d2cf990f39053fa72b9f422e3edc8d",
+    "/icons/recibo.png": "/icons/recibo.png?id=844f8f9e428c0b13797d1ac77af1d86e",
     "/icons/rotina.png": "/icons/rotina.png?id=171002fe2813cc21195c51d762c71c59",
     "/icons/sellercentrals/estante.png": "/icons/sellercentrals/estante.png?id=43f349b438828888138abde94767d19f",
     "/icons/sellercentrals/fnac.png": "/icons/sellercentrals/fnac.png?id=585514581c7d2b0b245f1a5fe375c243",
@@ -1200,6 +1201,7 @@
     "/robots.txt": "/robots.txt?id=61c27d2cd39a713f7829422c3d9edcc7",
     "/seline_white_bg.png": "/seline_white_bg.png?id=b9f5ad48dd4a904d471e42fa4adc3035",
     "/teste_logo.png": "/teste_logo.png?id=f0d5d8612e6cfeefac4986b37acbc870",
+    "/upload-file/template/Envio de pedidos AbeBooks.xlsx": "/upload-file/template/Envio de pedidos AbeBooks.xlsx?id=2a07e1f3382218dcc873e87b0011cf49",
     "/upload-file/template/Envio de pedidos Alibris.xlsx": "/upload-file/template/Envio de pedidos Alibris.xlsx?id=8d4cc5aa272fc373a3978aec9d93f06c",
     "/upload-file/template/Envio de pedidos Amazon.xlsx": "/upload-file/template/Envio de pedidos Amazon.xlsx?id=959b9b184bd6673c68b8164ddd1e7bd1",
     "/upload-file/template/Envio de pedidos Estante Virtual.xlsx": "/upload-file/template/Envio de pedidos Estante Virtual.xlsx?id=1c819b1968c5b34e6573736002a919a4",

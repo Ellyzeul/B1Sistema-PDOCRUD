@@ -102,7 +102,7 @@ class Order extends Model
             )
             ->leftJoin('order_control', 'phases.id', '=', 'order_control.id_phase')
             ->where('phases.id', '<', '7')
-            ->orWhere('phases.id', '8.1')
+            ->orWhereIn('phases.id', ['8.1', '8.12'])
             ->groupBy('phases.id')
             ->get();
         
