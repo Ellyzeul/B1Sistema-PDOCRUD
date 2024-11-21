@@ -34,6 +34,7 @@ import AddressPage from './pages/Home/Attendance/Address';
 import SupplierPurchasePage from './pages/Purchases/SupplierPurchase';
 import FinancialPage from './pages/Financial';
 import MatchPage from './pages/Financial/Match';
+import ExpensesPage from './pages/Financial/Expenses';
 
 function App() {
   const userDataRaw = window.localStorage.getItem("userData")
@@ -88,6 +89,7 @@ function App() {
           <Route path='/etiquetas/:order_id' element={getElement(<ShipmentLabelPage/>)}/>
           <Route path='/financeiro' element={getElement(<FinancialPage/>)}/>
           <Route path='/financeiro/match' element={getElement(<MatchPage/>)}/>
+          <Route path='/financeiro/contas' element={getElement(<ExpensesPage/>)}/>
         </Routes>
       </NavbarContext.Provider>
     </UserDataContext.Provider>
