@@ -18,6 +18,7 @@ use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BlacklistController;
 use App\Http\Controllers\ClientBlacklistController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OfferController;
@@ -226,6 +227,14 @@ Route::controller(InvoiceController::class)
         Route::get('/', 'read');
         Route::get('/purchase-items', 'getPurchaseItems');
         Route::put('/purchase-items', 'linkPurchaseItems');
+    });
+
+Route::controller(ExpenseController::class)
+    ->prefix('expense')
+    ->group(function() {
+        Route::get('/', 'read');
+        Route::post('/', 'createOrUpdate');
+        Route::patch('/', 'createOrUpdate');
     });
 
 Route::controller(B1RastreamentoController::class)

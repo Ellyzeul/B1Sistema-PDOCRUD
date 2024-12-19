@@ -1,6 +1,5 @@
 <?php namespace App\Actions\Tracking;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Actions\Tracking\DeliveryMethods\Correios;
 use App\Actions\Tracking\DeliveryMethods\Jadlog;

@@ -35,6 +35,7 @@ import SupplierPurchasePage from './pages/Purchases/SupplierPurchase';
 import FinancialPage from './pages/Financial';
 import MatchPage from './pages/Financial/Match';
 import ExpensesPage from './pages/Financial/Expenses';
+import BanksPage from './pages/Financial/Banks';
 
 function App() {
   const userDataRaw = window.localStorage.getItem("userData")
@@ -90,6 +91,7 @@ function App() {
           <Route path='/financeiro' element={getElement(<FinancialPage/>)}/>
           <Route path='/financeiro/match' element={getElement(<MatchPage/>)}/>
           <Route path='/financeiro/contas' element={getElement(<ExpensesPage/>)}/>
+          <Route path='/financeiro/bancos' element={getElement(<BanksPage/>)}/>
         </Routes>
       </NavbarContext.Provider>
     </UserDataContext.Provider>
