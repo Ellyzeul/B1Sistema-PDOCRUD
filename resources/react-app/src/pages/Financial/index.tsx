@@ -5,6 +5,8 @@ export default function FinancialPage() {
     <Home
       sections={[
         {icon: "/icons/match.png", label: "Match de notas", url: "/financeiro/match"},
+        {icon: "/icons/recibo.png", label: "Contas a pagar", url: "/financeiro/contas"},
+        {icon: "/icons/bank.png", label: "Extrato bancário", url: "/financeiro/bancos"},
       ]}
     />
   )
