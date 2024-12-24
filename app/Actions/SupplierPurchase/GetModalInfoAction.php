@@ -3,6 +3,7 @@
 namespace App\Actions\SupplierPurchase;
 
 use App\Models\PaymentMethod;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -15,6 +16,7 @@ class GetModalInfoAction
       'bank_accounts' => DB::table('companies_accounts')->get(),
       'delivery_addresses' => DB::table('delivery_addresses')->get(),
       'supplier_delivery_methods' => DB::table('supplier_delivery_methods')->get(),
+      'suppliers' => Supplier::get(),
     ];
   }
 }

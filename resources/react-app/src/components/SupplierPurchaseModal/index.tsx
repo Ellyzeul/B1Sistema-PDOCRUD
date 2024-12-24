@@ -143,7 +143,7 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paym
               </div>
               <div>
                 <label htmlFor="supplier">Fornecedor: </label>
-                <input type="text" name="supplier" defaultValue={savedPurchase?.supplier}/>
+                <input type="text" name="supplier" list="supplier-purchase-page-supplier-list" defaultValue={savedPurchase?.supplier}/>
                 <br />
                 <label htmlFor="reference">Ref: </label>
                 <input type="text" name="reference" style={{width:'70%'}} defaultValue={savedPurchase?.reference}/>
