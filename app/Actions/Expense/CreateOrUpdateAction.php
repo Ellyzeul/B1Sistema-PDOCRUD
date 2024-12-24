@@ -4,7 +4,6 @@ namespace App\Actions\Expense;
 
 use App\Models\Expense;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class CreateOrUpdateAction
 {
