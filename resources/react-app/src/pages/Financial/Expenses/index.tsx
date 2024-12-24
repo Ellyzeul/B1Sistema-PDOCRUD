@@ -7,8 +7,9 @@ import { toast, ToastContainer } from "react-toastify";
 
 export default function ExpensesPage() {
   const [expenses, setExpenses] = useState([] as Array<Expense>)
+  const [suppliers, setSuppliers] = useState([] as Array<{id: number, name: string}>)
   const [categories, setCategories] = useState({} as Record<number, string>)
-  const [banks, setBanks] = useState({} as Array<{
+  const [banks, setBanks] = useState([] as Array<{
     id_company: number,
     id_bank: number,
     name: string,
@@ -24,6 +25,7 @@ export default function ExpensesPage() {
       categories={categories}
       banks={banks}
       payment_methods={paymentMethods}
+      suppliers={suppliers}
     />)
   )
 
@@ -50,23 +52,26 @@ export default function ExpensesPage() {
       categories={categories}
       banks={banks}
       payment_methods={paymentMethods}
+      suppliers={suppliers}
     />))
   }
 
   useEffect(() => {
     api.get('/api/expense')
       .then(response => response.data)
-      .then(({expenses, categories, bank, payment_methods}) => {
+      .then(({expenses, categories, bank, payment_methods, suppliers}) => {
         setExpenses(expenses)
         setCategories(categories)
         setBanks(bank)
         setPaymentMethods(payment_methods)
+        setSuppliers(suppliers)
 
         setRows((expenses as Array<Expense>).map(expense => <ExpenseRow
           expense={expense}
           categories={categories}
           banks={banks}
           payment_methods={paymentMethods}
+          suppliers={suppliers}
         />))
       })
   }, [])
@@ -87,6 +92,7 @@ export default function ExpensesPage() {
           payment_methods={paymentMethods}
           isOpen={isModalOpen}
           setIsOpen={setIsModalOpen}
+          suppliers={suppliers}
         /> : <></>}
         <div className="expenses-page-table-container">
           <table>
@@ -112,11 +118,14 @@ export default function ExpensesPage() {
         </div>
       </div>
       <ToastContainer/>
+      <datalist id="expenses-page-suppliers-datalist">{
+        suppliers.map(({name}) => <option value={name}>{name}</option>)
+      }</datalist>
     </div>
   )
 }
 
-function ExpenseRow({expense, categories, banks, payment_methods}: ExpenseRowProp) {
+function ExpenseRow({expense, categories, banks, payment_methods, suppliers}: ExpenseRowProp) {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
@@ -143,6 +152,7 @@ function ExpenseRow({expense, categories, banks, payment_methods}: ExpenseRowPro
         categories={categories}
         banks={banks}
         payment_methods={payment_methods}
+        suppliers={suppliers}
       />
     </>
   )
@@ -158,6 +168,7 @@ type ExpenseRowProp = {
   }>,
   categories: Record<number, string>,
   payment_methods: Record<number, string>,
+  suppliers: Array<{id: number, name: string}>,
 }
 
 const MODAL_SELECTS: Array<{id: string, key: keyof Expense}> = [
@@ -166,11 +177,10 @@ const MODAL_SELECTS: Array<{id: string, key: keyof Expense}> = [
   {id: 'bank_account', key: 'bank_id'},
   {id: 'payment_method', key: 'payment_method_id'},
 ]
-function Modal({isOpen, setIsOpen, expense, banks, categories, payment_methods}: Prop) {
+function Modal({isOpen, setIsOpen, expense, banks, categories, payment_methods, suppliers}: ModalProp) {
   const [modalState, setModalState] = useState({
     id_company: 0,
   })
-  const [savedExpense, setSavedExpense] = useState(expense)
   const formRef = useRef(null as HTMLFormElement | null)
 
   function save() {
@@ -209,13 +219,13 @@ function Modal({isOpen, setIsOpen, expense, banks, categories, payment_methods}:
       <div className="expense-page-modal-is-close-container">
         <div className="expense-page-modal-is-close-close" onClick={() => setTimeout(() => setIsOpen(false), 1)}>X</div>
         <div className="expense-page-modal-save" onClick={save}>Salvar</div>
-        <div className="supplier-purchase-purchase-id">{savedExpense?.id ? `Compra Nº ${savedExpense.id}` : ''}</div>
+        <div className="supplier-purchase-purchase-id">{expense?.id ? `Compra Nº ${expense.id}` : ''}</div>
         <form ref={formRef} className="expense-page-modal-form">
           <div className="expense-page-modal-is-close-form-supplier">
             <label htmlFor="company">Grupo: </label>
             <select
               name="company"
-              defaultValue={savedExpense?.company_id}
+              defaultValue={expense?.company_id}
               onInput={({target}) => setModalState({...modalState, id_company: Number((target as HTMLSelectElement).value)})}
             >
               <option value="0">Seline</option>
@@ -230,10 +240,10 @@ function Modal({isOpen, setIsOpen, expense, banks, categories, payment_methods}:
             <div className="supplier-purchase-split-container">
               <div>
                 <label htmlFor="due_date">Data de vencimento:</label>
-                <input type="date" name="due_date" defaultValue={savedExpense?.due_date ?? ''}/>
+                <input type="date" name="due_date" defaultValue={expense?.due_date ?? ''}/>
                 <br />
                 <label htmlFor="status">Status do pedido:</label>
-                <select name="status" defaultValue={savedExpense?.status ?? 'pending'}>
+                <select name="status" defaultValue={expense?.status ?? 'pending'}>
                   <option value="pending">Pendente</option>
                   <option value="paid">Pago</option>
                   <option value="late">Atrasado</option>
@@ -241,7 +251,7 @@ function Modal({isOpen, setIsOpen, expense, banks, categories, payment_methods}:
               </div>
               <div>
                 <label htmlFor="expense_category">Despesa: </label>
-                <select name="expense_category" defaultValue={savedExpense?.expense_category_id ?? ''}>
+                <select name="expense_category" defaultValue={expense?.expense_category_id ?? ''}>
                   <option value="" key={0}>Selecione</option>
                   {Object.keys(categories).map((key, index) => 
                     <option key={index+1} value={key}>{categories[Number(key)]}</option>
@@ -249,7 +259,7 @@ function Modal({isOpen, setIsOpen, expense, banks, categories, payment_methods}:
                 </select>
                 <br />
                 <label htmlFor="supplier">Empresa: </label>
-                <input type="text" name="supplier" defaultValue={savedExpense?.supplier ?? ''}/>
+                <input type="text" name="supplier" list="expenses-page-suppliers-datalist" defaultValue={expense?.supplier ?? ''}/>
               </div>
             </div>
             <hr />
@@ -257,10 +267,10 @@ function Modal({isOpen, setIsOpen, expense, banks, categories, payment_methods}:
             <div className="supplier-purchase-split-container">
               <div>
                 <label htmlFor="value">Valor: </label>
-                <input name="value" defaultValue={savedExpense?.value.replace('.', ',') ?? 0}/>
+                <input name="value" defaultValue={expense?.value.replace('.', ',') ?? 0}/>
                 <br />
                 <label htmlFor="annotations">Histórico: </label>
-                <textarea name="annotations" defaultValue={savedExpense?.annotations ?? ''} rows={6} style={{width: '95%'}}/>
+                <textarea name="annotations" defaultValue={expense?.annotations ?? ''} rows={6} style={{width: '95%'}}/>
               </div>
               <div>
                 <label htmlFor="bank_account">Banco: </label>
@@ -283,7 +293,7 @@ function Modal({isOpen, setIsOpen, expense, banks, categories, payment_methods}:
                 ]}</select>
                 <br />
                 <label htmlFor="payment_date">Data do pagamento:</label>
-                <input type="date" name="payment_date" defaultValue={savedExpense?.payment_date ?? ''}/>
+                <input type="date" name="payment_date" defaultValue={expense?.payment_date ?? ''}/>
               </div>
             </div>
           </div>
@@ -294,7 +304,7 @@ function Modal({isOpen, setIsOpen, expense, banks, categories, payment_methods}:
   )
 }
 
-type Prop = {
+type ModalProp = {
   isOpen: boolean,
   setIsOpen: (isOpen: boolean) => void,
   expense?: Expense,
@@ -307,6 +317,7 @@ type Prop = {
   }>,
   categories: Record<number, string>,
   payment_methods: Record<number, string>,
+  suppliers: Array<{id: number, name: string}>,
 }
 
 function parseForm(form: HTMLFormElement, expense?: Expense) {

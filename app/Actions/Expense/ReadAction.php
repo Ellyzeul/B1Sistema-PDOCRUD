@@ -5,6 +5,7 @@ namespace App\Actions\Expense;
 use App\Models\Expense;
 use App\Models\ExpenseCategory;
 use App\Models\PaymentMethod;
+use App\Models\Supplier;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -24,6 +25,7 @@ class ReadAction
       'categories' => $this->parseArrayToMap(ExpenseCategory::get()),
       'bank' => DB::table('companies_accounts')->get(),
       'payment_methods' => $this->parseArrayToMap(PaymentMethod::get(), name: 'operation'),
+      'suppliers' => Supplier::get(),
       'expenses' => Expense::whereBetween(
         'due_date',
         [$month->format('Y-m-01'), $month->format('Y-m-t')]
