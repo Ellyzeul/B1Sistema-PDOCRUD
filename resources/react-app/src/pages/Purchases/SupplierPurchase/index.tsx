@@ -12,12 +12,13 @@ import getCurrencyFromSellercentral from "../../../lib/getCurrencyFromSellercent
 export default function SupplierPurchasePage() {
   const [modalOpen, setModalOpen] = useState(false)
   const [purchases, setPurchases] = useState([] as Array<SupplierPurchase>)
+  const [suppliers, setSuppliers] = useState([] as Array<{id: number, name: string}>)
   const [{payment_methods, bank_accounts, delivery_addresses, supplier_delivery_methods}, setModalInfo] = useState({} as ModalInfo)
 
   useEffect(() => {
     api.get('/api/supplier-purchase/modal-info')
       .then(response => response.data)
-      .then(({payment_methods, bank_accounts, delivery_addresses, supplier_delivery_methods}) => {
+      .then(({payment_methods, bank_accounts, delivery_addresses, supplier_delivery_methods, suppliers}) => {
         setModalInfo({
           payment_methods: (payment_methods as Array<{id: number, operation: string}>)
             .map(({id, operation}, key) => <option key={key+1} value={id}>{operation}</option>),
@@ -25,6 +26,7 @@ export default function SupplierPurchasePage() {
           delivery_addresses,
           supplier_delivery_methods,
         })
+        setSuppliers(suppliers)
       })
 
     api.get('/api/supplier-purchase')
@@ -95,6 +97,9 @@ export default function SupplierPurchasePage() {
             deliveryAddresses={delivery_addresses}
           />
       }
+      <datalist id="supplier-purchase-page-supplier-list">{
+        suppliers.map(({name}) => <option value={name}>{name}</option>)
+      }</datalist>
     </div>
   )
 }
