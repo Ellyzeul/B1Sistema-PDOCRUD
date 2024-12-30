@@ -17,6 +17,7 @@ class CreateOrUpdateAction
 
     $this->savePurchase($purchase, $request);
     $this->saveItems($request, $purchase);
+    if(!isset($request->id)) $this->createExpense($request);
 
     return response([
       'message' => 'Pedido inserido',
