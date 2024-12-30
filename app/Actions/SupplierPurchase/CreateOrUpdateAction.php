@@ -2,6 +2,7 @@
 
 namespace App\Actions\SupplierPurchase;
 
+use App\Models\Expense;
 use App\Models\Order;
 use App\Models\Supplier;
 use App\Models\SupplierPurchase;
@@ -86,5 +87,25 @@ class CreateOrUpdateAction
     return SupplierPurchaseItems::where('id', $idItem)
       ->where('id_purchase', $idPurchase)
       ->first();
+  }
+
+  private function createExpense(Request $request)
+  {
+    $expense = new Expense();
+
+    $expense->company_id = $request->id_company;
+    $expense->expense_category_id = 1;
+    $expense->annotations = $request->observation;
+    $expense->supplier = $request->supplier;
+    $expense->bank_id = $request->bank_account;
+    $expense->payment_method_id = $request->payment_method;
+    $expense->due_date = $request->date;
+    $expense->payment_date = $request->payment_date;
+    $expense->value = $this->salesTotal($request);
+    $expense->status = isset($request->payment_date) ? 'paid' : 'pending';
+    $expense->has_match = 0;
+    $expense->on_financial = 0;
+
+    return;
   }
 }
