@@ -30,6 +30,7 @@ return new class extends Migration
             $table->enum('status', ['paid', 'late', 'pending'])->default('pending');
             $table->boolean('has_match')->default(false);
             $table->boolean('on_financial')->default(false);
+            $table->string('fiscal')->nullable();
         });
     }
 

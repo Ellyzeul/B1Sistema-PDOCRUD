@@ -235,6 +235,7 @@ Route::controller(ExpenseController::class)
         Route::get('/', 'read');
         Route::post('/', 'createOrUpdate');
         Route::patch('/', 'createOrUpdate');
+        Route::post('/update-fiscal', 'updateFiscal');
     });
 
 Route::controller(B1RastreamentoController::class)

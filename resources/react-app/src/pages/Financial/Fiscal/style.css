@@ -1,0 +1,107 @@
+.expenses-page {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 60px calc(100vh - 60px);
+  background-color: #f2f4f5;
+}
+
+.expenses-page-container {
+  width: 90%;
+  height: 90%;
+  display: grid;
+  place-self: center;
+  grid-template-rows: 10% 90%;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 4px;
+}
+
+.expenses-page-search-container {
+  width: 100%;
+  padding-left: 50px;
+  padding-top: 20px;
+}
+
+.fiscal-page-table-container {
+  margin-top: 20px;
+  width: 100%;
+  height: 100%;
+}
+
+.fiscal-page-table-container > table {
+  width: 100%;
+}
+
+.fiscal-page-table-container > table > thead > tr > th,
+.fiscal-page-table-container > table > tbody > tr > td {
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.expense-page-modal {
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.125);
+  display: grid;
+  place-items: center;
+}
+.expense-page-modal-is-close {
+  display: none;
+}
+
+.expense-page-modal-is-close-container {
+  width: 90%;
+  height: 90%;
+  background-color: white;
+  border: 1px solid;
+  border-radius: 4px;
+  position: relative;
+}
+.expense-page-modal-is-close-close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+.expense-page-modal-is-close-close:hover {
+  background-color: black;
+  color: white;
+}
+.expense-page-modal-save {
+  position: absolute;
+  top: 20px;
+  left: 30px;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+  background-color: green;
+  color: white;
+  user-select: none;
+}
+.expense-page-modal-save:hover {
+  background-color: rgb(3, 168, 3);
+}
+
+.expense-page-modal-form {
+  margin-top: 60px;
+  margin-left: 4px;
+}
+
+.expense-page-add-modal {
+  font-size: large;
+  border: none;
+  border-radius: 4px;
+  background-color: rgb(226, 226, 226);
+  cursor: pointer;
+  padding: 4px 8px;
+  margin-left: 20px;
+}
+.expense-page-add-modal:hover {
+  background-color: rgb(195, 195, 195);
+}
