@@ -11,5 +11,5 @@ class Expense extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['annotations', 'supplier', 'bank_id', 'company_id', 'due_date', 'expense_category_id', 'id', 'on_financial', 'payment_date', 'payment_method_id', 'status', 'value'];
+    protected $fillable = ['annotations', 'supplier', 'bank_id', 'company_id', 'due_date', 'expense_category_id', 'id', 'on_financial', 'payment_date', 'payment_method_id', 'status', 'value', 'type'];
 }

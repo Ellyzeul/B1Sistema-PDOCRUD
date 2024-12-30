@@ -42,7 +42,7 @@ export default function ExpensesPage() {
       if((new Date(expense.payment_date ?? '')).toLocaleDateString()?.toLocaleLowerCase().includes(search)) return true
       if(paymentMethods[expense.payment_method_id]?.toLocaleLowerCase().includes(search)) return true
       if(expense.status?.toLocaleLowerCase().includes(search)) return true
-      if(expense.value?.toLocaleLowerCase().includes(search)) return true
+      if(String(expense.value)?.toLocaleLowerCase().includes(search)) return true
 
       return false
     })
@@ -136,11 +136,11 @@ function ExpenseRow({expense, categories, banks, payment_methods, suppliers}: Ex
         <td>{categories[expense.expense_category_id]}</td>
         <td>Empresa</td>
         <td>{expense.annotations?.slice(0, 30)}{(expense.annotations?.length ?? 0) > 30 ? '...' : ''}</td>
-        <td>{banks.find(({id_bank}) => id_bank === expense.bank_id)?.name}</td>
-        <td>{payment_methods[expense.payment_method_id]}</td>
+        <td>{banks.find(({id_bank}) => id_bank === expense.bank_id)?.name ?? '--'}</td>
+        <td>{payment_methods[expense.payment_method_id] ?? '--'}</td>
         <td>{new Date(expense.due_date).toLocaleDateString()}</td>
         <td>{expense.payment_date ? new Date(expense.payment_date).toLocaleDateString() : '-'}</td>
-        <td>R$ {`${expense.value}`.replace('.', ',')}</td>
+        <td style={{color: expense.type === 'payable' ? 'red' : 'green'}}>R$ {`${expense.value}`.replace('.', ',')}</td>
         <td>{STATUS[expense.status]}</td>
         <td>Match</td>
         <td>{!!expense.on_financial ? 'Sim' : 'Não'}</td>
@@ -219,7 +219,7 @@ function Modal({isOpen, setIsOpen, expense, banks, categories, payment_methods, 
       <div className="expense-page-modal-is-close-container">
         <div className="expense-page-modal-is-close-close" onClick={() => setTimeout(() => setIsOpen(false), 1)}>X</div>
         <div className="expense-page-modal-save" onClick={save}>Salvar</div>
-        <div className="supplier-purchase-purchase-id">{expense?.id ? `Compra Nº ${expense.id}` : ''}</div>
+        <div className="supplier-purchase-purchase-id">{expense?.id ? `Conta Nº ${expense.id}` : ''}</div>
         <form ref={formRef} className="expense-page-modal-form">
           <div className="expense-page-modal-is-close-form-supplier">
             <label htmlFor="company">Grupo: </label>
@@ -250,6 +250,12 @@ function Modal({isOpen, setIsOpen, expense, banks, categories, payment_methods, 
                 </select>
               </div>
               <div>
+                <label htmlFor="expense_type">Tipo</label>
+                <select name="expense_type" defaultValue={expense?.type}>
+                  <option value="payable">A pagar</option>
+                  <option value="receivable">A receber</option>
+                </select>
+                <br/>
                 <label htmlFor="expense_category">Despesa: </label>
                 <select name="expense_category" defaultValue={expense?.expense_category_id ?? ''}>
                   <option value="" key={0}>Selecione</option>
@@ -267,7 +273,7 @@ function Modal({isOpen, setIsOpen, expense, banks, categories, payment_methods, 
             <div className="supplier-purchase-split-container">
               <div>
                 <label htmlFor="value">Valor: </label>
-                <input name="value" defaultValue={expense?.value.replace('.', ',') ?? 0}/>
+                <input name="value" defaultValue={expense ? String(expense.value).replace('.', ',') : 0}/>
                 <br />
                 <label htmlFor="annotations">Histórico: </label>
                 <textarea name="annotations" defaultValue={expense?.annotations ?? ''} rows={6} style={{width: '95%'}}/>
@@ -337,6 +343,7 @@ function parseForm(form: HTMLFormElement, expense?: Expense) {
     payment_method_id: Number(form.querySelector<HTMLSelectElement>('select[name="payment_method"]')?.value),
     status: form.querySelector<HTMLSelectElement>('select[name="status"]')?.value,
     value: Number(form.querySelector<HTMLInputElement>('input[name="value"]')?.value.replace(',', '.')),
+    type: form.querySelector<HTMLSelectElement>('select[name="expense_type"]')?.value,
   }
 
   return expense
@@ -356,7 +363,8 @@ type Expense = {
   payment_date: string|null,
   payment_method_id: number,
   status: 'paid' | 'late' | 'pending'
-  value: "109.90"
+  value: number,
+  type: 'payable' | 'receivable',
 }
 
 const STATUS: Record<string, string> = {

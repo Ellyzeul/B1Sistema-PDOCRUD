@@ -22,8 +22,8 @@ return new class extends Migration
             $table->foreignIdFor(ExpenseCategory::class)->constrained();
             $table->string('annotations')->nullable();
             $table->string('supplier')->nullable();
-            $table->integer('bank_id');
-            $table->foreignIdFor(PaymentMethod::class)->constrained();
+            $table->integer('bank_id')->nullable();
+            $table->foreignIdFor(PaymentMethod::class)->nullable()->constrained();
             $table->date('due_date')->nullable();
             $table->date('payment_date')->nullable();
             $table->decimal('value');
@@ -31,6 +31,7 @@ return new class extends Migration
             $table->boolean('has_match')->default(false);
             $table->boolean('on_financial')->default(false);
             $table->string('fiscal')->nullable();
+            $table->enum('type', ['payable', 'receivable']);
         });
     }
 
