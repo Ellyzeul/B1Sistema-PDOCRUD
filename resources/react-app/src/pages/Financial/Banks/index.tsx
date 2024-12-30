@@ -133,7 +133,7 @@ function ExpenseRow({expense, categories, banks, payment_methods}: ExpenseRowPro
         <td>{banks.find(({id_bank}) => id_bank === expense.bank_id)?.name}</td>
         <td>{payment_methods[expense.payment_method_id]}</td>
         <td>{expense.payment_date ? new Date(expense.payment_date).toLocaleDateString() : '-'}</td>
-        <td>R$ {`${expense.value}`.replace('.', ',')}</td>
+        <td style={{color: expense.type === 'payable' ? 'red' : 'green'}}>R$ {`${expense.value}`.replace('.', ',')}</td>
       </tr>
       <Modal
         isOpen={isModalOpen}
@@ -344,7 +344,8 @@ type Expense = {
   payment_date: string|null,
   payment_method_id: number,
   status: 'paid' | 'late' | 'pending'
-  value: "109.90"
+  value: "109.90",
+  type: 'payable' | 'receivable',
 }
 
 const STATUS: Record<string, string> = {
