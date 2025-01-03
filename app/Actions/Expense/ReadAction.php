@@ -29,7 +29,7 @@ class ReadAction
       'expenses' => Expense::whereBetween(
         'due_date',
         [$month->format('Y-m-01'), $month->format('Y-m-t')]
-      )->get(),
+      )->get()->sortBy([fn($a, $b) => $a->id < $b->id])->values()->all(),
     ];
   }
 

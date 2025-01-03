@@ -212,11 +212,11 @@ function Modal({isOpen, setIsOpen, expense, banks, categories, payment_methods, 
     if(!formRef.current || !expense) return
     const form = formRef.current
 
-    MODAL_SELECTS.forEach(({id, key}) => {
+    setTimeout(() => MODAL_SELECTS.forEach(({id, key}) => {
       const select = form.querySelector(`select[name="${id}"]`) as HTMLSelectElement
 
       select.value = (expense[key] ?? '') as string
-    })
+    }), 1)
   }, [])
 
   return (
