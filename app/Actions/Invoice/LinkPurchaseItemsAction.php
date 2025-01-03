@@ -2,9 +2,13 @@
 
 namespace App\Actions\Invoice;
 
+use App\Models\Expense;
 use App\Models\Invoice;
+use App\Models\SupplierPurchase;
 use App\Models\SupplierPurchaseItems;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class LinkPurchaseItemsAction
 {
@@ -31,7 +35,31 @@ class LinkPurchaseItemsAction
     });
 
     Invoice::find($accessKey)->update(['match' => $request->input('match')]);
+    
+    Log::debug('aaaa');
+    $this->handleExpensesLink($linked);
 
     return ['success' => true];
+  }
+
+  private function handleExpensesLink(Collection $linked)
+  {
+    Log::debug(json_encode(
+      $linked
+        ->map(fn(array $data) => SupplierPurchase::find(SupplierPurchaseItems::find($data['id'])->id_purchase))
+        ->unique(fn(SupplierPurchase $purchase) => $purchase->id)
+        ->filter(fn(SupplierPurchase $purchase) => $purchase->items->map(fn(SupplierPurchaseItems $item) => isset($item->invoice_key))->reduce(fn($acc, $cur) => $acc && $cur, true))
+        ->map(fn(SupplierPurchase $purchase) => $purchase->id)
+    ));
+    $linked
+      ->map(fn(array $data) => SupplierPurchase::find(SupplierPurchaseItems::find($data['id'])->id_purchase))
+      ->unique(fn(SupplierPurchase $purchase) => $purchase->id)
+      ->filter(fn(SupplierPurchase $purchase) => $purchase->items->map(fn(SupplierPurchaseItems $item) => isset($item->invoice_key))->reduce(fn($acc, $cur) => $acc && $cur, true))
+      ->each(function(SupplierPurchase $purchase) {
+        Log::debug($purchase->id);
+        Expense::where('supplier_purchase_id', $purchase->id)->update([
+          'has_match' => true,
+        ]);
+      });
   }
 }

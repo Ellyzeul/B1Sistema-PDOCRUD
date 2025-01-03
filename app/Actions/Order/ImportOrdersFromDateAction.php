@@ -8,8 +8,6 @@ use App\Actions\Order\ImportOrdersFromDate\ImportFromNuvemshopAction as Nuvemsho
 class ImportOrdersFromDateAction
 {
   private array $sellercentrals = [
-    ['id_company' => 0, 'channel' => 'mercado-livre'], 
-    ['id_company' => 1, 'channel' => 'mercado-livre'], 
     ['id_company' => 0, 'channel' => 'fnac'], 
     ['id_company' => 0, 'channel' => 'nuvemshop'], 
   ];
