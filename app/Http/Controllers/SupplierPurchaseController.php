@@ -12,7 +12,7 @@ class SupplierPurchaseController extends Controller
 {
   public function read()
   {
-    return SupplierPurchase::get()->sortBy([fn($a, $b) => $a->id < $b->id]);
+    return SupplierPurchase::get()->sortBy([fn($a, $b) => $a->id < $b->id])->values()->all();
   }
 
   public function save(Request $request)
