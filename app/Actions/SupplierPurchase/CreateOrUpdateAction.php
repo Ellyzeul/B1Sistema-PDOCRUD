@@ -17,7 +17,9 @@ class CreateOrUpdateAction
 
     $this->savePurchase($purchase, $request);
     $this->saveItems($request, $purchase);
-    if(!isset($request->id)) $this->createExpense($request);
+    if($this->validateExpenseCreation($request, $purchase)) {
+      $this->createExpense($request, $purchase);
+    }
 
     return response([
       'message' => 'Pedido inserido',
@@ -90,7 +92,15 @@ class CreateOrUpdateAction
       ->first();
   }
 
-  private function createExpense(Request $request)
+  private function validateExpenseCreation(Request $request,SupplierPurchase $purchase)
+  {
+    if(!isset($request->bank_account) || !isset($request->payment_method)) return false;
+    if(Expense::where('supplier_purchase_id', $purchase->id)->exists()) return false;
+
+    return true;
+  }
+
+  private function createExpense(Request $request, SupplierPurchase $purchase)
   {
     $expense = new Expense();
 
@@ -102,10 +112,13 @@ class CreateOrUpdateAction
     $expense->payment_method_id = $request->payment_method;
     $expense->due_date = $request->date;
     $expense->payment_date = $request->payment_date;
-    $expense->value = $this->salesTotal($request);
+    $expense->value = $this->salesTotal($request) + $request->freight;
     $expense->status = isset($request->payment_date) ? 'paid' : 'pending';
     $expense->has_match = 0;
     $expense->on_financial = 0;
+    $expense->supplier_purchase_id = $purchase->id;
+
+    $expense->save();
 
     return;
   }

@@ -57,6 +57,10 @@ export default function ExpensesPage() {
   }
 
   useEffect(() => {
+    filterSearch('')
+  }, [banks, paymentMethods])
+
+  useEffect(() => {
     api.get('/api/expense')
       .then(response => response.data)
       .then(({expenses, categories, bank, payment_methods, suppliers}) => {
@@ -65,6 +69,7 @@ export default function ExpensesPage() {
         setBanks(bank)
         setPaymentMethods(payment_methods)
         setSuppliers(suppliers)
+        console.log(expenses)
 
         setRows((expenses as Array<Expense>).map(expense => <ExpenseRow
           expense={expense}
@@ -142,7 +147,7 @@ function ExpenseRow({expense, categories, banks, payment_methods, suppliers}: Ex
         <td>{expense.payment_date ? new Date(expense.payment_date).toLocaleDateString() : '-'}</td>
         <td style={{color: expense.type === 'payable' ? 'red' : 'green'}}>R$ {`${expense.value}`.replace('.', ',')}</td>
         <td>{STATUS[expense.status]}</td>
-        <td>Match</td>
+        <td>{expense.has_match ? 'Sim' : 'Não'}</td>
         <td>{!!expense.on_financial ? 'Sim' : 'Não'}</td>
       </tr>
       <Modal
@@ -360,6 +365,7 @@ type Expense = {
   expense_category_id: number,
   id: number,
   on_financial: boolean,
+  has_match: boolean,
   payment_date: string|null,
   payment_method_id: number,
   status: 'paid' | 'late' | 'pending'

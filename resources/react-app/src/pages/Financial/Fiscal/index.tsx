@@ -135,7 +135,7 @@ function ExpenseRow({expense, categories, banks, payment_methods}: ExpenseRowPro
         <td>{payment_methods[expense.payment_method_id]}</td>
         <td>{expense.payment_date ? new Date(expense.payment_date).toLocaleDateString() : '-'}</td>
         <td>R$ {`${expense.value}`.replace('.', ',')}</td>
-        <td><input defaultValue={expense.payment_date ?? ''} onBlur={({target}) => {
+        <td><input defaultValue={expense.fiscal ?? ''} onBlur={({target}) => {
           api.post('/api/expense/update-fiscal', {
             id: expense.id,
             fiscal: target.value
