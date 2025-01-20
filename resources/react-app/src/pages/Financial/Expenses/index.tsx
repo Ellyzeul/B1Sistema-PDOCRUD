@@ -4,6 +4,8 @@ import "./style.css"
 import api from "../../../services/axios";
 import getCompany from "../../../lib/getCompany";
 import { toast, ToastContainer } from "react-toastify";
+import { Invoice } from "../Match/types";
+import { format } from "date-fns";
 
 export default function ExpensesPage() {
   const [expenses, setExpenses] = useState([] as Array<Expense>)
@@ -20,8 +22,11 @@ export default function ExpensesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [rows, setRows] = useState(expenses.length === 0
     ? <>Sem registros...</>
-    : expenses.map(expense => <ExpenseRow
+    : expenses.map((expense, key) => <ExpenseRow
+      key={key}
       expense={expense}
+      expenses={expenses}
+      setExpenses={setExpenses}
       categories={categories}
       banks={banks}
       payment_methods={paymentMethods}
@@ -47,8 +52,11 @@ export default function ExpensesPage() {
       return false
     })
 
-    setRows(filtered.map(expense => <ExpenseRow
+    setRows(filtered.map((expense, key) => <ExpenseRow
+      key={key}
       expense={expense}
+      expenses={expenses}
+      setExpenses={setExpenses}
       categories={categories}
       banks={banks}
       payment_methods={paymentMethods}
@@ -69,10 +77,12 @@ export default function ExpensesPage() {
         setBanks(bank)
         setPaymentMethods(payment_methods)
         setSuppliers(suppliers)
-        console.log(expenses)
 
-        setRows((expenses as Array<Expense>).map(expense => <ExpenseRow
+        setRows((expenses as Array<Expense>).map((expense, key) => <ExpenseRow
+          key={key}
           expense={expense}
+          expenses={expenses}
+          setExpenses={setExpenses}
           categories={categories}
           banks={banks}
           payment_methods={paymentMethods}
@@ -124,13 +134,13 @@ export default function ExpensesPage() {
       </div>
       <ToastContainer/>
       <datalist id="expenses-page-suppliers-datalist">{
-        suppliers.map(({name}) => <option value={name}>{name}</option>)
+        suppliers.map(({name}, key) => <option key={key} value={name}>{name}</option>)
       }</datalist>
     </div>
   )
 }
 
-function ExpenseRow({expense, categories, banks, payment_methods, suppliers}: ExpenseRowProp) {
+function ExpenseRow({expense, expenses, setExpenses, categories, banks, payment_methods, suppliers}: ExpenseRowProp) {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
@@ -154,6 +164,10 @@ function ExpenseRow({expense, categories, banks, payment_methods, suppliers}: Ex
         isOpen={isModalOpen}
         setIsOpen={setIsModalOpen}
         expense={expense}
+        setExpense={(expense: Expense) => {
+          expenses.splice(expenses.findIndex(({id}) => id === expense.id), 0, expense)
+          setExpenses(expenses)
+        }}
         categories={categories}
         banks={banks}
         payment_methods={payment_methods}
@@ -164,6 +178,8 @@ function ExpenseRow({expense, categories, banks, payment_methods, suppliers}: Ex
 }
 type ExpenseRowProp = {
   expense: Expense,
+  expenses: Array<Expense>,
+  setExpenses: (expenses: Array<Expense>) => void,
   banks: Array<{
     id_company: number,
     id_bank: number,
@@ -182,16 +198,25 @@ const MODAL_SELECTS: Array<{id: string, key: keyof Expense}> = [
   {id: 'bank_account', key: 'bank_id'},
   {id: 'payment_method', key: 'payment_method_id'},
 ]
-function Modal({isOpen, setIsOpen, expense, banks, categories, payment_methods, suppliers}: ModalProp) {
+function Modal({isOpen, setIsOpen, expense, setExpense, banks, categories, payment_methods, suppliers}: ModalProp) {
   const [modalState, setModalState] = useState({
     id_company: 0,
   })
   const formRef = useRef(null as HTMLFormElement | null)
+  const [receipts, setReceipts] = useState<Array<ExpenseDocumentForm>>([])
+  const [documents, setDocuments] = useState<Array<ExpenseDocumentForm>>([])
+  const [isReceiptModalOpen, setIsReceiptModalOpen] = useState(false)
+  const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false)
 
   function save() {
     if(!formRef.current) return
     const form = formRef.current
-    const body = parseForm(form, expense)
+    const toSave = parseForm(form, expense)
+    const body = {
+      expense: toSave,
+      receipts: receipts.map(({file, ...receipt}) => ({...receipt, file: file?.split(',')[1] ?? null})),
+      documents: documents.map(({file, ...document}) => ({...document, file: file?.split(',')[1] ?? null})),
+    }
 
     if('id' in body) {
       api.patch('/api/expense', body)
@@ -307,6 +332,228 @@ function Modal({isOpen, setIsOpen, expense, banks, categories, payment_methods, 
                 <input type="date" name="payment_date" defaultValue={expense?.payment_date ?? ''}/>
               </div>
             </div>
+            {expense && expense?.invoices.length > 0
+              ? <>
+                <hr />
+                <p>Análise das despesas</p>
+                <div className="supplier-purchase-full-container">
+                  <div>Despesa: R$ {expense.value.toFixed(2).replace('.', ',')}</div>
+                  <div>Nota(s): R$ {expense.invoices.map(({value}) => value).reduce((acc, cur) => acc + cur, 0).toFixed(2).replace('.', ',')}</div>
+                  <div>Diferença: R$ {(expense.invoices.map(({value}) => value).reduce((acc, cur) => acc + cur, 0) - expense.value).toFixed(2).replace('.', ',')}</div>
+                </div>
+                <hr />
+              </>
+              : <></>}
+            {expense?.supplier_purchase_id
+              ? <>
+                <p>Notas associadas</p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Chave</th>
+                      <th>Emitente</th>
+                      <th>Valor</th>
+                      <th>Emissão</th>
+                      <th>Arquivos</th>
+                    </tr>
+                  </thead>
+                  <tbody>{
+                    expense.invoices.map(({key, value, emitted_at, period, emitter: {name}}, index) => <tr key={index}>
+                      <td>{key}</td>
+                      <td>{name}</td>
+                      <td>R$ {value.toFixed(2).replace('.', ',')}</td>
+                      <td>{new Date(emitted_at).toLocaleDateString()}</td>
+                      <td className="supplier-purchase-invoice-buttons-container">
+                        <div onClick={() => window.open(`https://www.fsist.com.br/usuario/api/1/100/${key}.pdf`, 'blank')}>DANFE</div>
+                        <div onClick={() => window.open(`https://www.fsist.com.br/usuario/api/1/100/${key}.xml`, 'blank')}>XML</div>
+                      </td>
+                    </tr>)
+                  }</tbody>
+                </table>
+                {/* <div>aaaaaaaa</div> */}
+                <hr />
+              </>
+              : <></>}
+            <div className="supplier-purchase-split-container">
+              <div className="supplier-purchase-documents-container">
+                <div>
+                  <span>Recibos</span>
+                  <button onClick={event => {
+                    event.preventDefault()
+                    setIsReceiptModalOpen(true)
+                    formRef.current?.parentElement?.scrollTo(0, 0)
+                  }}>+</button>
+                  <DocumentModal
+                    isOpen={isReceiptModalOpen}
+                    setIsOpen={setIsReceiptModalOpen}
+                    pushDocument={receipt => setReceipts([...receipts, receipt])}
+                    receiptModal={true}
+                  />
+                </div>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Data</th>
+                      <th>Recibo de pagamento</th>
+                      <th>Valor</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>{
+                    <>
+                      {(expense && expense.receipts.length > 0)
+                        ? expense.receipts.map(({created_at, key, value, filename}, index) => <tr key={index}>
+                          <td>{new Date(created_at).toLocaleDateString()}</td>
+                          <td>{key}</td>
+                          <td>R$ {Number(value).toFixed(2).replace('.', ',')}</td>
+                          <td>
+                            {filename && <button
+                                onClick={(event) => {
+                                  event.preventDefault()
+                                  window.open(`/storage/documents/${filename}`, 'blank')
+                                }}
+                              >Abrir</button>}
+                              <button
+                                onClick={event => {
+                                  event.preventDefault()
+                                  const toDelete = expense.receipts.splice(index, 1)[0]
+                                  receipts.push({
+                                    key: toDelete.key,
+                                    type: '',
+                                    value: 0,
+                                    created_at: '',
+                                    delete: true,
+                                  })
+                                  setExpense && setExpense(expense)
+                                  setReceipts(receipts)
+                                }}
+                              >Apagar</button>
+                          </td>
+                        </tr>)
+                        : <></>}
+                      {(receipts.length > 0)
+                        ? receipts.map(({created_at, key, value, file, delete: del}, index) => del
+                          ? <></>
+                          : <tr key={index}>
+                            <td>{new Date(created_at).toLocaleDateString()}</td>
+                            <td>{key}</td>
+                            <td>R$ {value.toFixed(2).replace('.', ',')}</td>
+                            <td>
+                              {file && <button
+                                onClick={(event) => {
+                                  event.preventDefault()
+                                  window.open(file, 'blank')
+                                }}
+                              >Abrir</button>}
+                              <button
+                                onClick={event => {
+                                  event.preventDefault()
+                                  setReceipts(receipts.filter((_, i) => i !== index))
+                                }}
+                              >Apagar</button>
+                            </td>
+                          </tr>
+                        )
+                        : <></>}
+                      {expense?.receipts.length === 0 && receipts.length === 0
+                        ? <tr><td></td><td>Sem recibos</td></tr>
+                        : <></>}
+                    </>
+                  }</tbody>
+                </table>
+              </div>
+              <div className="supplier-purchase-documents-container">
+                <div>
+                  <span>Recibos</span>
+                  <button onClick={event => {
+                    event.preventDefault()
+                    setIsDocumentModalOpen(true)
+                    formRef.current?.parentElement?.scrollTo(0, 0)
+                  }}>+</button>
+                  <DocumentModal
+                    isOpen={isDocumentModalOpen}
+                    setIsOpen={setIsDocumentModalOpen}
+                    pushDocument={document => setDocuments([...documents, document])}
+                    receiptModal={false}
+                  />
+                </div>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Data</th>
+                      <th>Tipo de documento</th>
+                      <th>Chave/Identificador</th>
+                      <th>Emissor</th>
+                      <th>Valor</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>{
+                    <>
+                      {(expense && expense.documents.length > 0)
+                        ? expense.documents.map(({created_at, key, value, filename}, index) => <tr key={index}>
+                          <td>{new Date(created_at).toLocaleDateString()}</td>
+                          <td>{key}</td>
+                          <td>R$ {value.toFixed(2).replace('.', ',')}</td>
+                          <td>
+                            {filename && <button
+                                onClick={(event) => {
+                                  event.preventDefault()
+                                  window.open(`/storage/documents/${filename}`, 'blank')
+                                }}
+                              >Abrir</button>}
+                              <button
+                                onClick={event => {
+                                  event.preventDefault()
+                                  const toDelete = expense.documents.splice(index, 1)[0]
+                                  documents.push({
+                                    key: toDelete.key,
+                                    type: '',
+                                    value: 0,
+                                    created_at: '',
+                                    delete: true,
+                                  })
+                                  setExpense && setExpense(expense)
+                                  setDocuments(documents)
+                                }}
+                              >Apagar</button>
+                          </td>
+                        </tr>)
+                        : <></>}
+                      {(documents.length > 0)
+                        ? documents.map(({created_at, type, key, issuer, value, file, delete: del}, index) => del
+                          ? <></>
+                          : <tr key={index}>
+                            <td>{new Date(created_at).toLocaleDateString()}</td>
+                            <td>{type}</td>
+                            <td>{key}</td>
+                            <td>{issuer}</td>
+                            <td>R$ {value.toFixed(2).replace('.', ',')}</td>
+                            <td>
+                              {file && <button
+                                onClick={(event) => {
+                                  event.preventDefault()
+                                  window.open(file, 'blank')
+                                }}
+                              >Abrir</button>}
+                              <button
+                                onClick={event => {
+                                  event.preventDefault()
+                                  setDocuments(documents.filter((_, i) => i !== index))
+                                }}
+                              >Apagar</button>
+                            </td>
+                          </tr>
+                        )
+                        : <></>}
+                      {expense?.documents.length === 0 && documents.length === 0
+                        ? <tr><td></td><td>Sem documentos</td></tr>
+                        : <></>}
+                    </>
+                  }</tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </form>
         <ToastContainer/>
@@ -315,10 +562,137 @@ function Modal({isOpen, setIsOpen, expense, banks, categories, payment_methods, 
   )
 }
 
+function DocumentModal({isOpen, setIsOpen, pushDocument, receiptModal}: DocumentModalProp) {
+  const modalFormRef = useRef<HTMLDivElement>(null)
+
+  return (
+    <div className={`expense-document-modal ${isOpen ? '' : 'expense-document-modal-is-close'}`}>
+      <div ref={modalFormRef} className="expense-document-modal-container">
+        <div className="expense-document-modal-close-container">
+          <span
+            onClick={() => {
+              setIsOpen(false)
+              modalFormRef.current && clearModalForm(modalFormRef.current)
+            }}
+          >X</span>
+        </div>
+        <div className="expense-document-modal-content">
+          <div className="expense-document-modal-title">Adicionar {receiptModal ? 'recibo' : 'documento'}</div>
+          <div className="expense-document-modal-input">
+            <label htmlFor="expense-document-date">Data: </label>
+            <input type="date" name="expense-document-date" defaultValue={format(new Date(), 'yyyy-MM-dd')}/>
+          </div>
+          {!receiptModal && <div className="expense-document-modal-input">
+            <label htmlFor="expense-document-type">Tipo: </label>
+            <select name="expense-document-type">
+              <option value="fatura">Fatura</option>
+              <option value="boleto">Boleto</option>
+              <option value="nfs">NFS</option>
+              <option value="cupom">Cupom Fiscal</option>
+              <option value="outros">Outros</option>
+            </select>
+          </div>}
+          <div className="expense-document-modal-input">
+            <label htmlFor="expense-document-key">Identificador: </label>
+            <input type="text" name="expense-document-key"/>
+          </div>
+          {!receiptModal && <div className="expense-document-modal-input">
+            <label htmlFor="expense-document-issuer">Emissor: </label>
+            <input type="text" name="expense-document-issuer"/>
+          </div>}
+          <div className="expense-document-modal-input">
+            <label htmlFor="expense-document-value">Valor: R$</label>
+            <input type="number" name="expense-document-value" defaultValue={0}/>
+          </div>
+          <div className="expense-document-modal-input">
+            <label htmlFor="expense-document-file">Arquivo: </label>
+            <input type="file" name="expense-document-file"/>
+          </div>
+        </div>
+        <div className="expense-document-modal-save-container">
+          <button
+            onClick={async(event) => {
+              event.preventDefault()
+              if(!modalFormRef.current) return
+
+              pushDocument(await parseDocumentModalForm(modalFormRef.current, receiptModal))
+              setIsOpen(false)
+              clearModalForm(modalFormRef.current)
+            }}
+          >Adicionar</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+async function parseDocumentModalForm(modalForm: HTMLDivElement, receiptModal: boolean): Promise<ExpenseDocumentForm> {
+  const [file, extension] = await getFileAndExtension(modalForm.querySelector<HTMLInputElement>('input[name="expense-document-file"]'))
+  const dateInput = modalForm.querySelector<HTMLInputElement>('input[name="expense-document-date"]')
+  const body = {
+    created_at: format(new Date(dateInput ? `${dateInput.value} 00:00:00` : new Date()), 'yyyy-MM-dd'),
+    key: modalForm.querySelector<HTMLInputElement>('input[name="expense-document-key"]')?.value ?? '',
+    value: Number(modalForm.querySelector<HTMLInputElement>('input[name="expense-document-value"]')?.value.replace(',', '.') ?? 0),
+    file,
+    extension,
+  }
+
+  return receiptModal
+    ? {
+      ...body,
+      type: 'recibo',
+    }
+    : {
+      ...body,
+      type: modalForm.querySelector<HTMLInputElement>('select[name="expense-document-type"]')?.value ?? '',
+      issuer: modalForm.querySelector<HTMLInputElement>('input[name="expense-document-issuer"]')?.value ?? '',
+    }
+}
+
+async function getFileAndExtension(fileInput: HTMLInputElement | null) {
+  if(!fileInput || !fileInput.files || fileInput.files.length === 0) return [null, null]
+  const file = fileInput.files[0]
+
+  return [await toBase64(file), /(?:\.([^.]+))?$/.exec(file.name)?.[1]]
+}
+
+async function toBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result as string)
+    reader.onerror = reject
+  })
+}
+
+function clearModalForm(modalForm: HTMLDivElement) {
+  modalForm.querySelectorAll('input').forEach(input => {
+    if(input.name.includes('date')) {
+      input.value = format(new Date(), 'yyyy-MM-dd')
+      return
+    }
+    if(input.name.includes('value')) {
+      input.value = '0'
+      return
+    }
+
+    input.value = ''
+  })
+}
+
+type DocumentModalProp = {
+  isOpen: boolean,
+  setIsOpen: (isOpen: boolean) => void,
+  pushDocument: (document: ExpenseDocumentForm) => void,
+  receiptModal: boolean,
+}
+
 type ModalProp = {
   isOpen: boolean,
   setIsOpen: (isOpen: boolean) => void,
   expense?: Expense,
+  setExpense?: (expense: Expense) => void,
   banks: Array<{
     id_company: number,
     id_bank: number,
@@ -371,6 +745,31 @@ type Expense = {
   status: 'paid' | 'late' | 'pending'
   value: number,
   type: 'payable' | 'receivable',
+  supplier_purchase_id?: number,
+  invoices: Array<Invoice>,
+  receipts: Array<ExpenseDocument>,
+  documents: Array<ExpenseDocument>,
+}
+
+type ExpenseDocument = {
+  key: string,
+  created_at: string,
+  type: string,
+  issuer?: string,
+  value: number,
+  filename?: string,
+  expense_id?: number,
+}
+
+type ExpenseDocumentForm = {
+  key: string,
+  created_at: string,
+  type: string,
+  issuer?: string,
+  value: number,
+  file?: string | null,
+  extension?: string | null,
+  delete?: boolean,
 }
 
 const STATUS: Record<string, string> = {

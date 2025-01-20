@@ -65,6 +65,7 @@
   border: 1px solid;
   border-radius: 4px;
   position: relative;
+  overflow-y: auto;
 }
 .expense-page-modal-is-close-close {
   position: absolute;
@@ -109,4 +110,106 @@
 }
 .expense-page-add-modal:hover {
   background-color: rgb(195, 195, 195);
+}
+
+.supplier-purchase-full-container {
+  width: 100%;
+  display: flex;
+}
+.supplier-purchase-full-container > div {
+  padding:  1px 2px;
+  margin-right: 10px;
+  border: 1px solid black;
+}
+
+.supplier-purchase-documents-container {
+  width: 99%;
+  border-right: 1px solid black;
+}
+.supplier-purchase-documents-container > div {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.supplier-purchase-documents-container > div > button {
+  border: none;
+  padding: 4px 8px;
+  background-color: grey;
+  color: white;
+  border-radius: 4px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+.supplier-purchase-documents-container > table {
+  width: 100%;
+}
+
+.expense-document-modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.125);
+  display: grid;
+  place-items: center;
+}
+.expense-document-modal-is-close {
+  display: none;
+}
+
+.expense-document-modal-container {
+  width: 50%;
+  height: 90%;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 4px;
+  display: grid;
+  grid-template-rows: 5% 85% 10%;
+  place-items: center;
+}
+
+.expense-document-modal-close-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row-reverse;
+}
+.expense-document-modal-close-container > span {
+  height: min-content;
+  padding: 2px 6px;
+  margin-right: 5px;
+  cursor: pointer;
+  border-radius: 10px;
+  background-color: white;
+}
+.expense-document-modal-close-container > span:hover {
+  filter: invert(1);
+}
+
+.expense-document-modal-content {
+  width: 98%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.expense-document-modal-title {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.expense-document-modal-input {
+  margin-bottom: 10px;
+}
+
+.expense-document-modal-save-container {
+  display: grid;
+  place-items: center;
+}
+.expense-document-modal-save-container > button {
+  border: none;
+  padding: 4px 8px;
+  background-color: green;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
 }

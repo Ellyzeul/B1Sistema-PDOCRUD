@@ -148,6 +148,10 @@ function Modal({open, setOpen, invoice}: ModalProp) {
               <option value="linked">Vínculo completo</option>
             </select>
           </div>
+          <div className="match-page-files-buttons">
+            <div onClick={() => window.open(`https://www.fsist.com.br/usuario/api/1/100/${invoice.key}.pdf`, 'blank')}>DANFE</div>
+            <div onClick={() => window.open(`https://www.fsist.com.br/usuario/api/1/100/${invoice.key}.xml`, 'blank')}>XML</div>
+          </div>
         </div>
         <div>
           <p>Itens associados:</p>

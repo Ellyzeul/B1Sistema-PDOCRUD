@@ -81,7 +81,7 @@ class PDOCrudService
 		"accepted" => ["general", "aceitar-fnac"],
 		"shipping_box_number" => ["general", "2.9", "4.1", "4.2", "5.1"],
 		"cancel_invoice" => ["cancelar-nf"],
-		"weight" => ["general", "2.9", "4.1", "4.11", "4.2", "4.3", "4.21"],
+		"weight" => ["general", "2.2", "2.3", "2.31", "2.9", "4.1", "4.11", "4.2", "4.3", "4.21"],
 
 		"delivery_hub" => ["4.11", "4.21"], 
 		"url" => ["4.11", "4.21"], 
