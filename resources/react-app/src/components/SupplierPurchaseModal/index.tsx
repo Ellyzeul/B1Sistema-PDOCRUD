@@ -159,7 +159,7 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paym
               ? <>
                 <div>
                   <span>Fiscal</span>
-                  <table>
+                  <table className="supplier-purchase-invoice-table">
                     <thead>
                       <tr>
                         <th>Chave</th>
@@ -167,6 +167,7 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paym
                         <th>Valor</th>
                         <th>Emissão</th>
                         <th>Período</th>
+                        <th>Arquivos</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -184,6 +185,10 @@ export default function SupplierPurchaseModal({isOpen, setIsOpen, purchase, paym
                                 <td>R$ {value.toFixed(2).replace('.', ',')}</td>
                                 <td>{new Date(emitted_at).toLocaleDateString()}</td>
                                 <td>{period}</td>
+                                <td className="supplier-purchase-invoice-buttons-container">
+                                  <div onClick={() => window.open(`https://www.fsist.com.br/usuario/api/1/100/${key}.pdf`, 'blank')}>DANFE</div>
+                                  <div onClick={() => window.open(`https://www.fsist.com.br/usuario/api/1/100/${key}.xml`, 'blank')}>XML</div>
+                                </td>
                               </tr>
                             )
                           })

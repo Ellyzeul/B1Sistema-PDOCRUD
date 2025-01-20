@@ -109,3 +109,19 @@
   cursor: pointer;
   user-select: none;
 }
+
+.supplier-purchase-invoice-table {
+  width: 100%;
+}
+
+.supplier-purchase-invoice-buttons-container {
+  display: flex;
+}
+.supplier-purchase-invoice-buttons-container > div {
+  padding: 2px 4px;
+  background-color: grey;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-right: 1px;
+}

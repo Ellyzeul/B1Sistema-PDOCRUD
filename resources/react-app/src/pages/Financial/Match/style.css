@@ -140,3 +140,15 @@
 .match-page-modal-not-linked-filter > div {
   margin: 0 10px;
 }
+
+.match-page-files-buttons {
+  display: flex;
+}
+.match-page-files-buttons > div {
+  padding: 2px 4px;
+  background-color: grey;
+  color: white;
+  margin: 1px 1px 0 0;
+  cursor: pointer;
+  border-radius: 4px;
+}
