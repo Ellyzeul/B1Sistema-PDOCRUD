@@ -4,7 +4,11 @@ namespace App\Actions\Expense;
 
 use App\Models\Expense;
 use App\Models\ExpenseDocument;
+use App\Models\Invoice;
+use App\Models\SupplierPurchase;
+use App\Models\SupplierPurchaseItems;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -14,6 +18,7 @@ class CreateOrUpdateAction
   {
     $expense = $this->handleExpense($request);
 
+    $this->handleInvoiceMatch($request->input('matches'), $expense);
     $this->handleExpenseDocuments($request->input('receipts'), $expense);
     $this->handleExpenseDocuments($request->input('documents'), $expense);
   }
@@ -42,6 +47,34 @@ class CreateOrUpdateAction
     $expense->update($data);
 
     return $expense;
+  }
+
+  private function handleInvoiceMatch(array $matches, Expense $expense)
+  {
+    $purchase = SupplierPurchase::find($expense->supplier_purchase_id);
+    if($purchase === null) return;
+    
+    collect($matches)->each(function(array $match) use($purchase) {
+      $purchase->items->each(function(SupplierPurchaseItems $item) use($match) {
+        if($match['match'] === false) {
+          if($item->invoice_key === $match['key']) {
+            $item->invoice_key = null;
+            $item->save();
+          }
+
+          return;
+        }
+
+        $item->invoice_key = $match['key'];
+        $item->save();
+      });
+
+      if($match['match'] === false) {
+        Invoice::find($match['key'])->update(['match' => 'not_linked']);
+      }
+    });
+
+    return;
   }
 
   private function handleExpenseDocuments(array $documents, Expense $expense)

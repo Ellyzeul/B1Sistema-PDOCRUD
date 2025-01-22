@@ -207,6 +207,8 @@ function Modal({isOpen, setIsOpen, expense, setExpense, banks, categories, payme
   const [documents, setDocuments] = useState<Array<ExpenseDocumentForm>>([])
   const [isReceiptModalOpen, setIsReceiptModalOpen] = useState(false)
   const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false)
+  const [invoiceMatches, setInvoiceMatches] = useState<Array<{key: string, match: boolean}>>([])
+  const [fetchedInvoice, setFetchedInvoice] = useState<Invoice|null>(null)
 
   function save() {
     if(!formRef.current) return
@@ -216,6 +218,9 @@ function Modal({isOpen, setIsOpen, expense, setExpense, banks, categories, payme
       expense: toSave,
       receipts: receipts.map(({file, ...receipt}) => ({...receipt, file: file?.split(',')[1] ?? null})),
       documents: documents.map(({file, ...document}) => ({...document, file: file?.split(',')[1] ?? null})),
+      matches: fetchedInvoice
+        ? [...invoiceMatches, {key: fetchedInvoice.key, match: true}]
+        : invoiceMatches
     }
 
     if('id' in body) {
@@ -353,24 +358,76 @@ function Modal({isOpen, setIsOpen, expense, setExpense, banks, categories, payme
                       <th>Chave</th>
                       <th>Emitente</th>
                       <th>Valor</th>
-                      <th>Emissão</th>
                       <th>Arquivos</th>
+                      <th>Emissão</th>
+                      <th>Ações</th>
                     </tr>
                   </thead>
                   <tbody>{
-                    expense.invoices.map(({key, value, emitted_at, period, emitter: {name}}, index) => <tr key={index}>
-                      <td>{key}</td>
-                      <td>{name}</td>
-                      <td>R$ {value.toFixed(2).replace('.', ',')}</td>
-                      <td>{new Date(emitted_at).toLocaleDateString()}</td>
-                      <td className="supplier-purchase-invoice-buttons-container">
-                        <div onClick={() => window.open(`https://www.fsist.com.br/usuario/api/1/100/${key}.pdf`, 'blank')}>DANFE</div>
-                        <div onClick={() => window.open(`https://www.fsist.com.br/usuario/api/1/100/${key}.xml`, 'blank')}>XML</div>
-                      </td>
-                    </tr>)
+                    ([...expense.invoices, fetchedInvoice]
+                      .filter(invoice => !!invoice && invoiceMatches.findIndex(({key, match}) => !match && invoice.key === key) === -1) as Array<Invoice>)
+                      .map(({key, value, emitted_at, emitter: {name}}, index) => <tr key={index}>
+                        <td>{key}</td>
+                        <td title={name}>{name?.substring(0, 30) + ((name?.length ?? 0) > 30 ? '...' : '')}</td>
+                        <td>R$ {value.toFixed(2).replace('.', ',')}</td>
+                        <td className="supplier-purchase-invoice-buttons-container">
+                          <div onClick={() => window.open(`https://www.fsist.com.br/usuario/api/1/100/${key}.pdf`, 'blank')}>DANFE</div>
+                          <div onClick={() => window.open(`https://www.fsist.com.br/usuario/api/1/100/${key}.xml`, 'blank')}>XML</div>
+                        </td>
+                        <td>{new Date(emitted_at).toLocaleDateString()}</td>
+                        <td className="supplier-purchase-invoice-buttons-container">
+                          <div
+                            onClick={() => setInvoiceMatches([...invoiceMatches, ...expense.invoices.filter(({key: invoiceKey}) => invoiceKey !== key).map(({key}) => ({
+                              key,
+                              match: false,
+                            }))])}
+                          >Sobrescrever</div>
+                          <div
+                            onClick={() => setInvoiceMatches([...invoiceMatches, {
+                              key,
+                              match: false,
+                            }])}
+                          >Apagar</div>
+                        </td>
+                      </tr>
+                    )
                   }</tbody>
                 </table>
-                {/* <div>aaaaaaaa</div> */}
+                <hr />
+                <div className="expense-page-modal-match-container">
+                  <div>Sobrescrever match de nota fiscal (insira abaixo a chave de acesso)</div>
+                  <div>
+                    <input type="text" />
+                    <div
+                      onClick={({target}) => {
+                        const {value} = (target as HTMLDivElement).previousSibling as HTMLInputElement
+                        const toastId = toast.loading('Pesquisando nota...')
+                        
+                        api.get('/api/invoice?key=' + value)
+                          .then(response => {
+                            toast.dismiss(toastId)
+                            return response.data as Invoice|null
+                          })
+                          .then(invoice => {
+                            if(!invoice) {
+                              toast.error('Nota não encontrada...')
+                              return
+                            }
+                            const invoiceMatched = invoiceMatches.find(({key}) => key === invoice.key)
+                            if(invoiceMatched) {
+                              if(!invoiceMatched.match) {
+                                setInvoiceMatches(invoiceMatches.filter(({key}) => key !== invoice.key))
+                              }
+                              
+                              return
+                            }
+
+                            setFetchedInvoice(invoice)
+                          })
+                      }}
+                    >Sobrescrever</div>
+                  </div>
+                </div>
                 <hr />
               </>
               : <></>}
