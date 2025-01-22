@@ -7,8 +7,12 @@ use Illuminate\Http\Request;
 
 class ReadAction
 {
-  public function handle(Request $_)
+  public function handle(Request $request)
   {
+    if($request->input('key') !== null) {
+      return Invoice::find($request->input('key'));
+    }
+
     $invoices = Invoice::where('emitted_at', '>=', now()->subMonths(2))->get();
     return [
       'linked' => $invoices->filter(fn(Invoice $item) => $item->match === 'linked')->values(),
