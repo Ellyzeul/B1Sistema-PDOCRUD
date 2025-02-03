@@ -169,6 +169,7 @@ Route::controller(TrackingController::class)
         Route::post('/update-phase', 'updateOrderPhase');
         Route::post('/create-internal', 'createInternal');
         Route::post('/update-internal', 'updateInternal');
+        Route::post('/expected-delivery-date', 'updateExpectedDeliveryDate');
     });
 
 Route::controller(BlacklistController::class)

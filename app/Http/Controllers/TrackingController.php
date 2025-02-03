@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Tracking\CreateShipmentAction;
+use App\Actions\Tracking\UpdateExpectedDeliveryDateAction;
 use App\Services\TrackingService;
 use Illuminate\Http\Request;
 
@@ -87,6 +88,11 @@ class TrackingController extends Controller
 	public static function updateInternal(Request $request)
 	{
 		return (new TrackingService())->updateInternal($request);
+	}
+
+	public function updateExpectedDeliveryDate(Request $request)
+	{
+		return (new UpdateExpectedDeliveryDateAction())->handle($request);
 	}
 
 	public function createShipment(Request $request)
