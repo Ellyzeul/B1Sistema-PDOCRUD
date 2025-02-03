@@ -115,7 +115,7 @@ const getRows = (data: {[key: string]: string}[], fieldsKeys: string[], actualPa
       onClick={() => updatePhase(row.online_order_number, row.last_update_date)}
     >Sim</td>    
     const rowElement = <tr key={idx}>{[
-      btnCell, 
+      row.tracking_code.startsWith('000') ? <td></td> : btnCell, 
       ...fieldsKeys.map((key, idx) => {
         if(key === 'tracking_code') {
           return (
