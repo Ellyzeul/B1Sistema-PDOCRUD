@@ -94,11 +94,18 @@ const handleClientNotify = async(order_number: string) => {
   toast.success('Mensagem enviada com sucesso!')
 }
 
-const getRows = (data: {[key: string]: string}[], fieldsKeys: string[], actualPage: number) => {
+const getRows = (data: {[key: string]: string}[], fieldsKeys: string[], actualPage: number, rules: Array<string>) => {
   const rowsElements = [] as JSX.Element[]
   const offset = actualPage * ROWS_PER_PAGE
 
-  data.slice(offset, offset + ROWS_PER_PAGE).forEach((row, idx) => {
+  data
+    .filter(row => Object.keys(row)
+      .map(key => 
+        (rules.length > 0 ? rules : ['']).map(rule => String(row[key]).toLocaleLowerCase().includes(rule.toLocaleLowerCase())).filter(passRule => passRule).length > 0
+      )
+      .filter(passRule => passRule).length > 0
+    )
+    .slice(offset, offset + ROWS_PER_PAGE).forEach((row, idx) => {
     const btnCell = <td 
       className="tracking-update-button" 
       onClick={() => updateRow(row.tracking_code, row.delivery_method, rowElement.props, fields)}
@@ -110,23 +117,56 @@ const getRows = (data: {[key: string]: string}[], fieldsKeys: string[], actualPa
     const rowElement = <tr key={idx}>{[
       btnCell, 
       ...fieldsKeys.map((key, idx) => {
-        if(key === 'tracking_code') return (
-          <td>
-            {row.tracking_code}
-            {
-              /^([0-9]{3}-[0-9]{7}-[0-9]{7}|[A-Z0-9]{13})$/.test(row.online_order_number)
-                ? <div className="tracking-table-notify-client">
-                    <i className="fa-regular fa-envelope" onClick={() => handleClientNotify(row.online_order_number)}/>
-                  </div>
-                : null
-            }
+        if(key === 'tracking_code') {
+          return (
+            <td>
+              {row.tracking_code}
+              {
+                /^([0-9]{3}-[0-9]{7}-[0-9]{7}|[A-Z0-9]{13})$/.test(row.online_order_number)
+                  ? <div className="tracking-table-notify-client">
+                      <i className="fa-regular fa-envelope" onClick={() => handleClientNotify(row.online_order_number)}/>
+                    </div>
+                  : null
+              }
+            </td>
+          )
+        }
+
+        if(key === "last_update_date") {
+          return [
+            <td key={idx}>{
+              fields[key].isDate
+                ? row[key]
+                  ? (new Date(`${row[key]} 00:00`)).toLocaleDateString("pt-BR")
+                  : ""
+                : row[key]
+            }</td>,
+            btnUpdate6dot1,
+          ]
+        }
+
+        if(key === 'delivery_expected_date') {
+          const updateDeliveryExpectedDate = ({target: {value}}: {target: {value: string}}) => {
+            api.post('/api/tracking/expected-delivery-date', {
+              tracking_code: row.tracking_code,
+              expected_delivery_date: value.length > 0 ? value : null,
+            })
+          }
+
+          return <td key={idx}>
+            <input
+              type="date"
+              defaultValue={row.delivery_expected_date ?? ''}
+              onChange={updateDeliveryExpectedDate}
+              onBlur={updateDeliveryExpectedDate}
+            />
           </td>
-        )
-        if(key === "last_update_date") return [<td key={idx}>{fields[key].isDate ? row[key] ? (new Date(`${row[key]} 00:00`)).toLocaleDateString("pt-BR") : "" : row[key]}</td>, btnUpdate6dot1]
+        }
+
         return <td key={idx}>{
-        fields[key].editable
-        ? <Textarea defaultValue={row[key]} tracking_code={row.tracking_code} field_name={key}/>
-        : fields[key].isDate ? row[key] ? (new Date(`${row[key]} 00:00`)).toLocaleDateString("pt-BR") : "" : row[key]
+          fields[key].editable
+            ? <Textarea defaultValue={row[key]} tracking_code={row.tracking_code} field_name={key}/>
+            : fields[key].isDate ? row[key] ? (new Date(`${row[key]} 00:00`)).toLocaleDateString("pt-BR") : "" : row[key]
         }</td>
     })]}</tr>
     rowsElements.push(rowElement)
@@ -168,12 +208,15 @@ export const TrackingTable = (props: TrackingTableProp) => {
   const [actualPage, setActualPage] = useState(0)
   const filterField = useRef(null)
   const filterInput = useRef(null)
+  const [rules, setRules] = useState<Array<string>>(JSON.parse(localStorage.getItem(FILTER_STORAGE_KEY) ?? '[]'))
+  const [isRuleModalOpen, setIsRuleModalOpen] = useState(false)
+  const [applyRules, setApplyRules] = useState(false)
 
   const headerSort = (field: string) => {
     const filtered = getFilteredData(data, filterInput, filterField)
       .sort((a, b) => a[field] < b[field] ? 1 : -1)
 
-    setRows(getRows(filtered, fieldsKeys, actualPage))
+    setRows(getRows(filtered, fieldsKeys, actualPage, applyRules ? rules : []))
   }
 
   const filterData = () => setFilteredData(
@@ -270,7 +313,7 @@ export const TrackingTable = (props: TrackingTableProp) => {
     const optionsElements = [] as JSX.Element[]
     const selectElements = [] as JSX.Element[]
     const headerElements = [] as JSX.Element[]
-    const rowsElements = getRows(filteredData, fieldsKeys, actualPage)
+    const rowsElements = getRows(filteredData, fieldsKeys, actualPage, applyRules ? rules : [])
     const totalPages = Math.ceil(filteredData.length / ROWS_PER_PAGE)
 
     fieldsKeys.forEach((key, idx) => {
@@ -299,7 +342,7 @@ export const TrackingTable = (props: TrackingTableProp) => {
     setSelectOptions(selectElements)
     setHeaders(<tr>{[<th></th>, ...headerElements]}</tr>)
     setRows(rowsElements)
-  }, [filteredData, actualPage])
+  }, [filteredData, actualPage, applyRules])
 
   return (
     <div className="tracking-table-container">
@@ -322,7 +365,39 @@ export const TrackingTable = (props: TrackingTableProp) => {
             <img src="/icons/excel-white.png" alt="Excel" />
           </div>
         </button>
-          <button onClick={updateAllTrackings} className="tracking-update-button tracking-updateall-button">Atualizar todos</button>
+        <button
+          onClick={updateAllTrackings}
+          className="tracking-update-button tracking-updateall-button"
+        >Atualizar todos</button>
+        <div>
+          <button
+            onClick={() => setApplyRules(!applyRules)}
+            className="tracking-highlight-button"
+            title="Aplica o filtro de regras definidas"
+          >{applyRules ? 'Desativar' : 'Aplicar'} regras</button>
+          <button
+            onClick={() => setIsRuleModalOpen(true)}
+            className="tracking-rules-button"
+          >Regras</button>
+          <div className={`tracking-rules-modal ${isRuleModalOpen ? 'tracking-rules-modal-open' : ''}`}>
+            <div className="tracking-rules-modal-container">
+              <span
+                onClick={() => setIsRuleModalOpen(false)}
+                className="tracking-rules-modal-close-button"
+              >X</span>
+              <div>Insira os termos de pesquisa separados por vírgula (,)</div>
+              <textarea
+                defaultValue={JSON.parse(localStorage.getItem(FILTER_STORAGE_KEY) ?? '[]').join(', ')}
+                onChange={({target: {value}}) => {
+                  const rules = value.split(/\s*,\s*/).map(rule => rule.trim()).filter(rule => !!rule)
+
+                  setRules(rules)
+                  localStorage.setItem(FILTER_STORAGE_KEY, JSON.stringify(rules))
+                }}
+              />
+            </div>
+          </div>
+        </div>
         <div>
           <span>Página </span>
           <select onChange={changePage}>{selectOptions}</select>
@@ -342,3 +417,5 @@ export const TrackingTable = (props: TrackingTableProp) => {
 }
 
 export default TrackingTable
+
+const FILTER_STORAGE_KEY = 'tracking-filter-rules'

@@ -142,6 +142,30 @@
 .tracking-updateall-button {
   height: 4vh;
   width: 8vw;
+  border: none;
+  border-radius: 4px;
+}
+
+.tracking-highlight-button {
+  border: none;
+  padding: 2px 4px;
+  border-radius: 4px 0 0 4px;
+  background-color: rgb(130, 130, 0);
+  color: white;
+  cursor: pointer;
+}
+
+.tracking-rules-button {
+  border: none;
+  padding: 2px 4px;
+  border-radius: 0 4px 4px 0;
+  background-color: rgb(0, 130, 128);
+  color: white;
+  cursor: pointer;
+}
+
+.tracking-highlight-button:hover, .tracking-rules-button:hover {
+  opacity: 80%;
 }
 
 .tracking-table-notify-client {
@@ -157,4 +181,49 @@
 .tracking-table-notify-client > i:hover {
   background-color: #155532;
   color: white;
+}
+
+.tracking-rules-modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.125);
+  display: none;
+}
+.tracking-rules-modal-open {
+  display: grid;
+  place-items: center;
+}
+
+.tracking-rules-modal-container {
+  width: 60%;
+  height: 80%;
+  position: relative;
+  background-color: white;
+  display: grid;
+  grid-template-rows: 20% 80%;
+  place-items: center;
+}
+.tracking-rules-modal-container > div {
+  width: 90%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+.tracking-rules-modal-container > textarea {
+  width: 90%;
+  height: 90%;
+}
+
+.tracking-rules-modal-close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: black;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 10px;
+  cursor: pointer;
 }

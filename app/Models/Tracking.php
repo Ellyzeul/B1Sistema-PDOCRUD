@@ -14,6 +14,10 @@ class Tracking extends Model
 {
 	use HasFactory;
 
+	protected $primaryKey = 'tracking_code';
+
+	public $timestamps = false;
+
 	private array $supportedServices = [
 		"Correios" => true,
 		"Jadlog" => true,
