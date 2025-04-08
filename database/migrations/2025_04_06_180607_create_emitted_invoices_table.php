@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('emitted_invoices', function (Blueprint $table) {
             $table->char('key', 44)->primary();
             $table->integer('number')->unsigned()->index();
-            $table->dateTime('emitted_at');
+            $table->dateTime('emitted_at')->nullable();
             $table->string('order_number')->nullable()->index();
             $table->enum('company', ['seline', 'b1']);
             $table->tinyText('link_danfe')->nullable();
