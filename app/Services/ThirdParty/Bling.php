@@ -334,6 +334,21 @@ class Bling
             ? $response->object()->data
             : $response->object();
     }
+    
+    public function getInvoice(string $id, string $resource = 'invoice')
+    {
+        if($resource === 'order') {
+            $id = $this->getOrder($id)->notaFiscal->id;
+        }
+
+        $accessToken = $this->auth();
+        $response = Http::bling($this->companyId, 'v3', $accessToken)->get("/nfe/{$id}");
+        $data = $response->object()->data;
+
+        return $response->ok()
+            ? $data
+            : (object) ['error' => true];
+    }
 
     /**
      * Funções auxiliares do endpoint /vendas

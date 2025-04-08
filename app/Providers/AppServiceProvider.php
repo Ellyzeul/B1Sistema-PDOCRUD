@@ -119,5 +119,15 @@ class AppServiceProvider extends ServiceProvider
                 ? $client->withToken($token)
                 : $client;
         });
+
+        Http::macro('focusNfe', function(string $company, string $version = 'v2', bool $debug = false) {
+            if($debug) {
+                $token = env($company === 'seline' ? 'FOCUS_NFE_SELINE_TOKEN_TEST' : 'FOCUS_NFE_B1_TOKEN_TEST');
+                return Http::baseUrl("https://homologacao.focusnfe.com.br/$version")->withBasicAuth($token, '');
+            }
+
+            $token = env($company === 'seline' ? 'FOCUS_NFE_SELINE_TOKEN' : 'FOCUS_NFE_B1_TOKEN');
+            return Http::baseUrl("https://api.focusnfe.com.br/$version")->withBasicAuth($token, '');
+        });
     }
 }

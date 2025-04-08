@@ -9,6 +9,7 @@
 .open-address-modal {
   border: none;
   background-color: inherit;
+  padding: 0;
 }
 
 .close-address-modal {

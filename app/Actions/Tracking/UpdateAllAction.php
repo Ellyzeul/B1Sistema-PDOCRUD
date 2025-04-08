@@ -30,7 +30,7 @@ class UpdateAllAction
 				try {
 					$response = (new UpdateOrInsertPurchaseTrackingAction())->handle($row->tracking_code, $row->delivery_method);
 				}
-				catch(Exception $e) {
+				catch(\Exception) {
 					$totalErrors+=1;
 					continue;
 				}
@@ -43,7 +43,7 @@ class UpdateAllAction
 				try {
 					$response = (new UpdateOrInsertOrderTrackingAction())->handle($row->tracking_code, $row->delivery_method);
 				}
-				catch(Exception $e) {
+				catch(\Exception) {
 					$totalErrors+=1;
 					continue;
 				}

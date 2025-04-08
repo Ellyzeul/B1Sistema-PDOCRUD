@@ -1,6 +1,7 @@
 <?php namespace App\Actions\Tracking;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ReadOrdersAction
 {
@@ -28,7 +29,9 @@ class ReadOrdersAction
 			)
 			->where('order_control.id_phase', '=', '5.1')
 			->orWhere('order_control.id_phase', '=', '5.2')
-			->get();
+			->get()
+			->filter(fn(\stdClass $tracking) => !Str::startsWith($tracking->tracking_code, '000'))
+			->values();
 		
 		return $results;
     }

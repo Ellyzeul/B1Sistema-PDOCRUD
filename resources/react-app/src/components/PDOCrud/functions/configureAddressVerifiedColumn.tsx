@@ -56,12 +56,30 @@ const configureRows = async(rows: HTMLTableRowElement[], colIdx: number) => {
     const orderId = row.cells[orderIdColIdx].textContent?.trim() as string
     const style = cell.style
     const salesChannel = row.cells[salesChannelColIdx].textContent?.trim() as string
+    const btnContainer = document.createElement('div')
 
     style.display = 'grid'
     style.placeItems = 'center'
 
     addCheckbox(input, checkboxes, onKeyDown)
-    addModal(cell, orderNumber, orderId, salesChannel, blacklist)
+    addModal(btnContainer, orderNumber, orderId, salesChannel, blacklist)
+
+    const addressLink = document.createElement('a')
+    const addressIcon = document.createElement('i')
+
+    addressIcon.className = `address-modal-btn fa-solid fa-address-book`
+    addressLink.appendChild(addressIcon)
+    addressLink.href = `/atendimento/enderecos?order-number=${orderNumber}&order-id=${orderId}`
+    addressLink.target = 'blank'
+
+    btnContainer.appendChild(addressLink)
+    cell.appendChild(btnContainer)
+
+    cell.style.padding = '0'
+    btnContainer.style.paddingTop = '5px'
+    btnContainer.style.width = '100%'
+    btnContainer.style.display = 'flex'
+    btnContainer.style.justifyContent = 'space-evenly'
   })
 
   saveBtn.addEventListener('click', onClick)
@@ -101,7 +119,7 @@ const addCheckbox = (
   })
 }
 
-const addModal = (cell: HTMLTableCellElement, orderNumber: string, orderId: string, salesChannel: string, blacklist: Record<string, boolean>) => {
+const addModal = (cell: HTMLElement, orderNumber: string, orderId: string, salesChannel: string, blacklist: Record<string, boolean>) => {
   const modalContainer = document.createElement('div')
   const modalRoot = createRoot(modalContainer)
 
