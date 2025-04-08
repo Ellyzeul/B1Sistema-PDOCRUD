@@ -498,50 +498,19 @@ class Order extends Model
             "link_simplified" => $linkSimplified,
         ];
     }
-    
+
     public function getInvoiceLink(string $companyId, string $blingNumber)
     {
-        $data = $this->getInvoiceNumberAndSerie($companyId, $blingNumber);
-        $invoice_number = $data['invoice_number'];
-        $serie = $data['serie'];
-        $idInvoice = $data['id_invoice'];
-        $idBling = $data['id_bling'];
-
-        $apikey = env($this->blingAPIKeys[$companyId > 1 ? 1 : $companyId]);
-        $linkDanfe = $this->getDanfeLink($apikey, $invoice_number, $serie);
-        if(isset($linkDanfe['error'])) return $linkDanfe;
-
-        $linkFull = $linkDanfe;
+        $bling = new ThirdPartyBling(intval($companyId > 1 ? 1 : $companyId));
+        $order = $bling->getOrder($blingNumber);
+        $invoice = $bling->getInvoice($order->notaFiscal->id);
 
         return [
-            "id_bling" => $idBling,
-            "invoice_number" => $invoice_number,
-            "serie" => $serie,
-            "link_full" => $linkFull, 
-            "link_simplified" => "https://www.bling.com.br/relatorios/danfe.simplificado.php?idNota1=$idInvoice"
-        ];
-    }
-
-    private function getInvoiceNumberAndSerie(string $companyId, string $blingNumber)
-    {
-        $apikey = env($this->blingAPIKeys[$companyId > 1 ? 1 : $companyId]);
-        $response = $this->makeBlingOrderRequest($apikey, $blingNumber);
-        $orderResponse = (new ThirdPartyBling($companyId > 1 ? 1 : $companyId))->getOrder($blingNumber);
-        if(isset($response['error'])) return $response;
-
-        $order = $response['retorno']['pedidos'][0]['pedido'];
-
-        $invoice_number = $order['nota']['numero'] ?? null;
-        $serie = $order['nota']['serie'] ?? null;
-
-        preg_match("/[0-9]{5}$/", $invoice_number, $treated_arr);
-        $treated_number = $treated_arr[0] ?? null;
-
-        return [
-            "id_bling" => $orderResponse->id, 
-            "id_invoice" => $orderResponse->notaFiscal->id, 
-            "invoice_number" => $treated_number,
-            "serie" => $serie
+            "id_bling" => $order->id,
+            "invoice_number" => $invoice->numero,
+            "serie" => $invoice->serie,
+            "link_full" => "https://www.bling.com.br/relatorios/danfe.php?idNota1={$invoice->id}", 
+            "link_simplified" => "https://www.bling.com.br/relatorios/danfe.simplificado.php?idNota1={$invoice->id}"
         ];
     }
 

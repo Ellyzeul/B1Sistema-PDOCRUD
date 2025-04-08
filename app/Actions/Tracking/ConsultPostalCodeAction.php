@@ -22,7 +22,18 @@ class ConsultPostalCodeAction
             return (new Correios())->consultPostalCode($postalCode);
         }
         catch(\Exception) {
-            return (new EnviaDotCom())->validateAddress($postalCode);
+            try {
+                return (new EnviaDotCom())->validateAddress($postalCode);
+            }
+            catch(\Exception) {
+                return [
+                    "postal_code" => null,
+                    "adress" => null,
+                    "county" => null,
+                    "city" => null,
+                    "uf"=>  null,
+                ];
+            }
         }
 	}    
 }

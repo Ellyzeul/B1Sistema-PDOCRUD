@@ -9,13 +9,26 @@ import { ToastContainer, toast } from "react-toastify";
 export default function AddressPage() {
   const [params] = useSearchParams()
   const formRef = useRef(null)
-  const [{address, order, validate_address}, setInitialState] = useState({} as Record<string, Record<string, unknown>>)
+  const [initialState, setInitialState] = useState({} as {
+    address: Record<string, unknown>,
+    order: Record<string, unknown>,
+    items: Array<Record<string, unknown>>,
+    validate_address: Record<string, unknown>,
+    invoice: EmittedInvoice | null,
+  })
+  const {address, order, items, validate_address, invoice} = initialState
   const [validation, setValidation] = useState({} as Record<string, string>)
 
   useEffect(() => {
     api.get(`/api/address?order_number=${params.get('order-number')}&order_id=${params.get('order-id')}`)
       .then(response => response.data)
-      .then((response: Record<string, Record<string, unknown>>) => {
+      .then((response: {
+        address: Record<string, unknown>,
+        order: Record<string, unknown>,
+        items: Array<Record<string, unknown>>,
+        validate_address: Record<string, unknown>,
+        invoice: EmittedInvoice | null,
+      }) => {
         console.log(response)
         setInitialState(response)
         setValidation(response.address as Record<string, string>)
@@ -67,6 +80,49 @@ export default function AddressPage() {
       })
   }
 
+  function handleCreateInvoice() {
+    if(!formRef.current) return
+    const address = getAddress(formRef.current as HTMLFormElement)
+    address.delivery_method = Number(address.delivery_method) === 0 ? null : address.delivery_method
+    const items = getItems(formRef.current as HTMLFormElement)
+    const loadingId = toast.loading('Gerando nota fiscal...')
+
+    api.post('/api/emitted-invoice', {
+      company: COMPANIES[order['id_company'] as number],
+      order_number: order['online_order_number'],
+      address,
+      items,
+    })
+      .then(response => response.data)
+      .then(({status, ...response}) => {
+        toast.dismiss(loadingId)
+
+        if(status === 'autorizado') {
+          toast.success('Nota gerada!')
+          setInitialState({
+            ...initialState,
+            invoice: response,
+          })
+          return
+        }
+        if(status === 'duplicado') {
+          toast.info(response.mensagem_sefaz)
+          return
+        }
+        if(status === 'erro_validacao') {
+          toast.error(response.mensagem)
+          return
+        }
+
+        toast.error(`Erro ${response.status_sefaz}: ${response.mensagem_sefaz}`)
+      })
+      .catch(err => {
+        toast.dismiss(loadingId)
+        toast.error('Algum erro ocorreu')
+        console.log(err)
+      })
+  }
+
   function Input({defaultValue, name, type, label, width, options, onChange}: InputProp) {
     return (
       <div className="attendance-address-input-container" style={width ? {width: `${width}%`} : {}}>
@@ -104,7 +160,8 @@ export default function AddressPage() {
                   <Input defaultValue={address['buyer_email']} type="text" name="buyer_email" label="E-mail" width={20} />
                 </div>
                 <div>
-                  <Input defaultValue={address['address_1']} type="text" name="address_1" label="Endereço" width={60} />
+                  <Input defaultValue={address['address_1']} type="text" name="address_1" label="Endereço" width={40} />
+                  <Input defaultValue={address['address_number']} type="text" name="address_number" label="Número" width={20} />
                   <Input defaultValue={address['address_2']} type="text" name="address_2" label="Complemento" width={30} />
                 </div>
                 <div>
@@ -152,6 +209,31 @@ export default function AddressPage() {
                 <div>
                   <div>{validate_address['adress'] as string}, {validate_address['county'] as string}, {validate_address['city'] as string} - {validate_address['uf'] as string}</div>
                 </div>
+                {
+                  invoice
+                    ? <div className="address-page-invoice-container">
+                      <div><strong>Nota Fiscal:</strong></div>
+                      <div>Chave: {invoice.key}</div>
+                      <div>Número: {invoice.number}</div>
+                      <div>{invoice.link_danfe ? <a target="_blank" href={invoice.link_danfe} rel="noreferrer">Link DANFE</a> : <></>}</div>
+                      <div>{invoice.link_xml ? <a target="_blank" href={invoice.link_xml} rel="noreferrer">Link XML</a> : <></>}</div>
+                    </div>
+                    : <></>
+                }
+                <div className="address-page-items">
+                  <div><strong>Itens:</strong></div>
+                  {
+                    groupItems(items).map((item) => <div className="address-page-item-row">
+                      <div>
+                        <div><strong>ISBN</strong></div>
+                        <div>{item['isbn'] as string}</div>
+                      </div>
+                      <Input type="number" name="quantity" defaultValue={item['quantity']} label="Quantidade" width={20}/>
+                      <Input type="number" name="value" defaultValue={String(item['selling_price']).replace('.', ',')} label="Valor" width={20}/>
+                      <Input type="number" name="weight" defaultValue={String(item['weight']).replace('.', ',')} label="Peso" width={20}/>
+                    </div>)
+                  }
+                </div>
               </form>
               <div className="attendance-address-btn-group">
                 <input
@@ -161,6 +243,7 @@ export default function AddressPage() {
                   onClick={handleClick}
                 />
                 <button onClick={handleCreateShipment}>Criar rastreio</button>
+                {!initialState.invoice ? <button onClick={handleCreateInvoice}>Criar nota</button> : <></>}
               </div>
             </>
             : <div className="attendance-address-loading">
@@ -172,6 +255,40 @@ export default function AddressPage() {
       <ToastContainer/>
     </div>
   )
+}
+
+function getItems(form: HTMLFormElement) {
+  const items: Array<{
+    isbn: string,
+    quantity: number,
+    value: number,
+    weight: number,
+  }> = []
+
+  form.querySelectorAll('div.address-page-item-row').forEach(row => items.push({
+    isbn: String(row.children[0].children[1].textContent),
+    quantity: Number((row.children[1].children[1] as HTMLInputElement).value),
+    value: Number((row.children[2].children[1] as HTMLInputElement).value.replace(',', '.')),
+    weight: Number((row.children[3].children[1] as HTMLInputElement).value.replace(',', '.')),
+  }))
+
+  return items
+}
+
+function groupItems(items: Array<Record<string, unknown>>): Array<Record<string, unknown>> {
+  const byIsbn: Record<string, Array<Record<string, unknown>>> = {}
+
+  items.forEach(item => {
+    const isbn = item['isbn'] as string
+    byIsbn[isbn] = !byIsbn[isbn] ? [] : byIsbn[isbn]
+
+    byIsbn[isbn].push(item)
+  })
+
+  return Object.keys(byIsbn).map(isbn => ({
+    ...byIsbn[isbn][0],
+    quantity: byIsbn[isbn].length,
+  }))
 }
 
 function getAddress(form: HTMLFormElement): Record<string, string|null> {
@@ -227,6 +344,14 @@ const DELIVERY_METHODS: Record<number, string> = {
   13: 'USPS',
 }
 
+const COMPANIES: Record<number, string> = {
+  0: 'seline',
+  1: 'b1',
+  2: 'j1',
+  3: 'r1',
+  5: 'livrux',
+}
+
 type InputProp = {
   defaultValue: unknown,
   name: string,
@@ -235,4 +360,16 @@ type InputProp = {
   width?: number,
   options?: Record<number, string>,
   onChange?: (event: FormEvent<HTMLInputElement|HTMLSelectElement>) => unknown,
+}
+
+type EmittedInvoice = {
+  key: string,
+  number: string,
+  emitted_at: string,
+  order_number: number,
+  company: 'seline' | 'b1',
+  link_danfe?: string,
+  link_xml?: string,
+  cancelled: boolean,
+  cancelment_same_day?: boolean,
 }
