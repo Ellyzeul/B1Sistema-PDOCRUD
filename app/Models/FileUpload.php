@@ -66,6 +66,7 @@ class FileUpload extends Model
 			'buyer_name' => $registry['buyer_name'], 
 			'buyer_email' => $registry['buyer_email'], 
 			'buyer_phone' => $registry['buyer_phone'], 
+			'cpf_cnpj' => $registry['cpf_cnpj'],
 			'recipient_name' => $registry['recipient_name'], 
 			'ship_phone' => $registry['ship_phone'], 
 			'address_1' => $registry['address_1'], 
