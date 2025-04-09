@@ -39,12 +39,14 @@ export default function AddressPage() {
     if(!formRef.current) return
     const body = getAddress(formRef.current as HTMLFormElement)
     body.delivery_method = Number(body.delivery_method) === 0 ? null : body.delivery_method
+    const items = getItems(formRef.current)
 
     const loadingId = toast.loading('Salvando...')
     api.put('/api/address', {
       order_number: address['online_order_number'],
       order_id: params.get('order-id'),
       address: body,
+      items,
     })
       .then(() => {
         toast.dismiss(loadingId)
@@ -125,7 +127,7 @@ export default function AddressPage() {
       })
   }
 
-  function Input({defaultValue, name, type, label, width, options, onChange}: InputProp) {
+  function Input({defaultValue, name, type, label, readonly, width, options, onChange}: InputProp) {
     return (
       <div className="attendance-address-input-container" style={width ? {width: `${width}%`} : {}}>
         <label htmlFor={name}>{label}</label>
@@ -134,6 +136,7 @@ export default function AddressPage() {
             ? <input
               type={type}
               name={name}
+              readOnly={!!readonly}
               defaultValue={defaultValue as any}
               onChange={onChange}
             />
@@ -196,13 +199,19 @@ export default function AddressPage() {
                   <Input defaultValue={address['delivery_instructions']} type="text" name="delivery_instructions" label="Instruções de entrega" width={40} />
                 </div>
                 <div>
-                  <Input defaultValue={address['price']} type="number" name="price" label="Preço" />
+                  <div className="attendance-address-input-container">
+                    <div>Subtotal</div>
+                    <span>R$ {String(items.map(item => item['selling_price'] as number).reduce((acc, cur) => acc + cur, 0)).replace('.', ',').replace(/^0+/, '')}</span>
+                  </div>
                   <Input defaultValue={address['freight']} type="number" name="freight" label="Frete" />
                   <Input defaultValue={address['freight_tax']} type="number" name="freight_tax" label="Taxa do frete" />
                 </div>
                 <div>
                   <Input type="select" name="delivery_method" defaultValue={order['id_delivery_method'] ?? null} label="Método de entrega" options={DELIVERY_METHODS}/>
-                  <Input type="number" name="weight" defaultValue={String(order['weight']).replace('.', ',')} label="Peso"/>
+                  <div className="attendance-address-input-container">
+                    <div>Peso</div>
+                    <span>{String(items.map(item => item['weight'] as number).reduce((acc, cur) => acc + cur, 0)).replace('.', ',').replace(/^0+/, '0')}Kg</span>
+                  </div>
                   <Input type="number" name="height" defaultValue={3} label="Altura"/>
                   <Input type="number" name="width" defaultValue={18} label="Largura"/>
                   <Input type="number" name="length" defaultValue={18} label="Comprimento"/>
@@ -231,8 +240,9 @@ export default function AddressPage() {
                         <div>{item['isbn'] as string}</div>
                       </div>
                       <Input type="number" name="quantity" defaultValue={item['quantity']} label="Quantidade" width={20}/>
-                      <Input type="number" name="value" defaultValue={String(item['selling_price']).replace('.', ',')} label="Valor" width={20}/>
+                      <Input type="number" name="value" defaultValue={String(item['selling_price']).replace('.', ',')} label="Valor" width={20} readonly={true}/>
                       <Input type="number" name="weight" defaultValue={String(item['weight']).replace('.', ',')} label="Peso" width={20}/>
+                      <input className="address-page-item-hidden-input" type="number" name="id" value={String(item['id'])}/>
                     </div>)
                   }
                 </div>
@@ -265,6 +275,7 @@ function getItems(form: HTMLFormElement) {
     quantity: number,
     value: number,
     weight: number,
+    id: number,
   }> = []
 
   form.querySelectorAll('div.address-page-item-row').forEach(row => items.push({
@@ -272,6 +283,7 @@ function getItems(form: HTMLFormElement) {
     quantity: Number((row.children[1].children[1] as HTMLInputElement).value),
     value: Number((row.children[2].children[1] as HTMLInputElement).value.replace(',', '.')),
     weight: Number((row.children[3].children[1] as HTMLInputElement).value.replace(',', '.')),
+    id: Number((row.children[4] as HTMLInputElement).value),
   }))
 
   return items
@@ -359,6 +371,7 @@ type InputProp = {
   name: string,
   type: string,
   label: string,
+  readonly?: boolean,
   width?: number,
   options?: Record<number, string>,
   onChange?: (event: FormEvent<HTMLInputElement|HTMLSelectElement>) => unknown,

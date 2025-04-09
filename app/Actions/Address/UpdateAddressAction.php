@@ -11,16 +11,16 @@ class UpdateAddressAction
 {
   public function handle(Request $request)
   {
-    $order = Order::find($request->order_id);
-
-    if(isset($order)) $this->handleOrder($request, $order);
+    collect($request->items)->each(fn(array $item) => $this->handleOrder($request, $item));
 
     return Address::find($request->order_number)->update($request->address);
   }
 
-  private function handleOrder(Request $request, Order $order)
+  private function handleOrder(Request $request, array $orderData)
   {
-    $order->weight = $request->address['weight'];
+    $order = Order::find($orderData['id']);
+
+    $order->weight = $orderData['weight'];
     $order->id_delivery_method = $request->address['delivery_method'] === 0
       ? null
       : $request->address['delivery_method'];
