@@ -110,7 +110,9 @@ export default function AddressPage() {
           return
         }
         if(status === 'erro_validacao') {
-          toast.error(response.mensagem)
+          toast.error(response.mensagem, {
+            style: {whiteSpace: 'pre-line'}
+          })
           return
         }
 

@@ -49,11 +49,15 @@ class CreateAction
       'items' => $items,
     ])->object();
 
-    Log::debug(isset($createResponse->codigo) ? 'setado' : 'não setado');
+    Log::debug(json_encode($createResponse));
     if(isset($createResponse->codigo)) {
       return [
         'status' => 'erro_validacao',
-        'mensagem' => $createResponse->mensagem,
+        'mensagem' => $createResponse->mensagem . (
+          isset($createResponse->erros)
+            ? "\n\n".collect($createResponse->erros)->map(fn($error) => '- ' . $error->campo . ': ' . $error->mensagem)->join('\n')
+            : ''
+          ),
       ];
     }
 
