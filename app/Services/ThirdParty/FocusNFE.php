@@ -20,6 +20,24 @@ class FocusNFE
       'fantasy_name' => 'B1 Comércio de Livros',
       'state_registration' => '136548985112',
     ],
+    'j1' => [
+      'cnpj' => '47317204000114',
+      'name' => 'B1 Comercio de Livros e Distribuidora LTDA',
+      'fantasy_name' => 'B1 Comércio de Livros',
+      'state_registration' => '136548985112',
+    ],
+    'r1' => [
+      'cnpj' => '47317204000114',
+      'name' => 'B1 Comercio de Livros e Distribuidora LTDA',
+      'fantasy_name' => 'B1 Comércio de Livros',
+      'state_registration' => '136548985112',
+    ],
+    'livrux' => [
+      'cnpj' => '47317204000114',
+      'name' => 'B1 Comercio de Livros e Distribuidora LTDA',
+      'fantasy_name' => 'B1 Comércio de Livros',
+      'state_registration' => '136548985112',
+    ],
   ];
 
   public function create(string $company, string $orderNumber, array $data)
