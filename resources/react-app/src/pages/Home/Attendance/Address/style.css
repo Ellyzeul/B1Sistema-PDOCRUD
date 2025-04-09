@@ -68,6 +68,11 @@
   font-weight: bold;
 }
 
+.attendance-address-input-container > span {
+  font-size: medium;
+  font-weight: 500;
+}
+
 .attendance-address-input-container > input {
   width: 100%;
   padding: 4px;
@@ -95,6 +100,10 @@
 .address-page-item-row {
   width: 100%;
   display: flex;
+}
+
+.address-page-item-hidden-input {
+  visibility: hidden;
 }
 
 .address-page-invoice-container {
