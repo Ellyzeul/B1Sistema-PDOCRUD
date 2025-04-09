@@ -49,6 +49,7 @@ export const fields = {
     {label: "shipping-tax", field_name: "freight_tax", updatable: true, required: true},
     {label: "item-promotion-discount", field_name: "discount_item", updatable: true, required: true},
     {label: "ship-county", field_name: "county", updatable: true, required: true},
+    {label: "cpf", field_name: "cpf_cnpj", updatable: true, required: true},
     {label: "buyer-phone-number", field_name: "buyer_phone", updatable: true, required: true},
     {label: "ship-phone-number", field_name: "ship_phone", updatable: true, required: true},
     {label: "buyer-name", field_name: "buyer_name", updatable: true, required: true},

@@ -84,7 +84,8 @@ class FocusNFE
         "cofins_situacao_tributaria" => "07",
       ]), 
       "valor_total" => "".$data['total_value'], 
-      "modalidade_frete" => "0", 
+      "modalidade_frete" => "1", 
+      "valor_frete" => "".$data['freight'],
       "formas_pagamento" => [[
         "forma_pagamento" => "01", 
         "valor_pagamento" => "".$data['total_value'], 
@@ -105,10 +106,10 @@ class FocusNFE
 
   private function getNumero(string $company)
   {
-    return EmittedInvoice::where('company', $company === 'seline' ? 'seline' : 'b1')
+    return (EmittedInvoice::where('company', $company === 'seline' ? 'seline' : 'b1')
       ->orderBy('number', 'desc')
       ->first()
-      ->number ?? 1;
+      ->number ?? 0) + 1;
   }
 
   private function getSkuPrefix(string $company, array $data)
