@@ -201,16 +201,20 @@ export default function AddressPage() {
                 <div>
                   <div className="attendance-address-input-container">
                     <div>Subtotal</div>
-                    <span>R$ {String(items.map(item => item['selling_price'] as number).reduce((acc, cur) => acc + cur, 0)).replace('.', ',').replace(/^0+/, '')}</span>
+                    <span>R$ {String(items.map(item => Number(item['selling_price'])).reduce((acc, cur) => acc + cur, 0)).replace('.', ',')}</span>
                   </div>
                   <Input defaultValue={address['freight']} type="number" name="freight" label="Frete" />
                   <Input defaultValue={address['freight_tax']} type="number" name="freight_tax" label="Taxa do frete" />
+                  <div className="attendance-address-input-container">
+                    <div>Total</div>
+                    <span>R$ {(String(items.map(item => Number(item['selling_price'])).reduce((acc, cur) => acc + cur, 0) + Number(address['freight']))).replace('.', ',')}</span>
+                  </div>
                 </div>
                 <div>
                   <Input type="select" name="delivery_method" defaultValue={order['id_delivery_method'] ?? null} label="Método de entrega" options={DELIVERY_METHODS}/>
                   <div className="attendance-address-input-container">
                     <div>Peso</div>
-                    <span>{String(items.map(item => item['weight'] as number).reduce((acc, cur) => acc + cur, 0)).replace('.', ',').replace(/^0+/, '0')}Kg</span>
+                    <span>{String(items.map(item => Number(item['weight'])).reduce((acc, cur) => acc + cur, 0)).replace('.', ',')}Kg</span>
                   </div>
                   <Input type="number" name="height" defaultValue={3} label="Altura"/>
                   <Input type="number" name="width" defaultValue={18} label="Largura"/>
