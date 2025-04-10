@@ -44,7 +44,7 @@ class CreateShipmentAction
           'length' => $address['length'],
           'width' => $address['width'],
           'height' => $address['height'],
-          'value' => Str::replace(',', '.', $address['price']),
+          'value' => Str::replace(',', '.', $request->price),
         ]);
     
         return $response->trackingCode;
