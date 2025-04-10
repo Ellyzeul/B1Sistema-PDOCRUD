@@ -238,15 +238,15 @@ export default function AddressPage() {
                 <div className="address-page-items">
                   <div><strong>Itens:</strong></div>
                   {
-                    groupItems(items).map((item) => <div className="address-page-item-row">
+                    groupItems(items).map((item, key) => <div className="address-page-item-row" key={key}>
                       <div>
                         <div><strong>ISBN</strong></div>
                         <div>{item['isbn'] as string}</div>
                       </div>
                       <Input type="number" name="quantity" defaultValue={item['quantity']} label="Quantidade" width={20}/>
-                      <Input type="number" name="value" defaultValue={String(item['selling_price']).replace('.', ',')} label="Valor" width={20} readonly={true}/>
-                      <Input type="number" name="weight" defaultValue={String(item['weight']).replace('.', ',')} label="Peso" width={20}/>
-                      <input className="address-page-item-hidden-input" type="number" name="id" value={String(item['id'])}/>
+                      <Input type="number" name="value" defaultValue={item['selling_price']} label="Valor" width={20} readonly={true}/>
+                      <Input type="number" name="weight" defaultValue={item['weight']} label="Peso" width={20}/>
+                      <input className="address-page-item-hidden-input" type="number" name="id" value={String(item['id'])} readOnly/>
                     </div>)
                   }
                 </div>
