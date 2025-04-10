@@ -74,6 +74,7 @@ export default function AddressPage() {
     api.post('/api/tracking/shipment', {
       order_id: params.get('order-id'),
       address: body,
+      price: items.map(item => Number(item['selling_price'])).reduce((acc, cur) => acc + cur, 0),
       weight: items.map(item => Number(item['weight'])).reduce((acc, cur) => acc + cur, 0),
     })
       .then(response => response.data)
