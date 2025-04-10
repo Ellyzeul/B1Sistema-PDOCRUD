@@ -63,6 +63,10 @@ export default function AddressPage() {
 
     const body = getAddress(formRef.current as HTMLFormElement)
     if(!validateBody(body)) return
+    if(!((formRef.current as HTMLFormElement).querySelector('input[name="cpf_cnpj"]') as HTMLInputElement).value.trim()) {
+      toast.error('O campo CPF/CNPJ não pode estar vazio')
+      return
+    }
 
     const loadingId = toast.loading('Criando rastreio')
 
@@ -70,6 +74,7 @@ export default function AddressPage() {
     api.post('/api/tracking/shipment', {
       order_id: params.get('order-id'),
       address: body,
+      weight: items.map(item => Number(item['weight'])).reduce((acc, cur) => acc + cur, 0),
     })
       .then(response => response.data)
       .then(({tracking_code}) => {
@@ -170,9 +175,9 @@ export default function AddressPage() {
                   <Input defaultValue={address['address_2']} type="text" name="address_2" label="Complemento" width={30} />
                 </div>
                 <div>
-                  <Input defaultValue={address['county']} type="text" name="county" label="Bairro" width={20} />
-                  <Input defaultValue={address['city']} type="text" name="city" label="Cidade" width={20} />
-                  <Input defaultValue={address['state']} type="text" name="state" label="Estado" width={20} />
+                  <Input defaultValue={address['county']} type="text" name="county" label="Bairro" width={18} />
+                  <Input defaultValue={address['city']} type="text" name="city" label="Cidade" width={18} />
+                  <Input defaultValue={address['state']} type="text" name="state" label="Estado" width={18} />
                   <div>
                     <Input 
                       defaultValue={validation['postal_code']} 
@@ -190,7 +195,7 @@ export default function AddressPage() {
                         : <></>
                     }
                   </div>
-                  <Input defaultValue={address['country']} type="text" name="country" label="País" width={20} />
+                  <Input defaultValue={address['country']} type="text" name="country" label="País" width={18} />
                 </div>
                 <div>
                   <Input defaultValue={address['expected_date']} type="date" name="expected_date" label="Data prevista" />
