@@ -40,7 +40,7 @@ class CreateShipmentAction
           'postal_code' => $address['postal_code'],
           'phone' => $address['ship_phone'],
           'cpf_cnpj' => $address['cpf_cnpj'],
-          'weight' => intval($address['weight']) * 1000,
+          'weight' => intval($request->weight) * 1000,
           'length' => $address['length'],
           'width' => $address['width'],
           'height' => $address['height'],
