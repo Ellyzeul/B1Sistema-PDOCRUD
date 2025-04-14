@@ -44,7 +44,7 @@ class CreateAction
       'country' => $address['country'],
       'postal_code' => $address['postal_code'],
       'phone' => $address['buyer_phone'],
-      'total_value' => $items->map(fn($item) => $item['value'])->reduce(fn($acc, $cur) => $acc + $cur, 0) + floatval($address['freight']),
+      'total_value' => $items->map(fn($item) => intval($item['value']) * intval($item['quantity']))->reduce(fn($acc, $cur) => $acc + $cur, 0) + floatval($address['freight']),
       'freight' => floatval($address['freight']),
       'items' => $items,
     ])->object();
@@ -71,6 +71,10 @@ class CreateAction
         continue;
       }
 
+      if($response->status !== 'autorizado') {
+        return $response;
+      }
+
       return $this->handleDatabaseInsert($response, $date, $company);
     }
   }
@@ -82,9 +86,9 @@ class CreateAction
       'number' => intval($invoice->numero),
       'emitted_at' => $date,
       'order_number' => $invoice->ref,
-      'company' => $company,
-      'link_danfe' => $this->getFocusBaseUrl(debug: true).$invoice->caminho_danfe,
-      'link_xml' => $this->getFocusBaseUrl(debug: true).$invoice->caminho_xml_nota_fiscal,
+      'company' => $company === 'seline' ? 'seline' : 'b1',
+      'link_danfe' => $this->getFocusBaseUrl().$invoice->caminho_danfe,
+      'link_xml' => $this->getFocusBaseUrl().$invoice->caminho_xml_nota_fiscal,
     ]);
   }
 

@@ -3,6 +3,7 @@
 namespace App\Services\ThirdParty;
 
 use App\Models\EmittedInvoice;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 
 class FocusNFE
@@ -43,8 +44,9 @@ class FocusNFE
   public function create(string $company, string $orderNumber, array $data)
   {
     $number = $this->getNumero($company);
+    $totalItems = $this->getTotalItems($data['items']);
 
-    return Http::focusNfe($company, debug: true)->post("/nfe?ref=$orderNumber", [
+    return Http::focusNfe($company)->post("/nfe?ref=$orderNumber", [
       "natureza_operacao" => "Venda", 
       "data_emissao" => date('Y-m-d\TH:i:sP'),
       "tipo_documento" => "1", 
@@ -76,24 +78,25 @@ class FocusNFE
       "cep_destinatario" => $data['postal_code'],
       "telefone_destinatario" => $data['phone'],
       "indicador_inscricao_estadual_destinatario" => "9",
-      "valor_original_fatura" => $data['total_value'],
+      "valor_original_fatura" => number_format($data['total_value'], 4),
       "valor_desconto_fatura" => 0,
-      "valor_liquido_fatura" => $data['total_value'],
+      "valor_liquido_fatura" => number_format($data['total_value'], 4),
       "itens" => $data['items']->map(fn($item, $index) => [
         "numero_item" => "".($index+1),
         "codigo_produto" => $this->getSkuPrefix($company, $data) . $item['isbn'],
         "codigo_barras_comercial" => $item['isbn'],
         "codigo_barras_tributavel" => $item['isbn'],
         "descricao" => "Livro ".$item['isbn'],
-        "codigo_ncm" => "49019900",
-        "cest" => "2806400",
-        "cfop" => "5102",
+        "codigo_ncm" => $data['ncm'] ?? "49019900",
+        "cest" => $data['cest'] ?? "2806400",
+        "cfop" => $data['cfop'] ?? $this->getCfop($data),
         "unidade_comercial" => "UN",
-        "quantidade_comercial" => $item['quantity'].".0000",
-        "valor_unitario_comercial" => "".$item['value'],
+        "quantidade_comercial" => number_format($item['quantity'], 4),
+        "valor_unitario_comercial" => number_format($item['value'], 4),
         "unidade_tributavel" => "UN",
-        "quantidade_tributavel" => $item['quantity'].".0000",
-        "valor_unitario_tributavel" => "".$item['value'],
+        "quantidade_tributavel" => number_format($item['quantity'], 4),
+        "valor_unitario_tributavel" => number_format($item['value'], 4),
+        "valor_frete" => number_format(($data['freight'] / $totalItems) * intval($item['quantity']), 4),
         "inclui_no_total" => "1",
         "icms_percentual_partilha" => "100.0000",
         "icms_origem" => "0",
@@ -101,25 +104,38 @@ class FocusNFE
         "pis_situacao_tributaria" => "07",
         "cofins_situacao_tributaria" => "07",
       ]), 
-      "valor_total" => "".$data['total_value'], 
-      "modalidade_frete" => "1", 
-      "valor_frete" => "".$data['freight'],
+      "valor_total" => number_format($data['total_value'], 4),
+      "modalidade_frete" => "1",
+      "valor_frete" => number_format($data['freight'], 4),
       "formas_pagamento" => [[
-        "forma_pagamento" => "01", 
-        "valor_pagamento" => "".$data['total_value'], 
-        "tipo_integracao" => null 
+        "forma_pagamento" => "01",
+        "valor_pagamento" => number_format($data['total_value'], 4),
+        "tipo_integracao" => null,
       ]], 
       "numero" => $number,
-      "numero_fatura" => ''.$number,
-      "valor_original_fatura" => $data['total_value'],
+      "numero_fatura" => "$number",
+      "valor_original_fatura" => number_format($data['total_value'], 4),
       "valor_desconto_fatura" => 0,
-      "valor_liquido_fatura" => $data['total_value'],
+      "valor_liquido_fatura" => number_format($data['total_value'], 4),
       "informacoes_adicionais_contribuinte" => "Pedido de compra Nº $orderNumber", 
       "cnpj_responsavel_tecnico" => self::COMPANY_INFO[$company]['cnpj'], 
       "contato_responsavel_tecnico" => "Roberto Vicente Lima",
       "email_responsavel_tecnico" => "financeiro@biblio1.com.br",
       "telefone_responsavel_tecnico" => "1130909280",
     ]);
+  }
+
+  private function getCfop(array $data)
+  {
+    if($data['uf'] === 'SP') return '5102';
+    if($data['country'] !== 'BR') return '7102';
+
+    return '6109';
+  }
+
+  private function getTotalItems(Collection $items)
+  {
+    return $items->map(fn(array $item) => intval($item['quantity']))->reduce(fn($acc, $cur) => $acc + $cur, 0);
   }
 
   private function getNumero(string $company)
@@ -169,6 +185,6 @@ class FocusNFE
 
   public function get(string $company, string $orderNumber)
   {
-    return Http::focusNfe($company, debug: true)->get("/nfe/$orderNumber");
+    return Http::focusNfe($company)->get("/nfe/$orderNumber");
   }
 }
