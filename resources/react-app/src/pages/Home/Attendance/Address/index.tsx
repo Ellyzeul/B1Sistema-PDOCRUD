@@ -105,7 +105,7 @@ export default function AddressPage() {
       .then(({status, ...response}) => {
         toast.dismiss(loadingId)
 
-        if(status === 'autorizado') {
+        if(!!response.key) {
           toast.success('Nota gerada!')
           setInitialState({
             ...initialState,
