@@ -33,14 +33,14 @@ export default function InvoicesPage() {
               <div>Status</div>
               <div>Links</div>
             </div>
-            {Array.from(invoices).splice(ROWS_PER_PAGE * page, ROWS_PER_PAGE).map(({number, emitted_at, company, link_danfe, link_xml, cancelled}, key) => <div className="emitted-invoices-row" key={key+1}>
+            {Array.from(invoices).splice(ROWS_PER_PAGE * page, ROWS_PER_PAGE).map(({key, number, emitted_at, company, link_danfe, link_xml, cancelled}, index) => <div className="emitted-invoices-row" key={index+1}>
               <div>{number}</div>
               <div>{company === 'seline' ? 'S1' : 'B1'}</div>
               <div>{emitted_at ? new Date(emitted_at).toLocaleDateString() : '-'}</div>
               <div>{cancelled ? 'Cancelada' : 'Emitida'}</div>
               <div className="emitted-invoices-row-link-anchors">
-                <a href={link_danfe} target="blank">DANFE</a>
-                <a href={link_xml} target="blank">XML</a>
+                <a href={link_danfe ?? `https://www.fsist.com.br/usuario/api/1/100/${key}.pdf`} target="blank">DANFE</a>
+                <a href={link_xml ?? `https://www.fsist.com.br/usuario/api/1/100/${key}.xml`} target="blank">XML</a>
               </div>
             </div>)}
           </div>
