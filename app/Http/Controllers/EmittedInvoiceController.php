@@ -10,8 +10,8 @@ use Illuminate\Http\Request;
 class EmittedInvoiceController extends Controller
 {
     public function read() {
-        return EmittedInvoice::where('emitted_at', '<>', null)
-            ->orderBy('emitted_at', 'desc')
+        return EmittedInvoice::orderBy('emitted_at', 'desc')
+            ->orderBy('number', 'desc')
             ->get()
             ->values();
     }
