@@ -32,7 +32,7 @@ class CreateShipmentAction
         $address = $request->address;
         $response = (new Loggi())->asyncShipment([
           'name' => $address['recipient_name'],
-          'street' => $address['address_1'],
+          'street' => $address['address_1'] . ' ' . $address['address_number'],
           'complement' => Str::substr($address['address_2'], 0, 128),
           'city' => $address['city'],
           'uf' => $address['state'],

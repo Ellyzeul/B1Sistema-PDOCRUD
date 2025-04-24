@@ -44,7 +44,7 @@ class CreateAction
       'country' => $address['country'],
       'postal_code' => $address['postal_code'],
       'phone' => $address['buyer_phone'],
-      'total_value' => $items->map(fn($item) => intval($item['value']) * intval($item['quantity']))->reduce(fn($acc, $cur) => $acc + $cur, 0) + floatval($address['freight']),
+      'total_value' => $items->map(fn($item) => floatval($item['value']) * intval($item['quantity']))->reduce(fn($acc, $cur) => $acc + $cur, 0) + floatval($address['freight']),
       'freight' => floatval($address['freight']),
       'items' => $items,
     ])->object();

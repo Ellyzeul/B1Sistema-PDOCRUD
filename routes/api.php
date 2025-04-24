@@ -234,6 +234,7 @@ Route::controller(InvoiceController::class)
 Route::controller(EmittedInvoiceController::class)
     ->prefix('emitted-invoice')
     ->group(function() {
+        Route::get('/', 'read');
         Route::post('/', 'create');
     });
 
