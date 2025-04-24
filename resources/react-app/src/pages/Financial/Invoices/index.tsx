@@ -30,13 +30,13 @@ export default function InvoicesPage() {
               <div>Número</div>
               <div>Empresa</div>
               <div>Emitida em</div>
-              <div>Cancelada</div>
+              <div>Status</div>
               <div>Links</div>
             </div>
             {Array.from(invoices).splice(ROWS_PER_PAGE * page, ROWS_PER_PAGE).map(({number, emitted_at, company, link_danfe, link_xml, cancelled}, key) => <div className="emitted-invoices-row" key={key+1}>
               <div>{number}</div>
               <div>{company === 'seline' ? 'S1' : 'B1'}</div>
-              <div>{new Date(emitted_at).toLocaleDateString()}</div>
+              <div>{emitted_at ? new Date(emitted_at).toLocaleDateString() : '-'}</div>
               <div>{cancelled ? 'Cancelada' : 'Emitida'}</div>
               <div className="emitted-invoices-row-link-anchors">
                 <a href={link_danfe} target="blank">DANFE</a>
