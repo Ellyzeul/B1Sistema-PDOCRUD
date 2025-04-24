@@ -8,7 +8,7 @@ export default function FinancialPage() {
         {icon: "/icons/recibo.png", label: "Contas a pagar/receber", url: "/financeiro/contas"},
         {icon: "/icons/bank.png", label: "Extrato bancário", url: "/financeiro/bancos"},
         {icon: "/icons/accounting.png", label: "Contabilidade", url: "/financeiro/fiscal"},
-        // {icon: "/icons/invoice.png", label: "Notas Fiscais emitidas", url: "/financeiro/notas-emitidas"},
+        {icon: "/icons/invoice.png", label: "Notas Fiscais emitidas", url: "/financeiro/notas-emitidas"},
       ]}
     />
   )
