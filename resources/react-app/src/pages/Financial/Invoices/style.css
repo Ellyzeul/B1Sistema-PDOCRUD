@@ -28,8 +28,48 @@
   width: 100%;
   height: 100%;
   display: grid;
-  grid-template-columns: 90% 10%;
+  grid-template-columns: 80% 10% 10%;
   place-items: center;
+}
+
+.emitted-invoices-mode-toogle {
+  display: flex;
+}
+
+.emitted-invoices-mode-toogle > button:hover {
+  opacity: 0.9;
+}
+
+.emitted-invoices-left {
+  border: none;
+  color: white;
+  border-radius: 4px 0 0 4px;
+  cursor: pointer;
+}
+
+.emitted-invoices-right {
+  border: none;
+  color: white;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+}
+
+.emiited-invoices-default {
+  background-color: rgb(114, 114, 114);
+}
+
+.emitted-invoices-cancel {
+  border: none;
+  color: white;
+  cursor: pointer;
+  background-color: rgb(132, 50, 50);
+}
+
+.emitted-invoices-devolution {
+  border: none;
+  color: white;
+  cursor: pointer;
+  background-color: rgb(50, 132, 130);
 }
 
 .emitted-invoices-list {
@@ -58,5 +98,11 @@
   padding: 2px 4px;
   background-color: grey;
   color: white;
+  border-radius: 4px;
+}
+
+.emitted-invoices-action-btn {
+  height: 100%;
+  padding: 1px 4px;
   border-radius: 4px;
 }

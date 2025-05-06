@@ -236,6 +236,7 @@ Route::controller(EmittedInvoiceController::class)
     ->group(function() {
         Route::get('/', 'read');
         Route::post('/', 'create');
+        Route::post('/devolution', 'createDevolution');
     });
 
 Route::controller(ExpenseController::class)

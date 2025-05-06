@@ -391,7 +391,7 @@ type EmittedInvoice = {
   key: string,
   number: string,
   emitted_at: string,
-  order_number: number,
+  order_number?: string,
   company: 'seline' | 'b1',
   link_danfe?: string,
   link_xml?: string,
