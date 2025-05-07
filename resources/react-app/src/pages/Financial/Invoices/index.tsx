@@ -6,6 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 
 export default function InvoicesPage() {
   const [invoices, setInvoices] = useState<Array<EmittedInvoice>>([])
+  const [filteredInvoices, setFilteredInvoices] = useState<Array<EmittedInvoice>>([])
   const [page, setPage] = useState(0)
   const [devolutionMode, setDevolutionMode] = useState(false)
   const [cancelMode, setCancelMode] = useState(false)
@@ -13,7 +14,10 @@ export default function InvoicesPage() {
   useEffect(() => {
     api.get('/api/emitted-invoice')
       .then(response => response.data)
-      .then(setInvoices)
+      .then(invoices => {
+        setInvoices(invoices)
+        setFilteredInvoices(invoices)
+      })
   }, [])
 
   function toogleMode(mode: 'devolution' | 'cancel') {
@@ -34,6 +38,13 @@ export default function InvoicesPage() {
       <div className="emitted-invoices-container">
         <div className="emitted-invoices-content">
           <div className="emitted-invoices-filter-bar">
+            <div className="emitted-invoices-filter">
+              <span>Filtrar</span>
+              <input
+                type="text"
+                onChange={({target: {value}}) => setFilteredInvoices(filterInvoices(invoices, value.trim()))}
+              />
+            </div>
             <div></div>
             <div className="emitted-invoices-mode-toogle">
               <button className={`emitted-invoices-left ${cancelMode ? "emiited-invoices-default" : "emitted-invoices-cancel"}`} onClick={() => toogleMode('cancel')}>{cancelMode ? 'Visualização de notas' : 'Cancelamento de notas'}</button>
@@ -41,7 +52,7 @@ export default function InvoicesPage() {
             </div>
             <div>
               <div>Página</div>
-              <select onChange={({target: {value}}) => setPage(Number(value))}>{getPages(invoices)}</select>
+              <select onChange={({target: {value}}) => setPage(Number(value))}>{getPages(filteredInvoices)}</select>
             </div>
           </div>
           <div className="emitted-invoices-list">
@@ -52,7 +63,7 @@ export default function InvoicesPage() {
               <div>Status</div>
               <div>{devolutionMode || cancelMode ? 'Ação' : 'Links'}</div>
             </div>
-            {Array.from(invoices).splice(ROWS_PER_PAGE * page, ROWS_PER_PAGE).map(({key, number, emitted_at, company, link_danfe, link_xml, cancelled}, index) => <div className="emitted-invoices-row" key={index+1}>
+            {Array.from(filteredInvoices).splice(ROWS_PER_PAGE * page, ROWS_PER_PAGE).map(({key, number, emitted_at, company, link_danfe, link_xml, cancelled}, index) => <div className="emitted-invoices-row" key={index+1}>
               <div>{number}</div>
               <div>{company === 'seline' ? 'S1' : 'B1'}</div>
               <div>{emitted_at ? new Date(emitted_at).toLocaleDateString() : '-'}</div>
@@ -118,6 +129,26 @@ type ActionCellProp = {
 }
 
 const ROWS_PER_PAGE = 20
+
+function filterInvoices(invoices: Array<EmittedInvoice>, search: string) {
+  function handleComparison(invoice: EmittedInvoice, key: keyof EmittedInvoice, search: string) {
+    if(key === 'emitted_at') {
+      return new Date(invoice[key]).toLocaleDateString().includes(search)
+    }
+    if(['key', 'order_number'].find(i => i === key)) {
+      return invoice[key] === search
+    }
+    if(key === 'cancelled') {
+      return (invoice[key] ? 'cancelada' : 'emitida').includes(search.toLowerCase())
+    }
+
+    return String(invoice[key]).includes(search)
+  }
+
+  return invoices.filter(invoice => 
+    Object.keys(invoice).some(key => handleComparison(invoice, key as keyof EmittedInvoice, search))
+  )
+}
 
 function getPages(invoices: Array<EmittedInvoice>) {
   const pagesCount = Math.ceil(invoices.length / ROWS_PER_PAGE)
