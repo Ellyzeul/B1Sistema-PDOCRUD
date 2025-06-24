@@ -6,22 +6,40 @@ Sistema de visualização dos dados de compra dos clientes e gerenciamento de fa
 
 Esse projeto depende umbilicalmente da biblioteca PDOCRUD, que não é open-source, tampouco de uso gratuito, então garanta ter uma distribuição dessa biblioteca antes de trabalhar nesse projeto.
 
-Caso ela não esteja disponível na pasta ```public/pdocrud/``` então será necessário instalá-la.
+## Funcionalidades
 
-Como essa dependência também é altamente personalizável, e diversas configurações precisam ser feitas para seu uso, uma versão já configurada estará disponível no link abaixo.
+### Gerenciamento de pedidos
 
-[Link para download](https://github.com/B1GabrielAugusto/PDOCRUD_distro/raw/main/PDOCRUD_configurado.zip)
+Tela principal do sistema. Uma tabela de edição direção direta, como uma planilha, onde todos os dados dos pedidos estão disponíveis para consulta e alteração. Permitindo alteração de fases para um melhor controle de etapa corrente do pedido
 
-Acesse esse link com login realizado no GitHub em uma conta com acesso ao repositório.
+![Gerenciamento de pedidos](.github/images/order_control.png)
 
-## Instalação do PDOCRUD
+### Envio de planilhas
 
-Ao ter a distribuição já configurada em mãos
+Os pedidos são inseridos via API para alguns canais de venda, mas para outros, o envio manual via planilha é feito. Esta tela também é útil para atualização massiva de dados do sistema.
 
-![Pasta com a distribuição](.github/images/procrud_zipped_folder.png)
+![Envio de planilhas](.github/images/upload_file.png)
 
-Mova a pasta ```pdocrud``` para dentro da pasta ```public``` do projeto.
+### Expedição
 
-![Dependência na pasta do projeto](.github/images/procrud_on_public.png)
+Seção com funcionalidades específicas para o envio dos pedidos.
 
-A partir deste momento a confuração do projeto estará completa.
+![Expedição](.github/images/expedition.png)
+
+### Atendimento
+
+Seção com funcionalidades específicas para o atendimento de clientes.
+
+![Atendimento](.github/images/attendance.png)
+
+### Compras
+
+Seção com funcionalidades específicas para a compra com fornecedores.
+
+![Compras](.github/images/purchases.png)
+
+### Financeiro
+
+Seção com funcionalidades específicas para controle das finanças das empresas.
+
+![Financeiro](.github/images/financial.png)
